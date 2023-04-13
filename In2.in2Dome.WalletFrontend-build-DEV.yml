@@ -24,8 +24,8 @@ stages:
               scannerMode: 'CLI'
               configMode: 'manual'
               cliProjectKey: 'in2Dome_in2-dome-wallet' 
-              projectKey: 'in2Dome_in2-dome-wallet'
-              projectName: 'in2-dome-wallet'
+              projectKey: 'in2Dome_in2-dome-wallet_frontend'
+              projectName: 'in2-dome-wallet_frontend'
               cliSources: '.' #$(Build.SourcesDirectory)
                 
           - task: SonarCloudAnalyze@1
