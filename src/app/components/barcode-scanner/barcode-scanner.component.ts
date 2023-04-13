@@ -1,10 +1,13 @@
-import { Component, ViewChild, AfterViewInit } from "@angular/core";
-import { BarcodeScannerLivestreamComponent } from "ngx-barcode-scanner";
+import { CommonModule } from "@angular/common";
+import { Component, ViewChild, AfterViewInit, OnInit } from "@angular/core";
+import { BarcodeScannerLivestreamComponent, BarcodeScannerLivestreamModule } from "ngx-barcode-scanner";
 
 @Component({
   selector: 'app-barcode-scanner',
   templateUrl: './barcode-scanner.component.html',
   styleUrls: ['./barcode-scanner.component.scss'],
+  standalone:true,
+  imports:[CommonModule,BarcodeScannerLivestreamModule]
 })
 export class BarcodeScannerComponent  implements OnInit {
 
@@ -12,19 +15,19 @@ export class BarcodeScannerComponent  implements OnInit {
 
   ngOnInit() {}
   @ViewChild(BarcodeScannerLivestreamComponent)
-  barcodeScanner: BarcodeScannerLivestreamComponent;
+  barcodeScanner!: BarcodeScannerLivestreamComponent;
 
-  barcodeValue;
+  barcodeValue: any;
 
   ngAfterViewInit() {
     this.barcodeScanner.start();
   }
 
-  onValueChanges(result) {
+  onValueChanges(result: { codeResult: { code: any; }; }) {
     this.barcodeValue = result.codeResult.code;
   }
 
-  onStarted(started) {
+  onStarted(started: any) {
     console.log(started);
   }
 }
