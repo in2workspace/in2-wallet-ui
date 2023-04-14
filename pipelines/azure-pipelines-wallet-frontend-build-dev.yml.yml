@@ -23,7 +23,7 @@ stages:
               organization: 'in2dome'
               scannerMode: 'CLI'
               configMode: 'manual'
-              cliProjectKey: 'in2Dome_in2-dome-wallet' 
+              cliProjectKey: 'in2Dome_in2-dome-wallet_frontend' 
               projectKey: 'in2Dome_in2-dome-wallet_frontend'
               projectName: 'in2-dome-wallet_frontend'
               cliSources: '.' #$(Build.SourcesDirectory)
