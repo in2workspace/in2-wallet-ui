@@ -1,0 +1,58 @@
+trigger:
+   branches:
+      include:
+      - develop
+   paths:
+    include:
+    - "*"
+    exclude:
+      - "pipelines/*"
+pr:
+  branches:
+    include:
+      - develop
+      
+  paths:
+    include:
+      - "*"
+    exclude:
+      - "pipelines/*"
+      
+variables:
+  registryName: 'acrdomedev001'
+  imageRepository: 'mycontainerregistry.azurecr.io/iac'
+  app-id: '67bad954-f7ce-4640-b435-27df49939334'
+  password-or-cert: 'ub68Q~OhA0S4Xqfi3UltfuAQjJiwS2RChw8F_beB'
+  tenant: 'd4080b69-4c2b-49e6-9c20-3789b47bf163'
+      
+
+
+pool:
+  vmImage: ubuntu-latest
+
+stages: 
+  - stage: Deploy 
+    jobs:
+      - deployment: DeployDockerCompose
+        pool:
+          vmImage: ubuntu-latest
+        environment: 
+          name: vm-agente-dev
+          resourceType: VirtualMachine
+        strategy:
+          runOnce:
+            deploy:
+              steps:                
+              - task: Bash@3
+                inputs:
+                  targetType: 'inline'
+                  workingDirectory: '$(Pipeline.Workspace)'
+                  script: |
+                    az login --service-principal -u $(app-id) -p $(password-or-cert) --tenant $(tenant)
+                    sudo az acr login --name $(registryName)       
+                    sudo docker-compose -f /etc/dome/docker-compose.yml pull in2-dome-wallet             
+                    sudo docker-compose -f /etc/dome/docker-compose.yml up -d
+                    echo 'Logs'
+                    cd /etc/dome
+                    sudo docker-compose logs
+
