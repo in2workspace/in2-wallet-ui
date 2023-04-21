@@ -11,7 +11,16 @@ import { IonicModule } from '@ionic/angular';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class LanguageSelectorPage implements OnInit {
-
+  languageList = [
+    {
+      name : "English",
+      url : "assets/flags/uk.png"
+    },
+    {
+      name: "Spanish",
+      url : "assets/flags/es.png"
+    }
+  ]
   constructor() { }
 
   ngOnInit() {
