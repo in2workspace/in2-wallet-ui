@@ -12,23 +12,24 @@ export class WalletService {
 
 
   public executeQR(state:string): Observable<any> {
-
-
   const headers = new HttpHeaders({
     'Content-Type': 'application/json'})
 
   return this.http.get(
-    environment.base_url + '/wallet/execute-content/get-credentials-type', 
-    { headers: headers, params:{state:state}, responseType: 'text'}
+    environment.base_url + '/wallet/execute-content/get-credentials-type?state='+state, 
+    { headers: headers, responseType: 'text'}
   )
   }
-  public executeVC(state:string,vc:string): Observable<any> {
+  public executeVC(state:string,vc:Array<string>): Observable<any> {
+    console.log("state",state);
+    console.log("vc",vc);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'})
-  
+    console.log("url",environment.base_url + '/wallet/execute-content/vp?state='+state)
     return this.http.post(
-      environment.base_url + '/wallet/execute-content/vp',{vc:[vc]} ,
-      { headers: headers, params:{state:state}, responseType: 'text'}
+      environment.base_url + '/wallet/execute-content/vp?state='+state,
+      vc,
+      { headers: headers, responseType: 'text'}
     )
     }
 }
