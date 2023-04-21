@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { StorageService } from './services/storage.service';
 
 export const routes: Routes = [
   {
@@ -34,4 +35,18 @@ export const routes: Routes = [
     path: 'faqs',
     loadComponent: () => import('./pages/faqs/faqs.page').then( m => m.FaqsPage)
   },
+  {
+    path: 'qrinfo',
+    loadComponent: () => import('./pages/qrinfo/qrinfo.page').then( m => m.QRInfoPage)
+  },
+  {
+    path: 'wallet',
+    providers: [StorageService],
+    loadComponent: () => import('./pages/wallet/wallet.page').then( m => m.WalletPage)
+  },  {
+    path: 'vc-selector',
+    loadComponent: () => import('./pages/vc-selector/vc-selector.page').then( m => m.VcSelectorPage)
+  },
+
+
 ];
