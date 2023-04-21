@@ -14,4 +14,4 @@ COPY . .
 # Expose port 80
 EXPOSE 4200
 # Start the app
-CMD ["ng", "serve", "--host", "0.0.0.0", "--disable-host-check", "true", "--port", "8000"]
+CMD ["ng", "serve", "--host", "0.0.0.0", "--disable-host-check", "true", "--port", "8000", "-c", "prod"]

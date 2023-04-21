@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  base_url: 'http://localhost:8083',
+  base_url: 'https://domeapidev.in2.es',
 
 };
