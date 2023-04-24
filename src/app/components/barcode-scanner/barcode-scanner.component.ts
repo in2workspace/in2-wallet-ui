@@ -1,33 +1,54 @@
-import { CommonModule } from "@angular/common";
-import { Component, ViewChild, AfterViewInit, OnInit } from "@angular/core";
-import { BarcodeScannerLivestreamComponent, BarcodeScannerLivestreamModule } from "ngx-barcode-scanner";
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  ViewChild,
+  AfterViewInit,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { BarcodeFormat } from '@zxing/library';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 @Component({
   selector: 'app-barcode-scanner',
   templateUrl: './barcode-scanner.component.html',
   styleUrls: ['./barcode-scanner.component.scss'],
-  standalone:true,
-  imports:[CommonModule,BarcodeScannerLivestreamModule]
+  standalone: true,
+  imports: [CommonModule, ZXingScannerModule],
 })
-export class BarcodeScannerComponent  implements OnInit {
+export class BarcodeScannerComponent implements OnInit {
+  @Output() availableDevices: EventEmitter<MediaDeviceInfo[]> =
+    new EventEmitter();
+  @Output() qrCode: EventEmitter<string> =
+  new EventEmitter();
+  @Input() currentDevice: MediaDeviceInfo = {
+    deviceId: '',
+    groupId: '',
+    kind: 'audiooutput',
+    label: '',
+    toJSON() {},
+  };
+  hasDevices: boolean = false;
+  formatsEnabled: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
+  qrResultString: string = '';
 
-  constructor() { }
+  constructor() {}
+  ngOnInit(): void {}
 
-  ngOnInit() {}
-  @ViewChild(BarcodeScannerLivestreamComponent)
-  barcodeScanner!: BarcodeScannerLivestreamComponent;
-
-  barcodeValue: any;
-
-  ngAfterViewInit() {
-    this.barcodeScanner.start();
+  clearResult(): void {
+    this.qrResultString = '';
   }
 
-  onValueChanges(result: { codeResult: { code: any; }; }) {
-    this.barcodeValue = result.codeResult.code;
+  onCamerasFound(devices: MediaDeviceInfo[]): void {
+    this.availableDevices.emit(devices);
+    this.hasDevices = Boolean(devices && devices.length);
   }
 
-  onStarted(started: any) {
-    console.log(started);
+  onCodeResult(resultString: string) {
+    this.qrCode.emit(resultString);
+
   }
+
 }

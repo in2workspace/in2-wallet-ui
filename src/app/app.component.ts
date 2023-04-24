@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -12,6 +14,7 @@ import { IonicModule } from '@ionic/angular';
 export class AppComponent {
   public appPages = [
     { title: 'Home', url: '/home', icon: 'home' },
+    { title: 'Wallet', url: '/wallet', icon: 'wallet' },
     { title: 'Camera Selector', url: '/camera-selector', icon: 'camera' },
     { title: 'Language Selector', url: '/language-selector', icon: 'flag' },
     { title: 'Terms of User', url: '/terms-of-use', icon: 'document-text' },
@@ -19,5 +22,9 @@ export class AppComponent {
     { title: 'FAQs', url: '/faqs', icon: 'help' },
     { title: 'Settings', url: '/settings', icon: 'cog' },
   ];
-  constructor() {}
+  constructor(public translate: TranslateService
+    ) {
+      translate.addLangs(['en']);
+      translate.setDefaultLang('en');
+    }
 }

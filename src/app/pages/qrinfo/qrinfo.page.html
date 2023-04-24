@@ -3,15 +3,15 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Settings</ion-title>
+    <ion-title>QR Info</ion-title>
   </ion-toolbar>
 </ion-header>
 
 
 <ion-content [fullscreen]="true">
-  <select>
-    <option value="option1">Verifiable Data Register</option>
-</select>
-<button class="btn-primary">Accept trust entity</button>
-
+  
+  <div>
+    <qr-code [value]="qr" [size]="tamano"></qr-code>
+    <ion-button (click)="saveCredential()">Save Verifiable Credential</ion-button>
+  </div>
 </ion-content>

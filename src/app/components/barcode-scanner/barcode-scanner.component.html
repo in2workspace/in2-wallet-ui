@@ -1,8 +1,14 @@
-<barcode-scanner-livestream
-      type="code_128"
-      (valueChanges)="onValueChanges($event)"
-      (started)="(onStarted)"
-    ></barcode-scanner-livestream>
-    <div [hidden]="!barcodeValue">
-      {{ barcodeValue }}
-    </div>
+<zxing-scanner
+  [(device)]="currentDevice"
+  (scanSuccess)="onCodeResult($event)"
+  [formats]="formatsEnabled"
+  (camerasFound)="onCamerasFound($event)"
+></zxing-scanner>
+
+<section class="results" *ngIf="qrResultString">
+  <div>
+    <small>Result</small>
+    <strong>{{ qrResultString }}</strong>
+  </div>
+  <button (click)="clearResult()">&times;</button>
+</section>
