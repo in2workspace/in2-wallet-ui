@@ -20,6 +20,16 @@ export class WalletService {
     { headers: headers, responseType: 'text'}
   )
   }
+
+  public executeURL(url:string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'text/plain'})
+    const options = { headers: headers, redirect : 'follow' };
+    return this.http.post(
+      environment.base_url + '/wallet/execute-content', 
+      url,options)
+    }
+
   public executeVC(state:string,vc:Array<string>): Observable<any> {
     console.log("state",state);
     console.log("vc",vc);
