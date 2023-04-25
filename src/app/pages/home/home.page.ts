@@ -52,7 +52,7 @@ export class HomePage implements OnInit {
         .subscribe((data) => {
           console.log("data",data);
           this.router.navigate(['/vc-selector/'], {
-            queryParams: { state: qrData.split('state=')[1] },
+            queryParams: { state: qrData.split('state=')[1], type:data },
           });
         });
     else if (qrType == this.QR_TOKEN)
