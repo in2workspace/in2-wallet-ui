@@ -62,12 +62,10 @@ export class HomePage implements OnInit {
   detectQRtype(qrData: string) {
     if (!qrData || !qrData.startsWith) {
       return this.QR_UNKNOWN;
-    } else if (qrData.includes('domeapidev')) {
-      return this.QR_AUTH_API;
     } else if (qrData.startsWith('https') || qrData.startsWith('http')) {
       // Normal QR with a URL where the real data is located
       // We require secure connections with https
-      return this.QR_URL;
+      return this.QR_AUTH_API;
     } else if (qrData.startsWith('ey')) {
       // JWT
       return this.QR_TOKEN;
