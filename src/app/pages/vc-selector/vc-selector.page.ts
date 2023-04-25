@@ -30,7 +30,22 @@ export class VcSelectorPage implements OnInit {
    this.storageService.getAll()!=null?this.credList=this.storageService.getAll():[];
   }
   selectCred(cred:string){
-    this.walletService.executeVC(this.state,[cred]);
+    this.walletService.executeVC("OnjnU-Y3SM255NdeSF7aNw",[cred]).subscribe(data=>{
+      this.isAlertOpen = true;
 
+    },
+    err => {
+      this.isAlertOpenFail = true;
+
+    });
+
+  }
+  isAlertOpenFail = false;
+
+  isAlertOpen = false;
+  public alertButtons = ['OK'];
+
+  setOpen(isOpen: boolean) {
+    this.isAlertOpen = isOpen;
   }
 }

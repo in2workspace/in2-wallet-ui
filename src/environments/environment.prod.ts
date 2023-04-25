@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  base_url: 'https://domeapidev.in2.es',
+  base_url: 'https://domewalletapidev.in2.es',
 
 };

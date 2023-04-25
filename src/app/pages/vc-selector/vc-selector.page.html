@@ -22,4 +22,17 @@
     <ion-button (click)="selectCred(cred)">Select credential</ion-button>
     </li>
   </ul>
+  <ion-alert
+  [isOpen]="isAlertOpen"
+  header="Congratulations"
+  message="Log In Completed"
+  [buttons]="alertButtons"
+  (didDismiss)="setOpen(false)"
+></ion-alert>  <ion-alert
+[isOpen]="isAlertOpen"
+header="Unsuccesfull"
+message="Log In Failed"
+[buttons]="alertButtons"
+(didDismiss)="setOpen(false)"
+></ion-alert>
 </ion-content>
