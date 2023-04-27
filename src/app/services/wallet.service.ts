@@ -18,7 +18,7 @@ export class WalletService {
     'Content-Type': 'application/json'})
 
   return this.http.get(
-    environment.base_url + '/wallet/execute-content/get-credentials-type', 
+    environment.base_url + '/api/execute-content/get-siop-authentication-request', 
     { headers: headers, params:{state:state}, responseType: 'text'}
   )
   }
@@ -27,7 +27,7 @@ export class WalletService {
       'Content-Type': 'application/json'})
   
     return this.http.post(
-      environment.base_url + '/wallet/execute-content/vp',{vc:[vc]} ,
+      environment.base_url + '/api/siop/vp',{vc:[vc]} ,
       { headers: headers, params:{state:state}, responseType: 'text'}
     )
     }
