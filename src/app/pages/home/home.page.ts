@@ -50,7 +50,7 @@ export class HomePage implements OnInit {
         .executeQR(qrData.split('state=')[1])
         .subscribe((data) => {
           this.router.navigate(['/vc-selector/'], {
-            queryParams: { state: qrData.split('state=')[1] },
+            queryParams: { state: qrData.split('state=')[1],data },
           });
         });
     else if (qrType == this.QR_TOKEN)

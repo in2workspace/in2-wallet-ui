@@ -16,21 +16,31 @@ import { ActivatedRoute } from '@angular/router';
   providers: [StorageService]
 })
 export class VcSelectorPage implements OnInit {
-
+  selCredList:(string)[]=[];
   credList:(string)[]=[];
+  credDataList:(any)[]=[];
   tamano:number=300;
   state:string="";
+  type: any;
   constructor(private storageService:StorageService, private walletService:WalletService, private route:ActivatedRoute) { 
     this.route.queryParams.subscribe(params => {
-      this.state = params['state']
+      this.state = params['state'];
+      this.type = params['type']
   })
+  
   }
 
   ngOnInit() {
    this.storageService.getAll()!=null?this.credList=this.storageService.getAll():[];
+   this.credList.forEach(data =>{
+    this.credDataList.push(JSON.parse(atob(data.split('.')[1]))['vc']);
+   })
   }
   selectCred(cred:string){
-    this.walletService.executeVC(this.state,cred);
+    this.selCredList.push(cred);
+  }
+  sendCred(){
+    this.walletService.executeVC(this.state,this.selCredList);
 
   }
 }
