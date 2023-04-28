@@ -20,6 +20,10 @@
         <ion-row class="ion-justify-content-center">
           <ion-button *ngIf="!toggleScan" (click)="startScan()">Scan QR</ion-button>
         </ion-row>
+        <ion-row class="ion-justify-content-center">
+          <ion-button (click)="excuteVC()">ExcuteVC</ion-button>
+          <ion-button (click)="excuteURL()">excuteURL</ion-button>
+        </ion-row>
       </ion-grid>
     </ion-card-content>
   </ion-card>
