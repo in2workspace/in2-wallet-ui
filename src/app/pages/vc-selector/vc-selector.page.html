@@ -26,4 +26,17 @@
 
   <ion-button (click)="sendCred()">Send Credential</ion-button>
 
+  <ion-alert
+  [isOpen]="isAlertOpen"
+  header="Congratulations"
+  message="Log In Completed"
+  [buttons]="alertButtons"
+  (didDismiss)="setOpen(false)"
+></ion-alert>  <ion-alert
+[isOpen]="isAlertOpenFail"
+header="Unsuccesfull"
+message="Log In Failed"
+[buttons]="alertButtons"
+(didDismiss)="setOpen(false)"
+></ion-alert>
 </ion-content>
