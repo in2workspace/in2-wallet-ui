@@ -31,14 +31,11 @@ export class WalletService {
     }
 
   public executeVC(state:string,vc:Array<string>): Observable<any> {
-    console.log("state",state);
-    console.log("vc",vc);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'})
-    console.log("url",environment.base_url + '/wallet/execute-content/vp?state='+state)
     return this.http.post(
       environment.base_url + '/api/siop/vp',{vc:[vc]} ,
-      { headers: headers, params:{state:state}, responseType: 'text'}
+      { headers: headers, params:{siopAuthenticationRequest:state}, responseType: 'text'}
     )
     }
 }
