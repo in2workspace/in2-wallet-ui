@@ -26,7 +26,7 @@ export class WalletService {
       'Content-Type': 'text/plain'})
     const options = { headers: headers, redirect : 'follow' };
     return this.http.post(
-      environment.base_url + '/wallet/execute-content', 
+      environment.base_url + '/api/execute-content/get-siop-authentication-request', 
       url,options)
     }
 
