@@ -47,7 +47,6 @@ export class HomePage implements OnInit {
     let qrData = qrCode;
     if (qrType == this.QR_AUTH_API)
       this.walletService
-        //.executeQR(qrData.split('state=')[1])
         .executeURL(qrData)
         .subscribe((data) => {
           console.log("data",data);
