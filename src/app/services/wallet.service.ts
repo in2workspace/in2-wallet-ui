@@ -23,7 +23,8 @@ export class WalletService {
 
   public executeURL(url:string): Observable<any> {
     const headers = new HttpHeaders({
-      'Content-Type': 'text/plain'})
+      'Content-Type': 'text/plain',
+      'Allow-Control-Allow-Origin': '*'})
     const options = { headers: headers, redirect : 'follow' };
     return this.http.post(
       environment.base_url + '/api/execute-content/get-siop-authentication-request', 
@@ -32,9 +33,10 @@ export class WalletService {
 
   public executeVC(state:string,vc:Array<string>): Observable<any> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'})
+      'Content-Type': 'application/json',
+      'Allow-Control-Allow-Origin': '*'})
     return this.http.post(
-      environment.base_url + '/api/siop/vp',{vc:[vc]} ,
+      environment.base_url + '/api/execute-content/siop/vp',vc,
       { headers: headers, params:{siopAuthenticationRequest:state}, responseType: 'text'}
     )
     }

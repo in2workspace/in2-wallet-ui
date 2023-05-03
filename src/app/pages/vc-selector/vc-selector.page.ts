@@ -40,7 +40,7 @@ export class VcSelectorPage implements OnInit {
     this.selCredList.push(cred);
   }
   sendCred(){
-    this.walletService.executeVC(this.state,this.selCredList).subscribe(data=>{
+    this.walletService.executeVC(this.type,this.selCredList).subscribe(data=>{
       this.isAlertOpen = true;
 
     },
