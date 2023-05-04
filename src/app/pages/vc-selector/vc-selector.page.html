@@ -11,11 +11,11 @@
   <ion-grid>
     <ion-row class="ion-justify-content-center"
     *ngFor="let cred of credList; let i = index">
-    <ion-card>
+    <ion-card *ngIf="isType(i)">
 
       <ion-card-header>
-        <ion-card-title>{{credDataList[0]['credentialSubject']['firstName']}} {{credDataList[0]['credentialSubject']['familyName']}}</ion-card-title>
-        <ion-card-subtitle>{{credDataList[0]['type'][1]}}</ion-card-subtitle>
+        <ion-card-title>{{credDataList[i]['credentialSubject']['firstName']}} {{credDataList[i]['credentialSubject']['familyName']}}</ion-card-title>
+        <ion-card-subtitle>{{credDataList[i]['type'][1]}}</ion-card-subtitle>
       </ion-card-header>
       <div class="ion-justify-content-center"><qr-code  [value]="cred" [size]="tamano"></qr-code>
       </div><span></span>

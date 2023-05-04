@@ -9,6 +9,7 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { StorageService } from 'src/app/services/storage.service';
 import { WalletService } from 'src/app/services/wallet.service';
 import { BarcodeScannerComponent } from '../../components/barcode-scanner/barcode-scanner.component';
+import { CameraService } from 'src/app/services/camera.service';
 @Component({
   selector: 'app-camera-selector',
   templateUrl: './camera-selector.page.html',
@@ -38,7 +39,8 @@ export class CameraSelectorPage implements OnInit {
   constructor(
     private router: Router,
     private storageService: StorageService,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private cameraService: CameraService
   ) {}
   ngOnInit(): void {}
   availableDevicesEmit(devices: MediaDeviceInfo[]) {
@@ -50,7 +52,8 @@ export class CameraSelectorPage implements OnInit {
   }
   onDeviceSelectChange(selected: string) {
     if (selected != '') {
-      const device = this.availableDevices.find((x) => x.deviceId === selected);
+      const device:MediaDeviceInfo|undefined = this.availableDevices.find((x) => x.deviceId === selected);
+      this.cameraService.camara=device;
       device != undefined ? (this.currentDevice = device) : false;
       this.desactivar = true;
     } else {

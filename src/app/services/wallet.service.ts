@@ -11,24 +11,14 @@ export class WalletService {
   constructor(private http:HttpClient) { }
 
 
-  public executeQR(state:string): Observable<any> {
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json'})
-
-  return this.http.get(
-    environment.base_url + '/api/execute-content/get-siop-authentication-request', 
-    { headers: headers, params:{state:state}, responseType: 'text'}
-  )
-  }
-
   public executeURL(url:string): Observable<any> {
     const headers = new HttpHeaders({
-      'Content-Type': 'text/plain',
+      'Content-Type': 'application/json',
       'Allow-Control-Allow-Origin': '*'})
     const options = { headers: headers, redirect : 'follow' };
     return this.http.post(
       environment.base_url + '/api/execute-content/get-siop-authentication-request', 
-      url,options)
+      {"qr_content":url},options)
     }
 
   public executeVC(state:string,vc:Array<string>): Observable<any> {
@@ -36,8 +26,8 @@ export class WalletService {
       'Content-Type': 'application/json',
       'Allow-Control-Allow-Origin': '*'})
     return this.http.post(
-      environment.base_url + '/api/execute-content/siop/vp',vc,
-      { headers: headers, params:{siopAuthenticationRequest:state}, responseType: 'text'}
+      environment.base_url + '/api/execute-content/vp',{"vc_list":vc,"siop_authentication_request":state},
+      { headers: headers, responseType: 'text'}
     )
     }
 }

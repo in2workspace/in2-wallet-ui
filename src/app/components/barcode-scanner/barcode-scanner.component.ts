@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { BarcodeFormat } from '@zxing/library';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { CameraService } from 'src/app/services/camera.service';
 
 @Component({
   selector: 'app-barcode-scanner',
@@ -34,8 +35,13 @@ export class BarcodeScannerComponent implements OnInit {
   formatsEnabled: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
   qrResultString: string = '';
 
-  constructor() {}
-  ngOnInit(): void {}
+  constructor(
+    private cameraService: CameraService
+  ) {}
+  ngOnInit(): void {
+    this.currentDevice=(this.cameraService.camara!=undefined?this.cameraService.camara :this.currentDevice);
+    console.log(this.currentDevice)
+  }
 
   clearResult(): void {
     this.qrResultString = '';
@@ -44,6 +50,8 @@ export class BarcodeScannerComponent implements OnInit {
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices.emit(devices);
     this.hasDevices = Boolean(devices && devices.length);
+    this.currentDevice=(this.cameraService.camara!=undefined?this.cameraService.camara :this.currentDevice);
+
   }
 
   onCodeResult(resultString: string) {
