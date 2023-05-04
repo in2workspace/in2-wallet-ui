@@ -22,10 +22,12 @@ export class VcSelectorPage implements OnInit {
   tamano:number=300;
   state:string="";
   type: any;
+  token:any;
   constructor(private storageService:StorageService, private walletService:WalletService, private route:ActivatedRoute) { 
     this.route.queryParams.subscribe(params => {
       this.state = params['state'];
-      this.type = params['type']
+      this.token = params['type']
+      this.type = params['type'].split('[')[1].split(']')[0].split(', ')
   })
   
   }
@@ -40,7 +42,7 @@ export class VcSelectorPage implements OnInit {
     this.selCredList.push(cred);
   }
   sendCred(){
-    this.walletService.executeVC(this.type,this.selCredList).subscribe(data=>{
+    this.walletService.executeVC(this.token,this.selCredList).subscribe(data=>{
       this.isAlertOpen = true;
 
     },
@@ -57,5 +59,9 @@ export class VcSelectorPage implements OnInit {
 
   setOpen(isOpen: boolean) {
     this.isAlertOpen = isOpen;
+  }
+  isType(index:number)
+  {
+    return this.type.find((element: any) => element ==this.credDataList[index]['type'][1])!= undefined;
   }
 }

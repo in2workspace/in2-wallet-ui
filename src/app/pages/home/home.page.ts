@@ -9,6 +9,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { StorageService } from 'src/app/services/storage.service';
 import { WalletService } from 'src/app/services/wallet.service';
+import { CameraService } from 'src/app/services/camera.service';
 
 @Component({
   selector: 'app-home',
@@ -38,7 +39,8 @@ export class HomePage implements OnInit {
   constructor(
     private router: Router,
     private storageService: StorageService,
-    private walletService: WalletService
+    private walletService: WalletService,
+   
   ) {}
 
   ngOnInit(): void {}
@@ -51,7 +53,7 @@ export class HomePage implements OnInit {
         .subscribe((data) => {
           console.log("data",data);
           this.router.navigate(['/vc-selector/'], {
-            queryParams: { state: qrData.split('state=')[1], type:data },
+            queryParams: { state: qrData.split('state=')[1], type:data.auth_request },
 
           });
         });
