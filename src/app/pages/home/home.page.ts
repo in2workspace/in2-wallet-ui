@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -32,18 +32,51 @@ export class HomePage implements OnInit {
   QR_TOKEN = 4;
   QR_AUTH = 5;
   QR_AUTH_API = 6;
+  URL_TOKEN = 7;
   toggleScan: boolean = false;
   startScan() {
     this.toggleScan = true;
   }
+  @Input() availableDevices: MediaDeviceInfo[] = [];
+
+  currentDevice: MediaDeviceInfo = {
+    deviceId: '',
+    groupId: '',
+    kind: 'audiooutput',
+    label: '',
+    toJSON() {},
+  };
+
+  desactivar: boolean = true;
   constructor(
+    private cameraService: CameraService,
     private router: Router,
     private storageService: StorageService,
     private walletService: WalletService,
    
   ) {}
-
-  ngOnInit(): void {}
+  availableDevicesEmit(devices: MediaDeviceInfo[]) {
+    this.availableDevices = devices;
+  }
+  ngOnInit(): void {    this.desactivar = false;
+  }
+  onDeviceSelectChange(selected: string) {
+    if (selected != '') {
+      const device:MediaDeviceInfo|undefined = this.availableDevices.find((x) => x.deviceId === selected);
+      this.cameraService.camara=device;
+      device != undefined ? (this.currentDevice = device) : false;
+      this.desactivar = true;
+    } else {
+      this.currentDevice = {
+        deviceId: '',
+        groupId: '',
+        kind: 'audiooutput',
+        label: '',
+        toJSON() {},
+      };
+      this.desactivar = false;
+    }
+  }
   qrCodeEmit(qrCode: string) {
     let qrType = this.detectQRtype(qrCode);
     let qrData = qrCode;
@@ -57,14 +90,30 @@ export class HomePage implements OnInit {
 
           });
         });
-    else if (qrType == this.QR_TOKEN)
+        else if (qrType == this.QR_TOKEN)
       this.router.navigate(['/qrinfo/'], {
         queryParams: { token: qrData },
       });
+    else if (qrType == this.URL_TOKEN)
+    this.walletService
+        .executeURLTOKEN(qrData)
+        .subscribe({
+          next: (res2:any) => {
+            let headers = res2.headers;
+            let locationHeader = headers.get('Location');
+            console.log(locationHeader)
+          this.router.navigate(['/qrinfo/'], {
+            queryParams: { token: locationHeader },
+          });}
+        });
+
   }
   detectQRtype(qrData: string) {
     if (!qrData || !qrData.startsWith) {
       return this.QR_UNKNOWN;
+    }
+    else if (qrData.includes('issuerapidev')){
+      return this.URL_TOKEN;
     } else if (qrData.startsWith('https') || qrData.startsWith('http')) {
       // Normal QR with a URL where the real data is located
       // We require secure connections with https

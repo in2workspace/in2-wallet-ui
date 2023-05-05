@@ -30,5 +30,22 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
-  <app-barcode-scanner *ngIf="toggleScan" (qrCode)="qrCodeEmit($event)"></app-barcode-scanner>
+  <ion-grid  *ngIf="toggleScan">
+    <ion-row class="ion-justify-content-start">
+      <ion-button (click)="onDeviceSelectChange('')">No device</ion-button>
+    </ion-row>
+    <ion-row
+      class="ion-justify-content-start"
+      *ngFor="let camera of availableDevices"
+    >
+      <ion-button (click)="onDeviceSelectChange(camera.deviceId)"
+        >{{camera.label}}</ion-button
+      >
+    </ion-row>
+    <ion-row class="ion-justify-content-center">
+      <app-barcode-scanner (qrCode)="qrCodeEmit($event)"         (availableDevices)="availableDevicesEmit($event)"
+      [currentDevice]="currentDevice"></app-barcode-scanner>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>
