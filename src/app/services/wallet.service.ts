@@ -7,6 +7,12 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class WalletService {
+  executeURLTOKEN(qrData: string) {
+    return this.http.get(
+      qrData ,
+       {
+      observe: 'response'});  
+    }
 
   constructor(private http:HttpClient) { }
 

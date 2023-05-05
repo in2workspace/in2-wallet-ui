@@ -32,6 +32,7 @@ export class HomePage implements OnInit {
   QR_TOKEN = 4;
   QR_AUTH = 5;
   QR_AUTH_API = 6;
+  URL_TOKEN = 7;
   toggleScan: boolean = false;
   startScan() {
     this.toggleScan = true;
@@ -89,14 +90,30 @@ export class HomePage implements OnInit {
 
           });
         });
-    else if (qrType == this.QR_TOKEN)
+        else if (qrType == this.QR_TOKEN)
       this.router.navigate(['/qrinfo/'], {
         queryParams: { token: qrData },
       });
+    else if (qrType == this.URL_TOKEN)
+    this.walletService
+        .executeURLTOKEN(qrData)
+        .subscribe({
+          next: (res2:any) => {
+            let headers = res2.headers;
+            let locationHeader = headers.get('Location');
+            console.log(locationHeader)
+          this.router.navigate(['/qrinfo/'], {
+            queryParams: { token: locationHeader },
+          });}
+        });
+
   }
   detectQRtype(qrData: string) {
     if (!qrData || !qrData.startsWith) {
       return this.QR_UNKNOWN;
+    }
+    else if (qrData.includes('issuerapidev')){
+      return this.URL_TOKEN;
     } else if (qrData.startsWith('https') || qrData.startsWith('http')) {
       // Normal QR with a URL where the real data is located
       // We require secure connections with https
