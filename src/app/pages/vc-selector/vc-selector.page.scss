@@ -1,0 +1,10 @@
+.boton-fijo {
+    position: fixed;
+    left: 0;
+    bottom: 10px;
+    right: 0;
+}
+ion-button:focus {
+    --background: #067856;
+    --color: white;
+  }
