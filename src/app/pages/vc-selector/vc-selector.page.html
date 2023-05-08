@@ -15,28 +15,28 @@
 
       <ion-card-header>
         <ion-card-title>{{credDataList[i]['credentialSubject']['firstName']}} {{credDataList[i]['credentialSubject']['familyName']}}</ion-card-title>
+        <ion-card-title>{{credDataList[i]['credentialSubject']['nom']}} {{credDataList[i]['credentialSubject']['cognoms']}}</ion-card-title>
         <ion-card-subtitle>{{credDataList[i]['type'][1]}}</ion-card-subtitle>
       </ion-card-header>
       <div class="ion-justify-content-center"><qr-code  [value]="cred" [size]="tamano"></qr-code>
-      </div><span></span>
-      <ion-button (click)="selectCred(cred)">Select credential</ion-button>
+      </div>
+      <ion-row class="ion-justify-content-center"> <ion-button [disabled]="isClicked(i)" (click)="selectCred(cred,i)">Select credential</ion-button></ion-row>
     </ion-card>
     </ion-row>
   </ion-grid>
 
-  <ion-button (click)="sendCred()">Send Credential</ion-button>
+  <ion-row class="ion-justify-content-center">  <ion-button class="boton-fijo" (click)="sendCred()">Send Credential</ion-button>
+  </ion-row>
 
   <ion-alert
   [isOpen]="isAlertOpen"
   header="Congratulations"
   message="Log In Completed"
-  [buttons]="alertButtons"
   (didDismiss)="setOpen(false)"
 ></ion-alert>  <ion-alert
 [isOpen]="isAlertOpenFail"
 header="Unsuccesfull"
 message="Log In Failed"
-[buttons]="alertButtons"
 (didDismiss)="setOpen(false)"
 ></ion-alert>
 </ion-content>
