@@ -66,13 +66,13 @@ stages:
                   workingDirectory: '$(Pipeline.Workspace)'
                   script: |
                     az login --service-principal -u $(app-id) -p $(password-or-cert) --tenant $(tenant)
-                    sudo az acr login --name $(registryName)       
+                    sudo az acr login --name $(registryName)
+                    cd /etc/dome       
                     sudo docker-compose stop $(volumeRepository)
                     sudo docker-compose -f /etc/dome/docker-compose.yml pull $(volumeRepository)
                     sudo docker rm $(sudo docker ps -a -f status=exited -q)        
                     sudo docker rmi $(sudo docker images --filter "dangling=true" -q --no-trunc)            
                     sudo docker-compose -f /etc/dome/docker-compose.yml up -d
                     echo 'Logs'
-                    cd /etc/dome
                     sudo docker-compose logs
 
