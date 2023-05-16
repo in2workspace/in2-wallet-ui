@@ -1,12 +1,11 @@
 # Base image
-FROM node:14-alpine
+FROM node:19.5.0-alpine
 # Create app directory
 WORKDIR /app
 # Copy package.json and package-lock.json
 COPY package*.json ./
 # Install dependencies
 RUN npm install -g @angular/cli
-RUN npm install --save-dev @angular-devkit/build-angular
 RUN npm i
 # Copy app source
 COPY . .
