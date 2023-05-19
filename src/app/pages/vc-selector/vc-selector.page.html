@@ -25,18 +25,24 @@
     </ion-row>
   </ion-grid>
 
-  <ion-row class="ion-justify-content-center">  <ion-button class="boton-fijo" (click)="sendCred()">Send Credential</ion-button>
-  </ion-row>
+
 
   <ion-alert
   [isOpen]="isAlertOpen"
+  class="custom-alert"
   header="Congratulations"
   message="Log In Completed"
   (didDismiss)="setOpen(false)"
 ></ion-alert>  <ion-alert
 [isOpen]="isAlertOpenFail"
+class="custom-alert"
 header="Unsuccesfull"
 message="Log In Failed"
 (didDismiss)="setOpen(false)"
 ></ion-alert>
 </ion-content>
+<ion-footer [translucent]="false">
+
+  <ion-row class="ion-justify-content-center">  <ion-button (click)="sendCred()">Send Credential</ion-button>
+  </ion-row>
+</ion-footer>
