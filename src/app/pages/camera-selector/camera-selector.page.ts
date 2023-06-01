@@ -37,12 +37,10 @@ export class CameraSelectorPage implements OnInit {
   desactivar: boolean = true;
 
   constructor(
-    private router: Router,
     private storageService: StorageService,
-    private walletService: WalletService,
-    private cameraService: CameraService
   ) {}
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    }
   availableDevicesEmit(devices: MediaDeviceInfo[]) {
     this.availableDevices = devices;
   }
@@ -53,8 +51,8 @@ export class CameraSelectorPage implements OnInit {
   onDeviceSelectChange(selected: string) {
     if (selected != '') {
       const device:MediaDeviceInfo|undefined = this.availableDevices.find((x) => x.deviceId === selected);
-      this.cameraService.camara=device;
-      device != undefined ? (this.currentDevice = device) : false;
+      this.storageService.setLlave("camara",selected);
+      device!=undefined?this.currentDevice=device:this.currentDevice
       this.desactivar = true;
     } else {
       this.currentDevice = {
@@ -64,6 +62,7 @@ export class CameraSelectorPage implements OnInit {
         label: '',
         toJSON() {},
       };
+      this.storageService.setLlave("camara","");
       this.desactivar = false;
     }
   }

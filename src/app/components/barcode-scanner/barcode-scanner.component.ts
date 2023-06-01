@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
-  ViewChild,
-  AfterViewInit,
   OnInit,
   Input,
   Output,
@@ -10,7 +8,7 @@ import {
 } from '@angular/core';
 import { BarcodeFormat } from '@zxing/library';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import { CameraService } from 'src/app/services/camera.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-barcode-scanner',
@@ -36,12 +34,11 @@ export class BarcodeScannerComponent implements OnInit {
   qrResultString: string = '';
 
   constructor(
-    private cameraService: CameraService
+    private storageService: StorageService
   ) {}
   ngOnInit(): void {
-    this.currentDevice=(this.cameraService.camara!=undefined?this.cameraService.camara :this.currentDevice);
-    console.log(this.currentDevice)
   }
+
 
   clearResult(): void {
     this.qrResultString = '';
@@ -50,13 +47,23 @@ export class BarcodeScannerComponent implements OnInit {
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices.emit(devices);
     this.hasDevices = Boolean(devices && devices.length);
-    this.currentDevice=(this.cameraService.camara!=undefined?this.cameraService.camara :this.currentDevice);
-
-  }
+    let cam= this.storageService.get("camara");
+    if(cam!=undefined && cam != "undefined"){
+      console.log(cam)
+      const device:MediaDeviceInfo|undefined = devices.find((x) => x.deviceId === cam);
+      device!=undefined?this.currentDevice=device:this.currentDevice
+    }
+    else{
+      this.currentDevice={
+        deviceId: '',
+        groupId: '',
+        kind: 'audiooutput',
+        label: '',
+        toJSON() {},
+      }}  }
 
   onCodeResult(resultString: string) {
     this.qrCode.emit(resultString);
-
   }
 
 }

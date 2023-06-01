@@ -19,6 +19,9 @@ export class StorageService {
   public set( value: any) {
     sessionStorage.setItem(sessionStorage.length.toString(),value)
   }
+  public setLlave(llave:string, value: any) {
+    sessionStorage.setItem(llave,value)
+  }
   public getAll(){
     let items:(string)[] = []
     for(let i= 0; i<sessionStorage.length;i++){

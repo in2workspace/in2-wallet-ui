@@ -18,7 +18,7 @@
         <ion-card-title>{{credDataList[i]['credentialSubject']['nom']}} {{credDataList[i]['credentialSubject']['cognoms']}}</ion-card-title>
         <ion-card-subtitle>{{credDataList[i]['type'][1]}}</ion-card-subtitle>
       </ion-card-header>
-      <qr-code [value]="cred" [size]="tamano"></qr-code>
+      <qr-code [value]="credDataList[i]['id']" [size]="tamano"></qr-code>
       <span></span>
     </ion-card>
     </ion-row>
