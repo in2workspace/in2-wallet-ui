@@ -30,7 +30,7 @@ export class HomePage implements OnInit {
       const device: MediaDeviceInfo | undefined = this.availableDevices.find(
         (x) => x.deviceId === selected
       );
-      device != undefined ? (this.currentDevice = device) : this.currentDevice;
+      if(device != undefined)this.currentDevice = device;
     } else {
       this.currentDevice = {
         deviceId: '',

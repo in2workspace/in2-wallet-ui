@@ -23,7 +23,7 @@ import { CameraService } from 'src/app/services/camera.service';
     BarcodeScannerComponent,
   ],
 })
-export class CameraSelectorPage implements OnInit {
+export class CameraSelectorPage {
   @Input() availableDevices: MediaDeviceInfo[] = [];
 
   currentDevice: MediaDeviceInfo = {
@@ -39,8 +39,7 @@ export class CameraSelectorPage implements OnInit {
   constructor(
     private storageService: StorageService,
   ) {}
-  ngOnInit(): void {
-    }
+
   availableDevicesEmit(devices: MediaDeviceInfo[]) {
     this.availableDevices = devices;
   }
@@ -52,7 +51,7 @@ export class CameraSelectorPage implements OnInit {
     if (selected != '') {
       const device:MediaDeviceInfo|undefined = this.availableDevices.find((x) => x.deviceId === selected);
       this.storageService.setLlave("camara",selected);
-      device!=undefined?this.currentDevice=device:this.currentDevice
+      if(device!=undefined)this.currentDevice=device
       this.desactivar = true;
     } else {
       this.currentDevice = {

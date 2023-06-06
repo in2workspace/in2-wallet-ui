@@ -16,7 +16,7 @@ import { StorageService } from 'src/app/services/storage.service';
   standalone: true,
   imports: [CommonModule, ZXingScannerModule],
 })
-export class BarcodeScannerComponent implements OnInit {
+export class BarcodeScannerComponent {
   @Output() availableDevices: EventEmitter<MediaDeviceInfo[]> =
     new EventEmitter();
   @Output() qrCode: EventEmitter<string> =
@@ -35,8 +35,7 @@ export class BarcodeScannerComponent implements OnInit {
   constructor(
     private storageService: StorageService
   ) {}
-  ngOnInit(): void {
-  }
+
 
 
   clearResult(): void {
@@ -50,7 +49,7 @@ export class BarcodeScannerComponent implements OnInit {
     if(cam!=undefined && cam != "undefined"){
       console.log(cam)
       const device:MediaDeviceInfo|undefined = devices.find((x) => x.deviceId === cam);
-      device!=undefined?this.currentDevice=device:this.currentDevice
+      if(device!=undefined)this.currentDevice=device
     }
     else{
       this.currentDevice={
