@@ -13,16 +13,17 @@
   <ion-card>
 
     <ion-card-header>
-      <ion-card-title>{{token['credentialSubject']['firstName']}} {{token['credentialSubject']['familyName']}}</ion-card-title>
-      <ion-card-title>{{token['credentialSubject']['nom']}} {{token['credentialSubject']['cognoms']}}</ion-card-title>
-      <ion-card-subtitle>{{token['type'][1]}}</ion-card-subtitle>
+      <ion-row class="ion-justify-content-center"> <ion-card-title>{{token['credentialSubject']['firstName']}} {{token['credentialSubject']['familyName']}}</ion-card-title></ion-row>
+      <ion-row class="ion-justify-content-center"> <ion-card-title>{{token['credentialSubject']['nom']}} {{token['credentialSubject']['cognoms']}}</ion-card-title></ion-row>
+      <ion-row class="ion-justify-content-center"> <ion-card-subtitle>{{token['type'][1]}}</ion-card-subtitle></ion-row>
     </ion-card-header>
-    <qr-code [value]="qr" [size]="tamano"></qr-code>
+    <ion-row class="ion-justify-content-center"> <qr-code [value]="qr" [size]="tamano"></qr-code></ion-row>
     <ion-row class="ion-justify-content-center">    <ion-button (click)="saveCredential()">Save Verifiable Credential</ion-button>
     </ion-row>
   </ion-card>
   <ion-alert
 [isOpen]="isAlertOpen"
+class="custom-alert"
 header="Congratulations"
 message="Credential saved"
 (didDismiss)="setOpen(false)"

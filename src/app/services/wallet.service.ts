@@ -7,33 +7,45 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class WalletService {
-  executeURLTOKEN(qrData: string) {
-    return this.http.get(
-      qrData ,
-       {
-      observe: 'response'});  
-    }
+
 
   constructor(private http:HttpClient) { }
 
 
-  public executeURL(url:string): Observable<any> {
+  public executeContent(url:string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Allow-Control-Allow-Origin': '*'})
-    const options = { headers: headers, redirect : 'follow' };
+    const options = { headers: headers, redirect : 'follow',responseType: 'text' as 'json' };
     return this.http.post(
-      environment.base_url + '/api/execute-content/get-siop-authentication-request', 
+      environment.base_url + '/api/execute-content', 
       {"qr_content":url},options)
     }
-
-  public executeVC(state:string,vc:Array<string>): Observable<any> {
+  public getOne(data: string) {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Allow-Control-Allow-Origin': '*'})
+      const options = { headers: headers, redirect : 'follow' };
+      return this.http.get(
+        environment.base_url + '/api/vc/1/'+data+'/format/vc_json', 
+        options)
+    }  
+  public executeVC(vc:Array<string>,siop_authentication_request:any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Allow-Control-Allow-Origin': '*'})
     return this.http.post(
-      environment.base_url + '/api/execute-content/vp',{"vc_list":vc,"siop_authentication_request":state},
+      environment.base_url + '/api/execute-content/vp/v2',{"siop_authentication_request":siop_authentication_request,"vc_list":vc},
       { headers: headers, responseType: 'text'}
     )
+    }
+  public getAll(){
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Allow-Control-Allow-Origin': '*'})
+      const options = { headers: headers, redirect : 'follow' };
+      return this.http.get(
+        environment.base_url + '/api/vc/1/format/vc_json', 
+        options)
     }
 }

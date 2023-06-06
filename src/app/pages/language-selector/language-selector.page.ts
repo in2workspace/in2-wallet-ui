@@ -6,7 +6,6 @@ import { IonicModule } from '@ionic/angular';
 @Component({
   selector: 'app-language-selector',
   templateUrl: './language-selector.page.html',
-  styleUrls: ['./language-selector.page.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })

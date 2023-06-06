@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Home</ion-title>
-    <img src="https://www.evidenceledger.eu/images/logo.png" width="auto" slot="end" height="60px"/>
+    <img alt src="https://www.evidenceledger.eu/images/logo.png" width="auto" slot="end" height="60px"/>
 
   </ion-toolbar>
 </ion-header>
@@ -22,30 +22,29 @@
         <ion-row class="ion-justify-content-center">
           <ion-button *ngIf="!toggleScan" (click)="startScan()">Scan QR</ion-button>
         </ion-row>
-        
-        <!-- <ion-row class="ion-justify-content-center">
-          <ion-button (click)="excuteVC()">ExcuteVC</ion-button>
-          <ion-button (click)="excuteURL()">excuteURL</ion-button>
-        </ion-row> -->
+      
       </ion-grid>
     </ion-card-content>
   </ion-card>
-  <ion-grid  *ngIf="toggleScan">
-    <ion-row class="ion-justify-content-start">
-      <ion-button (click)="onDeviceSelectChange('')">No device</ion-button>
-    </ion-row>
-    <ion-row
-      class="ion-justify-content-start"
-      *ngFor="let camera of availableDevices"
-    >
-      <ion-button (click)="onDeviceSelectChange(camera.deviceId)"
-        >{{camera.label}}</ion-button
-      >
-    </ion-row>
+  <div [hidden]="!toggleScan">
+    <ion-grid  >
     <ion-row class="ion-justify-content-center">
-      <app-barcode-scanner (qrCode)="qrCodeEmit($event)"         (availableDevices)="availableDevicesEmit($event)"
+      <app-barcode-scanner *ngIf="escaneado===''" (qrCode)="qrCodeEmit($event)"
       [currentDevice]="currentDevice"></app-barcode-scanner>
     </ion-row>
   </ion-grid>
-
+</div>
+  <ion-alert
+  [isOpen]="isAlertOpen"
+  class="custom-alert"
+  header="Congratulations"
+  message="VC saved"
+  (didDismiss)="setOpen(false)"
+></ion-alert>  <ion-alert
+[isOpen]="isAlertOpenFail"
+class="custom-alert"
+header="Unsuccesfull"
+message="VC already saved"
+(didDismiss)="setOpen(false)"
+></ion-alert>
 </ion-content>
