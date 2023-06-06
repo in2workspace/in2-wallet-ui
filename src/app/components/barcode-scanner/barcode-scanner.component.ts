@@ -13,7 +13,6 @@ import { StorageService } from 'src/app/services/storage.service';
 @Component({
   selector: 'app-barcode-scanner',
   templateUrl: './barcode-scanner.component.html',
-  styleUrls: ['./barcode-scanner.component.scss'],
   standalone: true,
   imports: [CommonModule, ZXingScannerModule],
 })
