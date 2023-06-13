@@ -47,4 +47,12 @@ header="Unsuccesfull"
 message="VC already saved"
 (didDismiss)="setOpen(false)"
 ></ion-alert>
+<ion-alert
+[isOpen]="isAlertOpenNotFound"
+class="custom-alert"
+header="Unsuccesfull"
+message="No stored valid credential"
+[buttons]="alertButtons"
+(didDismiss)="setOpenNotFound(false)"
+></ion-alert>
 </ion-content>

@@ -22,6 +22,7 @@ import { CameraService } from 'src/app/services/camera.service';
   ],
 })
 export class HomePage implements OnInit {
+  public alertButtons = ['OK'];
   toggleScan: boolean = false;
   escaneado = '';
   startScan() {
@@ -93,7 +94,11 @@ this.escaneado= qrCode;
             this.isAlertOpen = false;
           }, TIME_IN_MS);
           this.isAlertOpen = true;
-        } else {
+        }
+        else if (err.status == 404) {
+          this.isAlertOpenNotFound = true;
+        } 
+        else {
           let TIME_IN_MS = 1500;
           setTimeout(() => {
             this.isAlertOpenFail = false;
@@ -106,6 +111,11 @@ this.escaneado= qrCode;
   setOpen(isOpen: boolean) {
     this.isAlertOpen = isOpen;
   }
+  setOpenNotFound(isOpen: boolean) {
+    this.isAlertOpenNotFound = isOpen;
+    this.router.navigate(['/home'], {});
+    }
+    isAlertOpenNotFound=false;
   isAlertOpenFail = false;
   isAlertOpen = false;
 }

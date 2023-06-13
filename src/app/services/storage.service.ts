@@ -11,27 +11,27 @@ export class StorageService {
   }
 
   async init() {
-    sessionStorage.clear();
+    localStorage.clear();
   }
 
   // Create and expose methods that users of this service can
   // call, for example:
   public set( value: any) {
-    sessionStorage.setItem(sessionStorage.length.toString(),value)
+    localStorage.setItem(localStorage.length.toString(),value)
   }
   public setLlave(llave:string, value: any) {
-    sessionStorage.setItem(llave,value)
+    localStorage.setItem(llave,value)
   }
   public getAll(){
     let items:(string)[] = []
-    for(let i= 0; i<sessionStorage.length;i++){
+    for(let i= 0; i<localStorage.length;i++){
 
-      let val = sessionStorage.getItem(i.toString())
+      let val = localStorage.getItem(i.toString())
       items.push((val!=null)?val:"");
   }
   return items;
   }
   public get(key:string){
-    return sessionStorage.getItem(key);
+    return localStorage.getItem(key);
   }
 }
