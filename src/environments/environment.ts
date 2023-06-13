@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  base_url: 'http://localhost:8083',
+  base_url: 'https://walletapidev.in2.es',
 
 };
 

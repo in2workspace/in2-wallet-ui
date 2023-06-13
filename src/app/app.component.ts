@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthenticationService } from './services/authentication.service';
 
 @Component({
   selector: 'app-root',
@@ -21,10 +22,17 @@ export class AppComponent {
     { title: 'Privacy Policy', url: '/privacy-policy', icon: 'book' },
     { title: 'FAQs', url: '/faqs', icon: 'help' },
     { title: 'Settings', url: '/settings', icon: 'cog' },
+    { title: 'Logout', url:'/login', icon:'log-out'}
   ];
-  constructor(public translate: TranslateService
+  constructor(public translate: TranslateService,
+    private authenticationService:AuthenticationService,
+    private router: Router,
     ) {
       translate.addLangs(['en']);
       translate.setDefaultLang('en');
+    }
+    logout(){
+      this.authenticationService.logout();
+      this.router.navigate(['/login'], {})
     }
 }

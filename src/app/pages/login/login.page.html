@@ -1,0 +1,46 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>John Doe</ion-card-title>
+      <ion-card-subtitle>Welcome</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row class="ion-justify-content-first"> You are using the IN2 wallet </ion-row>
+        <br/>
+        <ion-row class="ion-justify-content-center">
+          <form [formGroup]="login" (ngSubmit)="onSubmit()">
+            <ion-item>
+              <ion-grid>
+              <ion-row><ion-label >Email</ion-label></ion-row>
+              <ion-row><ion-input type="text" required formControlName="username"></ion-input></ion-row>
+            </ion-grid>
+            </ion-item>
+            <br/>
+            <ion-item>
+              <ion-grid>
+              <ion-row><ion-label>Password</ion-label></ion-row>
+              <ion-row><ion-input type="password" required formControlName="password"></ion-input></ion-row>
+            </ion-grid>
+            </ion-item>
+            <ion-row>
+              <ion-col>
+                <ion-button type="submit" [disabled]="!login.valid">Login</ion-button>
+              </ion-col>
+            </ion-row>
+          </form>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  
+</ion-content>
