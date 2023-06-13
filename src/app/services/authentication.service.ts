@@ -32,7 +32,7 @@ export class AuthenticationService {
       return this.isLogin;
     }
     logout(){
-      const loggedIn = localStorage.removeItem('token');
+      localStorage.removeItem('token');
       this.isLogin = false;
 
     }

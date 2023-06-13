@@ -16,7 +16,7 @@ interface LoginForm {
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
   login = new FormGroup<LoginForm>({
     username: new FormControl('', {nonNullable: true}),
     password: new FormControl('', {nonNullable: true}),
@@ -26,12 +26,8 @@ export class LoginPage implements OnInit {
     private storageService:StorageService,
     private router: Router,
     ) { }
-
-  ngOnInit() {
-  }
   onSubmit(){
     this.authenticationService.login(this.login.value).subscribe(data=>{
-      console.log(data)
       this.authenticationService.isLogin = true;
       let token = data.headers.get('Authorization')
       this.storageService.setLlave('token',token)
