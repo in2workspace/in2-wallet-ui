@@ -50,10 +50,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/qrinfo/qrinfo.page').then( m => m.QRInfoPage)
   },
   {
-    path: 'wallet',
+    path: 'credentials',
     providers: [StorageService],
     canActivate: [AuthGuard],
-    loadComponent: () => import('./pages/wallet/wallet.page').then( m => m.WalletPage)
+    loadComponent: () => import('./pages/credentials/credentials.page').then( m => m.WalletPage)
   },
   {
     path: 'vc-selector',

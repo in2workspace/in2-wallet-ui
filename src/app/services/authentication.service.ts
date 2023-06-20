@@ -25,8 +25,11 @@ export class AuthenticationService {
     }
     isLoggedIn() {
       const loggedIn = localStorage.getItem('token');
-      if (loggedIn )
-        this.isLogin = true;
+      
+      if (loggedIn){
+      let expired = JSON.parse(atob(loggedIn.split('Bearer ')[1].split('.')[1]))['exp'];
+        if(Date.now() <= expired *1000 )
+          this.isLogin = true;}
       else
         this.isLogin = false;
       return this.isLogin;

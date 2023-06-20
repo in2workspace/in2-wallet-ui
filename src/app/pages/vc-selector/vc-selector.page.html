@@ -10,17 +10,17 @@
 <ion-content [fullscreen]="true">
   <ion-grid >
     <ion-row class="ion-justify-content-center"
-    *ngFor="let cred of credDataList; let i = index">
+    *ngFor="let cred of credList; let i = index">
     <ion-card>
 
       <ion-card-header >
-        <ion-card-title>{{credDataList[i]['credentialSubject']['firstName']}} {{credDataList[i]['credentialSubject']['familyName']}}</ion-card-title>
-        <ion-card-title>{{credDataList[i]['credentialSubject']['nom']}} {{credDataList[i]['credentialSubject']['cognoms']}}</ion-card-title>
-        <ion-card-subtitle>{{credDataList[i]['type'][1]}}</ion-card-subtitle>
+        <ion-card-title>{{cred['credentialSubject']['firstName']}} {{cred['credentialSubject']['familyName']}}</ion-card-title>
+        <ion-card-title>{{cred['credentialSubject']['nom']}} {{cred['credentialSubject']['cognoms']}}</ion-card-title>
+        <ion-card-subtitle>{{cred['vcType'][1]}}</ion-card-subtitle>
       </ion-card-header>
-      <div class="ion-justify-content-center"><qr-code  [value]="credDataList[i]['id']" [size]="tamano"></qr-code>
+      <div class="ion-justify-content-center"><qr-code  [value]="cred['id']" [size]="tamano"></qr-code>
       </div>
-      <ion-row class="ion-justify-content-center"> <ion-button [disabled]="isClicked(i)" (click)="selectCred(credDataList[i]['id'],i)">Select credential</ion-button></ion-row>
+      <ion-row class="ion-justify-content-center"> <ion-button [disabled]="isClicked(i)" (click)="selectCred(cred,i)">Select credential</ion-button></ion-row>
     </ion-card>
     </ion-row>
   </ion-grid>

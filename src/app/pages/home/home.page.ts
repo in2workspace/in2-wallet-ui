@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { StorageService } from 'src/app/services/storage.service';
 import { WalletService } from 'src/app/services/wallet.service';
 import { CameraService } from 'src/app/services/camera.service';
+const   TIME_IN_MS = 1500;
 
 @Component({
   selector: 'app-home',
@@ -68,42 +69,40 @@ export class HomePage implements OnInit {
   }
 
   qrCodeEmit(qrCode: string) {
-this.escaneado= qrCode;
-    console.log(qrCode);
-    //qrCode="eyJraWQiOiJkaWQ6a2V5OnpEbmFlUms5ZWluQmFKMUJGMUcyZVZ4TkN1b3JaU2FkZ0ZORlVMeWZSdFg1M2dodWMjekRuYWVSazllaW5CYUoxQkYxRzJlVnhOQ3VvclpTYWRnRk5GVUx5ZlJ0WDUzZ2h1YyIsInR5cCI6IkpXVCIsImFsZyI6IkVTMjU2In0.eyJzdWIiOiJkaWQ6a2V5OnpEbmFlWVpiWTg3dk5BZFVjRW9yQ1Rjd3ZKUnRvTmVVZW8zRWpldTZrY0M0VG9UeFoiLCJuYmYiOjE2ODEyMjA0NDcsImlzcyI6ImRpZDprZXk6ekRuYWVSazllaW5CYUoxQkYxRzJlVnhOQ3VvclpTYWRnRk5GVUx5ZlJ0WDUzZ2h1YyIsImlhdCI6MTY4MTIyMDQ0NywidmMiOnsiY3JlZGVudGlhbFNjaGVtYSI6eyJpZCI6Imh0dHBzOi8vZG9tZS5ldS9zY2hlbWFzL0N1c3RvbWVyQ3JlZGVudGlhbC9zY2hlbWEuanNvbiIsInR5cGUiOiJGdWxsSnNvblNjaGVtYVZhbGlkYXRvcjIwMjEifSwiY3JlZGVudGlhbFN1YmplY3QiOnsiZmFtaWx5TmFtZSI6InBlbmciLCJmaXJzdE5hbWUiOiJoYW8iLCJpZCI6ImRpZDprZXk6ekRuYWVZWmJZODd2TkFkVWNFb3JDVGN3dkpSdG9OZVVlbzNFamV1NmtjQzRUb1R4WiJ9LCJpc3N1YW5jZURhdGUiOiJUaHUgTWFyIDMwIDEwOjI3OjQyIFVUQyAyMDIzIiwiaWQiOiJ1cm46dXVpZDpkYTc3ZjZhNy1iOWRhLTQ3MTktYThkOS1jM2QxMTM5ZGI3NzIiLCJ2YWxpZEZyb20iOiIyMDIzLTA0LTExVDEzOjQwOjQ3WiIsImlzc3VlZCI6IjIwMjMtMDQtMTFUMTM6NDA6NDdaIiwidHlwZSI6WyJWZXJpZmlhYmxlQ3JlZGVudGlhbCIsIkN1c3RvbWVyQ3JlZGVudGlhbCJdLCJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJpc3N1ZXIiOiJkaWQ6a2V5OnpEbmFlUms5ZWluQmFKMUJGMUcyZVZ4TkN1b3JaU2FkZ0ZORlVMeWZSdFg1M2dodWMifSwianRpIjoidXJuOnV1aWQ6ZGE3N2Y2YTctYjlkYS00NzE5LWE4ZDktYzNkMTEzOWRiNzcyIn0.jA0ykyPenvIW5LOIMd-uO0edu-NmxlNl0y4IpQfzwZ4GXGnYkm8eQytoHjNbgcSIcppOvQCXomK4G8JFpAwygg"
+    this.escaneado= qrCode;
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
-        console.log('data', executionResponse);
         if (executionResponse==='{}') {
-          let TIME_IN_MS = 1500;
           setTimeout(() => {
             this.isAlertOpen = false;
           }, TIME_IN_MS);
           this.isAlertOpen = true;
+          this.escaneado= '';
         } else {
           this.router.navigate(['/vc-selector/'], {
-            queryParams: { executionResponse: executionResponse, siop_authentication_request: qrCode },
+            queryParams: { executionResponse: executionResponse },
           });
+          this.escaneado= '';
         }
       },
       error: (err) => {
-        console.log(err);
         if (err.status == 422) {
-          let TIME_IN_MS = 1500;
           setTimeout(() => {
             this.isAlertOpen = false;
           }, TIME_IN_MS);
           this.isAlertOpen = true;
+          this.escaneado= '';
         }
         else if (err.status == 404) {
           this.isAlertOpenNotFound = true;
+          this.escaneado= '';
         } 
         else {
-          let TIME_IN_MS = 1500;
           setTimeout(() => {
             this.isAlertOpenFail = false;
           }, TIME_IN_MS);
           this.isAlertOpenFail = true;
+          this.escaneado= '';
         }
       }
   });

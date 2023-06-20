@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage.service';
 import { QRCodeModule } from 'angular2-qrcode';
-import { WalletService } from 'src/app/services/wallet.service';
+import { VCReply, WalletService } from 'src/app/services/wallet.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -17,12 +17,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class VcSelectorPage implements OnInit {
   isClick: boolean[] = [];
-  selCredList: string[] = [];
-  credList: string[] = [];
+  selCredList: any[] = [];
+  credList: any[] = [];
   credDataList: any[] = [];
   tamano: number = 300;
   executionResponse: any;
-  siop_authentication_request: any;
+  _VCReply: VCReply = {
+    selectedVcList:[],
+    state:"",
+    redirectUri:""  
+  };
   constructor(
     private router: Router,
     private storageService: StorageService,
@@ -30,32 +34,29 @@ export class VcSelectorPage implements OnInit {
     private route: ActivatedRoute
   ) {
     this.route.queryParams.subscribe((params) => {
-      this.siop_authentication_request = JSON.parse(params['executionResponse'])[0];
       this.executionResponse = JSON.parse(params['executionResponse']);
-      this.executionResponse.shift();
+      this._VCReply.redirectUri = this.executionResponse['redirectUri'];
+      this._VCReply.state = this.executionResponse['state'];
     });
   }
 
   ngOnInit() {
-    this.credList = this.executionResponse;
+    this.credList = this.executionResponse['selectableVcList'];
     this.credList.forEach((credential) => {
-      this.walletService.getOne(credential).subscribe((vc: any) => {
-        console.log(vc);
-        this.credDataList.push(vc['vc']['value']);
         this.isClick.push(false);
-      });
     });
   }
   isClicked(index: number) {
     return this.isClick[index];
   }
-  selectCred(cred: string, index: number) {
+  selectCred(cred: any, index: number) {
     this.selCredList.push(cred);
     this.isClick[index] = !this.isClick[index];
   }
   sendCred() {
+    this._VCReply.selectedVcList=this.selCredList;
     this.walletService
-      .executeVC(this.selCredList, this.siop_authentication_request)
+      .executeVC(this._VCReply)
       .subscribe({
         next: (authenticationResponse) => {
           this.isAlertOpen = true;

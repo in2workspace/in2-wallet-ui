@@ -15,7 +15,7 @@ import { AuthenticationService } from './services/authentication.service';
 export class AppComponent {
   public appPages = [
     { title: 'Home', url: '/home', icon: 'home' },
-    { title: 'Wallet', url: '/wallet', icon: 'wallet' },
+    { title: 'Credentials', url: '/credentials', icon: 'wallet' },
     { title: 'Camera Selector', url: '/camera-selector', icon: 'camera' },
     { title: 'Language Selector', url: '/language-selector', icon: 'flag' },
     { title: 'Terms of User', url: '/terms-of-use', icon: 'document-text' },
