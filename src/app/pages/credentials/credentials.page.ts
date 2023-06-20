@@ -10,7 +10,6 @@ import { VcViewComponent, VerifiableCredential } from "../../components/vc-view/
 @Component({
     selector: 'app-credentials',
     templateUrl: './credentials.page.html',
-    styleUrls: ['./credentials.page.scss'],
     standalone: true,
     providers: [StorageService],
     imports: [IonicModule, CommonModule, FormsModule, QRCodeModule, VcViewComponent]
