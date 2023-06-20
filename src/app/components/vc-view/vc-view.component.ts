@@ -1,5 +1,5 @@
 import {
-  Component, EventEmitter, Input, OnInit, Output,
+  Component, Input, OnInit,
 } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { QRCodeModule } from 'angular2-qrcode';
