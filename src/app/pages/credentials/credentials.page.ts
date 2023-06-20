@@ -8,9 +8,9 @@ import { WalletService } from 'src/app/services/wallet.service';
 import { VcViewComponent, VerifiableCredential } from "../../components/vc-view/vc-view.component";
 
 @Component({
-    selector: 'app-wallet',
-    templateUrl: './wallet.page.html',
-    styleUrls: ['./wallet.page.scss'],
+    selector: 'app-credentials',
+    templateUrl: './credentials.page.html',
+    styleUrls: ['./credentials.page.scss'],
     standalone: true,
     providers: [StorageService],
     imports: [IonicModule, CommonModule, FormsModule, QRCodeModule, VcViewComponent]
