@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "in2dome",
+        "projectKey": "in2Dome_in2-dome-wallet_frontend"
+    }
+}

@@ -11,7 +11,7 @@
   <ion-grid>
     <ion-row class="ion-justify-content-center"
     *ngFor="let cred of credList">
-      <app-vc-view (qrCode)="qrCodeEmit($event)" [credentialInput]="cred"></app-vc-view>
+      <app-vc-view [credentialInput]="cred"></app-vc-view>
     </ion-row>
   </ion-grid>
 </ion-content>
