@@ -1,6 +1,6 @@
 <ion-header [translucent]="false">
   <ion-toolbar>
-    <ion-title>Login</ion-title>
+    <ion-title>Register</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -10,14 +10,22 @@
    
     <ion-card-content>
       <ion-grid>
-        <ion-row class="ion-justify-content-first"> You are using the IN2 wallet </ion-row>
+        <ion-row class="ion-justify-content-first"> Register Form </ion-row>
         <br/>
         <ion-row class="ion-justify-content-center">
           <form [formGroup]="login" (ngSubmit)="onSubmit()">
             <ion-item>
               <ion-grid>
-              <ion-row><ion-label >Email</ion-label></ion-row>
+              <ion-row><ion-label >Username</ion-label></ion-row>
               <ion-row><ion-input type="text" required formControlName="username"></ion-input></ion-row>
+            </ion-grid>
+            </ion-item>
+            <br/>
+
+            <ion-item>
+              <ion-grid>
+              <ion-row><ion-label >Email</ion-label></ion-row>
+              <ion-row><ion-input type="text" required formControlName="email"></ion-input></ion-row>
             </ion-grid>
             </ion-item>
             <br/>
@@ -27,11 +35,9 @@
               <ion-row><ion-input type="password" required formControlName="password"></ion-input></ion-row>
             </ion-grid>
             </ion-item>
-            <a [routerLink]="['/register']">New User? Click to register</a>
-
             <ion-row>
               <ion-col>
-                <ion-button type="submit" [disabled]="!login.valid">Login</ion-button>
+                <ion-button type="submit" [disabled]="!login.valid">Register</ion-button>
               </ion-col>
             </ion-row>
           </form>

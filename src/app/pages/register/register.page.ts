@@ -4,33 +4,34 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { IonicModule } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { StorageService } from 'src/app/services/storage.service';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { RegisterService } from 'src/app/services/register.service';
 interface LoginForm {
   username: FormControl<string>;
+  email: FormControl<string>;
   password?: FormControl<string>;
 }
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
+  selector: 'app-register',
+  templateUrl: './register.page.html',
+  styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule,RouterModule]
+  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
 })
-export class LoginPage {
+export class RegisterPage {
   login = new FormGroup<LoginForm>({
     username: new FormControl('', {nonNullable: true}),
+    email: new FormControl('', {nonNullable: true}),
     password: new FormControl('', {nonNullable: true}),
 });
 
-  constructor(private authenticationService:AuthenticationService,
-    private storageService:StorageService,
+  constructor(
+    private registerService:RegisterService,
     private router: Router,
     ) { }
   onSubmit(){
-    this.authenticationService.login(this.login.value).subscribe(data=>{
-      this.authenticationService.isLogin = true;
-      let token = data.headers.get('Authorization')
-      this.storageService.setLlave('token',token)
-      this.router.navigate(['/home/'], {})
-  })
+    this.registerService.register(this.login.value);
+    this.router.navigate(['/login/'], {})
+
   }  
 }
