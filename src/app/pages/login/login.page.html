@@ -2,36 +2,35 @@
 
 
 <ion-content [fullscreen]="true" class="ion-padding content">
-  <ion-header [translucent]="false">
-    <ion-toolbar>
-      <ion-title>Login</ion-title>
-    </ion-toolbar>
-  </ion-header>
+
 <br/>
       <ion-grid>
-        <ion-row class="ion-justify-content-first"> You are using the IN2 wallet </ion-row>
-        <br/>
+        <ion-row class="ion-justify-content-center header-logo">     
+          <img alt src="https://www.evidenceledger.eu/images/logo.png" width="auto"  height="60px"/>
+        </ion-row>
+
         <ion-row class="ion-justify-content-center">
           <form [formGroup]="login" (ngSubmit)="onSubmit()">
             <ion-item class="item-trns">
-              <ion-grid>
-              <ion-row><ion-label >Email</ion-label></ion-row>
-              <ion-row><ion-input type="text" required formControlName="username"></ion-input></ion-row>
-            </ion-grid>
+              <ion-input placeholder="Username" labelPlacement="floating" type="text" required formControlName="username"></ion-input>
+              <ion-icon name="person-outline" slot="start"></ion-icon>
+
             </ion-item >
             <br/>
             <ion-item class="item-trns">
-              <ion-grid>
-              <ion-row><ion-label>Password</ion-label></ion-row>
-              <ion-row><ion-input type="password" required formControlName="password"></ion-input></ion-row>
-            </ion-grid>
-            </ion-item>
-            <ion-button fill="clear" color="secondary"[routerLink]="['/register']">New User? Click to register</ion-button>
+              <ion-input placeholder="Password" labelPlacement="floating" type="password" required formControlName="password"></ion-input>
+              <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
 
-            <ion-row>
+            </ion-item>
+
+
+            <ion-row class="login-row">
               <ion-col>
-                <ion-button color="secondary" type="submit" [disabled]="!login.valid">Login</ion-button>
+                <ion-button class="ion-button-custom"expand="block"color="secondary" type="submit" [disabled]="!login.valid">Login</ion-button>
               </ion-col>
+            </ion-row>
+            <ion-row class="ion-justify-content-center">
+              <ion-button fill="clear" color="secondary"[routerLink]="['/register']">New User? Click to register</ion-button>
             </ion-row>
           </form>
         </ion-row>

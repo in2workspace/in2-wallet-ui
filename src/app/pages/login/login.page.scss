@@ -5,13 +5,27 @@
     --background: url("https://www.in2.es/images/backgrounds/m3@2x.jpg");
 }
 .item-trns {
-	border-color: #b1ff2b93;
-    --ion-item-background: #b1ff2b93;
-	color: white; 
-    border-radius: 5px;
+    --ion-item-background: transparent;
+	color: #B0FF2B; 
+}
+ion-item{
+    --border-color:#B0FF2B;
 }
 .custom-button-content {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+.ion-button-custom{
+    --ion-color-base:#B0FF2B!important;
+    --ion-color-contrast:black!important;
+}
+.ion-button-custom[disabled]{
+    --ion-color-base:grey!important;
+  }
+  .header-logo{
+    height: 9rem ;
+  }
+  .login-row{
+    margin-top: 2rem;
+  }
