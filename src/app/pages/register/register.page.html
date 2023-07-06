@@ -1,0 +1,51 @@
+<ion-header [translucent]="false">
+  <ion-toolbar>
+    <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card>
+   
+    <ion-card-content>
+      <ion-grid>
+        <ion-row class="ion-justify-content-first"> Register Form </ion-row>
+        <br/>
+        <ion-row class="ion-justify-content-center">
+          <form [formGroup]="login" (ngSubmit)="onSubmit()">
+            <ion-item>
+              <ion-grid>
+              <ion-row><ion-label >Username</ion-label></ion-row>
+              <ion-row><ion-input type="text" required formControlName="username"></ion-input></ion-row>
+            </ion-grid>
+            </ion-item>
+            <br/>
+
+            <ion-item>
+              <ion-grid>
+              <ion-row><ion-label >Email</ion-label></ion-row>
+              <ion-row><ion-input type="text" required formControlName="email"></ion-input></ion-row>
+            </ion-grid>
+            </ion-item>
+            <br/>
+            <ion-item>
+              <ion-grid>
+              <ion-row><ion-label>Password</ion-label></ion-row>
+              <ion-row><ion-input type="password" required formControlName="password"></ion-input></ion-row>
+            </ion-grid>
+            </ion-item>
+            <ion-row>
+              <ion-col>
+                <ion-button type="submit" [disabled]="!login.valid">Register</ion-button>
+              </ion-col>
+            </ion-row>
+          </form>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  
+</ion-content>

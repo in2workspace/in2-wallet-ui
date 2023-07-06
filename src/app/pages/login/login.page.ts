@@ -4,16 +4,17 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { IonicModule } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { StorageService } from 'src/app/services/storage.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 interface LoginForm {
   username: FormControl<string>;
-  password?: FormControl<string>;
+  password: FormControl<string>;
 }
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
+  styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule,RouterModule]
 })
 export class LoginPage {
   login = new FormGroup<LoginForm>({

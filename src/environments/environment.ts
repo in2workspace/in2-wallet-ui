@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   base_url: 'https://walletapidev.in2.es',
+  keycloak_url: 'https://walletapidev.in2.es',
 
 };
 
