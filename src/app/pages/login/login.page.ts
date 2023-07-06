@@ -7,11 +7,12 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Router, RouterModule } from '@angular/router';
 interface LoginForm {
   username: FormControl<string>;
-  password?: FormControl<string>;
+  password: FormControl<string>;
 }
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
+  styleUrls: ['./login.page.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule,RouterModule]
 })

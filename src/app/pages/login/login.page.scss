@@ -1,0 +1,17 @@
+.register{
+    width: -webkit-fill-available;
+}
+.content{
+    --background: url("https://www.in2.es/images/backgrounds/m3@2x.jpg");
+}
+.item-trns {
+	border-color: #b1ff2b93;
+    --ion-item-background: #b1ff2b93;
+	color: white; 
+    border-radius: 5px;
+}
+.custom-button-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
