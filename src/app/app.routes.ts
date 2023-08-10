@@ -53,7 +53,13 @@ export const routes: Routes = [
     path: 'credentials',
     providers: [StorageService],
     canActivate: [AuthGuard],
-    loadComponent: () => import('./pages/credentials/credentials.page').then( m => m.WalletPage)
+    loadComponent: () => import('./pages/credentials/credentials.page').then( m => m.CredentialsPage)
+  },
+  {
+    path: 'dids',
+    providers: [StorageService],
+    canActivate: [AuthGuard],
+    loadComponent: () => import('./pages/dids/dids.page').then( m => m.DidsPage)
   },
   {
     path: 'vc-selector',
@@ -63,7 +69,8 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
-  },  {
+  },
+  {
     path: 'register',
     loadComponent: () => import('./pages/register/register.page').then( m => m.RegisterPage)
   },

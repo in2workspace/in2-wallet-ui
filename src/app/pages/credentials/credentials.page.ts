@@ -15,14 +15,14 @@ import { VcViewComponent, VerifiableCredential } from "../../components/vc-view/
     imports: [IonicModule, CommonModule, FormsModule, QRCodeModule, VcViewComponent]
 })
 
-export class WalletPage implements OnInit {
+export class CredentialsPage implements OnInit {
   credList:Array<VerifiableCredential>=[];
   tamano:number=300;
   credDataList: any[]=[];
   @Input() availableDevices: MediaDeviceInfo[] = [];
   currentDevice: any;
   constructor(private walletService:WalletService) { 
-    this.walletService.getAll().subscribe((credentialListResponse:Array<VerifiableCredential>) => {
+    this.walletService.getAllVCs().subscribe((credentialListResponse:Array<VerifiableCredential>) => {
       this.credList=credentialListResponse;
      })
   }
