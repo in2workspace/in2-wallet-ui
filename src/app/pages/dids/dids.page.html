@@ -10,13 +10,13 @@
 <ion-content [fullscreen]="true">
   <ion-grid>
     <ion-row class="ion-justify-content-center">
-      <ion-button expand="block" (click)="createDid()">
+      <ion-button  expand="block" (click)="createDid()">
         <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
       </ion-button>
     </ion-row>
     <ion-row class="ion-justify-content-center"
     *ngFor="let did of didList">
-      <app-did-view (didEmit)="didDelete($event)" [didInput]="did"></app-did-view>
+      <app-did-view style="width: 20rem;"(didEmit)="didDelete($event)" [didInput]="did"></app-did-view>
     </ion-row>
   </ion-grid>
 </ion-content>
