@@ -19,6 +19,7 @@ export interface ECResponse{
 export class WalletService {
 
 
+
   constructor(private http:HttpClient,private storageService:StorageService) { }
 
 
@@ -37,14 +38,15 @@ export class WalletService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Allow-Control-Allow-Origin': '*',
-      'Authorization': ''+this.storageService.get('token')})
+      'Authorization': ''+this.storageService.get('token'),
+      })
 
     return this.http.post(
       environment.base_url + '/api/vp',_VCReply,
       { headers: headers, responseType: 'text'}
     )
     }
-  public getAll():Observable<any>{
+  public getAllVCs():Observable<any>{
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Allow-Control-Allow-Origin': '*',
@@ -53,6 +55,17 @@ export class WalletService {
       const options = { headers: headers, redirect : 'follow' };
       return this.http.get(
         environment.base_url + '/api/personal-data-space', 
+        options)
+    }
+    public getAllDIDs():Observable<any>{
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Allow-Control-Allow-Origin': '*',
+        'Authorization': ''+this.storageService.get('token')})
+
+      const options = { headers: headers, redirect : 'follow' };
+      return this.http.get(
+        environment.base_url + '/api/dids', 
         options)
     }
     public getOne(data: string) {
@@ -66,4 +79,26 @@ export class WalletService {
         environment.base_url + '/api/vc/1/'+data+'/format?format=vc_json', 
         options)
     }  
+    postDid(arg0: { type: string; value:any}) {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Allow-Control-Allow-Origin': '*',
+        'Authorization': ''+this.storageService.get('token')})
+
+      const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text' };
+      return this.http.post(
+        environment.base_url + '/api/dids', arg0,
+        options)
+    }
+    deleteDid(did:string) {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Allow-Control-Allow-Origin': '*',
+        'Authorization': ''+this.storageService.get('token')})
+
+      const options = { headers: headers, redirect : 'follow', body:did,responseType:'text' as 'text' };
+      return this.http.delete(
+        environment.base_url + '/api/dids',
+        options)
+    }
 }

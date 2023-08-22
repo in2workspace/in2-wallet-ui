@@ -16,6 +16,7 @@ export class AppComponent {
   public appPages = [
     { title: 'Home', url: '/home', icon: 'home' },
     { title: 'Credentials', url: '/credentials', icon: 'wallet' },
+    { title: 'Dids', url: '/dids', icon: 'key' },
     { title: 'Camera Selector', url: '/camera-selector', icon: 'camera' },
     { title: 'Language Selector', url: '/language-selector', icon: 'flag' },
     { title: 'Terms of User', url: '/terms-of-use', icon: 'document-text' },
