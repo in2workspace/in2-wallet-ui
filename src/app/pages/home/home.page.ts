@@ -8,11 +8,13 @@ import { Router } from '@angular/router';
 import { StorageService } from 'src/app/services/storage.service';
 import { WalletService } from 'src/app/services/wallet.service';
 import { CameraService } from 'src/app/services/camera.service';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 const   TIME_IN_MS = 1500;
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
   standalone: true,
   imports: [
     IonicModule,
@@ -57,19 +59,21 @@ export class HomePage implements OnInit {
     label: '',
     toJSON() {},
   };
-
+  userName:string="";
   desactivar: boolean = true;
   constructor(
     private cameraService: CameraService,
     private router: Router,
     private storageService: StorageService,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private authenticationService:AuthenticationService,
   ) {}
   availableDevicesEmit(devices: MediaDeviceInfo[]) {
     this.availableDevices = devices;
   }
   ngOnInit(): void {
     this.escaneado=''
+    this.userName = this.authenticationService.getName();
   }
   isCredOffer=false;
   qrCodeEmit(qrCode: string) {

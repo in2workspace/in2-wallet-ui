@@ -36,7 +36,15 @@ export class AuthenticationService {
     } else this.isLogin = false;
     return this.isLogin;
   }
-
+  getName(){
+    const loggedIn = localStorage.getItem('token');
+    if (loggedIn) {
+      let username = JSON.parse(
+        atob(loggedIn.split('Bearer ')[1].split('.')[1])
+      )['username'];
+    return username}
+    return '';
+  }
   public logout() {
     localStorage.removeItem('token');
     this.isLogin = false;

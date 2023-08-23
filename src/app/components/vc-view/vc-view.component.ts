@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { QRCodeModule } from 'angular2-qrcode';
 
 export interface VerifiableCredential{
-  credentialSubject:{firstName:string,familyName:string,nom:string,cognoms:string},
+  credentialSubject:{firstName:string,familyName:string,dateOfBirth:string,gender:string},
   id:string,
   vcType:['','']
 
@@ -18,8 +18,8 @@ export interface VerifiableCredential{
 })
 export class VcViewComponent implements OnInit{
 
-  @Input() credentialInput: VerifiableCredential = {credentialSubject:{firstName:"",familyName:"",nom:"",cognoms:""},id:"",vcType:['','']} ;
-  cred: VerifiableCredential ={credentialSubject:{firstName:"",familyName:"",nom:"",cognoms:""},id:"",vcType:['','']};
+  @Input() credentialInput: VerifiableCredential = {credentialSubject:{firstName:"",familyName:"",dateOfBirth:"",gender:""},id:"",vcType:['','']} ;
+  cred: VerifiableCredential ={credentialSubject:{firstName:"",familyName:"",dateOfBirth:"",gender:""},id:"",vcType:['','']};
 
 
   ngOnInit(): void {
