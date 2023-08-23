@@ -44,6 +44,10 @@ export class HomePage implements OnInit {
     }
     this.toggleScan = true;
   }
+  getCred(){
+    this.router.navigate(['/credential-offer/'], {});
+
+  }
   @Input() availableDevices: MediaDeviceInfo[] = [];
 
   currentDevice: MediaDeviceInfo = {
@@ -67,17 +71,19 @@ export class HomePage implements OnInit {
   ngOnInit(): void {
     this.escaneado=''
   }
-
+  isCredOffer=false;
   qrCodeEmit(qrCode: string) {
     this.escaneado= qrCode;
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
         if (executionResponse==='{}') {
-          setTimeout(() => {
-            this.isAlertOpen = false;
-          }, TIME_IN_MS);
-          this.isAlertOpen = true;
+//          setTimeout(() => {
+//            this.isAlertOpen = false;
+//          }, TIME_IN_MS);
+//          this.isAlertOpen = true;
           this.escaneado= '';
+          this.isCredOffer=true;
+          
         } else {
           this.router.navigate(['/vc-selector/'], {
             queryParams: { executionResponse: executionResponse },

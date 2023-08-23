@@ -50,6 +50,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/qrinfo/qrinfo.page').then( m => m.QRInfoPage)
   },
   {
+    path: 'credential-offer',
+    providers: [StorageService],
+    canActivate: [AuthGuard],
+    loadComponent: () => import('./pages/credential-offer/credential-offer.page').then( m => m.CredentialOfferPage)
+  },  
+  {
     path: 'credentials',
     providers: [StorageService],
     canActivate: [AuthGuard],

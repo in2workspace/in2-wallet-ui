@@ -2,7 +2,7 @@
     width: -webkit-fill-available;
 }
 .content{
-    --background: url("https://www.in2.es/images/backgrounds/m3@2x.jpg");
+    --background: url("https://www.in2.es/images/backgrounds/m3@2x.jpg") center/cover fixed no-repeat;
 }
 .item-trns {
     --ion-item-background: transparent;

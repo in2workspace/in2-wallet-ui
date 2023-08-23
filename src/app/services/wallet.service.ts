@@ -101,4 +101,15 @@ export class WalletService {
         environment.base_url + '/api/dids',
         options)
     }
+    public getAllIssuers():Observable<any>{
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Allow-Control-Allow-Origin': '*',
+        'Authorization': ''+this.storageService.get('token')})
+
+      const options = { headers: headers, redirect : 'follow' };
+      return this.http.get(
+        environment.base_url + '/api/issuers', 
+        options)
+    }
 }
