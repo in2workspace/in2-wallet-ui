@@ -10,22 +10,25 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>John Doe</ion-card-title>
-      <ion-card-subtitle>Welcome</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
+
       <ion-grid>
-        <ion-row class="ion-justify-content-first"> You are using the IN2 wallet </ion-row>
-        <br/>
+        <ion-row class="ion-justify-content-first">
+          <ion-col style="border-left-width:10px;border-color: #B0FF2B; border-left-style: solid;">
+          <ion-text class="ion-text-start" color="primary"><b>Welcome to IN2Wallet</b></ion-text></ion-col>
+          <ion-col><div class="ion-text-end userData">
+            <ion-row>
+            <ion-col><div class="ion-text-start"><ion-icon size="small" color="secondary" name="person"></ion-icon></div></ion-col>
+            <ion-col><ion-text color="primary">{{userName}}</ion-text></ion-col>
+          </ion-row></div> 
+          </ion-col>
+        </ion-row>
+          <br/>
         <ion-row class="ion-justify-content-center">
-          <ion-button *ngIf="!toggleScan" (click)="startScan()">Scan QR</ion-button>
+          <ion-button  size="large" *ngIf="!toggleScan" (click)="startScan()"> <div class="custom-button-content"><ion-icon size="large"color="white"name="qr-code"></ion-icon><ion-label>Scan QR </ion-label> </div></ion-button>
         </ion-row>
       
       </ion-grid>
-    </ion-card-content>
-  </ion-card>
+
   <div [hidden]="!toggleScan">
     <ion-grid  >
     <ion-row class="ion-justify-content-center">
