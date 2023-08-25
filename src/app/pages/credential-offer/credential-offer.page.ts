@@ -28,7 +28,15 @@ export class CredentialOfferPage implements OnInit {
     this.walletService.getAllIssuers().subscribe(response => {console.log(response);this.issuersList=response})
 
   }
+  isAlertOpen = false;
+
   onSubmit(){
-    this.walletService.submitCredential(this.login.value).subscribe(response => {console.log(response);})
+    this.walletService.submitCredential(this.login.value).subscribe(response => {
+      this.isAlertOpen = true;
+
+      console.log(response);})
+  }
+  setOpen(isOpen: boolean) {
+    this.isAlertOpen = isOpen;
   }
 }
