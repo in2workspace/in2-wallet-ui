@@ -21,7 +21,7 @@ export class AuthenticationService {
   }
   public register(userData: any) {
     return this.http.post(
-      environment.base_url + '/register',
+      environment.base_url + '/api/users',
       userData,
       options
     );

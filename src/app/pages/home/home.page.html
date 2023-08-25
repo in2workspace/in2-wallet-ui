@@ -58,4 +58,10 @@ message="No stored valid credential"
 [buttons]="alertButtons"
 (didDismiss)="setOpenNotFound(false)"
 ></ion-alert>
+
 </ion-content>
+<ion-footer [translucent]="false">
+
+  <ion-row *ngIf="isCredOffer" class="ion-justify-content-center">  <ion-button (click)="getCred()">Get Credential</ion-button>
+  </ion-row>
+</ion-footer>

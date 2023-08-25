@@ -3,6 +3,26 @@
 
 /** Ionic CSS Variables **/
 :root {
+
+  ion-alert.select-alert {
+    --background: #203d76!important;
+
+    button {
+        color: white !important;
+        font-size: 20px !important;
+    }
+
+    .sc-ion-alert-md {
+        color: white;
+    }
+    [aria-checked=true].sc-ion-alert-md .alert-radio-label.sc-ion-alert-md{
+      color:#B0FF2B;
+    }
+    [aria-checked=true].sc-ion-alert-md .alert-radio-icon.sc-ion-alert-md{
+      border-color:#B0FF2B;
+
+    }
+  }
   /** primary **/
   --ion-color-primary: #203d76;
   --ion-color-primary-rgb: 56, 128, 255;

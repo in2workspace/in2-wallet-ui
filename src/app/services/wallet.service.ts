@@ -101,4 +101,37 @@ export class WalletService {
         environment.base_url + '/api/dids',
         options)
     }
+    public getAllIssuers():Observable<any>{
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Allow-Control-Allow-Origin': '*',
+        'Authorization': ''+this.storageService.get('token')})
+
+      const options = { headers: headers, redirect : 'follow' };
+      return this.http.get(
+        environment.base_url + '/api/issuers', 
+        options)
+    }
+    public submitCredential(arg0: { }) {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Allow-Control-Allow-Origin': '*',
+        'Authorization': ''+this.storageService.get('token')})
+
+      const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text' };
+      return this.http.post(
+        environment.base_url + '/api/credentials', arg0,
+        options)
+    }
+    deleteVC(VC:string) {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Allow-Control-Allow-Origin': '*',
+        'Authorization': ''+this.storageService.get('token')})
+
+      const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text' };
+      return this.http.delete(
+        environment.base_url + '/api/vc/'+VC,
+        options)
+    }
 }
