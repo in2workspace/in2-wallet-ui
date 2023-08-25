@@ -22,7 +22,6 @@ export class DidsPage implements OnInit {
   @Input() availableDevices: MediaDeviceInfo[] = [];
   currentDevice: any;
   constructor(private walletService:WalletService) { 
-this.refresh()
   }
 refresh(){
   this.walletService.getAllDIDs().subscribe((didListResponse:Array<any>) => {
@@ -30,6 +29,8 @@ refresh(){
    })
 }
   ngOnInit() {
+    this.refresh()
+
   }
   createDid(){
     this.walletService.postDid({"type":"key","value":null}).subscribe((response:any) => {
