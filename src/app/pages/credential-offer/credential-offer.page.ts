@@ -3,9 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { WalletService } from 'src/app/services/wallet.service';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { Router, RouterModule } from '@angular/router';
+import {  RouterModule } from '@angular/router';
 @Component({
   selector: 'app-credential-offer',
   templateUrl: './credential-offer.page.html',

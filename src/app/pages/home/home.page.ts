@@ -81,10 +81,6 @@ export class HomePage implements OnInit {
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
         if (executionResponse==='{}') {
-//          setTimeout(() => {
-//            this.isAlertOpen = false;
-//          }, TIME_IN_MS);
-//          this.isAlertOpen = true;
           this.escaneado= '';
           this.isCredOffer=true;
           

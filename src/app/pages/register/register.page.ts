@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { RegisterService } from 'src/app/services/register.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router, RouterModule } from '@angular/router';
 
