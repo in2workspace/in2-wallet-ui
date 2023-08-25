@@ -123,4 +123,15 @@ export class WalletService {
         environment.base_url + '/api/credentials', arg0,
         options)
     }
+    deleteVC(VC:string) {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Allow-Control-Allow-Origin': '*',
+        'Authorization': ''+this.storageService.get('token')})
+
+      const options = { headers: headers, redirect : 'follow', body:VC,responseType:'text' as 'text' };
+      return this.http.delete(
+        environment.base_url + '/api/personal-data-space',
+        options)
+    }
 }

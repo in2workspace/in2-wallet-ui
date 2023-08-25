@@ -1,11 +1,12 @@
 import {
-  Component, Input, OnInit,
+  Component, EventEmitter, Input, OnInit, Output,
 } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { QRCodeModule } from 'angular2-qrcode';
+import { WalletService } from 'src/app/services/wallet.service';
 
 export interface VerifiableCredential{
-  credentialSubject:{first_name:string,last_name:string,dateOfBirth:string,gender:string},
+  credentialSubject:{mobile_phone:string,email:string,title:string,first_name:string,last_name:string,dateOfBirth:string,gender:string},
   id:string,
   vcType:['','']
 
@@ -18,8 +19,13 @@ export interface VerifiableCredential{
 })
 export class VcViewComponent implements OnInit{
 
-  @Input() credentialInput: VerifiableCredential = {credentialSubject:{first_name:"",last_name:"",dateOfBirth:"",gender:""},id:"",vcType:['','']} ;
-  cred: VerifiableCredential ={credentialSubject:{first_name:"",last_name:"",dateOfBirth:"",gender:""},id:"",vcType:['','']};
+  constructor(private walletService:WalletService){}
+  @Input() credentialInput: VerifiableCredential = {credentialSubject:{mobile_phone:"",email:"",title:"",first_name:"",last_name:"",dateOfBirth:"",gender:""},id:"",vcType:['','']} ;
+  cred: VerifiableCredential ={credentialSubject:{mobile_phone:"",email:"",title:"",first_name:"",last_name:"",dateOfBirth:"",gender:""},id:"",vcType:['','']};
+  @Output() vcEmit: EventEmitter<VerifiableCredential> =
+  new EventEmitter();
+
+
 
   isAlertOpenNotFound=false;
 
@@ -30,7 +36,10 @@ export class VcViewComponent implements OnInit{
       this.isAlertOpenNotFound = true;
     }
     isModalOpen = false;
+    deleteVC(){
+      this.vcEmit.emit(this.cred);
 
+    }
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
   }
