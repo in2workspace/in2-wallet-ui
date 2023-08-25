@@ -20,13 +20,15 @@ export class CredentialOfferPage implements OnInit {
   issuersList = [];
   didsList =[]
   login = new FormGroup<any>({
-    username: new FormControl('', {nonNullable: true}),
-    password: new FormControl('', {nonNullable: true}),
+    issuerName: new FormControl('', {nonNullable: true}),
+    did: new FormControl('', {nonNullable: true}),
 });
   ngOnInit() {
     this.walletService.getAllDIDs().subscribe(response => {console.log(response);this.didsList=response})
+    this.walletService.getAllIssuers().subscribe(response => {console.log(response);this.issuersList=response})
 
   }
   onSubmit(){
+    this.walletService.submitCredential(this.login.value).subscribe(response => {console.log(response);})
   }
 }

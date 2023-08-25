@@ -62,6 +62,6 @@ message="No stored valid credential"
 </ion-content>
 <ion-footer [translucent]="false">
 
-  <ion-row *ngIf="!isCredOffer" class="ion-justify-content-center">  <ion-button (click)="getCred()">Get Credential</ion-button>
+  <ion-row *ngIf="isCredOffer" class="ion-justify-content-center">  <ion-button (click)="getCred()">Get Credential</ion-button>
   </ion-row>
 </ion-footer>
