@@ -1,7 +1,7 @@
 <ion-card>
     <ion-row>
       <ion-col>
-        <img
+        <img alt
           src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg"
         />
       </ion-col>
@@ -32,7 +32,7 @@
         </ion-col>
         <ion-col col-12 align-self-end>
           <ion-row class="ion-justify-content-center"
-            ><ion-button
+            ><ion-button (click)="qrView()"
               ><ion-icon name="qr-code-outline"></ion-icon
             ></ion-button> </ion-row
         >
@@ -40,6 +40,31 @@
     </ion-grid>
       </ion-col>
     </ion-row>
-    <!-- <qr-code [value]="cred['id']" [size]="500"></qr-code> -->
     <span></span>
+    <ion-alert
+[isOpen]="isAlertOpenNotFound"
+class="custom-alert"
+header="Alerta"
+message="Al generar este código, aceptas que los datos contenidos en tu permiso, y su situación legal, se muestren en el dispositivo lector para verificar su validez."
+[buttons]="alertButtons"
+(didDismiss)="setOpenNotFound(false)"
+></ion-alert>
+<ion-modal [isOpen]="isModalOpen" id="example-modal" #modal >
+  <ng-template>
+    <div class="wrapper">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>QR Credential</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="setOpen(false)">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content style="min-height: 24rem;"class="ion-padding">
+      <qr-code [value]="cred['id']" [size]="350"></qr-code>
+    </ion-content>
+  </div>
+  </ng-template>
+</ion-modal>
 </ion-card>
+

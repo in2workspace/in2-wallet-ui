@@ -21,8 +21,27 @@ export class VcViewComponent implements OnInit{
   @Input() credentialInput: VerifiableCredential = {credentialSubject:{first_name:"",last_name:"",dateOfBirth:"",gender:""},id:"",vcType:['','']} ;
   cred: VerifiableCredential ={credentialSubject:{first_name:"",last_name:"",dateOfBirth:"",gender:""},id:"",vcType:['','']};
 
+  isAlertOpenNotFound=false;
 
   ngOnInit(): void {
     this.cred = this.credentialInput
+    }
+    qrView(){
+      this.isAlertOpenNotFound = true;
+    }
+    isModalOpen = false;
+
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
+  }
+    handlerMessage = ''
+    public alertButtons = [{      text: 'OK',
+    role: 'confirm',
+    handler: () => {
+      this.handlerMessage = 'Alert confirmed';
+      this.isModalOpen=true;
+    }}];
+  setOpenNotFound(isOpen: boolean) {
+    this.isAlertOpenNotFound = isOpen;
     }
     }
