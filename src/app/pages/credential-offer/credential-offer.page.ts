@@ -39,4 +39,9 @@ export class CredentialOfferPage implements OnInit {
   setOpen(isOpen: boolean) {
     this.isAlertOpen = isOpen;
   }
+  newDid(){
+    this.walletService.postDid({"type":"key","value":null}).subscribe(response => {
+      this.walletService.getAllDIDs().subscribe(response => {console.log(response);this.didsList=response})
+
+      console.log(response);})  }
 }
