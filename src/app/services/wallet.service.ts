@@ -129,9 +129,9 @@ export class WalletService {
         'Allow-Control-Allow-Origin': '*',
         'Authorization': ''+this.storageService.get('token')})
 
-      const options = { headers: headers, redirect : 'follow', body:VC,responseType:'text' as 'text' };
+      const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text' };
       return this.http.delete(
-        environment.base_url + '/api/personal-data-space',
+        environment.base_url + '/api/vc/'+VC,
         options)
     }
 }
