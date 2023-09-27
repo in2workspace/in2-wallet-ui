@@ -1,0 +1,32 @@
+<ion-header [translucent]="false">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>QR Info</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+
+  <ion-card>
+
+    <ion-card-header>
+      <ion-row class="ion-justify-content-center"> <ion-card-title>{{token['credentialSubject']['firstName']}} {{token['credentialSubject']['familyName']}}</ion-card-title></ion-row>
+      <ion-row class="ion-justify-content-center"> <ion-card-title>{{token['credentialSubject']['nom']}} {{token['credentialSubject']['cognoms']}}</ion-card-title></ion-row>
+      <ion-row class="ion-justify-content-center"> <ion-card-subtitle>{{token['type'][1]}}</ion-card-subtitle></ion-row>
+    </ion-card-header>
+    <ion-row class="ion-justify-content-center"> <qr-code [value]="qr" [size]="tamano"></qr-code></ion-row>
+    <ion-row class="ion-justify-content-center">    <ion-button (click)="saveCredential()">Save Verifiable Credential</ion-button>
+    </ion-row>
+  </ion-card>
+  <ion-alert
+[isOpen]="isAlertOpen"
+class="custom-alert"
+header="Congratulations"
+message="Credential saved"
+(didDismiss)="setOpen(false)"
+></ion-alert> 
+</ion-content>
+

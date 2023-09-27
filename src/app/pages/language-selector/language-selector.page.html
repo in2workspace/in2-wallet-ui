@@ -1,0 +1,29 @@
+<ion-header [translucent]="false">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Language selector</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row
+      class="ion-justify-content-start"
+      *ngFor="let language of languageList"
+    >
+      <a>
+        <div class="flex p-2">
+          <img
+            class="mr-4"
+            src="{{language.url}}"
+            alt
+            style="width: 70px; height: 45px"
+          />
+          <span class="my-auto font-medium">{{language.name}}</span>
+        </div>
+      </a>
+    </ion-row>
+  </ion-grid>
+</ion-content>

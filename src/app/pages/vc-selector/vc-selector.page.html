@@ -1,0 +1,48 @@
+<ion-header [translucent]="false">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>VC Selector</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid >
+    <ion-row class="ion-justify-content-center"
+    *ngFor="let cred of credList; let i = index">
+    <ion-card>
+
+      <ion-card-header >
+        <ion-card-title>{{cred['credentialSubject']['firstName']}} {{cred['credentialSubject']['familyName']}}</ion-card-title>
+        <ion-card-title>{{cred['credentialSubject']['nom']}} {{cred['credentialSubject']['cognoms']}}</ion-card-title>
+        <ion-card-subtitle>{{cred['vcType'][1]}}</ion-card-subtitle>
+      </ion-card-header>
+      <div class="ion-justify-content-center"><qr-code  [value]="cred['id']" [size]="tamano"></qr-code>
+      </div>
+      <ion-row class="ion-justify-content-center"> <ion-button [disabled]="isClicked(i)" (click)="selectCred(cred,i)">Select credential</ion-button></ion-row>
+    </ion-card>
+    </ion-row>
+  </ion-grid>
+
+
+
+  <ion-alert
+  [isOpen]="isAlertOpen"
+  class="custom-alert"
+  header="Congratulations"
+  message="Log In Completed"
+  (didDismiss)="setOpen(false)"
+></ion-alert>  <ion-alert
+[isOpen]="isAlertOpenFail"
+class="custom-alert"
+header="Unsuccesfull"
+message="Log In Failed"
+(didDismiss)="setOpen(false)"
+></ion-alert>
+</ion-content>
+<ion-footer [translucent]="false">
+
+  <ion-row class="ion-justify-content-center">  <ion-button (click)="sendCred()">Send Credential</ion-button>
+  </ion-row>
+</ion-footer>

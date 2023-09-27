@@ -1,0 +1,67 @@
+<ion-header [translucent]="false">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-start">Home</ion-title>
+    <img alt src="assets/icon/generalitat-de-catalunya-logo-vector.png" width="auto" slot="end" height="60px"/>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+      <ion-grid>
+        <ion-row class="ion-justify-content-first">
+          <ion-col style="border-left-width:10px;border-color: #B0FF2B; border-left-style: solid;">
+          <ion-text class="ion-text-start" color="primary"><b>Welcome to IN2Wallet</b></ion-text></ion-col>
+          <ion-col><div class="ion-text-end userData">
+            <ion-row>
+            <ion-col><div class="ion-text-start"><ion-icon size="small" color="secondary" name="person"></ion-icon></div></ion-col>
+            <ion-col><ion-text color="primary">{{userName}}</ion-text></ion-col>
+          </ion-row></div> 
+          </ion-col>
+        </ion-row>
+          <br/>
+        <ion-row class="ion-justify-content-center">
+          <ion-button  size="large" *ngIf="!toggleScan" (click)="startScan()"> <div class="custom-button-content"><ion-icon size="large"color="white"name="qr-code"></ion-icon><ion-label>Scan QR </ion-label> </div></ion-button>
+        </ion-row>
+      
+      </ion-grid>
+
+  <div [hidden]="!toggleScan">
+    <ion-grid  >
+    <ion-row class="ion-justify-content-center">
+      <app-barcode-scanner *ngIf="escaneado===''" (qrCode)="qrCodeEmit($event)"
+      [currentDevice]="currentDevice"></app-barcode-scanner>
+    </ion-row>
+  </ion-grid>
+</div>
+  <ion-alert
+  [isOpen]="isAlertOpen"
+  class="custom-alert"
+  header="Congratulations"
+  message="VC saved"
+  (didDismiss)="setOpen(false)"
+></ion-alert>  <ion-alert
+[isOpen]="isAlertOpenFail"
+class="custom-alert"
+header="Unsuccesfull"
+message="VC already saved"
+(didDismiss)="setOpen(false)"
+></ion-alert>
+<ion-alert
+[isOpen]="isAlertOpenNotFound"
+class="custom-alert"
+header="Unsuccesfull"
+message="No stored valid credential"
+[buttons]="alertButtons"
+(didDismiss)="setOpenNotFound(false)"
+></ion-alert>
+
+</ion-content>
+<ion-footer [translucent]="false">
+
+  <ion-row *ngIf="isCredOffer" class="ion-justify-content-center">  <ion-button (click)="getCred()">Get Credential</ion-button>
+  </ion-row>
+</ion-footer>
