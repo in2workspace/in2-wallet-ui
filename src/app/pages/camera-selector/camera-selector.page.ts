@@ -24,6 +24,7 @@ export class CameraSelectorPage {
   availableDevicesEmit(devices: MediaDeviceInfo[]) {
     this.availableDevices = devices;
   }
+  //TO-DO:Simplfy function and pass logic to the service
   onDeviceSelectChange(selected: string) {
     if (selected != '') {
       const device:MediaDeviceInfo|undefined = this.availableDevices.find((x) => x.deviceId === selected);
