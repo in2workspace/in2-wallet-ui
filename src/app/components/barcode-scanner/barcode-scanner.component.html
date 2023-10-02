@@ -1,14 +1,9 @@
 <zxing-scanner 
   [(device)]="currentDevice"
+  [enable]="cameraEnabled"
   (scanSuccess)="onCodeResult($event)"
   [formats]="formatsEnabled"
   (camerasFound)="onCamerasFound($event)"
-></zxing-scanner>
+  [autostart]="true"
 
-<section class="results" *ngIf="qrResultString">
-  <div>
-    <small>Result</small>
-    <strong>{{ qrResultString }}</strong>
-  </div>
-  <button (click)="clearResult()">&times;</button>
-</section>
+></zxing-scanner>

@@ -3,13 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { BarcodeScannerComponent } from 'src/app/components/barcode-scanner/barcode-scanner.component';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { Router } from '@angular/router';
-import { StorageService } from 'src/app/services/storage.service';
 import { WalletService } from 'src/app/services/wallet.service';
-import { CameraService } from 'src/app/services/camera.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-const   TIME_IN_MS = 1500;
+const TIME_IN_MS = 1500;
 
 @Component({
   selector: 'app-home',
@@ -21,74 +18,45 @@ const   TIME_IN_MS = 1500;
     CommonModule,
     FormsModule,
     BarcodeScannerComponent,
-    ZXingScannerModule,
   ],
 })
 export class HomePage implements OnInit {
   public alertButtons = ['OK'];
   toggleScan: boolean = false;
   escaneado = '';
-  startScan() {
-    let selected = this.storageService.get('camara');
-    if (selected != '') {
-      const device: MediaDeviceInfo | undefined = this.availableDevices.find(
-        (x) => x.deviceId === selected
-      );
-      if(device != undefined)this.currentDevice = device;
-    } else {
-      this.currentDevice = {
-        deviceId: '',
-        groupId: '',
-        kind: 'audiooutput',
-        label: '',
-        toJSON() {},
-      };
-    }
+  async startScan() {
     this.toggleScan = true;
   }
-  getCred(){
+  getCred() {
     this.router.navigate(['/credential-offer/'], {});
-
   }
   @Input() availableDevices: MediaDeviceInfo[] = [];
 
-  currentDevice: MediaDeviceInfo = {
-    deviceId: '',
-    groupId: '',
-    kind: 'audiooutput',
-    label: '',
-    toJSON() {},
-  };
-  userName:string="";
+  userName: string = '';
   desactivar: boolean = true;
   constructor(
-    private cameraService: CameraService,
     private router: Router,
-    private storageService: StorageService,
     private walletService: WalletService,
-    private authenticationService:AuthenticationService,
+    private authenticationService: AuthenticationService
   ) {}
-  availableDevicesEmit(devices: MediaDeviceInfo[]) {
-    this.availableDevices = devices;
-  }
-  ngOnInit(): void {
-    this.escaneado=''
+
+  ngOnInit() {
+    this.escaneado = '';
     this.userName = this.authenticationService.getName();
   }
-  isCredOffer=false;
+  isCredOffer = false;
   qrCodeEmit(qrCode: string) {
-    this.escaneado= qrCode;
+    this.escaneado = qrCode;
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
-        if (executionResponse==='{}') {
-          this.escaneado= '';
-          this.isCredOffer=true;
-          
+        if (executionResponse === '{}') {
+          this.escaneado = '';
+          this.isCredOffer = true;
         } else {
           this.router.navigate(['/vc-selector/'], {
             queryParams: { executionResponse: executionResponse },
           });
-          this.escaneado= '';
+          this.escaneado = '';
         }
       },
       error: (err) => {
@@ -97,21 +65,19 @@ export class HomePage implements OnInit {
             this.isAlertOpen = false;
           }, TIME_IN_MS);
           this.isAlertOpen = true;
-          this.escaneado= '';
-        }
-        else if (err.status == 404) {
+          this.escaneado = '';
+        } else if (err.status == 404) {
           this.isAlertOpenNotFound = true;
-          this.escaneado= '';
-        } 
-        else {
+          this.escaneado = '';
+        } else {
           setTimeout(() => {
             this.isAlertOpenFail = false;
           }, TIME_IN_MS);
           this.isAlertOpenFail = true;
-          this.escaneado= '';
+          this.escaneado = '';
         }
-      }
-  });
+      },
+    });
   }
   setOpen(isOpen: boolean) {
     this.isAlertOpen = isOpen;
@@ -119,8 +85,8 @@ export class HomePage implements OnInit {
   setOpenNotFound(isOpen: boolean) {
     this.isAlertOpenNotFound = isOpen;
     this.router.navigate(['/home'], {});
-    }
-    isAlertOpenNotFound=false;
+  }
+  isAlertOpenNotFound = false;
   isAlertOpenFail = false;
   isAlertOpen = false;
 }

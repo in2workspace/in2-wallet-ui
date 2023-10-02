@@ -1,12 +1,9 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, OnInit } from '@angular/core';
 import { BarcodeFormat } from '@zxing/library';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { Observable, map } from 'rxjs';
+import { CameraService } from 'src/app/services/camera.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
@@ -15,52 +12,37 @@ import { StorageService } from 'src/app/services/storage.service';
   standalone: true,
   imports: [CommonModule, ZXingScannerModule],
 })
-export class BarcodeScannerComponent {
+export class BarcodeScannerComponent implements OnInit {
   @Output() availableDevices: EventEmitter<MediaDeviceInfo[]> =
     new EventEmitter();
-  @Output() qrCode: EventEmitter<string> =
-  new EventEmitter();
-  @Input() currentDevice: MediaDeviceInfo = {
-    deviceId: '',
-    groupId: '',
-    kind: 'audiooutput',
-    label: '',
-    toJSON() {},
-  };
+  @Output() qrCode: EventEmitter<string> = new EventEmitter();
+  currentDevice: MediaDeviceInfo = this.cameraService.mediaDeviceInfoNull
+  cameraEnabled:boolean = false;
   hasDevices: boolean = false;
   formatsEnabled: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
-  qrResultString: string = '';
-
-  constructor(
-    private storageService: StorageService
-  ) {}
-
-
-
-  clearResult(): void {
-    this.qrResultString = '';
+  constructor(private cameraService:CameraService) {
+  }
+  ngOnInit(): void {
+    this.cameraService.navEnabled$
+    .subscribe(preferedDevice => {
+      this.cameraEnabled=preferedDevice}
+      )
+    this.cameraService.navCamera$
+    .subscribe(preferedDevice => {
+      this.currentDevice = preferedDevice}
+      )
+    setTimeout(()=>{
+      this.cameraService.updateCamera();
+    },1000)
   }
 
-  onCamerasFound(devices: MediaDeviceInfo[]): void {
+
+  async onCamerasFound(devices: MediaDeviceInfo[]): Promise<void> {
     this.availableDevices.emit(devices);
-    this.hasDevices = Boolean(devices && devices.length);
-    let cam= this.storageService.get("camara");
-    if(cam!=undefined && cam != "undefined"){
-      console.log(cam)
-      const device:MediaDeviceInfo|undefined = devices.find((x) => x.deviceId === cam);
-      if(device!=undefined)this.currentDevice=device
-    }
-    else{
-      this.currentDevice={
-        deviceId: '',
-        groupId: '',
-        kind: 'audiooutput',
-        label: '',
-        toJSON() {},
-      }}  }
+
+  }
 
   onCodeResult(resultString: string) {
     this.qrCode.emit(resultString);
   }
-
 }

@@ -32,8 +32,7 @@
   <div [hidden]="!toggleScan">
     <ion-grid  >
     <ion-row class="ion-justify-content-center">
-      <app-barcode-scanner *ngIf="escaneado===''" (qrCode)="qrCodeEmit($event)"
-      [currentDevice]="currentDevice"></app-barcode-scanner>
+      <app-barcode-scanner *ngIf="escaneado===''" (qrCode)="qrCodeEmit($event)"></app-barcode-scanner>
     </ion-row>
   </ion-grid>
 </div>

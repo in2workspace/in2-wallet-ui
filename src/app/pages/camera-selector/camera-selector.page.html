@@ -22,10 +22,9 @@
     </ion-row>
     <ion-row class="ion-justify-content-center">
       <app-barcode-scanner
-        *ngIf="desactivar"
         (availableDevices)="availableDevicesEmit($event)"
-        [currentDevice]="currentDevice"
       ></app-barcode-scanner>
     </ion-row>
   </ion-grid>
+
 </ion-content>
