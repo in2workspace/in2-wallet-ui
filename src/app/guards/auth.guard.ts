@@ -1,40 +1,35 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanDeactivate, CanLoad, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { inject } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
-type guardResponse = Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthGuard implements CanActivate, CanActivateChild, CanDeactivate<unknown>, CanLoad {
-  constructor(private authService: AuthenticationService, private router: Router) { }
+import { Router } from '@angular/router';
+import { map } from 'rxjs';
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): guardResponse {
-      let isAuthenticated = this.authService.isLoggedIn();
-      if (!isAuthenticated) {
-          this.router.navigate(['/login']);
+export const authGuard = () => {
+  const authService = inject(AuthenticationService);
+  const router = inject(Router);
+  if(authService.isAuthenticated.value) return true;
+  return authService.isAuth().pipe(map(
+    (isLogged:boolean) => {
+      if(isLogged){
+        return true;
       }
-      return isAuthenticated;
-  }
-  canActivateChild(
-    childRoute: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): guardResponse {
-    return true;
-  }
-  canDeactivate(
-    component: unknown,
-    currentRoute: ActivatedRouteSnapshot,
-    currentState: RouterStateSnapshot,
-    nextState?: RouterStateSnapshot): guardResponse {
-    return true;
-  }
-  canLoad(
-    route: Route,
-    segments: UrlSegment[]): guardResponse {
-    return true;
-  }
-  
+      router.navigate(['/login'], {})
 
+      return false;
+    }
+  ));
 }
+export const notAuthGuard = () => {
+  const authService = inject(AuthenticationService);
+  const router = inject(Router);
+  if(authService.isAuthenticated.value) return false;
+  return authService.isAuth().pipe(map(
+    (isLogged:boolean) => {
+      if(isLogged){
+        router.navigate(['/home'], {})
+        return false;
+      }
+
+      return true;
+    }
+  ));
+  }

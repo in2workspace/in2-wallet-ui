@@ -1,86 +1,102 @@
 import { Routes } from '@angular/router';
+import { authGuard, notAuthGuard } from './guards/auth.guard';
 import { StorageService } from './services/storage.service';
-import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
   {
-    path: 'home',    canActivate: [AuthGuard],
-
-    loadComponent: () => import('./pages/home/home.page').then( m => m.HomePage)
+    path: 'home',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/home/home.page').then((m) => m.HomePage),
   },
   {
-    path: 'privacy-policy',    canActivate: [AuthGuard],
-
-    loadComponent: () => import('./pages/privacy-policy/privacy-policy.page').then( m => m.PrivacyPolicyPage)
+    path: 'privacy-policy',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/privacy-policy/privacy-policy.page').then(
+        (m) => m.PrivacyPolicyPage
+      ),
   },
   {
-    path: 'camera-selector',    canActivate: [AuthGuard],
-
-    loadComponent: () => import('./pages/camera-selector/camera-selector.page').then( m => m.CameraSelectorPage)
+    path: 'camera-selector',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/camera-selector/camera-selector.page').then(
+        (m) => m.CameraSelectorPage
+      ),
   },
   {
-    path: 'language-selector',    canActivate: [AuthGuard],
+    path: 'language-selector',
+    canActivate: [authGuard],
 
-    loadComponent: () => import('./pages/language-selector/language-selector.page').then( m => m.LanguageSelectorPage)
+    loadComponent: () =>
+      import('./pages/language-selector/language-selector.page').then(
+        (m) => m.LanguageSelectorPage
+      ),
   },
   {
-    path: 'terms-of-use',    canActivate: [AuthGuard],
+    path: 'terms-of-use',
+    canActivate: [authGuard],
 
-    loadComponent: () => import('./pages/terms-of-use/terms-of-use.page').then( m => m.TermsOfUsePage)
+    loadComponent: () =>
+      import('./pages/terms-of-use/terms-of-use.page').then(
+        (m) => m.TermsOfUsePage
+      ),
   },
   {
-    path: 'settings',    canActivate: [AuthGuard],
+    path: 'settings',
+    canActivate: [authGuard],
 
-    loadComponent: () => import('./pages/settings/settings.page').then( m => m.SettingsPage)
+    loadComponent: () =>
+      import('./pages/settings/settings.page').then((m) => m.SettingsPage),
   },
   {
-    path: 'faqs',    canActivate: [AuthGuard],
+    path: 'faqs',
+    canActivate: [authGuard],
 
-    loadComponent: () => import('./pages/faqs/faqs.page').then( m => m.FaqsPage)
-  },
-  {
-    path: 'qrinfo',
-    canActivate: [AuthGuard],
-
-    loadComponent: () => import('./pages/qrinfo/qrinfo.page').then( m => m.QRInfoPage)
+    loadComponent: () =>
+      import('./pages/faqs/faqs.page').then((m) => m.FaqsPage),
   },
   {
     path: 'credential-offer',
-    providers: [StorageService],
-    canActivate: [AuthGuard],
-    loadComponent: () => import('./pages/credential-offer/credential-offer.page').then( m => m.CredentialOfferPage)
-  },  
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/credential-offer/credential-offer.page').then(
+        (m) => m.CredentialOfferPage
+      ),
+  },
   {
     path: 'credentials',
-    providers: [StorageService],
-    canActivate: [AuthGuard],
-    loadComponent: () => import('./pages/credentials/credentials.page').then( m => m.CredentialsPage)
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/credentials/credentials.page').then(
+        (m) => m.CredentialsPage
+      ),
   },
   {
     path: 'dids',
-    providers: [StorageService],
-    canActivate: [AuthGuard],
-    loadComponent: () => import('./pages/dids/dids.page').then( m => m.DidsPage)
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/dids/dids.page').then((m) => m.DidsPage),
   },
   {
     path: 'vc-selector',
-    canActivate: [AuthGuard],
-    loadComponent: () => import('./pages/vc-selector/vc-selector.page').then( m => m.VcSelectorPage)
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/vc-selector/vc-selector.page').then(
+        (m) => m.VcSelectorPage
+      ),
   },
   {
     path: 'login',
-    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
+    canActivate: [notAuthGuard],
+    providers:[StorageService],
+    loadComponent: () =>
+      import('./pages/login/login.page').then((m) => m.LoginPage),
   },
-  {
-    path: 'register',
-    loadComponent: () => import('./pages/register/register.page').then( m => m.RegisterPage)
-  },
-
-
-
 ];

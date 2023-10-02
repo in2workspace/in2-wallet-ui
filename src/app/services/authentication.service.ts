@@ -1,7 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { BehaviorSubject, Observable, from, map, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { StorageService } from './storage.service';
+import { Platform } from '@ionic/angular';
 const respuesta = 'response' as const;
 const headers = new HttpHeaders({
   'Content-Type': 'application/json',
@@ -12,12 +14,40 @@ const options = { headers: headers, redirect: 'follow', observe: respuesta };
   providedIn: 'root',
 })
 export class AuthenticationService {
-  isLogin = false;
+  private http = inject(HttpClient);
+  private _storage = inject(StorageService);
 
-  constructor(private http: HttpClient) {}
+  constructor() {
+    this._storage.get('token').then((savedToken) => {
+      if (!savedToken) {
+        this.token = '';
+        this.isAuthenticated.next(false);
+      } else {
+        this.token = savedToken;
+        this.isAuthenticated.next(true);
+      }
+    });
+  }
+  isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
+  token = '';
 
   public login(userData: any): Observable<any> {
-    return this.http.post(environment.base_url + '/login', userData, options);
+    return this.http
+      .post(environment.base_url + '/login', userData, options)
+      .pipe(
+        map((data: any) => {
+          this.token = data.headers.get('Authorization');
+          return this.token;
+        }),
+        switchMap((token) => {
+          return this._storage.set('token', token);
+        }),
+        tap((_) => {
+          this.isAuthenticated.next(true);
+        })
+      );
   }
   public register(userData: any) {
     return this.http.post(
@@ -26,27 +56,29 @@ export class AuthenticationService {
       options
     );
   }
-  public isLoggedIn() {
-    const loggedIn = localStorage.getItem('token');
-    if (loggedIn) {
-      let expired = JSON.parse(
-        atob(loggedIn.split('Bearer ')[1].split('.')[1])
-      )['exp'];
-      if (Date.now() <= expired * 1000) this.isLogin = true;
-    } else this.isLogin = false;
-    return this.isLogin;
-  }
-  getName(){
-    const loggedIn = localStorage.getItem('token');
-    if (loggedIn) {
-      let username = JSON.parse(
-        atob(loggedIn.split('Bearer ')[1].split('.')[1])
-      )['username'];
-    return username}
-    return '';
+
+  public getName() {
+    let username = JSON.parse(
+      atob(this.token.split('Bearer ')[1].split('.')[1])
+    )['username'];
+    return username;
   }
   public logout() {
-    localStorage.removeItem('token');
-    this.isLogin = false;
+    this.isAuthenticated.next(false);
+    this._storage.remove('token');
+  }
+  public isAuth(): Observable<boolean> {
+    return from(this._storage.get('token')).pipe(
+      map((savedToken: string) => {
+        if (!savedToken) {
+          this.token = '';
+          this.isAuthenticated.next(false);
+          return false;
+        }
+        this.token = savedToken;
+        this.isAuthenticated.next(true);
+        return true;
+      })
+    );
   }
 }

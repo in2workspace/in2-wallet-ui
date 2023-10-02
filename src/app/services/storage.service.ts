@@ -7,31 +7,31 @@ import { Storage } from '@ionic/storage-angular';
 export class StorageService {
   private _storage: Storage | null = null;
 
-  constructor(private storage: Storage) {   
+  constructor(private storage: Storage) {  
+    this.init(); 
   }
 
   async init() {
-    localStorage.clear();
-  }
+    const storage = await this.storage.create();
+    this._storage = storage;  }
 
-  // Create and expose methods that users of this service can
-  // call, for example:
-  public set( value: any) {
-    localStorage.setItem(localStorage.length.toString(),value)
+  public async set(llave:string, value: any) {
+    await this._storage?.set(llave,value);
   }
-  public setLlave(llave:string, value: any) {
-    localStorage.setItem(llave,value)
-  }
-  public getAll(){
+  public async getAll(){
     let items:(string)[] = []
-    for(let i= 0; i<localStorage.length;i++){
+    let tamano= await this._storage?.length();
+    for(let i= 0; i<(tamano?tamano:0);i++){
 
-      let val = localStorage.getItem(i.toString())
+      let val = await this._storage?.get(i.toString())
       items.push((val!=null)?val:"");
   }
   return items;
   }
-  public get(key:string){
-    return localStorage.getItem(key);
+  public get(key:string): Promise<any>{
+    return this.storage.get(key);
+  }
+  public remove(key:string){
+    return this.storage.remove(key);
   }
 }

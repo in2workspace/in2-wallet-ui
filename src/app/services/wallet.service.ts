@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { StorageService } from './storage.service';
+import { AuthenticationService } from './authentication.service';
 export interface VCReply{
   selectedVcList:any[],
   state:string,
@@ -17,17 +18,15 @@ export interface ECResponse{
   providedIn: 'root'
 })
 export class WalletService {
-
-
-
-  constructor(private http:HttpClient,private storageService:StorageService) { }
-
+  private http = inject(HttpClient)
+  private authService = inject(AuthenticationService);
+  constructor() {  }
 
   public executeContent(url:string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Allow-Control-Allow-Origin': '*',
-      'Authorization': ''+this.storageService.get('token')})
+      'Authorization': ''+this.authService.token})
     const options = { headers: headers, redirect : 'follow',responseType: 'text' as 'json' };
     return this.http.post(
       environment.base_url + '/api/execute-content', 
@@ -38,7 +37,7 @@ export class WalletService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Allow-Control-Allow-Origin': '*',
-      'Authorization': ''+this.storageService.get('token'),
+      'Authorization': ''+this.authService.token,
       })
 
     return this.http.post(
@@ -50,7 +49,7 @@ export class WalletService {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.storageService.get('token')})
+        'Authorization': ''+this.authService.token})
 
       const options = { headers: headers, redirect : 'follow' };
       return this.http.get(
@@ -61,7 +60,7 @@ export class WalletService {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.storageService.get('token')})
+        'Authorization': ''+this.authService.token})
 
       const options = { headers: headers, redirect : 'follow' };
       return this.http.get(
@@ -72,7 +71,7 @@ export class WalletService {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.storageService.get('token')})
+        'Authorization': ''+this.authService.token})
 
       const options = { headers: headers, redirect : 'follow' };
       return this.http.get(
@@ -83,7 +82,7 @@ export class WalletService {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.storageService.get('token')})
+        'Authorization': ''+this.authService.token})
 
       const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text' };
       return this.http.post(
@@ -94,7 +93,7 @@ export class WalletService {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.storageService.get('token')})
+        'Authorization': ''+this.authService.token})
 
       const options = { headers: headers, redirect : 'follow', body:did,responseType:'text' as 'text' };
       return this.http.delete(
@@ -105,7 +104,7 @@ export class WalletService {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.storageService.get('token')})
+        'Authorization': ''+this.authService.token})
 
       const options = { headers: headers, redirect : 'follow' };
       return this.http.get(
@@ -116,7 +115,7 @@ export class WalletService {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.storageService.get('token')})
+        'Authorization': ''+this.authService.token})
 
       const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text' };
       return this.http.post(
@@ -127,7 +126,7 @@ export class WalletService {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.storageService.get('token')})
+        'Authorization': ''+this.authService.token})
 
       const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text' };
       return this.http.delete(

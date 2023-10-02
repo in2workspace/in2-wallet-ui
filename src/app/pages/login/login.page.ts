@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { StorageService } from 'src/app/services/storage.service';
 import { Router, RouterModule } from '@angular/router';
 interface LoginForm {
   username: FormControl<string>;
@@ -22,15 +21,11 @@ export class LoginPage {
     password: new FormControl('', {nonNullable: true}),
 });
 
-  constructor(private authenticationService:AuthenticationService,
-    private storageService:StorageService,
-    private router: Router,
-    ) { }
+private authenticationService = inject(AuthenticationService);
+private router = inject(Router);
+
   onSubmit(){
-    this.authenticationService.login(this.login.value).subscribe(data=>{
-      this.authenticationService.isLogin = true;
-      let token = data.headers.get('Authorization')
-      this.storageService.setLlave('token',token)
+    this.authenticationService.login(this.login.value).subscribe(()=>{
       this.router.navigate(['/home/'], {})
   })
   }  
