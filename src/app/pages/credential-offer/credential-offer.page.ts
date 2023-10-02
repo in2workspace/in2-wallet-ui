@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { WalletService } from 'src/app/services/wallet.service';
@@ -12,8 +12,8 @@ import {  RouterModule } from '@angular/router';
   imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule,RouterModule]
 })
 export class CredentialOfferPage implements OnInit {
-
-  constructor(    private walletService: WalletService
+  private walletService = inject(WalletService);
+  constructor(    
     ) { }
   issuersList = [];
   didsList =[]

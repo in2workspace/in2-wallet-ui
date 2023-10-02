@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 const respuesta = 'response' as const;
 const headers = new HttpHeaders({
@@ -17,15 +17,15 @@ const options2 = { headers: headers2, redirect: 'follow', observe: respuesta };
   providedIn: 'root',
 })
 export class KeycloakService {
+  private http = inject(HttpClient);
   public register(userData: any) {
     let registerData = {
-      username:userData['username'],
-      email:userData['email'],
-      enabled:"true2",
-      firstName:"John",
-      lastName:"Doe"
-
-    }
+      username: userData['username'],
+      email: userData['email'],
+      enabled: 'true2',
+      firstName: 'John',
+      lastName: 'Doe',
+    };
     return this.http.post(
       environment.base_url + '/admin/realms/master/users',
       registerData,
@@ -47,5 +47,4 @@ export class KeycloakService {
       options2
     );
   }
-  constructor(private http: HttpClient) {}
 }

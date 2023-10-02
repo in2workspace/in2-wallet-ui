@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -21,7 +21,8 @@ export class CredentialsPage implements OnInit {
   credDataList: any[]=[];
   @Input() availableDevices: MediaDeviceInfo[] = [];
   currentDevice: any;
-  constructor(private walletService:WalletService) { 
+  private walletService = inject(WalletService);
+  constructor() { 
 
   }
 

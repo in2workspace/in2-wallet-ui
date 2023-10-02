@@ -19,7 +19,7 @@ export interface VerifiableCredential{
 })
 export class VcViewComponent implements OnInit{
 
-  constructor(private walletService:WalletService){}
+  constructor(){}
   @Input() credentialInput: VerifiableCredential = {credentialSubject:{mobile_phone:"",email:"",title:"",first_name:"",last_name:"",dateOfBirth:"",gender:""},id:"",vcType:['','']} ;
   cred: VerifiableCredential ={credentialSubject:{mobile_phone:"",email:"",title:"",first_name:"",last_name:"",dateOfBirth:"",gender:""},id:"",vcType:['','']};
   @Output() vcEmit: EventEmitter<VerifiableCredential> =

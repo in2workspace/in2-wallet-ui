@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { KeycloakService } from './keycloak.service';
 
@@ -6,8 +6,9 @@ import { KeycloakService } from './keycloak.service';
   providedIn: 'root'
 })
 export class RegisterService {
-  constructor(private authenticationService:AuthenticationService,
-    private keycloakService:KeycloakService) { }
+  private authenticationService=inject(AuthenticationService);
+    private keycloakService=inject(KeycloakService);
+  constructor() { }
   register(userData:any) {
     this.keycloakService.register(userData).subscribe(data=>{
       this.authenticationService.register(userData).subscribe(data=>{})
