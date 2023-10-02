@@ -1,0 +1,15 @@
+
+{
+    "menu":{
+    "home":"Inicio",
+    "credentials":"Credenciales",
+    "dids":"Dids",
+    "camera-selector":"Selector de Camara",
+    "language-selector":"Selector de Idioma",
+    "terms-of-user":"Terminos de Uso",
+    "privacy-policy":"Politica de Privacidad",
+    "faqs":"FAQs",
+    "settings":"Ajustes",
+    "logout":"Logout"},
+    "":""
+}

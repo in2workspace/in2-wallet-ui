@@ -1,35 +1,36 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
+import { StorageService } from './services/storage.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   standalone: true,
-  imports: [IonicModule, RouterLink, RouterLinkActive, CommonModule],
+  imports: [IonicModule, RouterLink, RouterLinkActive, CommonModule,TranslateModule ],
 })
 export class AppComponent {
+    private authenticationService = inject(AuthenticationService);
+    private storageService = inject(StorageService);
+    private router = inject(Router);
   public appPages = [
-    { title: 'Home', url: '/home', icon: 'home' },
-    { title: 'Credentials', url: '/credentials', icon: 'wallet' },
-    { title: 'Dids', url: '/dids', icon: 'key' },
-    { title: 'Camera Selector', url: '/camera-selector', icon: 'camera' },
-    { title: 'Language Selector', url: '/language-selector', icon: 'flag' },
-    { title: 'Terms of User', url: '/terms-of-use', icon: 'document-text' },
-    { title: 'Privacy Policy', url: '/privacy-policy', icon: 'book' },
-    { title: 'FAQs', url: '/faqs', icon: 'help' },
-    { title: 'Settings', url: '/settings', icon: 'cog' },
-    { title: 'Logout', url:'/login', icon:'log-out'}
+    { title: 'home', url: '/home', icon: 'home' },
+    { title: 'credentials', url: '/credentials', icon: 'wallet' },
+    { title: 'dids', url: '/dids', icon: 'key' },
+    { title: 'camera-selector', url: '/camera-selector', icon: 'camera' },
+    { title: 'language-selector', url: '/language-selector', icon: 'flag' },
+    { title: 'terms-of-user', url: '/terms-of-use', icon: 'document-text' },
+    { title: 'privacy-policy', url: '/privacy-policy', icon: 'book' },
+    { title: 'faqs', url: '/faqs', icon: 'help' },
+    { title: 'settings', url: '/settings', icon: 'cog' },
+    { title: 'logout', url:'/login', icon:'log-out'}
   ];
-  constructor(public translate: TranslateService,
-    private authenticationService:AuthenticationService,
-    private router: Router,
-    ) {
-      translate.addLangs(['en']);
+  constructor(public translate:TranslateService) {
+      translate.addLangs(['en','es','ca']);
       translate.setDefaultLang('en');
     }
     logout(){

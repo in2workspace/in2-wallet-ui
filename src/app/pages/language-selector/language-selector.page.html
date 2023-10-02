@@ -13,17 +13,10 @@
       class="ion-justify-content-start"
       *ngFor="let language of languageList"
     >
-      <a>
-        <div class="flex p-2">
-          <img
-            class="mr-4"
-            src="{{language.url}}"
-            alt
-            style="width: 70px; height: 45px"
-          />
-          <span class="my-auto font-medium">{{language.name}}</span>
-        </div>
-      </a>
+      <ion-button (click)="languageChange(language.code)">
+        <img src="{{language.url}}" alt style="width: 70px; height: 45px; margin-right: 0.5rem;" />
+        <ion-label class="my-auto font-medium">{{language.name}}</ion-label>
+      </ion-button>
     </ion-row>
   </ion-grid>
 </ion-content>

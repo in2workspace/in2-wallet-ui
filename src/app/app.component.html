@@ -7,13 +7,13 @@
           <ion-note>Welcome</ion-note>
 
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item *ngIf="p.title!=='Logout'"routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+            <ion-item *ngIf="p.title!=='logout'"routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
               <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
+              <ion-label>{{ "menu."+(p.title) | translate }}</ion-label>
             </ion-item>
-            <ion-item  *ngIf="p.title==='Logout'" button lines="none" detail="false" (click)="logout()">
+            <ion-item  *ngIf="p.title==='logout'" button lines="none" detail="false" (click)="logout()">
               <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
+              <ion-label>{{ "menu."+p.title | translate}}</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
