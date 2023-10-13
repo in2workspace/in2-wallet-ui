@@ -5,8 +5,14 @@
 
 <br/>
       <ion-grid class="login-grid">
-        <ion-row class="ion-justify-content-center header-logo">     
-          <img alt src="assets/icon/generalitat-de-catalunya-logo-vector.png" width="auto"  height="60px"/>
+        <ion-row>
+          <ion-col class="ion-justify-content-first" style="margin-top:20px">
+            <ion-col class="ion-justify-content-first" style="border-left-width:3px;border-color: #B0FF2B; margin-left: 10px;border-left-style: solid;">
+            <ion-text class="ion-text-login" color="primary"><b>Iniciar Sessió</b></ion-text></ion-col>
+          </ion-col>
+          <ion-col class="ion-text-right header-logo">     
+            <img alt src="assets/icon/IN2-SLOGAN.png" width="auto"  height="60px"/>
+          </ion-col>
         </ion-row>
 
         <ion-row class="ion-justify-content-center">
@@ -30,7 +36,7 @@
               </ion-col>
             </ion-row>
             <ion-row class="ion-justify-content-center">
-              <ion-button class="ion-button-register" fill="clear" [routerLink]="['/register']">New User? Click to register</ion-button>
+              <ion-button class="ion-button-register" fill="clear" [routerLink]="['/register']">No estàs registrat? Registra't</ion-button>
             </ion-row>
           </form>
         </ion-row>

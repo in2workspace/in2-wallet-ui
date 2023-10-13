@@ -74,6 +74,9 @@ ion-alert.custom-alert {
 
   .ion-button-register {
     color: #203d76 !important;
+    text-decoration: underline;
+    text-transform: none;
+    font-weight: bold;
   }
 
 
@@ -112,4 +115,8 @@ ion-alert.custom-alert {
 
   ion-menu.md ion-item.selected {
     --background: #B0FF2B !important;
+  }
+
+  .ion-text-login {
+    font-size: 20px;
   }
