@@ -15,7 +15,7 @@
                 >{{ cred["credentialSubject"]["title"] }}</ion-card-title
               ></ion-col>
               <ion-col size="3" style="padding: 0%;">
-                <ion-button size="small" style="padding: 0%;" (click)="deleteVC()"
+                <ion-button class="vc-view-button" size="small" style="padding: 0%;" (click)="deleteVC()"
               ><ion-icon  name="trash-outline"></ion-icon
             ></ion-button>
               </ion-col>
@@ -42,7 +42,7 @@
         </ion-col>
         <ion-col size="12" align-self-end>
           <ion-row class="ion-justify-content-center"
-            ><ion-button (click)="qrView()"
+            ><ion-button class="vc-view-button" (click)="qrView()"
               ><ion-icon name="qr-code-outline"></ion-icon
             ></ion-button> </ion-row
         >

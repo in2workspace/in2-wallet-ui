@@ -5,7 +5,7 @@
 :root {
 
   ion-alert.select-alert {
-    --background: #203d76!important;
+    --background: #203d76 !important;
 
     button {
         color: white !important;
@@ -36,10 +36,10 @@
   --ion-item-color	: #ffffff;
   --ion-color-step-850: #FFFFFF;
   --ion-toolbar-color	:#ffffff;
-  --ion-card-background:#B0FF2B;
-  --ion-card-color:#203d76;
+  --ion-card-background:#203d76;
+  --ion-card-color:#ffffff;
   /** secondary **/
-  --ion-color-secondary: #B0FF2B;
+  --ion-color-secondary: #203d76;
   --ion-color-secondary-rgb: 61, 194, 255;
   --ion-color-secondary-contrast: #ffffff;
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
@@ -55,7 +55,7 @@
   --ion-color-tertiary-tint: #6370ff;
 
   /** success **/
-  --ion-color-success: #2dd36f;
+  --ion-color-success: #203d76;
   --ion-color-success-rgb: 45, 211, 111;
   --ion-color-success-contrast: #ffffff;
   --ion-color-success-contrast-rgb: 255, 255, 255;

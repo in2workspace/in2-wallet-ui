@@ -4,20 +4,20 @@
 <ion-content [fullscreen]="true" class="ion-padding content">
 
 <br/>
-      <ion-grid>
+      <ion-grid class="login-grid">
         <ion-row class="ion-justify-content-center header-logo">     
           <img alt src="assets/icon/generalitat-de-catalunya-logo-vector.png" width="auto"  height="60px"/>
         </ion-row>
 
         <ion-row class="ion-justify-content-center">
           <form [formGroup]="login" (ngSubmit)="onSubmit()">
-            <ion-item class="item-trns">
+            <ion-item class="item-username">
               <ion-input placeholder="Username" labelPlacement="floating" type="text" required formControlName="username"></ion-input>
               <ion-icon name="person-outline" slot="start"></ion-icon>
 
             </ion-item >
             <br/>
-            <ion-item class="item-trns">
+            <ion-item class="item-username">
               <ion-input placeholder="Password" labelPlacement="floating" type="password" required formControlName="password"></ion-input>
               <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
 
@@ -26,11 +26,11 @@
 
             <ion-row class="login-row">
               <ion-col>
-                <ion-button class="ion-button-custom"expand="block"color="secondary" type="submit" [disabled]="!login.valid">Login</ion-button>
+                <ion-button class="ion-button-in2"expand="block"color="secondary" type="submit" [disabled]="!login.valid">Login</ion-button>
               </ion-col>
             </ion-row>
             <ion-row class="ion-justify-content-center">
-              <ion-button fill="clear" color="secondary"[routerLink]="['/register']">New User? Click to register</ion-button>
+              <ion-button class="ion-button-register" fill="clear" [routerLink]="['/register']">New User? Click to register</ion-button>
             </ion-row>
           </form>
         </ion-row>
