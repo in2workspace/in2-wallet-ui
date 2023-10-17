@@ -106,6 +106,7 @@ ion-alert.custom-alert {
 
   .ion-icon-home {
     color: #B0FF2B !important;
+    margin-right: 20px;
   }
 
   .vc-view-button {
@@ -119,4 +120,24 @@ ion-alert.custom-alert {
 
   .ion-text-login {
     font-size: 20px;
+  }
+
+  .welcome-text {
+    height: 35px;
+  }
+
+  .user-welcome {
+    width: 180px !important;
+  }
+
+  .userDataIn2 {
+    padding: 0.5rem;
+    background-color: rgba(226, 226, 226, 0.644);
+    width: fit-content !important;
+    align-items: end;
+  }
+
+  .userDataCol {
+    justify-content: end;
+    display: contents;
   }
