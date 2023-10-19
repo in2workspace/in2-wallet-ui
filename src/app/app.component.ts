@@ -29,8 +29,19 @@ export class AppComponent {
     { title: 'settings', url: '/settings', icon: 'cog' },
     { title: 'logout', url:'/login', icon:'log-out'}
   ];
-  constructor(public translate:TranslateService) {
-      translate.addLangs(['en','es','ca']);
+
+  showLanguageDropDown = false;
+
+  toggleLanguageDropdown() {
+    this.showLanguageDropDown = !this.showLanguageDropDown;
+  }
+
+  changeLanguage(language: string) {
+    this.showLanguageDropDown = false;
+  }
+  constructor(public translate: TranslateService,
+    ) {
+      translate.addLangs(['en']);
       translate.setDefaultLang('en');
     }
     logout(){
