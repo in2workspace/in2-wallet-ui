@@ -25,6 +25,16 @@ export class AppComponent {
     { title: 'Settings', url: '/settings', icon: 'cog' },
     { title: 'Logout', url:'/login', icon:'log-out'}
   ];
+
+  showLanguageDropDown = false;
+
+  toggleLanguageDropdown() {
+    this.showLanguageDropDown = !this.showLanguageDropDown;
+  }
+
+  changeLanguage(language: string) {
+    this.showLanguageDropDown = false;
+  }
   constructor(public translate: TranslateService,
     private authenticationService:AuthenticationService,
     private router: Router,
