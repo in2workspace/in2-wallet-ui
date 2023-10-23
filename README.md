@@ -19,11 +19,16 @@ The application is based on the following architecture:
 # Getting Started
 This aplication is developed, builded and tested in Visual Studio Code 
 1. Clone the repository:
-```git clone https://in2Dome@dev.azure.com/in2Dome/DOME/_git/in2-dome-wallet_frontend```
+```git clone https://github.com/in2workspace/in2-wallet-wda.git```
 2. Install dependencies:
 ```npm install```
 3. Install Ionic
 ```npm install -g @ionic/cli```
+4. Start aplication in local development
+```npm start```
+5. Build docker image
+```docker build -t wallet-wda .```
+
 # Build and Test
 We have 3 different ways to build and test the project depending on the selected Spring Boot profile.
 - `test` profile: This profile is used for unit testing. It uses an in-memory database and does not require any external dependencies.

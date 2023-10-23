@@ -3,13 +3,16 @@ import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, from, map, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { StorageService } from './storage.service';
-import { Platform } from '@ionic/angular';
+
 const respuesta = 'response' as const;
 const headers = new HttpHeaders({
-  'Content-Type': 'application/json',
-  'Allow-Control-Allow-Origin': '*',
+  'Content-Type': 'application/x-www-form-urlencoded',
 });
 const options = { headers: headers, redirect: 'follow', observe: respuesta };
+const keycloakOptions = {
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  observe: respuesta,
+};
 @Injectable({
   providedIn: 'root',
 })
@@ -17,6 +20,11 @@ export class AuthenticationService {
   private http = inject(HttpClient);
   private _storage = inject(StorageService);
 
+  isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
+  token = '';
+  
   constructor() {
     this._storage.get('token').then((savedToken) => {
       if (!savedToken) {
@@ -28,26 +36,26 @@ export class AuthenticationService {
       }
     });
   }
-  isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
-  token = '';
 
   public login(userData: any): Observable<any> {
-    return this.http
-      .post(environment.base_url + '/login', userData, options)
-      .pipe(
-        map((data: any) => {
-          this.token = data.headers.get('Authorization');
-          return this.token;
-        }),
-        switchMap((token) => {
-          return this._storage.set('token', token);
-        }),
-        tap((_) => {
-          this.isAuthenticated.next(true);
-        })
-      );
+    let body = new URLSearchParams();
+    body.set('client_id', environment.keycloakParams.client_id);
+    body.set('username', userData.username);
+    body.set('password', userData.password);
+    body.set('client_secret', environment.keycloakParams.client_secret);
+    body.set('grant_type', environment.keycloakParams.grant_type);
+    return this.http.post(environment.keycloakParams.keycloak_url, body, keycloakOptions).pipe(
+      map((data: any) => {
+        this.token = data.body.access_token;
+        return this.token;
+      }),
+      switchMap((token) => {
+        return this._storage.set('token', token);
+      }),
+      tap((_) => {
+        this.isAuthenticated.next(true);
+      })
+    );
   }
   public register(userData: any) {
     return this.http.post(
@@ -59,8 +67,8 @@ export class AuthenticationService {
 
   public getName() {
     let username = JSON.parse(
-      atob(this.token.split('Bearer ')[1].split('.')[1])
-    )['username'];
+      atob(this.token.split('.')[1])
+    )['name'];
     return username;
   }
   public logout() {
