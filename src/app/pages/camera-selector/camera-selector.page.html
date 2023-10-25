@@ -1,0 +1,30 @@
+<ion-header [translucent]="false">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Camera selector</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row class="ion-justify-content-start">
+      <ion-button (click)="onDeviceSelectChange('')">No device</ion-button>
+    </ion-row>
+    <ion-row
+      class="ion-justify-content-start"
+      *ngFor="let camera of availableDevices"
+    >
+      <ion-button (click)="onDeviceSelectChange(camera.deviceId)"
+        >{{camera.label}}</ion-button
+      >
+    </ion-row>
+    <ion-row class="ion-justify-content-center">
+      <app-barcode-scanner
+        (availableDevices)="availableDevicesEmit($event)"
+      ></app-barcode-scanner>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

@@ -1,0 +1,15 @@
+.boton-fijo {
+    position: fixed;
+    left: 0;
+    bottom: 10px;
+    right: 0;
+}
+ion-button:focus {
+    --background: #067856;
+    --color: white;
+  }
+  ion-alert.custom-alert {   
+      --ion-text-color:black;
+      --backdrop-opacity: 0.7;
+    }
+  
