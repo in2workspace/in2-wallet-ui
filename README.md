@@ -29,6 +29,10 @@ This aplication is developed, builded and tested in Visual Studio Code
 5. Build docker image
 ```docker build -t wallet-wda .```
 
+# Customization
+
+
+
 # Build and Test
 We have 3 different ways to build and test the project depending on the selected Spring Boot profile.
 - `test` profile: This profile is used for unit testing. It uses an in-memory database and does not require any external dependencies.

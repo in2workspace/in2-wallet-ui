@@ -9,7 +9,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "eje": "copy customTheme customTheme2"
   },
   "private": true,
   "dependencies": {
