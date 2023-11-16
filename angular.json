@@ -40,6 +40,86 @@
             "scripts": []
           },
           "configurations": {
+            "custom_dev": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.customdev.ts"
+                }
+              ],
+              "outputHashing": "all",
+              "assets": [
+                "src/favicon.ico",
+                {
+                  "glob": "**/*",
+                  "input": "customAssets",
+                  "output": "/assets/"
+                },
+                {
+                  "glob": "**/*",
+                  "input": "customTheme",
+                  "output": "/theme/"
+                },
+                {
+                  "glob": "**/*.svg",
+                  "input": "node_modules/ionicons/dist/ionicons/svg",
+                  "output": "./svg"
+                }
+              ],
+              "styles": ["customTheme/variables.scss", "src/global.scss","customTheme/globalDefault.scss"]
+            },
+            "custom_production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.customprod.ts"
+                }
+              ],
+              "outputHashing": "all",
+              "assets": [
+                "src/favicon.ico",
+                {
+                  "glob": "**/*",
+                  "input": "customAssets",
+                  "output": "/assets/"
+                },
+                {
+                  "glob": "**/*",
+                  "input": "customTheme",
+                  "output": "/theme/"
+                },
+                {
+                  "glob": "**/*.svg",
+                  "input": "node_modules/ionicons/dist/ionicons/svg",
+                  "output": "./svg"
+                }
+              ],
+              "styles": ["customTheme/variables.scss", "src/global.scss","customTheme/globalDefault.scss"]
+            },
             "production": {
               "budgets": [
                 {
@@ -59,20 +139,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all",
-              "assets": [
-                "src/favicon.ico",
-                {
-                  "glob": "**/*",
-                  "input": "customAssets",
-                  "output": "/assets/"
-                },
-                {
-                  "glob": "**/*",
-                  "input": "src/assets/",
-                  "output": "/assets/"
-                }
-              ]
+              "outputHashing": "all"
             },            
             "dev": {
               "budgets": [
@@ -112,6 +179,12 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
+            "custom_production": {
+              "browserTarget": "app:build:custom_production"
+            },
+            "custom_dev": {
+              "browserTarget": "app:build:custom_dev"
+            },
             "production": {
               "browserTarget": "app:build:production"
             },
