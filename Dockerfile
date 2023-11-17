@@ -1,16 +1,15 @@
-# Base image
-FROM node:19.5.0-alpine
-# Create app directory
+FROM node:19.5.0-alpine as build
 WORKDIR /app
-# Copy package.json and package-lock.json
-COPY package*.json ./
-# Install dependencies
-RUN npm install -g @angular/cli
-RUN npm i
-# Copy app source
-COPY . .
-# Build the app
-# Expose port 80
-EXPOSE 4203
-# Start the app
- CMD ["sh", "-c", "ng serve --host 0.0.0.0 --disable-host-check true --port 4203 -c ${ENVIRONMENT}"]
+COPY . /app/
+RUN npm install -g @angular/cli --force
+RUN npm i --force
+RUN npm run build
+
+FROM nginx
+COPY --from=build /app/www/ /usr/share/nginx/html
+COPY /docker-entrypoint.sh /
+COPY /nginx-custom.conf /etc/nginx/conf.d/default.conf
+RUN chmod +x /docker-entrypoint.sh
+EXPOSE 8088
+ENTRYPOINT [ "/docker-entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]

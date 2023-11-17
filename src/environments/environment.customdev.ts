@@ -13,7 +13,7 @@ export const environment = {
   },
   registerParams:{
     has_register: true,
-    register_url: '',
+    register_url: 'http://yourregisterurl',
     client_id:'',
     client_secret:'',
     grant_type:''

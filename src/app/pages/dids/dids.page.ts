@@ -34,12 +34,9 @@ refresh(){
 
   }
   createDid(){
-    this.walletService.postDid({"type":"key","value":null}).subscribe((response:any) => {
-      console.log(response)
-      this.refresh()
-
-     },
-     error=>{console.log(error)})
+    this.walletService.createCrypto().subscribe(respon => {
+      this.walletService.getAllDIDs().subscribe(response => {console.log(response);this.didList=response})
+    })
   }
   didDelete(did: string) {
     this.walletService.deleteDid(did).subscribe((response:any) => {

@@ -1,0 +1,17 @@
+
+{
+    "menu":{
+
+    "home":"Home",
+    "credentials":"Credentials",
+    "dids":"Dids",
+    "camera-selector":"Camera Selector",
+    "language-selector":"Language Selector",
+    "terms-of-user":"Terms of User",
+    "privacy-policy":"Privacy Policy",
+    "faqs":"FAQs",
+    "settings":"Settings",
+    "logout":"Logout"
+    },
+    "":""
+}

@@ -1,0 +1,12 @@
+version: "3.9" 
+services:
+  portal:
+    build:
+      context: .
+      dockerfile: Dockerfile.Dev
+      args:
+        - Test=$TEST
+    environment:
+        TEST: Test
+    ports:
+      - "5555:80"

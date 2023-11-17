@@ -1,7 +1,7 @@
 <ion-card>
   <ion-card-header>
     <ion-row>
-      <ion-col size="9"><ion-card-title style="padding-top: 0.5rem;">{{did['did'].substr(1,14)}}...{{did['did'].substr(did['did'].length-4,did['did'].length)}}</ion-card-title>
+      <ion-col size="9"><ion-card-title style="padding-top: 0.5rem;">{{did.substr(1,14)}}...{{did.substr(did.length-4,did.length)}}</ion-card-title>
       </ion-col>
       <ion-col size="3"> 
     <ion-button (click)="deleteDid()" shape="round" fill="clear"  style="margin-left: auto; border-radius: 5%;"> <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon></ion-button>
