@@ -44,7 +44,7 @@ export class AuthenticationService {
     body.set('password', userData.password);
     body.set('client_secret', environment.loginParams.client_secret);
     body.set('grant_type', environment.loginParams.grant_type);
-    return this.http.post(environment.loginParams.login_url, body, keycloakOptions).pipe(
+    return this.http.post(environment.loginParams.login_url+'/realms/EAAProvider/protocol/openid-connect/token', body, keycloakOptions).pipe(
       map((data: any) => {
         this.token = data.body.access_token;
         return this.token;
@@ -59,7 +59,7 @@ export class AuthenticationService {
   }
   public register(userData: any) {
     return this.http.post(
-      environment.base_url + '/api/users',
+      environment.api_url + '/api/users',
       userData,
       options
     );

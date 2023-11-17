@@ -4,12 +4,15 @@
 
 export const environment = {
   production: false,
-  base_url: 'https://app-wallet-api-ms-iep-dev.azurewebsites.net',
+  api_url: 'http://yourapiurl',
+  data_url: 'http://yourdataurl',
+  wca_url: 'http://yourwcaurl',
+  crypto_url: 'http://yourcyptourl',
   loginParams:{
     has_login: true,
-    login_url: 'https://app-cross-keycloak-ms-iep-dev.azurewebsites.net/',
-    client_id: 'oidc4vci-client',
-    client_secret:'vxuLBYhEJ0atp1AZPjwKh5hzaZMOqd5y',
+    login_url: 'http://yourloginurl',
+    client_id: 'client',
+    client_secret:'secret',
     grant_type:'password'
   },
   registerParams:{
@@ -19,7 +22,6 @@ export const environment = {
     client_secret:'',
     grant_type:''
   },
-
 };
 
 /*

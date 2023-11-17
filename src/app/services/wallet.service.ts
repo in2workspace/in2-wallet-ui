@@ -13,123 +13,109 @@ export interface ECResponse{
   state:string,
   redirectUri:string  
 }
+const options ={};
+const headers = new HttpHeaders({
+  'Content-Type': 'application/json',
+  'Allow-Control-Allow-Origin': '*'})
 @Injectable({
   providedIn: 'root'
 })
 export class WalletService {
   private http = inject(HttpClient)
   private authService = inject(AuthenticationService);
-  constructor() {  }
+  constructor() { 
+    headers.append('Authorization', 'Bearer '+this.authService.token)
+   }
 
-  public executeContent(url:string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Allow-Control-Allow-Origin': '*',
-      'Authorization': ''+this.authService.token})
+  public apisiop(url:string): Observable<any> {
     const options = { headers: headers, redirect : 'follow',responseType: 'text' as 'json' };
     return this.http.post(
-      environment.base_url + '/api/execute-content', 
+      environment.wca_url + '/api/siop', 
       {"qr_content":url},options)
     }
+    public executeContent(url:string): Observable<any> {
 
+      const options = { headers: headers, redirect : 'follow',responseType: 'text' as 'json' };
+      return this.http.post(
+        environment.api_url + '/api/execute-content',       {"qr_content":url},options)
+      }
   public executeVC(_VCReply:VCReply): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Allow-Control-Allow-Origin': '*',
-      'Authorization': ''+this.authService.token,
-      })
+
 
     return this.http.post(
-      environment.base_url + '/api/vp',_VCReply,
+      environment.wca_url  + '/api/vp',_VCReply,
       { headers: headers, responseType: 'text'}
     )
     }
   public getAllVCs():Observable<any>{
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.authService.token})
+
 
       const options = { headers: headers, redirect : 'follow' };
       return this.http.get(
-        environment.base_url + '/api/personal-data-space', 
+        environment.data_url + '/api/credentials', 
         options)
     }
     public getAllDIDs():Observable<any>{
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.authService.token})
+
 
       const options = { headers: headers, redirect : 'follow' };
       return this.http.get(
-        environment.base_url + '/api/dids', 
+        environment.data_url + '/api/dids', 
         options)
     }
     public getOne(data: string) {
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.authService.token})
+
 
       const options = { headers: headers, redirect : 'follow' };
       return this.http.get(
-        environment.base_url + '/api/vc/1/'+data+'/format?format=vc_json', 
+        environment.data_url + '/api/vc/1/'+data+'/format?format=vc_json', 
         options)
     }  
-    postDid(arg0: { type: string; value:any}) {
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.authService.token})
+    postDid(arg0: { didType: string; did:any}) {
+
 
       const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text' };
       return this.http.post(
-        environment.base_url + '/api/dids', arg0,
+        environment.data_url + '/api/dids', arg0,
         options)
     }
     deleteDid(did:string) {
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.authService.token})
 
-      const options = { headers: headers, redirect : 'follow', body:did,responseType:'text' as 'text' };
+
+      const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text' };
       return this.http.delete(
-        environment.base_url + '/api/dids',
+        environment.data_url + '/api/dids?did=' + did,
         options)
     }
     public getAllIssuers():Observable<any>{
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.authService.token})
+
 
       const options = { headers: headers, redirect : 'follow' };
       return this.http.get(
-        environment.base_url + '/api/issuers', 
+        environment.wca_url + '/api/issuers', 
         options)
     }
     public submitCredential(arg0: { }) {
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.authService.token})
+
 
       const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text' };
       return this.http.post(
-        environment.base_url + '/api/credentials', arg0,
+        environment.wca_url + '/api/credentials', arg0,
         options)
     }
     deleteVC(VC:string) {
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Allow-Control-Allow-Origin': '*',
-        'Authorization': ''+this.authService.token})
+
 
       const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text' };
       return this.http.delete(
-        environment.base_url + '/api/vc/'+VC,
+        environment.data_url + '/api/credentials?credentialId='+VC,
         options)
     }
-}
+    createCrypto(){
+
+
+      const options = { headers: headers, redirect : 'follow' ,responseType:'text' as 'text' };
+      return this.http.post(
+        environment.crypto_url + '/api/v1/dids/key',{} ,
+        options)
+    }}

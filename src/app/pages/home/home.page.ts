@@ -49,14 +49,16 @@ export class HomePage implements OnInit {
     this.escaneado = qrCode;
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
-        if (executionResponse === '{}') {
+        if (qrCode.includes("credential_offer_uri")) {
           this.escaneado = '';
           this.isCredOffer = true;
         } else {
+          this.walletService.apisiop(qrCode).subscribe({
+            next: (val) =>{
           this.router.navigate(['/vc-selector/'], {
-            queryParams: { executionResponse: executionResponse },
+            queryParams: { executionResponse: val },
           });
-          this.escaneado = '';
+          this.escaneado = '';}})
         }
       },
       error: (err) => {
