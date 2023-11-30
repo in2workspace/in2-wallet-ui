@@ -24,8 +24,6 @@ const headers = new HttpHeaders({
 export class WalletService {
   private http = inject(HttpClient);
   private authService = inject(AuthenticationService);
-  constructor() {
-  }
 
   public apisiop(url: string): Observable<any> {
     const options = {
@@ -40,7 +38,6 @@ export class WalletService {
     );
   }
   public executeContent(url: string): Observable<any> {
-    
     const options = {
       headers: headers,
       redirect: 'follow',
