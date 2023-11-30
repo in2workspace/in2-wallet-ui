@@ -6,13 +6,14 @@ import { StorageService } from 'src/app/services/storage.service';
 import { QRCodeModule } from 'angular2-qrcode';
 import { WalletService } from 'src/app/services/wallet.service';
 import { VcViewComponent, VerifiableCredential } from "../../components/vc-view/vc-view.component";
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-credentials',
     templateUrl: './credentials.page.html',
     standalone: true,
     providers: [StorageService],
-    imports: [IonicModule, CommonModule, FormsModule, QRCodeModule, VcViewComponent]
+    imports: [IonicModule, CommonModule, FormsModule, QRCodeModule, VcViewComponent,TranslateModule]
 })
 
 export class CredentialsPage implements OnInit {

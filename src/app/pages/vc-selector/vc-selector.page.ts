@@ -6,13 +6,14 @@ import { StorageService } from 'src/app/services/storage.service';
 import { QRCodeModule } from 'angular2-qrcode';
 import { VCReply, WalletService } from 'src/app/services/wallet.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-vc-selector',
   templateUrl: './vc-selector.page.html',
   styleUrls: ['./vc-selector.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, QRCodeModule],
+  imports: [IonicModule, CommonModule, FormsModule, QRCodeModule,TranslateModule],
   providers: [StorageService],
 })
 export class VcSelectorPage implements OnInit {

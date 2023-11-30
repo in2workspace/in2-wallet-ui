@@ -3,8 +3,8 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title class="ion-text-start">Home</ion-title>
-    <img alt src="assets/icon/bannerLogo.png" width="auto" slot="end" height="60px"/>
+    <ion-title class="ion-text-start">{{"home.title"|translate}}</ion-title>
+    <img alt src="assets/icon/Logo_white_IN2.png" width="auto" slot="end" height="60px"/>
 
   </ion-toolbar>
 </ion-header>
@@ -14,7 +14,7 @@
       <ion-grid>
         <ion-row class="ion-justify-content-first">
           <ion-col class="welcome-text" style="border-left-width:4px;border-color: #B0FF2B; border-left-style: solid;">
-          <ion-text class="ion-text-start" color="primary"><b>Welcome to IN2Wallet</b></ion-text></ion-col>
+          <ion-text class="ion-text-start" color="primary"><b>{{"home.hello"|translate}}</b></ion-text></ion-col>
           <ion-col class="userDataCol"><div class="ion-text-end userDataIn2">
             <ion-row class="user-welcome">
             <ion-col><div class="ion-text-start"><ion-icon class="ion-icon-home" size="small" name="person"></ion-icon></div></ion-col>
@@ -24,7 +24,7 @@
         </ion-row>
           <br/>
         <ion-row class="ion-justify-content-center">
-          <ion-button  size="large" *ngIf="!toggleScan" (click)="startScan()"> <div class="custom-button-content"><ion-icon size="large"color="white"name="qr-code"></ion-icon><ion-label>Scan QR </ion-label> </div></ion-button>
+          <ion-button  size="large" *ngIf="!toggleScan" (click)="startScan()"> <div class="custom-button-content"><ion-icon size="large"color="white"name="qr-code"></ion-icon><ion-label>{{"home.scan"|translate}}</ion-label> </div></ion-button>
         </ion-row>
       
       </ion-grid>
@@ -39,21 +39,21 @@
   <ion-alert
   [isOpen]="isAlertOpen"
   class="custom-alert"
-  header="Congratulations"
-  message="VC saved"
+  [header]=" 'home.ok-header' | translate"
+  [message]=" 'home.ok-msg' | translate"
   (didDismiss)="setOpen(false)"
 ></ion-alert>  <ion-alert
 [isOpen]="isAlertOpenFail"
 class="custom-alert"
-header="Unsuccesfull"
-message="VC already saved"
+[header]=" 'home.unsucces' | translate"
+[message]=" 'home.already-saved' | translate"
 (didDismiss)="setOpen(false)"
 ></ion-alert>
 <ion-alert
 [isOpen]="isAlertOpenNotFound"
 class="custom-alert"
-header="Unsuccesfull"
-message="No stored valid credential"
+[header]=" 'home.unsucces' | translate"
+[message]=" 'home.no-credential' | translate"
 [buttons]="alertButtons"
 (didDismiss)="setOpenNotFound(false)"
 ></ion-alert>
@@ -61,6 +61,6 @@ message="No stored valid credential"
 </ion-content>
 <ion-footer [translucent]="false">
 
-  <ion-row *ngIf="isCredOffer" class="ion-justify-content-center">  <ion-button (click)="getCred()">Get Credential</ion-button>
+  <ion-row *ngIf="isCredOffer" class="ion-justify-content-center">  <ion-button (click)="getCred()">{{"home.get-cred"|translate}}</ion-button>
   </ion-row>
 </ion-footer>

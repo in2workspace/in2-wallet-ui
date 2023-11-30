@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { BarcodeScannerComponent } from '../../components/barcode-scanner/barcode-scanner.component';
 import { CameraService } from 'src/app/services/camera.service';
+
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-camera-selector',
   templateUrl: './camera-selector.page.html',
@@ -14,6 +16,7 @@ import { CameraService } from 'src/app/services/camera.service';
     CommonModule,
     FormsModule,
     BarcodeScannerComponent,
+    TranslateModule
   ],
 })
 export class CameraSelectorPage {

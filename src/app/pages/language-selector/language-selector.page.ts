@@ -2,13 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-language-selector',
   templateUrl: './language-selector.page.html',
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule,TranslateModule]
 })
 export class LanguageSelectorPage implements OnInit {
   public translate= inject(TranslateService);

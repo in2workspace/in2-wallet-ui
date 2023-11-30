@@ -45,7 +45,9 @@ export class AppComponent {
       translate.setDefaultLang('en');
     }
     logout(){
-      this.authenticationService.logout();
-      this.router.navigate(['/login'], {})
+      this.authenticationService.logout().subscribe(() => {
+        this.router.navigate(['/login'], {})
+
+      });
     }
 }

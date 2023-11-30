@@ -13,5 +13,74 @@
     "settings":"Settings",
     "logout":"Logout"
     },
-    "":""
+    "camera-selector":{
+        "title":"Camera Selector",
+        "no-device": "No device"
+    },
+    "credential-offer":{
+        "title":"Credential Offer",
+        "generate":"Create Credential",
+        "ok-header": "Congratulations",
+        "vc-saved":"Credential saved"
+    },
+    "credentials":{
+        "title":"Credentials"
+    },
+    "dids":{
+        "title":"Dids"
+    },
+    "faqs":{
+        "title":"Faqs"
+    },
+    "home":{
+        "title":"Home",
+        "hello":"Welcome to IN2Wallet",
+        "scan":"Scan QR ",
+        "get-cred":"Get Credential",
+        "ok-header": "Congratulations",
+        "ok-msg": "VC saved",
+        "unsucces": "Unsuccesfull",
+        "already-saved": "VC already saved",
+        "no-credential": "No stored valid credential"
+    },
+    "language-selector":{
+        "title":"Language Selector"
+    },
+    "login":{
+        "title":"Login",
+        "login":"Login",
+        "register":"Not registered? Sign up",
+        "error": "Username or password incorrect"
+    },
+    "privacy-policy":{
+        "title":"Privacy Policy"
+    },
+    "register":{
+        "title":"Register",
+        "register":"Register",
+        "login":"Go to Login",
+        "error": "There was an error",
+        "email-error":"Invalid email"
+    },
+    "settings":{
+        "title":"Settings"
+    },
+    "terms-of-use":{
+        "title":"Terms Of Use"
+    },
+    "vc-selector":{
+        "title":"Vc Selector",
+        "select-cred":"Select Credential",
+        "send-cred":"Send Credential",
+        "ok-header": "Congratulations",
+        "ok-message":"Log in completed",
+        "ko-header":"Error",
+        "ko-message":"Failed to Login"
+    },
+    "vc-view":{
+        "warning-header": "Credential",
+        "warning-msg": "By generating this code, you agree that the data contained in your permit, and its legal status, will be displayed on the reader device to verify its validity.",
+        "qr-title": "QR Credential",
+        "qr-close": "Close"
+    }
 }

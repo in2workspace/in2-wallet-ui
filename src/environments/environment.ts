@@ -4,20 +4,18 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://yourapiurl',
-  data_url: 'http://yourdataurl',
-  wca_url: 'http://yourwcaurl',
-  crypto_url: 'http://yourcyptourl',
+  data_url: 'http://localhost:8086',
+  wca_url: 'http://localhost:8083',
   loginParams:{
     has_login: true,
-    login_url: 'http://yourloginurl',
-    client_id: 'client',
-    client_secret:'secret',
-    grant_type:'password'
+    login_url: 'http://localhost:8084/realms/WalletIdP',
+    client_id: 'wallet-client',
+    client_secret:'fV51P8jFBo8VnFKMMuP3imw3H3i5mNck',
+    grant_type:'code'
   },
   registerParams:{
     has_register: true,
-    register_url: '',
+    register_url: 'http://localhost:8085',
     client_id:'',
     client_secret:'',
     grant_type:''
