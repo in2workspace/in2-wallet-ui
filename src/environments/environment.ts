@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   data_url: 'http://localhost:8086',
-  wca_url: 'http://localhost:8083',
+  wca_url: 'http://localhost:8087',
   loginParams:{
     has_login: true,
     login_url: 'http://localhost:8084/realms/WalletIdP',

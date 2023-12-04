@@ -50,7 +50,7 @@ export class WalletService {
     );
   }
   public executeVC(_VCReply: VCReply): Observable<any> {
-    return this.http.post(environment.wca_url + '/api/v1/', _VCReply, {
+    return this.http.post(environment.wca_url + '/api/v1/verifiable-presentation', _VCReply, {
       headers: headers,
       responseType: 'text',
     });
