@@ -6,6 +6,8 @@ import { BarcodeScannerComponent } from 'src/app/components/barcode-scanner/barc
 import { Router } from '@angular/router';
 import { WalletService } from 'src/app/services/wallet.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { TranslateModule } from '@ngx-translate/core';
+
 const TIME_IN_MS = 1500;
 
 @Component({
@@ -18,6 +20,7 @@ const TIME_IN_MS = 1500;
     CommonModule,
     FormsModule,
     BarcodeScannerComponent,
+    TranslateModule
   ],
 })
 export class HomePage implements OnInit {
@@ -51,14 +54,12 @@ export class HomePage implements OnInit {
       next: (executionResponse) => {
         if (qrCode.includes("credential_offer_uri")) {
           this.escaneado = '';
-          this.isCredOffer = true;
         } else {
-          this.walletService.apisiop(qrCode).subscribe({
-            next: (val) =>{
+
           this.router.navigate(['/vc-selector/'], {
-            queryParams: { executionResponse: val },
+            queryParams: { executionResponse: executionResponse },
           });
-          this.escaneado = '';}})
+          this.escaneado = '';
         }
       },
       error: (err) => {

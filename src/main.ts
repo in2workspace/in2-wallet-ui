@@ -8,9 +8,9 @@ import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { QRCodeModule } from 'angular2-qrcode';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { AuthModule, LogLevel, AuthInterceptor, authInterceptor } from 'angular-auth-oidc-client';
 
 if (environment.production) {
   enableProdMode();
@@ -30,6 +30,23 @@ bootstrapApplication(AppComponent, {
       }
     })),
     importProvidersFrom(IonicStorageModule.forRoot()),
+    importProvidersFrom( AuthModule.forRoot({
+      config: {
+        authority: environment.loginParams.login_url,
+        redirectUrl: window.location.origin,
+        postLogoutRedirectUri: window.location.origin,
+        clientId: environment.loginParams.client_id,
+        scope: environment.loginParams.scope,
+        responseType: environment.loginParams.grant_type,
+        silentRenew: true,
+        useRefreshToken: true,
+        logLevel: LogLevel.Debug,
+        secureRoutes:[environment.data_url,environment.wca_url]
+      }
+    })
+    ),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    provideHttpClient(withInterceptors([authInterceptor()])),
     provideRouter(routes),
   ],
 });

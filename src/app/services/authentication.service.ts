@@ -3,10 +3,11 @@ import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, from, map, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { StorageService } from './storage.service';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 const respuesta = 'response' as const;
 const headers = new HttpHeaders({
-  'Content-Type': 'application/x-www-form-urlencoded',
+  'Content-Type': 'application/json',
 });
 const options = { headers: headers, redirect: 'follow', observe: respuesta };
 const keycloakOptions = {
@@ -24,69 +25,56 @@ export class AuthenticationService {
     false
   );
   token = '';
-  
-  constructor() {
-    this._storage.get('token').then((savedToken) => {
-      if (!savedToken) {
-        this.token = '';
-        this.isAuthenticated.next(false);
-      } else {
-        this.token = savedToken;
-        this.isAuthenticated.next(true);
-      }
+  userData:any;
+  constructor(public oidcSecurityService: OidcSecurityService) {
+    this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData,accessToken}) => {
+      this.isAuthenticated.next(isAuthenticated);
+      this.userData=userData;    
+      this.token=accessToken
     });
+
   }
 
-  public login(userData: any): Observable<any> {
-    let body = new URLSearchParams();
-    body.set('client_id', environment.loginParams.client_id);
-    body.set('username', userData.username);
-    body.set('password', userData.password);
-    body.set('client_secret', environment.loginParams.client_secret);
-    body.set('grant_type', environment.loginParams.grant_type);
-    return this.http.post(environment.loginParams.login_url+'/realms/EAAProvider/protocol/openid-connect/token', body, keycloakOptions).pipe(
+
+
+  login() {
+    return this.oidcSecurityService.authorizeWithPopUp().pipe(
+      map(({ isAuthenticated, userData, accessToken}) => {
+        this.isAuthenticated.next(isAuthenticated);
+        this.userData=userData; 
+        this.token=accessToken;
+      })
+    );
+  }
+
+  logout() {
+    return this.oidcSecurityService.logoff().pipe(
       map((data: any) => {
-        this.token = data.body.access_token;
+        this.token = data.accessToken;
         return this.token;
       }),
       switchMap((token) => {
-        return this._storage.set('token', token);
+        return token;
       }),
       tap((_) => {
         this.isAuthenticated.next(true);
       })
     );
   }
+
   public register(userData: any) {
     return this.http.post(
-      environment.api_url + '/api/users',
+      environment.registerParams.register_url + '/api/v1/users',
       userData,
       options
     );
   }
 
   public getName() {
-    let username = JSON.parse(
-      atob(this.token.split('.')[1])
-    )['name'];
-    return username;
+    return this.userData.name;
   }
-  public logout() {
-    this.isAuthenticated.next(false);
-    this._storage.remove('token');
-  }
+
   public isAuth(): Observable<boolean> {
-    return from(this._storage.get('token')).pipe(
-      map((savedToken: string) => {
-        if (!savedToken) {
-          this.token = '';
-          this.isAuthenticated.next(false);
-          return false;
-        }
-        this.token = savedToken;
-        this.isAuthenticated.next(true);
-        return true;
-      })
-    );
-  }
+    return this.isAuthenticated;
+} 
 }

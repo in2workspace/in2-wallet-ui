@@ -3,14 +3,14 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Camera selector</ion-title>
+    <ion-title>{{"camera-selector.title" | translate}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-grid>
     <ion-row class="ion-justify-content-start">
-      <ion-button (click)="onDeviceSelectChange('')">No device</ion-button>
+      <ion-button (click)="onDeviceSelectChange('')">{{"camera-selector.no-device" | translate}}</ion-button>
     </ion-row>
     <ion-row
       class="ion-justify-content-start"

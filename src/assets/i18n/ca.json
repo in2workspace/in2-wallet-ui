@@ -2,15 +2,84 @@
 {
     "menu":{
     "home":"Home",
-    "credentials":"Credentials",
+    "credentials":"Credencials",
     "dids":"Dids",
-    "camera-selector":"Camera Selector",
-    "language-selector":"Language Selector",
-    "terms-of-user":"Terms of User",
-    "privacy-policy":"Privacy Policy",
+    "camera-selector":"Selector de Camara",
+    "language-selector":"Selector d'Idioma",
+    "terms-of-user":"Terms d'Us",
+    "privacy-policy":"Politica de Privacitat",
     "faqs":"FAQs",
     "settings":"Settings",
     "logout":"Logout"
     },
-    "":""
+    "camera-selector":{
+        "title":"Selector de Camara",
+        "no-device": "Sense dispositiu"
+    },
+    "credential-offer":{
+        "title":"Oferta de Credencial",
+        "generate":"Crear Credencial",
+        "ok-header": "Enhorabona",
+        "vc-saved":"Credencial emmagatzemada"
+    },
+    "credentials":{
+        "title":"Credencials"
+    },
+    "dids":{
+        "title":"Dids"
+    },
+    "faqs":{
+        "title":"Faqs"
+    },
+    "home":{
+        "title":"Home",
+        "hello":"Benvingut a IN2Wallet",
+        "scan":"Escaneja QR",
+        "get-cred":"Obtenir Credencial",
+        "ok-header": "Enhorabona",
+        "ok-msg": "VC guardat",
+        "unsucces": "Sense èxit",
+        "already-saved": "VC ja guardat",
+        "no-credential": "No hi ha credencial vàlida emmagatzemada"
+    },
+    "language-selector":{
+        "title":"Selector d'idioma"
+    },
+    "login":{
+        "title":"Login",
+        "login":"Login",
+        "register":"No estàs registrat? Registra't",
+        "error": "Nom d'usuari o contrasenya incorrectes"
+    },
+    "privacy-policy":{
+        "title":"Politica de Privacitat"
+    },
+    "register":{
+        "title":"Registrat",
+        "register":"Registrat",
+        "login":"Ves a Login",
+        "error": "Hi ha hagut algun error",
+        "email-error": "Correu electrònic no vàlid"
+    },
+    "settings":{
+        "title":"Settings"
+    },
+    "terms-of-use":{
+        "title":"Terms d'Us"
+    },
+    "vc-selector":{
+        "title":"Selector de VC",
+        "select-cred":"Selecciona Credencial",
+        "send-cred":"Envia Credencial",
+        "ok-header": "Enhorabona",
+        "ok-message":"Login correcte",
+        "ko-header":"Error",
+        "ko-message":"El login ha fallat"
+    },
+    "vc-view":{
+        "warning-header": "Credencial",
+        "warning-msg": "Al generar aquest codi, acceptes que les dades contingudes en el teu permís, i la seva situació legal, es mostrin en el dispositiu lector per verificar la seva validesa.",
+        "qr-title": "Credencial QR",
+        "qr-close": "Tancar"
+    }
 }

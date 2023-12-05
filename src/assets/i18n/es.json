@@ -11,5 +11,74 @@
     "faqs":"FAQs",
     "settings":"Ajustes",
     "logout":"Logout"},
-    "":""
+    "camera-selector":{
+        "title":"Selector de Camara",
+        "no-device": "Sin dispositivo"
+    },
+    "credential-offer":{
+        "title":"Oferta de Credencial",
+        "generate":"Crear Credencial",
+        "ok-header": "Enhorabuena",
+        "vc-saved":"Credencial guardada"
+    },
+    "credentials":{
+        "title":"Credenciales"
+    },
+    "dids":{
+        "title":"Dids"
+    },
+    "faqs":{
+        "title":"Faqs"
+    },
+    "home":{
+        "title":"Home",
+        "hello":"Bienvenido a IN2Wallet",
+        "scan":"Escanear QR",
+        "get-cred":"Obtener Credencial",
+        "ok-header": "Enhorabuena",
+        "ok-msg": "VC guardado",
+        "unsucces": "Sin éxito",
+        "already-saved": "VC ya guardado",
+        "no-credential": "No hay credencial válida almacenada"
+    },
+    "language-selector":{
+        "title":"Selector de idioma"
+    },
+    "login":{
+        "title":"Login",
+        "login":"Login",
+        "register":"No estás registrado? Registrate",
+        "error": "Nombre de usuario o contraseña incorrectos"
+    },
+    "privacy-policy":{
+        "title":"Politica de Privacidad"
+    },
+    "register":{
+        "title":"Registrate",
+        "register":"Registrate",
+        "login":"Ves a Login",
+        "error": "Se ha producido algun error",
+        "email-error": "Correo electrónico no válido"
+    },
+    "settings":{
+        "title":"Settings"
+    },
+    "terms-of-use":{
+        "title":"Terminos de Uso"
+    },
+    "vc-selector":{
+        "title":"Selector de VC",
+        "select-cred":"Selecciona Credencial",
+        "send-cred":"Envia Credencial",
+        "ok-header": "Enhorabuena",
+        "ok-message":"Login correcto",
+        "ko-header":"Error",
+        "ko-message":"El login ha fallado"
+    },
+    "vc-view":{
+        "warning-header": "Credencial",
+        "warning-msg": "Al generar este código, aceptas que los datos contenidos en tu permiso, y su situación legal, se muestren en el dispositivo lector para verificar su validez.",
+        "qr-title": "Credencial QR",
+        "qr-close": "Cerrar"
+    }
 }
