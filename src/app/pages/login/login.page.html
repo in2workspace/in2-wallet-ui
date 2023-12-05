@@ -12,7 +12,7 @@
             </ion-col>
           </ion-row>
   
-          <ion-row *ngIf="environment.loginParams.has_login" class="ion-justify-content-center">
+          <ion-row *ngIf="!environment.loginParams.has_login" class="ion-justify-content-center">
             <form [formGroup]="login" (ngSubmit)="onSubmit()">
               <ion-item class="item-username">
                 <ion-input placeholder="Username" labelPlacement="floating" type="text" required formControlName="username"></ion-input>
@@ -48,7 +48,10 @@
             <ion-button class="ion-button-in2"expand="block"color="primary" (click)="onSubmit()">{{"login.login"|translate}}</ion-button>
           </ion-col>
         </ion-row>
-
+  
+        <ion-row class="ion-justify-content-center">
+          <ion-button class="ion-button-register" color="secondary" fill="clear" [routerLink]="['/register']">{{"login.register"|translate}}</ion-button>
+        </ion-row>
         </ion-grid>
   
 
