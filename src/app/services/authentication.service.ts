@@ -7,7 +7,7 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 const respuesta = 'response' as const;
 const headers = new HttpHeaders({
-  'Content-Type': 'application/x-www-form-urlencoded',
+  'Content-Type': 'application/json',
 });
 const options = { headers: headers, redirect: 'follow', observe: respuesta };
 const keycloakOptions = {

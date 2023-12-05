@@ -36,7 +36,7 @@ bootstrapApplication(AppComponent, {
         redirectUrl: window.location.origin,
         postLogoutRedirectUri: window.location.origin,
         clientId: environment.loginParams.client_id,
-        scope: 'openid profile email offline_access',
+        scope: environment.loginParams.scope,
         responseType: environment.loginParams.grant_type,
         silentRenew: true,
         useRefreshToken: true,

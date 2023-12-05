@@ -9,8 +9,8 @@ export const environment = {
   loginParams:{
     has_login: true,
     login_url: 'http://localhost:8084/realms/WalletIdP',
-    client_id: 'wallet-client',
-    client_secret:'fV51P8jFBo8VnFKMMuP3imw3H3i5mNck',
+    client_id: 'auth-client',
+    scope:'openid profile email offline_access',
     grant_type:'code'
   },
   registerParams:{
