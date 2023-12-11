@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage-angular';
+import {Injectable} from '@angular/core';
+import {Storage} from '@ionic/storage-angular';
 
 @Injectable({
   providedIn: 'root'
@@ -7,31 +7,34 @@ import { Storage } from '@ionic/storage-angular';
 export class StorageService {
   private _storage: Storage | null = null;
 
-  constructor(private storage: Storage) {  
-    this.init(); 
+  constructor(private storage: Storage) {
+    this.init();
   }
 
   async init() {
-    const storage = await this.storage.create();
-    this._storage = storage;  }
-
-  public async set(llave:string, value: any) {
-    await this._storage?.set(llave,value);
+    this._storage = await this.storage.create();
   }
-  public async getAll(){
-    let items:(string)[] = []
-    let tamano= await this._storage?.length();
-    for(let i= 0; i<(tamano?tamano:0);i++){
 
+  public async set(llave: string, value: any) {
+    await this._storage?.set(llave, value);
+  }
+
+  public async getAll() {
+    let items: (string)[] = []
+    let size = await this._storage?.length();
+    for (let i = 0; i < (size || 0); i++) {
       let val = await this._storage?.get(i.toString())
-      items.push((val!=null)?val:"");
+      items.push(val ?? "");
+    }
+    return items;
   }
-  return items;
-  }
-  public get(key:string): Promise<any>{
+
+  public get(key: string): Promise<any> {
     return this.storage.get(key);
   }
-  public remove(key:string){
+
+  public remove(key: string) {
     return this.storage.remove(key);
   }
+
 }

@@ -6,27 +6,18 @@ export const environment = {
   production: false,
   data_url: 'http://localhost:8086',
   wca_url: 'http://localhost:8087',
-  loginParams:{
+  loginParams: {
     has_login: true,
     login_url: 'http://localhost:8084/realms/WalletIdP',
     client_id: 'auth-client',
-    scope:'openid profile email offline_access',
-    grant_type:'code'
+    scope: 'openid profile email offline_access',
+    grant_type: 'code'
   },
-  registerParams:{
+  registerParams: {
     has_register: true,
     register_url: 'http://localhost:8085',
-    client_id:'',
-    client_secret:'',
-    grant_type:''
+    client_id: '',
+    client_secret: '',
+    grant_type: ''
   },
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

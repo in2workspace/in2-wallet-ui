@@ -1,19 +1,20 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Observable, from, map, switchMap, tap } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { StorageService } from './storage.service';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
+import {BehaviorSubject, map, Observable, switchMap, tap} from 'rxjs';
+import {environment} from 'src/environments/environment';
+import {StorageService} from './storage.service';
+import {OidcSecurityService} from 'angular-auth-oidc-client';
 
 const respuesta = 'response' as const;
 const headers = new HttpHeaders({
   'Content-Type': 'application/json',
 });
-const options = { headers: headers, redirect: 'follow', observe: respuesta };
+const options = {headers: headers, redirect: 'follow', observe: respuesta};
 const keycloakOptions = {
-  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  headers: {'Content-Type': 'application/x-www-form-urlencoded'},
   observe: respuesta,
 };
+
 @Injectable({
   providedIn: 'root',
 })
@@ -25,24 +26,24 @@ export class AuthenticationService {
     false
   );
   token = '';
-  userData:any;
+  userData: any;
+
   constructor(public oidcSecurityService: OidcSecurityService) {
-    this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData,accessToken}) => {
+    this.oidcSecurityService.checkAuth().subscribe(({isAuthenticated, userData, accessToken}) => {
       this.isAuthenticated.next(isAuthenticated);
-      this.userData=userData;    
-      this.token=accessToken
+      this.userData = userData;
+      this.token = accessToken
     });
 
   }
 
 
-
   login() {
     return this.oidcSecurityService.authorizeWithPopUp().pipe(
-      map(({ isAuthenticated, userData, accessToken}) => {
+      map(({isAuthenticated, userData, accessToken}) => {
         this.isAuthenticated.next(isAuthenticated);
-        this.userData=userData; 
-        this.token=accessToken;
+        this.userData = userData;
+        this.token = accessToken;
       })
     );
   }
@@ -76,5 +77,5 @@ export class AuthenticationService {
 
   public isAuth(): Observable<boolean> {
     return this.isAuthenticated;
-} 
+  }
 }
