@@ -80,6 +80,6 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           DOCKER_HUB_CLIENT_NAME: ${{ secrets.DOCKER_HUB_CLIENT_NAME }}
           COMPONENT_NAME: wallet-driving-application
-          VERSION: 1.0.0
+          VERSION: 1.1.0
           SUFFIX: -SNAPSHOT
 
