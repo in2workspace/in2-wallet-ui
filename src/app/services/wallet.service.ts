@@ -49,14 +49,14 @@ export class WalletService {
       responseType: 'text' as 'json',
     };
     return this.http.post(
-      environment.wca_url + '/api/v1/execute-content',
+      environment.wca_url + '/api/v2/execute-content',
       {qr_content: url},
       options
     );
   }
 
   public executeVC(_VCReply: VCReply): Observable<any> {
-    return this.http.post(environment.wca_url + '/api/v1/verifiable-presentation', _VCReply, {
+    return this.http.post(environment.wca_url + '/api/v2/verifiable-presentation', _VCReply, {
       headers: headers,
       responseType: 'text',
     });
@@ -64,7 +64,7 @@ export class WalletService {
 
   public getAllVCs(): Observable<any> {
     const options = {headers: headers, redirect: 'follow'};
-    return this.http.get(environment.data_url + '/api/credentials', options);
+    return this.http.get(environment.data_url + '/api/v2/credentials', options);
   }
 
   public getOne(data: string) {
@@ -82,7 +82,7 @@ export class WalletService {
       responseType: 'text' as 'text',
     };
     return this.http.post(
-      environment.wca_url + '/api/v1/credentials',
+      environment.wca_url + '/api/v2/credentials',
       arg0,
       options
     );
@@ -95,7 +95,7 @@ export class WalletService {
       responseType: 'text' as 'text',
     };
     return this.http.delete(
-      environment.data_url + '/api/v1/credentials?credentialId=' + VC,
+      environment.data_url + '/api/v2/credentials?credentialId=' + VC,
       options
     );
   }
