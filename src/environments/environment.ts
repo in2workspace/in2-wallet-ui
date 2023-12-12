@@ -4,7 +4,7 @@ export const environment = {
   wca_url: 'https://localhost:8087',
   loginParams: {
     has_login: true,
-    login_url: 'https://localhost:8084/realms/WalletIdP',
+    login_url: 'https://localhost:8084/realms/wallet',
     client_id: 'auth-client',
     scope: 'openid profile email offline_access',
     grant_type: 'code'
