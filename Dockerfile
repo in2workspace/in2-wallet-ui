@@ -1,16 +1,10 @@
-# Base image
+# build image
 FROM node:19.5.0-alpine
-# Create app directory
+RUN addgroup -S nonroot && adduser -S nonroot -G nonroot
 WORKDIR /app
-# Copy package.json and package-lock.json
 COPY package*.json ./
-# Install dependencies
-RUN npm install -g @angular/cli
-RUN npm i
-# Copy app source
+RUN npm install -g @angular/cli && npm install
 COPY . .
-# Build the app
-# Expose port 80
-EXPOSE 4203
-# Start the app
- CMD ["sh", "-c", "ng serve --host 0.0.0.0 --disable-host-check true --port 4203 -c ${ENVIRONMENT}"]
+EXPOSE 4200
+USER nonroot
+CMD ["sh", "-c", "ng serve --host 0.0.0.0 --disable-host-check true --port 4200 -c ${ENVIRONMENT}"]

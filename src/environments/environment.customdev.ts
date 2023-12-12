@@ -1,19 +1,19 @@
 export const environment = {
   production: false,
-  api_url: 'http://yourapiurl',
-  data_url: 'http://yourdataurl',
-  wca_url: 'http://yourwcaurl',
-  crypto_url: 'http://yourcyptourl',
+  api_url: 'https://yourapiurl',
+  data_url: 'https://yourdataurl',
+  wca_url: 'https://yourwcaurl',
+  crypto_url: 'https://yourcyptourl',
   loginParams:{
     has_login: true,
-    login_url: 'http://yourloginurl',
+    login_url: 'https://yourloginurl',
     client_id: 'client',
     client_secret:'secret',
     grant_type:'password'
   },
   registerParams:{
     has_register: true,
-    register_url: 'http://yourregisterurl',
+    register_url: 'https://yourregisterurl',
     client_id:'',
     client_secret:'',
     grant_type:''
