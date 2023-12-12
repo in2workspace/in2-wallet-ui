@@ -11,6 +11,7 @@ RUN npm i
 COPY . .
 # Build the app
 # Expose port 80
-EXPOSE 4203
+
+EXPOSE 4200
 # Start the app
- CMD ["sh", "-c", "ng serve --host 0.0.0.0 --disable-host-check true --port 4203 -c ${ENVIRONMENT}"]
+ CMD ["sh", "-c", "ng serve --host 0.0.0.0 --disable-host-check true --port 4200 -c ${ENVIRONMENT}"]
