@@ -11,7 +11,7 @@ export const environment = {
   },
   registerParams: {
     has_register: true,
-    register_url: 'https://localhost:8085',
+    register_url: 'https://wallet-user-registry:8080',
     client_id: '',
     client_secret: '',
     grant_type: ''
