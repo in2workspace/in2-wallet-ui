@@ -41,14 +41,15 @@ export class RegisterPage {
   }
 
   onSubmit() {
+    // fixme: .subscribe() is deprecated, use .toPromise() instead
     this.authenticationService.register(this.login.value).subscribe(() => {
+        // fixme: this.router.navigate() needs then().
         this.router.navigate(['/login/'], {})
       },
       (error) => {
         this.error = 'register.error';
       }
     );
-
   }
 
   handleEmailBlur() {

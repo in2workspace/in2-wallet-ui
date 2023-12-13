@@ -34,9 +34,7 @@ export class AuthenticationService {
       this.userData = userData;
       this.token = accessToken
     });
-
   }
-
 
   login() {
     return this.oidcSecurityService.authorizeWithPopUp().pipe(
@@ -65,7 +63,7 @@ export class AuthenticationService {
 
   public register(userData: any) {
     return this.http.post(
-      environment.registerParams.register_url + '/api/v2/users',
+      environment.registerParams.register_url + environment.walletUri.users_uri,
       userData,
       options
     );
@@ -78,4 +76,5 @@ export class AuthenticationService {
   public isAuth(): Observable<boolean> {
     return this.isAuthenticated;
   }
+
 }

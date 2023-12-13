@@ -31,7 +31,9 @@ export class LoginPage {
   private router = inject(Router);
 
   onSubmit() {
+    // fixme: .subscribe() is deprecated, use .toPromise() instead
     this.authenticationService.login().subscribe(() => {
+        // fixme: this.router.navigate() needs then().
         this.router.navigate(['/home/'], {})
       },
       (error) => {

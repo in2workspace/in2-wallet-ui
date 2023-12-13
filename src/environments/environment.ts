@@ -16,4 +16,11 @@ export const environment = {
     client_secret: '',
     grant_type: ''
   },
+  walletUri: {
+    execute_content_uri: '/api/v2/execute-content',
+    verifiable_presentation_uri: '/api/v2/verifiable-presentation',
+    credentials_uri: '/api/v2/credentials',
+    credentials_by_id_uri: '/api/v2/credentials?credentialId=',
+    users_uri: '/api/v2/users',
+  }
 };
