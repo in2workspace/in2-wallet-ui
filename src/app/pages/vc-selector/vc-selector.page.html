@@ -33,11 +33,12 @@
   [header]=" 'vc-selector.ok-header' | translate"
   [message]=" 'vc-selector.ok-message' | translate"
   (didDismiss)="setOpen(false)"
-></ion-alert>  <ion-alert
+></ion-alert>  
+<ion-alert
 [isOpen]="isAlertOpenFail"
 class="custom-alert"
 [header]=" 'vc-selector.ko-header' | translate"
-`[message]=" 'vc-selector.ko-message' | translate"
+[message]=" 'vc-selector.ko-message' | translate"
 (didDismiss)="setOpen(false)"
 ></ion-alert>
 </ion-content>
