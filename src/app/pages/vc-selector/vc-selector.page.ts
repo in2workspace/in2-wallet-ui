@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { StorageService } from 'src/app/services/storage.service';
-import { QRCodeModule } from 'angular2-qrcode';
-import { VCReply, WalletService } from 'src/app/services/wallet.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {IonicModule} from '@ionic/angular';
+import {StorageService} from 'src/app/services/storage.service';
+import {QRCodeModule} from 'angular2-qrcode';
+import {VCReply, WalletService} from 'src/app/services/wallet.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-vc-selector',
   templateUrl: './vc-selector.page.html',
   styleUrls: ['./vc-selector.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, QRCodeModule,TranslateModule],
+  imports: [IonicModule, CommonModule, FormsModule, QRCodeModule, TranslateModule],
   providers: [StorageService],
 })
 export class VcSelectorPage implements OnInit {
@@ -21,13 +21,14 @@ export class VcSelectorPage implements OnInit {
   selCredList: any[] = [];
   credList: any[] = [];
   credDataList: any[] = [];
-  tamano: number = 300;
+  size: number = 300;
   executionResponse: any;
   _VCReply: VCReply = {
-    selectedVcList:[],
-    state:"",
-    redirectUri:""  
+    selectedVcList: [],
+    state: "",
+    redirectUri: ""
   };
+
   constructor(
     private router: Router,
     private storageService: StorageService,
@@ -44,18 +45,21 @@ export class VcSelectorPage implements OnInit {
   ngOnInit() {
     this.credList = this.executionResponse['selectableVcList'];
     this.credList.forEach((credential) => {
-        this.isClick.push(false);
+      this.isClick.push(false);
     });
   }
+
   isClicked(index: number) {
     return this.isClick[index];
   }
+
   selectCred(cred: any, index: number) {
     this.selCredList.push(cred);
     this.isClick[index] = !this.isClick[index];
   }
+
   sendCred() {
-    this._VCReply.selectedVcList=this.selCredList;
+    this._VCReply.selectedVcList = this.selCredList;
     this.walletService
       .executeVC(this._VCReply)
       .subscribe({
@@ -67,10 +71,11 @@ export class VcSelectorPage implements OnInit {
             this.isAlertOpen = false;
           }, TIME_IN_MS);
           setTimeout(() => {
+            // fixme: this.router.navigate() needs then().
             this.router.navigate(['/home']);
           }, 2000);
         },
-        error : (err) => {
+        error: (err) => {
           let TIME_IN_MS = 1500;
           setTimeout(() => {
             this.isAlertOpenFail = false;
@@ -79,6 +84,7 @@ export class VcSelectorPage implements OnInit {
         }
       });
   }
+
   isAlertOpenFail = false;
 
   isAlertOpen = false;
@@ -87,4 +93,5 @@ export class VcSelectorPage implements OnInit {
   setOpen(isOpen: boolean) {
     this.isAlertOpen = isOpen;
   }
+
 }

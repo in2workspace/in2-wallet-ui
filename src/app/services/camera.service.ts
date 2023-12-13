@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { StorageService } from './storage.service';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {StorageService} from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,8 @@ export class CameraService {
     groupId: '',
     kind: 'audiooutput',
     label: '',
-    toJSON() {},
+    toJSON() {
+    },
   };
   private camara: BehaviorSubject<MediaDeviceInfo> =
     new BehaviorSubject<MediaDeviceInfo>(this.mediaDeviceInfoNull);
@@ -21,12 +22,16 @@ export class CameraService {
   );
   navEnabled$ = this.enabled.asObservable();
 
-  constructor(private storageService: StorageService) {}
+  constructor(private storageService: StorageService) {
+  }
+
   changeCamera(camara: MediaDeviceInfo) {
     this.enabled.next(true);
     this.camara.next(camara);
+    // fixme: this.router.navigate() needs then().
     this.storageService.set('camara', camara);
   }
+
   updateCamera() {
     this.storageService.get('camara').then((result) => {
       if (result != null) {
@@ -35,8 +40,11 @@ export class CameraService {
       }
     });
   }
+
   noCamera() {
     this.enabled.next(false);
+    // fixme: this.router.navigate() needs then().
     this.storageService.remove('camara');
   }
+
 }

@@ -18,7 +18,7 @@ import {TranslateModule} from '@ngx-translate/core';
 export class CredentialsPage implements OnInit {
 
   credList: Array<VerifiableCredential> = [];
-  tamano: number = 300;
+  size: number = 300;
   credDataList: any[] = [];
   @Input() availableDevices: MediaDeviceInfo[] = [];
   currentDevice: any;
@@ -38,7 +38,6 @@ export class CredentialsPage implements OnInit {
     this.walletService.deleteVC(cred.id).subscribe((response: any) => {
       console.log(response)
       this.refresh()
-
     })
   }
 

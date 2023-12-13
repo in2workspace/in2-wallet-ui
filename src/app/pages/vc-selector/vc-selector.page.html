@@ -18,7 +18,7 @@
         <ion-card-title>{{cred['credentialSubject']['nom']}} {{cred['credentialSubject']['cognoms']}}</ion-card-title>
         <ion-card-subtitle>{{cred['vcType'][1]}}</ion-card-subtitle>
       </ion-card-header>
-      <div class="ion-justify-content-center"><qr-code  [value]="cred['id']" [size]="tamano"></qr-code>
+      <div class="ion-justify-content-center"><qr-code  [value]="cred['id']" [size]="size"></qr-code>
       </div>
       <ion-row class="ion-justify-content-center"> <ion-button [disabled]="isClicked(i)" (click)="selectCred(cred,i)">{{"vc-selector.select-cred"|translate}}</ion-button></ion-row>
     </ion-card>
@@ -33,11 +33,12 @@
   [header]=" 'vc-selector.ok-header' | translate"
   [message]=" 'vc-selector.ok-message' | translate"
   (didDismiss)="setOpen(false)"
-></ion-alert>  <ion-alert
+></ion-alert>  
+<ion-alert
 [isOpen]="isAlertOpenFail"
 class="custom-alert"
 [header]=" 'vc-selector.ko-header' | translate"
-`[message]=" 'vc-selector.ko-message' | translate"
+[message]=" 'vc-selector.ko-message' | translate"
 (didDismiss)="setOpen(false)"
 ></ion-alert>
 </ion-content>

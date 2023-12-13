@@ -26,22 +26,11 @@ const headers = new HttpHeaders({
   providedIn: 'root',
 })
 export class WalletService {
+
   private http = inject(HttpClient);
   private authService = inject(AuthenticationService);
 
-  public apisiop(url: string): Observable<any> {
-    const options = {
-      headers: headers,
-      redirect: 'follow',
-      responseType: 'text' as 'json',
-    };
-    return this.http.post(
-      environment.wca_url + '/api/siop',
-      {qr_content: url},
-      options
-    );
-  }
-
+  // Send a request to the WCA to execute the content of a QR code
   public executeContent(url: string): Observable<any> {
     const options = {
       headers: headers,
@@ -49,24 +38,27 @@ export class WalletService {
       responseType: 'text' as 'json',
     };
     return this.http.post(
-      environment.wca_url + '/api/v2/execute-content',
+      environment.wca_url + environment.walletUri.execute_content_uri,
       {qr_content: url},
       options
     );
   }
 
+  // Send the Selected VC List to the WCA to create the Verifiable Presentation
   public executeVC(_VCReply: VCReply): Observable<any> {
-    return this.http.post(environment.wca_url + '/api/v2/verifiable-presentation', _VCReply, {
+    return this.http.post(environment.wca_url + environment.walletUri.verifiable_presentation_uri, _VCReply, {
       headers: headers,
       responseType: 'text',
     });
   }
 
+  // Request all Verifiable Credentials of a user from the Wallet Data
   public getAllVCs(): Observable<any> {
     const options = {headers: headers, redirect: 'follow'};
-    return this.http.get(environment.data_url + '/api/v2/credentials', options);
+    return this.http.get(environment.data_url + environment.walletUri.credentials_uri, options);
   }
 
+  // Request one Verifiable Credential of a user from the Wallet Data
   public getOne(data: string) {
     const options = {headers: headers, redirect: 'follow'};
     return this.http.get(
@@ -75,6 +67,7 @@ export class WalletService {
     );
   }
 
+  // Deprecated
   public submitCredential(arg0: {}) {
     const options = {
       headers: headers,
@@ -82,12 +75,13 @@ export class WalletService {
       responseType: 'text' as 'text',
     };
     return this.http.post(
-      environment.wca_url + '/api/v2/credentials',
+      environment.wca_url + environment.walletUri.credentials_uri,
       arg0,
       options
     );
   }
 
+  // Delete the selected Verifiable Credential from the Wallet Data
   deleteVC(VC: string) {
     const options = {
       headers: headers,
@@ -95,7 +89,7 @@ export class WalletService {
       responseType: 'text' as 'text',
     };
     return this.http.delete(
-      environment.data_url + '/api/v2/credentials?credentialId=' + VC,
+      environment.data_url + environment.walletUri.credentials_by_id_uri + VC,
       options
     );
   }

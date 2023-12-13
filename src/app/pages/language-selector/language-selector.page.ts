@@ -11,10 +11,11 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
   imports: [IonicModule, CommonModule, FormsModule, TranslateModule]
 })
 export class LanguageSelectorPage implements OnInit {
-  
+
   public translate = inject(TranslateService);
 
   languageList = [
+    // todo: add more EU official languages, such as French, German, and Italian.
     {
       name: "English",
       url: "assets/flags/uk.png",
@@ -38,7 +39,6 @@ export class LanguageSelectorPage implements OnInit {
 
   languageChange(code: string) {
     this.translate.use(code)
-
   }
 
 }
