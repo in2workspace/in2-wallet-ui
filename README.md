@@ -1,3 +1,5 @@
+
+
 # Introduction 
 IN2 Wallet Front is the presentation side application for the IN2 Wallet project. It is a Ionic Angular application. 
 

@@ -1,47 +1,32 @@
 name: Build and Deploy (Test Environment)
 
 on:
+  push:
+    branches:
+      - develop
   pull_request:
-    branches: [ "develop" ]
+    types: [opened, synchronize, reopened]
+
 
 jobs:
 
-  analyze:
-    name: analyze
-    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
-    timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ 'javascript-typescript' ]
-
+  sonarcloud:
+    name: sonarcloud
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+      - uses: actions/checkout@v3
         with:
-          languages: ${{ matrix.language }}
-
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v2
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
-        with:
-          category: "/language:${{matrix.language}}"
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   build:
-    name: build-project
+    name: build
     if: success()
     runs-on: ubuntu-latest
-    environment: test
 
     steps:
       - name: Checkout Repository
@@ -59,7 +44,7 @@ jobs:
         run: npm run build -- --configuration=development
 
   deploy:
-    name: deploy-project
+    name: deploy
     needs: build
     if: success()
     runs-on: ubuntu-latest
