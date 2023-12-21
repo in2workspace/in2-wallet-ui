@@ -5,8 +5,8 @@ export const environment = {
   loginParams: {
     has_login: true,
     login_url: window["env"]["loginUrl"] || 'http://localhost:9099/realms/wallet',
-    client_id: 'oidc4vci-wallet-client',
-    scope: 'openid gicar_id_token',
+    client_id: 'auth-client',
+    scope: 'openid profile email offline_access',
     grant_type: 'code'
   },
   registerParams: {
