@@ -1,7 +1,7 @@
 #################
 # Build the app #
 #################
-FROM node:alpine as build
+FROM node:alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install --force

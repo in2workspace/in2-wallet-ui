@@ -1,19 +1,34 @@
-import {Component, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {IonicModule} from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Router,RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule,RouterModule,TranslateModule]
 })
 export class SettingsPage implements OnInit {
 
-  ngOnInit() {
-    // document why this method 'ngOnInit' is empty
-  }
+  constructor(    private authenticationService: AuthenticationService,
+    private router:Router
+    ) { }
+  userName: string = '';
 
+  ngOnInit() {
+    this.userName = this.authenticationService.getName();
+
+  }
+  logout(){
+    console.log("hola")
+    this.authenticationService.logout().subscribe(()=>{
+      this.router.navigate(['/login'], {})
+
+    });
+  }
 }

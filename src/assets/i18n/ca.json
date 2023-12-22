@@ -11,6 +11,7 @@
     "faqs":"FAQs",
     "settings":"Settings",
     "logout":"Logout"
+
     },
     "camera-selector":{
         "title":"Selector de Camara",
@@ -23,7 +24,9 @@
         "vc-saved":"Credencial emmagatzemada"
     },
     "credentials":{
-        "title":"Credencials"
+        "title":"Credencials",
+        "add":"Afegeix",
+        "nocred":"No tens cap credencial carregada"
     },
     "dids":{
         "title":"Dids"
@@ -34,7 +37,8 @@
     "home":{
         "title":"Home",
         "hello":"Benvingut a IN2Wallet",
-        "scan":"Escaneja QR",
+        "scan":"Identifica't",
+        "access":"Accedeix a un espai",
         "get-cred":"Obtenir Credencial",
         "ok-header": "Enhorabona",
         "ok-msg": "VC guardat",
@@ -62,7 +66,7 @@
         "email-error": "Correu electrònic no vàlid"
     },
     "settings":{
-        "title":"Settings"
+        "title":"Configuració"
     },
     "terms-of-use":{
         "title":"Terms d'Us"

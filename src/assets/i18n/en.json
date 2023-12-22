@@ -24,7 +24,11 @@
         "vc-saved":"Credential saved"
     },
     "credentials":{
-        "title":"Credentials"
+        "title":"Credentials",
+        "add":"Add",
+        "nocred":"No credential loaded"
+
+
     },
     "dids":{
         "title":"Dids"
@@ -35,7 +39,8 @@
     "home":{
         "title":"Home",
         "hello":"Welcome to IN2Wallet",
-        "scan":"Scan QR ",
+        "scan":"Identify",
+        "access":"Access",
         "get-cred":"Get Credential",
         "ok-header": "Congratulations",
         "ok-msg": "VC saved",

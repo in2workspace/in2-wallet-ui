@@ -1,12 +1,9 @@
-import {Component, Input} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {IonicModule} from '@ionic/angular';
-import {BarcodeScannerComponent} from '../../components/barcode-scanner/barcode-scanner.component';
-import {CameraService} from 'src/app/services/camera.service';
-
-import {TranslateModule} from '@ngx-translate/core';
-
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
+import { BarcodeScannerComponent } from '../../components/barcode-scanner/barcode-scanner.component';
+import { CameraService } from 'src/app/services/camera.service';
 @Component({
   selector: 'app-camera-selector',
   templateUrl: './camera-selector.page.html',
@@ -17,30 +14,28 @@ import {TranslateModule} from '@ngx-translate/core';
     CommonModule,
     FormsModule,
     BarcodeScannerComponent,
-    TranslateModule
   ],
 })
 export class CameraSelectorPage {
-  @Input() availableDevices: MediaDeviceInfo[] = [];
-
-  constructor(private cameraService: CameraService,
-  ) {
-  }
+  selectedDevice: string = '';
+  @Input() availableDevices: MediaDeviceInfo[] = []; 
+  constructor( private cameraService:CameraService,
+  ) {}
 
   availableDevicesEmit(devices: MediaDeviceInfo[]) {
     this.availableDevices = devices;
   }
-
-  // todo: Simplify function and pass logic to the service
+  //TO-DO:Simplfy function and pass logic to the service
   onDeviceSelectChange(selected: string) {
+    this.selectedDevice = selected;
     if (selected != '') {
-      const device: MediaDeviceInfo | undefined = this.availableDevices.find((x) => x.deviceId === selected);
-      if (device != undefined) {
+      const device:MediaDeviceInfo|undefined = this.availableDevices.find((x) => x.deviceId === selected);
+      if(device!=undefined){
         this.cameraService.changeCamera(device);
       }
-    } else {
+    }
+    else{
       this.cameraService.noCamera();
     }
   }
-
 }

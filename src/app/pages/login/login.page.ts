@@ -34,7 +34,7 @@ export class LoginPage {
     // fixme: .subscribe() is deprecated, use .toPromise() instead
     this.authenticationService.login().subscribe(() => {
         // fixme: this.router.navigate() needs then().
-        this.router.navigate(['/home/'], {})
+        this.router.navigate(['/tabs/home/'], {})
       },
       (error) => {
         console.log("ERR:", error);

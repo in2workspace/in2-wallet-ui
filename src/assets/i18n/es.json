@@ -22,7 +22,11 @@
         "vc-saved":"Credencial guardada"
     },
     "credentials":{
-        "title":"Credenciales"
+        "title":"Credenciales",
+        "add":"Añade",
+        "nocred":"No tienes ninguna credencial cargada"
+
+
     },
     "dids":{
         "title":"Dids"
@@ -33,7 +37,8 @@
     "home":{
         "title":"Home",
         "hello":"Bienvenido a IN2Wallet",
-        "scan":"Escanear QR",
+        "scan":"Identificate",
+        "access":"Accede a un espacio",
         "get-cred":"Obtener Credencial",
         "ok-header": "Enhorabuena",
         "ok-msg": "VC guardado",
@@ -61,7 +66,7 @@
         "email-error": "Correo electrónico no válido"
     },
     "settings":{
-        "title":"Settings"
+        "title":"Configuración"
     },
     "terms-of-use":{
         "title":"Terminos de Uso"

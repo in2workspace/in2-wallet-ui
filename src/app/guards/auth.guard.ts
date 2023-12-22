@@ -25,7 +25,7 @@ export const notAuthGuard = () => {
   return authService.isAuth().pipe(map(
     (isLogged:boolean) => {
       if(isLogged){
-        router.navigate(['/home'], {})
+        router.navigate(['/tabs/home'], {})
         return false;
       }
 

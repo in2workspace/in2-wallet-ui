@@ -3,23 +3,24 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{"camera-selector.title" | translate}}</ion-title>
+    <ion-title>Camera selector</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-grid>
+    <h3>Configura la càmera</h3>
+    <p style="font-weight: bold;">Càmera</p>
     <ion-row class="ion-justify-content-start">
-      <ion-button (click)="onDeviceSelectChange('')">{{"camera-selector.no-device" | translate}}</ion-button>
+      <ion-select [(ngModel)]="selectedDevice" (ionChange)="onDeviceSelectChange($any($event).target?.value)" interface="popover" style="border: 1px solid #ccc; border-radius: 5px;">
+        <ion-select-option value="">No Device</ion-select-option>
+        <ion-select-option *ngFor="let camera of availableDevices" [value]="camera.deviceId">
+          {{ camera.label }}
+        </ion-select-option>
+      </ion-select>
     </ion-row>
-    <ion-row
-      class="ion-justify-content-start"
-      *ngFor="let camera of availableDevices"
-    >
-      <ion-button (click)="onDeviceSelectChange(camera.deviceId)"
-        >{{camera.label}}</ion-button
-      >
-    </ion-row>
+
+    
     <ion-row class="ion-justify-content-center">
       <app-barcode-scanner
         (availableDevices)="availableDevicesEmit($event)"
