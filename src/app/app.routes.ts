@@ -63,26 +63,12 @@ export const routes: Routes = [
       import('./pages/faqs/faqs.page').then((m) => m.FaqsPage),
   },
   {
-    path: 'credential-offer',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./pages/credential-offer/credential-offer.page').then(
-        (m) => m.CredentialOfferPage
-      ),
-  },
-  {
     path: 'credentials',
     canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/credentials/credentials.page').then(
         (m) => m.CredentialsPage
       ),
-  },
-  {
-    path: 'dids',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./pages/dids/dids.page').then((m) => m.DidsPage),
   },
   {
     path: 'vc-selector',

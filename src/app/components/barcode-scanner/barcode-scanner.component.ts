@@ -1,10 +1,8 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter, inject, OnInit } from '@angular/core';
-import { BarcodeFormat } from '@zxing/library';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import { Observable, map } from 'rxjs';
-import { CameraService } from 'src/app/services/camera.service';
-import { StorageService } from 'src/app/services/storage.service';
+import {CommonModule} from '@angular/common';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {BarcodeFormat} from '@zxing/library';
+import {ZXingScannerModule} from '@zxing/ngx-scanner';
+import {CameraService} from 'src/app/services/camera.service';
 
 @Component({
   selector: 'app-barcode-scanner',
@@ -17,23 +15,27 @@ export class BarcodeScannerComponent implements OnInit {
     new EventEmitter();
   @Output() qrCode: EventEmitter<string> = new EventEmitter();
   currentDevice: MediaDeviceInfo = this.cameraService.mediaDeviceInfoNull
-  cameraEnabled:boolean = false;
+  cameraEnabled: boolean = false;
   hasDevices: boolean = false;
   formatsEnabled: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
-  constructor(private cameraService:CameraService) {
+
+  constructor(private cameraService: CameraService) {
   }
+
   ngOnInit(): void {
     this.cameraService.navEnabled$
-    .subscribe(preferedDevice => {
-      this.cameraEnabled=preferedDevice}
+      .subscribe(preferedDevice => {
+          this.cameraEnabled = preferedDevice
+        }
       )
     this.cameraService.navCamera$
-    .subscribe(preferedDevice => {
-      this.currentDevice = preferedDevice}
+      .subscribe(preferedDevice => {
+          this.currentDevice = preferedDevice
+        }
       )
-    setTimeout(()=>{
+    setTimeout(() => {
       this.cameraService.updateCamera();
-    },1000)
+    }, 1000)
   }
 
 

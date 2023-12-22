@@ -1,6 +1,6 @@
 {
   "name": "WalletIN2",
-  "version": "0.0.1",
+  "version": "2.0.0",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
   "scripts": {
@@ -33,6 +33,7 @@
     "@zxing/browser": "^0.1.1",
     "@zxing/library": "^0.19.2",
     "@zxing/ngx-scanner": "^3.8.1",
+    "angular-auth-oidc-client": "^16.0.1",
     "angular2-qrcode": "^2.0.3",
     "ionicons": "^7.0.0",
     "ngx-indexed-db": "^16.0.0",

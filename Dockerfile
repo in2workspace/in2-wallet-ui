@@ -1,15 +1,19 @@
-FROM node:19.5.0-alpine as build
+#################
+# Build the app #
+#################
+FROM node:alpine AS build
 WORKDIR /app
-COPY . /app/
-RUN npm install -g @angular/cli --force
-RUN npm i --force
-RUN npm run build
+COPY package.json package-lock.json ./
+RUN npm install --force
+COPY . .
+RUN npm install -g @angular/cli
+RUN ng build --configuration production --output-path=/dist
 
-FROM nginx
-COPY --from=build /app/www/ /usr/share/nginx/html
-COPY /docker-entrypoint.sh /
-COPY /nginx-custom.conf /etc/nginx/conf.d/default.conf
-RUN chmod +x /docker-entrypoint.sh
-EXPOSE 8088
-ENTRYPOINT [ "/docker-entrypoint.sh"]
-CMD ["nginx", "-g", "daemon off;"]
+################
+# Run in NGINX #
+################
+FROM nginx:alpine
+COPY --from=build /dist /usr/share/nginx/html
+
+# When the container starts, replace the env.js with values from environment variables
+CMD ["/bin/sh",  "-c",  "envsubst < /usr/share/nginx/html/assets/env.template.js > /usr/share/nginx/html/assets/env.js && exec nginx -g 'daemon off;'"]
