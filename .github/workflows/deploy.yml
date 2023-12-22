@@ -8,10 +8,8 @@ jobs:
 
   deploy-prod:
     name: deploy-prod
-    needs: build
-    if: success()
     runs-on: ubuntu-latest
-    environment: test
+    environment: prod
 
     steps:
       - name: Checkout Repository
