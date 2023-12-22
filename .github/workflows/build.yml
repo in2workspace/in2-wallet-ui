@@ -1,23 +1,10 @@
-name: Build and Deploy (Test Environment)
+name: Build
 
 on:
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "main" ]
 
 jobs:
-
-  sonarcloud:
-    name: sonarcloud
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   build:
     name: build
@@ -27,6 +14,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -39,8 +28,14 @@ jobs:
       - name: Build Angular Project
         run: npm run build -- --configuration=development
 
-  deploy:
-    name: deploy
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  deploy-test:
+    name: deploy-test
     needs: build
     if: success()
     runs-on: ubuntu-latest
@@ -63,4 +58,3 @@ jobs:
           COMPONENT_NAME: wallet-driving-application
           VERSION: 2.0.0
           SUFFIX: -SNAPSHOT
-
