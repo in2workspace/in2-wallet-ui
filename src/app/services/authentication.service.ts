@@ -70,7 +70,7 @@ export class AuthenticationService {
   }
 
   public getName() {
-    return this.userData.name;
+    return this.userData.preferred_username;
   }
 
   public isAuth(): Observable<boolean> {

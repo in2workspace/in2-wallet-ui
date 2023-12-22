@@ -50,23 +50,24 @@ export class VcViewComponent implements OnInit {
   @Output() vcEmit: EventEmitter<VerifiableCredential> =
     new EventEmitter();
 
-  isAlertOpenNotFound = false;
+
+  isAlertOpenNotFound=false;
+  isAlertOpenDeleteNotFound=false;
 
   ngOnInit(): void {
     this.cred = this.credentialInput
-  }
-
-  qrView() {
-    this.isAlertOpenNotFound = true;
-  }
-
-  isModalOpen = false;
-
-  deleteVC() {
-    this.vcEmit.emit(this.cred);
-
-  }
-
+    }
+    qrView(){
+      this.isModalOpen = true;
+    }
+    isModalOpen = false;
+    deleteView(){
+      this.isModalDeleteOpen = true;
+    }
+    isModalDeleteOpen = false;
+    deleteVC(){
+      this.isModalDeleteOpen =true;
+    }
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
   }
@@ -77,12 +78,23 @@ export class VcViewComponent implements OnInit {
     role: 'confirm',
     handler: () => {
       this.handlerMessage = 'Alert confirmed';
-      this.isModalOpen = true;
-    }
-  }];
+      this.isModalOpen=true;
+    }}];
 
+    public deleteButtons = [{text: 'Cancel·la',
+      role: 'cancel',
+      handler: () => {
+        this.isModalDeleteOpen=false;
+      }}, {text: 'Sí, elimina-la',
+      role: 'confirm',
+      handler: () => {
+        this.isModalDeleteOpen=true;
+        this.vcEmit.emit(this.cred);      
+      }}]
   setOpenNotFound(isOpen: boolean) {
     this.isAlertOpenNotFound = isOpen;
-  }
-  
-}
+    }
+    setOpenDeleteNotFound(isOpen: boolean) {
+      this.isAlertOpenDeleteNotFound = isOpen;
+    }
+    }

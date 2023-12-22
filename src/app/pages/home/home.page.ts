@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {IonicModule} from '@ionic/angular';
 import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router,RouterModule} from '@angular/router';
 import {WalletService} from 'src/app/services/wallet.service';
 import {AuthenticationService} from 'src/app/services/authentication.service';
 import {TranslateModule} from '@ngx-translate/core';
@@ -20,7 +20,8 @@ const TIME_IN_MS = 1500;
     CommonModule,
     FormsModule,
     BarcodeScannerComponent,
-    TranslateModule
+    TranslateModule,
+    RouterModule
   ],
 })
 export class HomePage implements OnInit {
@@ -33,10 +34,6 @@ export class HomePage implements OnInit {
     this.toggleScan = true;
   }
 
-  getCred() {
-    // fixme: Sonar Lint: Need .then()
-    this.router.navigate(['/credential-offer/'], {});
-  }
 
   @Input() availableDevices: MediaDeviceInfo[] = [];
 
@@ -46,7 +43,9 @@ export class HomePage implements OnInit {
   constructor(
     private router: Router,
     private walletService: WalletService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private route: ActivatedRoute,
+
   ) {
   }
 
@@ -56,16 +55,25 @@ export class HomePage implements OnInit {
   }
 
   isCredOffer = false;
+  untoggleScan(){
+    this.toggleScan = false;
 
+  }
   qrCodeEmit(qrCode: string) {
     this.escaneado = qrCode;
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
         if (qrCode.includes("credential_offer_uri")) {
           this.escaneado = '';
+          setTimeout(() => {
+            this.isAlertOpen = false;
+            this.router.navigate(['/tabs/credentials/'])
+
+          }, TIME_IN_MS);
+          this.isAlertOpen = true;
         } else {
           // fixme: Sonar Lint: Need .then()
-          this.router.navigate(['/vc-selector/'], {
+          this.router.navigate(['/tabs/vc-selector/'], {
             queryParams: {executionResponse: executionResponse},
           });
           this.escaneado = '';

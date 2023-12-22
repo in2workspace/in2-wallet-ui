@@ -1,17 +1,29 @@
 <ion-header [translucent]="false">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Settings</ion-title>
+  <ion-toolbar style="padding-right: 0.5rem;">
+    <img alt src="assets/icon/IDEP_blanc_400x200.png" width="auto" slot="start" height="35px"/>
+    <ion-text slot="primary" color="white">{{userName}}</ion-text>
+    <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
   </ion-toolbar>
 </ion-header>
 
 
 <ion-content [fullscreen]="true">
-  <select>
-    <option value="option1">Verifiable Data Register</option>
-</select>
-<button class="btn-primary">Accept trust entity</button>
+  <b>
+    {{"settings.title"|translate}}
+  </b>
+  <ion-list>
+      <ion-item [routerLink]="['/tabs/camera-selector']">
+       
+        <ion-icon color="grey" name="camera" style="margin-right: 1rem;"></ion-icon><ion-text>{{"camera-selector.title"|translate}}</ion-text>
+      </ion-item>
+      <ion-item [routerLink]="['/tabs/language-selector']">
+       
+        <ion-icon color="grey" name="globe-outline"  style="margin-right: 1rem;"></ion-icon>{{"language-selector.title"|translate}}
+      </ion-item>
+      <ion-item  (click)="logout()">
+       
+        <ion-icon color="grey" name="log-out-outline"  style="margin-right: 1rem;"></ion-icon>{{"menu.logout"|translate}}
+      </ion-item>
+  </ion-list>
 
 </ion-content>

@@ -1,30 +1,19 @@
 <ion-header [translucent]="false">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title class="ion-text-start">{{"home.title"|translate}}</ion-title>
-    <img alt src="assets/icon/Logo_white_IN2.png" width="auto" slot="end" height="60px"/>
-
+  <ion-toolbar style="padding-right: 0.5rem;">
+    <img alt src="assets/icon/IDEP_blanc_400x200.png" width="auto" slot="start" height="35px"/>
+    <ion-text slot="primary" color="white">{{userName}}</ion-text>
+    <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
       <ion-grid>
-        <ion-row class="ion-justify-content-first">
-          <ion-col class="welcome-text" style="border-left-width:4px;border-color: #B0FF2B; border-left-style: solid;">
-          <ion-text class="ion-text-start" color="primary"><b>{{"home.hello"|translate}}</b></ion-text></ion-col>
-          <ion-col class="userDataCol"><div class="ion-text-end userDataIn2">
-            <ion-row class="user-welcome">
-            <ion-col><div class="ion-text-start"><ion-icon class="ion-icon-home" size="small" name="person"></ion-icon></div></ion-col>
-            <ion-col><ion-text color="primary">{{userName}}</ion-text></ion-col>
-          </ion-row></div> 
-          </ion-col>
-        </ion-row>
-          <br/>
         <ion-row class="ion-justify-content-center">
-          <ion-button  size="large" *ngIf="!toggleScan" (click)="startScan()"> <div class="custom-button-content"><ion-icon size="large"color="white"name="qr-code"></ion-icon><ion-label>{{"home.scan"|translate}}</ion-label> </div></ion-button>
+          <ion-button style="margin-top:5rem;width: 15rem;height: 5rem;" size="large" *ngIf="!toggleScan" (click)="startScan()"> <div class="custom-button-content"><ion-icon size="large"color="white"name="qr-code"></ion-icon><ion-label>{{"home.scan"|translate}}</ion-label> </div></ion-button>
+        </ion-row>    
+        <ion-row class="ion-justify-content-center">
+          <ion-button style="width: 15rem;height: 5rem;" size="large" *ngIf="!toggleScan" [routerLink]="['/tabs/credentials']"> <div class="custom-button-content"><ion-img style="height:2rem"color="white"name="qr-code" src="assets/icon/Torno/torno-blanc.png"></ion-img><ion-label>{{"home.access"|translate}} </ion-label> </div></ion-button>
         </ion-row>
       
       </ion-grid>
@@ -36,31 +25,31 @@
     </ion-row>
   </ion-grid>
 </div>
+<ion-footer [translucent]="false">
+
+  <ion-row *ngIf="toggleScan" class="ion-justify-content-center">  <ion-button (click)="untoggleScan()">Enrere</ion-button>
+  </ion-row>
+</ion-footer>
   <ion-alert
   [isOpen]="isAlertOpen"
   class="custom-alert"
-  [header]=" 'home.ok-header' | translate"
-  [message]=" 'home.ok-msg' | translate"
+  [header]="'home.ok-msg' | translate"
+  message='<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style="border-radius: 2px">'
   (didDismiss)="setOpen(false)"
 ></ion-alert>  <ion-alert
 [isOpen]="isAlertOpenFail"
 class="custom-alert"
-[header]=" 'home.unsucces' | translate"
-[message]=" 'home.already-saved' | translate"
+[header]="'home.unsucces' | translate"
+[message]="'home.already-saved' | translate"
 (didDismiss)="setOpen(false)"
 ></ion-alert>
 <ion-alert
 [isOpen]="isAlertOpenNotFound"
 class="custom-alert"
-[header]=" 'home.unsucces' | translate"
-[message]=" 'home.no-credential' | translate"
+[header]="'home.unsucces' | translate"
+[message]="'home.no-credential' | translate"
 [buttons]="alertButtons"
 (didDismiss)="setOpenNotFound(false)"
 ></ion-alert>
 
 </ion-content>
-<ion-footer [translucent]="false">
-
-  <ion-row *ngIf="isCredOffer" class="ion-justify-content-center">  <ion-button (click)="getCred()">{{"home.get-cred"|translate}}</ion-button>
-  </ion-row>
-</ion-footer>

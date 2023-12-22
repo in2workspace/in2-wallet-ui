@@ -1,9 +1,8 @@
 <ion-header [translucent]="false">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>{{"vc-selector.title"|translate}}</ion-title>
+  <ion-toolbar style="padding-right: 0.5rem;">
+    <img alt src="assets/icon/IDEP_blanc_400x200.png" width="auto" slot="start" height="35px"/>
+    <ion-text slot="primary" color="white">{{userName}}</ion-text>
+    <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
   </ion-toolbar>
 </ion-header>
 
@@ -11,16 +10,9 @@
   <ion-grid >
     <ion-row class="ion-justify-content-center"
     *ngFor="let cred of credList; let i = index">
-    <ion-card>
+    <ion-card (click)="sendCred(cred)">
 
-      <ion-card-header >
-        <ion-card-title>{{cred['credentialSubject']['firstName']}} {{cred['credentialSubject']['familyName']}}</ion-card-title>
-        <ion-card-title>{{cred['credentialSubject']['nom']}} {{cred['credentialSubject']['cognoms']}}</ion-card-title>
-        <ion-card-subtitle>{{cred['vcType'][1]}}</ion-card-subtitle>
-      </ion-card-header>
-      <div class="ion-justify-content-center"><qr-code  [value]="cred['id']" [size]="size"></qr-code>
-      </div>
-      <ion-row class="ion-justify-content-center"> <ion-button [disabled]="isClicked(i)" (click)="selectCred(cred,i)">{{"vc-selector.select-cred"|translate}}</ion-button></ion-row>
+      <app-vc-view [credentialInput]="cred"></app-vc-view>
     </ion-card>
     </ion-row>
   </ion-grid>
@@ -31,7 +23,7 @@
   [isOpen]="isAlertOpen"
   class="custom-alert"
   [header]=" 'vc-selector.ok-header' | translate"
-  [message]=" 'vc-selector.ok-message' | translate"
+  message='<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style="border-radius: 2px">'
   (didDismiss)="setOpen(false)"
 ></ion-alert>  
 <ion-alert
@@ -44,6 +36,5 @@ class="custom-alert"
 </ion-content>
 <ion-footer [translucent]="false">
 
-  <ion-row class="ion-justify-content-center">  <ion-button (click)="sendCred()">{{"vc-selector.send-cred"|translate}}</ion-button>
-  </ion-row>
+
 </ion-footer>
