@@ -1,17 +1,19 @@
-# Base image
-FROM node:20.10.0-alpine
-# Create app directory
+#################
+# Build the app #
+#################
+FROM node:alpine as build
 WORKDIR /app
-# Copy package.json and package-lock.json
-COPY package*.json ./
-# Install dependencies
-RUN npm install -g @angular/cli
-RUN npm i
-# Copy app source
+COPY package.json package-lock.json ./
+RUN npm install --force
 COPY . .
-# Build the app
-# Expose port 80
+RUN npm install -g @angular/cli
+RUN ng build --configuration production --output-path=/dist
 
-EXPOSE 4200
-# Start the app
- CMD ["sh", "-c", "ng serve --host 0.0.0.0 --disable-host-check true --port 4200 -c ${ENVIRONMENT}"]
+################
+# Run in NGINX #
+################
+FROM nginx:alpine
+COPY --from=build /dist /usr/share/nginx/html
+
+# When the container starts, replace the env.js with values from environment variables
+CMD ["/bin/sh",  "-c",  "envsubst < /usr/share/nginx/html/assets/env.template.js > /usr/share/nginx/html/assets/env.js && exec nginx -g 'daemon off;'"]

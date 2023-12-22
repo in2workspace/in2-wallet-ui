@@ -51,7 +51,8 @@ This aplication is developed, builded and tested in Visual Studio Code
 ```npm start```
 5. Build docker image
 ```docker build -t wallet-wda .```
-
+6. Run docker image
+```docker run -p 8080:80 -e WCA_URL=http://yourdomain.com -e LOGIN_URL=http://yourdomain.com wallet-driving-application```
 # Customization
 
 
@@ -62,7 +63,7 @@ We have 3 different ways to build and test the project depending on the selected
 - `local` profile: This profile is used for local development. It uses an in-memory database and generates default data to test the application. You need to run a set of docker containers to run the application (Orion Context Broker and MongoDb).
 - `local-docker` profile: This profile is used for local development. It uses a dockerized database and generates default data to test the application.
 - `dev` profile: This profile is used for development. It uses a dockerized database and generates default data to test the application.
-
+- `docker` you can set environment variables dinamicaly using '-e WCA_URL=http://yourdomain.com' all the diferent environment variables are WCA_URL, DATA_URL, LOGIN_URL, REGISTER_URL, EXECCONT_URI, VP_URL, CRED_URI, CREDID_URI, USER_URI
 # Contribute
 
 # License
