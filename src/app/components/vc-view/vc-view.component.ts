@@ -1,30 +1,54 @@
-import {
-  Component, EventEmitter, Input, OnInit, Output,
-} from '@angular/core';
-import { IonicModule } from '@ionic/angular';
-import { QRCodeModule } from 'angular2-qrcode';
-import { WalletService } from 'src/app/services/wallet.service';
+import {Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
+import {IonicModule} from '@ionic/angular';
+import {QRCodeModule} from 'angular2-qrcode';
 
-export interface VerifiableCredential{
-  credentialSubject:{mobile_phone:string,email:string,title:string,first_name:string,last_name:string,dateOfBirth:string,gender:string},
-  id:string,
-  vcType:['','']
+export interface VerifiableCredential {
+  credentialSubject: {
+    mobile_phone: string,
+    email: string,
+    title: string,
+    first_name: string,
+    last_name: string,
+    dateOfBirth: string,
+    gender: string
+  },
+  id: string,
+  vcType: ['', '']
 
 }
+
 @Component({
   selector: 'app-vc-view',
   templateUrl: './vc-view.component.html',
   standalone: true,
-  imports: [IonicModule,QRCodeModule],
+  imports: [IonicModule, QRCodeModule],
 })
-export class VcViewComponent implements OnInit{
+export class VcViewComponent implements OnInit {
 
-  constructor(){}
-  @Input() credentialInput: VerifiableCredential = {credentialSubject:{mobile_phone:"",email:"",title:"",first_name:"",last_name:"",dateOfBirth:"",gender:""},id:"",vcType:['','']} ;
-  cred: VerifiableCredential ={credentialSubject:{mobile_phone:"",email:"",title:"",first_name:"",last_name:"",dateOfBirth:"",gender:""},id:"",vcType:['','']};
+  @Input() credentialInput: VerifiableCredential = {
+    credentialSubject: {
+      mobile_phone: "",
+      email: "",
+      title: "",
+      first_name: "",
+      last_name: "",
+      dateOfBirth: "",
+      gender: ""
+    }, id: "", vcType: ['', '']
+  };
+  cred: VerifiableCredential = {
+    credentialSubject: {
+      mobile_phone: "",
+      email: "",
+      title: "",
+      first_name: "",
+      last_name: "",
+      dateOfBirth: "",
+      gender: ""
+    }, id: "", vcType: ['', '']
+  };
   @Output() vcEmit: EventEmitter<VerifiableCredential> =
-  new EventEmitter();
-
+    new EventEmitter();
 
 
   isAlertOpenNotFound=false;
@@ -43,13 +67,14 @@ export class VcViewComponent implements OnInit{
     isModalDeleteOpen = false;
     deleteVC(){
       this.isModalDeleteOpen =true;
-
     }
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
   }
-    handlerMessage = ''
-    public alertButtons = [{      text: 'OK',
+
+  handlerMessage = ''
+  public alertButtons = [{
+    text: 'OK',
     role: 'confirm',
     handler: () => {
       this.handlerMessage = 'Alert confirmed';

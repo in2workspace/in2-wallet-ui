@@ -23,14 +23,14 @@ export class VcSelectorPage implements OnInit {
   selCredList: any[] = [];
   credList: any[] = [];
   credDataList: any[] = [];
-  tamano: number = 300;
+  size: number = 300;
   executionResponse: any;
   userName: string = '';
 
   _VCReply: VCReply = {
-    selectedVcList:[],
-    state:"",
-    redirectUri:""  
+    selectedVcList: [],
+    state: "",
+    redirectUri: ""
   };
 test: any=`<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style="border-radius: 2px">`;
   constructor(
@@ -51,12 +51,14 @@ test: any=`<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style=
 
     this.credList = this.executionResponse['selectableVcList'];
     this.credList.forEach((credential) => {
-        this.isClick.push(false);
+      this.isClick.push(false);
     });
   }
+
   isClicked(index: number) {
     return this.isClick[index];
   }
+
   selectCred(cred: any, index: number) {
     this.selCredList.push(cred);
     this.isClick[index] = !this.isClick[index];
@@ -78,7 +80,7 @@ test: any=`<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style=
             this.router.navigate(['/tabs/home']);
           }, 2000);
         },
-        error : (err) => {
+        error: (err) => {
           let TIME_IN_MS = 1500;
           setTimeout(() => {
             this.isAlertOpenFail = false;
@@ -87,6 +89,7 @@ test: any=`<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style=
         }
       });
   }
+
   isAlertOpenFail = false;
 
   isAlertOpen = false;
@@ -95,4 +98,5 @@ test: any=`<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style=
   setOpen(isOpen: boolean) {
     this.isAlertOpen = isOpen;
   }
+
 }

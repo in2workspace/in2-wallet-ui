@@ -17,20 +17,21 @@ export class LanguageSelectorPage implements OnInit {
   userName: string = '';
 
   languageList = [
+    // todo: add more EU official languages, such as French, German, and Italian.
     {
-      name : "English",
-      url : "assets/flags/uk.png",
-      code : "en"
+      name: "English",
+      url: "assets/flags/uk.png",
+      code: "en"
     },
     {
       name: "Castellano",
-      url : "assets/flags/es.png",
-      code : "es"
+      url: "assets/flags/es.png",
+      code: "es"
     },
     {
       name: "Català",
-      url : "assets/flags/ca.png",
-      code : "ca"
+      url: "assets/flags/ca.png",
+      code: "ca"
     }
   ]
   constructor(    private authenticationService: AuthenticationService
@@ -45,4 +46,5 @@ export class LanguageSelectorPage implements OnInit {
 
     
   }
+
 }
