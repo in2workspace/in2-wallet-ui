@@ -14,7 +14,8 @@
 
     },
     "camera-selector":{
-        "title":"Selector de Camara",
+        "title":"Camara",
+        "settings": "Configuració de la camara",
         "no-device": "Sense dispositiu"
     },
     "credential-offer":{
@@ -37,7 +38,7 @@
     "home":{
         "title":"Home",
         "hello":"Benvingut a IN2Wallet",
-        "scan":"Identifica't",
+        "scan":"Escaneja el QR",
         "access":"Accedeix a un espai",
         "get-cred":"Obtenir Credencial",
         "ok-header": "Enhorabona",

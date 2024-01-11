@@ -25,7 +25,6 @@ export class SettingsPage implements OnInit {
 
   }
   logout(){
-    console.log("hola")
     this.authenticationService.logout().subscribe(()=>{
       this.router.navigate(['/login'], {})
 

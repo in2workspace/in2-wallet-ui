@@ -6,11 +6,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" style="--ion-background-color: #DDE6F6 !important; box-shadow: none;">
   <ion-grid >
     <ion-row class="ion-justify-content-center"
     *ngFor="let cred of credList; let i = index">
-    <ion-card (click)="sendCred(cred)">
+    <ion-card (click)="sendCred(cred)" style="--ion-background-color: #DDE6F6; background-color: #DDE6F6; box-shadow: none;">
 
       <app-vc-view [credentialInput]="cred"></app-vc-view>
     </ion-card>
@@ -23,9 +23,11 @@
   [isOpen]="isAlertOpen"
   class="custom-alert"
   [header]=" 'vc-selector.ok-header' | translate"
-  message='<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style="border-radius: 2px">'
-  (didDismiss)="setOpen(false)"
-></ion-alert>  
+  message='<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style="border-radius: 2px; max-width: 60%;">'
+  [buttons] = "closeButton"
+  cssClass="custom-close-button"
+  >
+</ion-alert>  
 <ion-alert
 [isOpen]="isAlertOpenFail"
 class="custom-alert"

@@ -1,0 +1,48 @@
+<ion-header [translucent]="false">
+    <ion-toolbar style="padding-right: 0.5rem;">
+      <img alt src="assets/icon/IDEP_blanc_400x200.png" width="auto" slot="start" height="35px"/>
+      <ion-text slot="primary" color="white">{{userName}}</ion-text>
+      <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding" style="--ion-background-color: #DDE6F6">
+    <ion-grid>
+        <ion-row class="ion-justify-content-center">
+            <ion-label>
+                Add a credential
+            </ion-label>
+        </ion-row>
+    </ion-grid>
+
+    <ion-grid  >
+        <ion-row class="ion-justify-content-center">
+          <app-barcode-scanner *ngIf="escaneado===''" (qrCode)="qrCodeEmit($event)"></app-barcode-scanner>
+        </ion-row>
+    </ion-grid>
+
+    <ion-footer [translucent]="false">
+        <ion-row *ngIf="showBut" class="ion-justify-content-center">
+            <ion-button (click)="addCred()">
+                Get credential
+            </ion-button>
+        </ion-row>
+    </ion-footer>
+
+    <ion-alert
+        [isOpen]="isAlertOpenFail"
+        class="custom-alert"
+        [header]="'home.unsucces' | translate"
+        [message]="'home.already-saved' | translate"
+        (didDismiss)="setOpen(false)"
+    ></ion-alert>
+    <ion-alert
+        [isOpen]="isAlertOpenNotFound"
+        class="custom-alert"
+        [header]="'home.unsucces' | translate"
+        [message]="'home.no-credential' | translate"
+        [buttons]="alertButtons"
+        (didDismiss)="setOpenNotFound(false)"
+    ></ion-alert>
+
+</ion-content>

@@ -3,15 +3,14 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{"camera-selector.title" | translate}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" style="--ion-background-color: #DDE6F6">
   <ion-grid>
-    <h3>Configura la càmera</h3>
-    <p style="font-weight: bold;">Càmera</p>
-    <ion-row class="ion-justify-content-start">
+    <b class="pages_titles">{{"camera-selector.settings" | translate}}</b>
+    <p style="margin-left: 10px;">{{"camera-selector.title" | translate}}</p>
+    <ion-row class="ion-justify-content-start" style="margin-left: 10px; margin-bottom: 10px;">
       <ion-select [(ngModel)]="selectedDevice" (ionChange)="onDeviceSelectChange($any($event).target?.value)" interface="popover" style="border: 1px solid #ccc; border-radius: 5px;">
         <ion-select-option value="">No Device</ion-select-option>
         <ion-select-option *ngFor="let camera of availableDevices" [value]="camera.deviceId">

@@ -1,50 +1,44 @@
-<ion-card style="background-color: white; width:200px; height:275px; border-radius: 20px;">
-  <div style="position: absolute; top: 0; right: 10; width: 50%; height: 50%; background-color: #ffffff; border-radius: 0% 0% 75% 75%; transform: translateX(85%) translateY(-90%); z-index: 1;"></div>
+<ion-card style="background-color: #ffffff; width:200px; height:220px; border-radius: 20px; box-shadow: none;">
+  <div style="position: absolute; top: 0; right: 10; width: 50%; height: 50%; background-color: #DDE6F6; border-radius: 0% 0% 75% 75%; transform: translateX(85%) translateY(-90%); z-index: 1;"></div>
 <ion-card-header style="background-color:var(--ion-color-primary); padding: 12px;"> </ion-card-header>
   <ion-col>
-    <img alt src="assets/icon/bannerLogo2.png" width="auto" height="40px"/>
-    <ion-col style="margin-left: 35px">
-      <img
-        width="70"
-        height="70"
-        margin-left="20px"
-        alt
-        src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg"
-      />
+    <ion-col>
+      <ion-row style="margin-left: 12px;">
+        <img alt src="assets/icon/dome_logo.png" width="auto" height="40px"/>
+      </ion-row>
     </ion-col>
     <ion-col>
       
         <ion-col size="12">
-          <ion-card-header style="padding: 0% !important; margin-left:35px; margin-bottom: 10px;">
+          <ion-card-header style="padding: 0% !important; margin-left:22px; margin-bottom: 25px;">
             
             <ion-row>
               <ion-card-title style="color:black; font-size:12px; font-weight: bold;"
-                >{{ cred["credentialSubject"]["first_name"] }}</ion-card-title
+                >{{ cred["credentialSubject"]["first_name"] }} {{ cred["credentialSubject"]["last_name"] }}</ion-card-title
               >
             </ion-row>
-            <ion-row>
-              <ion-card-title style="color:black; font-size:12px; font-weight: bold;"
-                >{{ cred["credentialSubject"]["last_name"] }}</ion-card-title
+            <ion-row style="margin-top: 5px;">
+              <ion-card-title style="color:black; font-size:12px;"
+                >LEAR Credential</ion-card-title
               >
             </ion-row>
             
           </ion-card-header>
         </ion-col>
-        <ion-col size="12" align-self-end style="margin-left:12px">
-          <img  (click)="qrView()" alt src="assets/icon/41.png" width="auto" height="40px"/>
+        <ion-col size="12" align-self-end style="margin-left:12px;">
             <ion-row style="justify-content: end;">
               <ion-button
-                  class="vc-view-button"
                   size="small"
-                  style="padding: 0%;"
+                  style="padding: 0%; --background: #ffffff; --box-shadow: none; box-shadow: none;"
                   (click)="deleteVC()"
-                  ><ion-icon color="secondary" name="trash-outline"></ion-icon
+                  ><ion-icon style="color: grey;" name="trash-outline"></ion-icon
                 ></ion-button>
             </ion-row>
         </ion-col>
       
     </ion-col>
   </ion-col>
+
   <span></span>
   <ion-alert
     [isOpen]="isAlertOpenNotFound"

@@ -1,0 +1,1 @@
+import { ScanCredPage } from "./scan-cred.page";

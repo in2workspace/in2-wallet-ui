@@ -29,6 +29,7 @@ export class HomePage implements OnInit {
   public alertButtons = ['OK'];
   toggleScan: boolean = false;
   escaneado = '';
+  //error : boolean = false;
 
   async startScan() {
     this.toggleScan = true;
@@ -52,6 +53,7 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.escaneado = '';
     this.userName = this.authenticationService.getName();
+    //this.error = false;
   }
 
   isCredOffer = false;

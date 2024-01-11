@@ -6,16 +6,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true" class="ion-padding" style="--ion-background-color: #DDE6F6">
 
       <ion-grid>
         <ion-row class="ion-justify-content-center">
           <ion-button style="margin-top:5rem;width: 15rem;height: 5rem;" size="large" *ngIf="!toggleScan" (click)="startScan()"> <div class="custom-button-content"><ion-icon size="large"color="white"name="qr-code"></ion-icon><ion-label>{{"home.scan"|translate}}</ion-label> </div></ion-button>
         </ion-row>    
-        <ion-row class="ion-justify-content-center">
-          <ion-button style="width: 15rem;height: 5rem;" size="large" *ngIf="!toggleScan" [routerLink]="['/tabs/credentials']"> <div class="custom-button-content"><ion-img style="height:2rem"color="white"name="qr-code" src="assets/icon/Torno/torno-blanc.png"></ion-img><ion-label>{{"home.access"|translate}} </ion-label> </div></ion-button>
-        </ion-row>
-      
       </ion-grid>
 
   <div [hidden]="!toggleScan">

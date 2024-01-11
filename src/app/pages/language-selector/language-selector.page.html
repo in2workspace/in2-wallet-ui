@@ -6,15 +6,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" style="--ion-background-color: #DDE6F6">
   <ion-grid>
     <p style="font-weight: bold;">{{"language-selector.title"|translate}}</p>
     <ion-row class="ion-justify-content-start">
-      <ion-list >
+      <ion-list style="--ion-item-background: #DDE6F6; --ion-item-color: grey;">
         <ion-radio-group [(ngModel)]="selected" (ionChange)="languageChange($any($event).target?.value)">
-          <ion-item color="secondary" *ngFor="let language of languageList">
-            <ion-label color="primary">{{ language.name }}</ion-label>
-            <ion-radio color="primary   "[value]="language.code"  slot="start"></ion-radio>
+          <ion-item *ngFor="let language of languageList" style="--border-color: #DDE6F6">
+            <ion-label style="color:grey;">{{ language.name }}</ion-label>
+            <ion-radio style="color:grey; --color-checked: grey; width: 15px; height: 15px;" [value]="language.code"  slot="start"></ion-radio>
           </ion-item>
         </ion-radio-group>
       </ion-list>

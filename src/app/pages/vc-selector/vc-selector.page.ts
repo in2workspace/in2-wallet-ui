@@ -72,13 +72,13 @@ test: any=`<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style=
         next: (authenticationResponse) => {
           this.isAlertOpen = true;
           this.isAlertOpen = true;
-          let TIME_IN_MS = 1500;
+          /*let TIME_IN_MS = 1500;
           setTimeout(() => {
             this.isAlertOpen = false;
           }, TIME_IN_MS);
           setTimeout(() => {
             this.router.navigate(['/tabs/home']);
-          }, 2000);
+          }, 2000);*/
         },
         error: (err) => {
           let TIME_IN_MS = 1500;
@@ -89,6 +89,13 @@ test: any=`<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style=
         }
       });
   }
+
+  public closeButton = [{text: 'Close',
+  role: 'confirm',
+  handler: () => {
+    this.isAlertOpen=false;
+    this.router.navigate(['/tabs/home']);
+  }}]
 
   isAlertOpenFail = false;
 

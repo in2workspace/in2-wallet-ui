@@ -37,6 +37,7 @@ ion-alert.custom-alert {
 
 .content {
     --background: url("../../customAssets/icon/background.png") center/cover fixed no-repeat;
+    
 }
 
 .item-trns {
@@ -44,7 +45,7 @@ ion-alert.custom-alert {
 	color: #B0FF2B; 
 }
 ion-item{
-    --border-color:#B0FF2B;
+    --border-color:#ffffff;
 }
 .custom-button-content {
     display: flex;
@@ -63,4 +64,18 @@ ion-item{
   }
   .login-row{
     margin-top: 2rem;
+  }
+
+  .custom-button-row {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 60px;
+    margin-right: 20px;
+  }
+
+  .pages_titles {
+    margin-top: 20px;
+    margin-left: 10px;
+    font-size: 1em;
   }

@@ -35,7 +35,7 @@ export class CredentialsPage implements OnInit {
     this.refresh()
   }
   scan(){
-    this.router.navigate(['/tabs/home/'], {
+    this.router.navigate(['/tabs/scan-cred/'], {
       queryParams: { toggle: true },
     });
   }

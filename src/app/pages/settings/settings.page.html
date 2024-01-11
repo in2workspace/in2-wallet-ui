@@ -7,11 +7,11 @@
 </ion-header>
 
 
-<ion-content [fullscreen]="true">
-  <b>
+<ion-content [fullscreen]="true" style="--ion-background-color: #DDE6F6;" >
+  <b class="pages_titles">
     {{"settings.title"|translate}}
   </b>
-  <ion-list>
+  <ion-list style="margin: 20px; --ion-item-background: white; --ion-item-color: grey;">
       <ion-item [routerLink]="['/tabs/camera-selector']">
        
         <ion-icon color="grey" name="camera" style="margin-right: 1rem;"></ion-icon><ion-text>{{"camera-selector.title"|translate}}</ion-text>

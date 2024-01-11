@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
 import { StorageService } from './services/storage.service';
+import { scan } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,8 @@ export class AppComponent {
     { title: 'privacy-policy', url: '/privacy-policy', icon: 'book' },
     { title: 'faqs', url: '/faqs', icon: 'help' },
     { title: 'settings', url: '/settings', icon: 'cog' },
-    { title: 'logout', url:'/login', icon:'log-out'}
+    { title: 'logout', url:'/login', icon:'log-out'},
+    { title: 'add-cred', url: '/scan-cred', icon:'camera'}
   ];
 
   showLanguageDropDown = false;
