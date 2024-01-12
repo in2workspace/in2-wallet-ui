@@ -52,7 +52,7 @@ This aplication is developed, builded and tested in Visual Studio Code
 5. Build docker image
 ```docker build -t wallet-wda .```
 6. Run docker image
-```docker run -p 8080:80 -e WCA_URL=http://yourdomain.com -e LOGIN_URL=http://yourdomain.com wallet-driving-application```
+```docker run -p 4200:8088 -e WCA_URL=http://yourdomain.com -e LOGIN_URL=http://yourdomain.com wallet-driving-application```
 # Customization
 
 
