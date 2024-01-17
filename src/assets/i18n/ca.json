@@ -85,6 +85,10 @@
         "warning-header": "Credencial",
         "warning-msg": "Al generar aquest codi, acceptes que les dades contingudes en el teu permís, i la seva situació legal, es mostrin en el dispositiu lector per verificar la seva validesa.",
         "qr-title": "Credencial QR",
-        "qr-close": "Tancar"
+        "qr-close": "Tancar",
+        "delete-header": "Estàs segur d'eliminar la credencial?",
+        "delete-message": "Si elimines la credencial de l'aplicació i necessites recuperar-la hauràs de demanar-ne una de nova.",
+        "delete-confirm": "Sí, elimina-la",
+        "delete-cancel": "Cancel·la"
     }
 }

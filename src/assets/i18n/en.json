@@ -86,6 +86,8 @@
         "warning-header": "Credential",
         "warning-msg": "By generating this code, you agree that the data contained in your permit, and its legal status, will be displayed on the reader device to verify its validity.",
         "qr-title": "QR Credential",
-        "qr-close": "Close"
+        "qr-close": "Close",
+        "delete-header": "Are you sure to delete this credential?",
+        "delete-message": "If you delete the credential from the app and need to recover it, you will need to request a new one."
     }
 }

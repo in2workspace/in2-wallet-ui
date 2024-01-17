@@ -85,6 +85,8 @@
         "warning-header": "Credencial",
         "warning-msg": "Al generar este código, aceptas que los datos contenidos en tu permiso, y su situación legal, se muestren en el dispositivo lector para verificar su validez.",
         "qr-title": "Credencial QR",
-        "qr-close": "Cerrar"
+        "qr-close": "Cerrar",
+        "delete-header": "Estas seguro de eliminar la credencial?",
+        "delete-message": "Si eliminas la credencial de la aplicacion y necesitas recuperarla tendrás que pedir una nueva."
     }
 }

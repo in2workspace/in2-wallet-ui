@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
 import {IonicModule} from '@ionic/angular';
 import {QRCodeModule} from 'angular2-qrcode';
+import {TranslateModule} from '@ngx-translate/core';
 
 export interface VerifiableCredential {
   credentialSubject: {
@@ -21,7 +22,7 @@ export interface VerifiableCredential {
   selector: 'app-vc-view',
   templateUrl: './vc-view.component.html',
   standalone: true,
-  imports: [IonicModule, QRCodeModule],
+  imports: [IonicModule, QRCodeModule, TranslateModule],
 })
 export class VcViewComponent implements OnInit {
 
@@ -83,6 +84,7 @@ export class VcViewComponent implements OnInit {
 
     public deleteButtons = [{text: 'Cancel·la',
       role: 'cancel',
+      cssClass: 'cancel-button',
       handler: () => {
         this.isModalDeleteOpen=false;
       }}, {text: 'Sí, elimina-la',

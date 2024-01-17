@@ -69,9 +69,9 @@
 
   <ion-alert
     [isOpen]="isModalDeleteOpen"
-    class="custom-alert"
-    header="Vols eliminar la credencial?"
-    message="Si elimines la credencial de l'aplicació i necessites recuperar-la hauràs de demanar-ne una de nova."
+    class="custom-alert-delete"
+    [header]="'vc-view.delete-header' | translate"
+    [message]="'vc-view.delete-message' | translate"
     [buttons]="deleteButtons"
     (didDismiss)="setOpenDeleteNotFound(false)"
   ></ion-alert>

@@ -9,6 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { VcViewComponent } from "../../components/vc-view/vc-view.component";
+import { PopoverController } from '@ionic/angular';
+import {LogoutPage } from '../logout/logout.page';
 
 @Component({
     selector: 'app-vc-selector',
@@ -26,6 +28,7 @@ export class VcSelectorPage implements OnInit {
   size: number = 300;
   executionResponse: any;
   userName: string = '';
+  toolbarClick: boolean = false;
 
   _VCReply: VCReply = {
     selectedVcList: [],
@@ -37,7 +40,8 @@ test: any=`<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style=
     private router: Router,
     private storageService: StorageService,
     private walletService: WalletService,
-    private route: ActivatedRoute,    private authenticationService: AuthenticationService
+    private route: ActivatedRoute,    private authenticationService: AuthenticationService,
+    private popoverController: PopoverController
   ) {
     this.route.queryParams.subscribe((params) => {
       this.executionResponse = JSON.parse(params['executionResponse']);
@@ -57,6 +61,20 @@ test: any=`<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style=
 
   isClicked(index: number) {
     return this.isClick[index];
+  }
+
+  clickedToolbar() {
+    !this.toolbarClick;
+  }
+
+  async openPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: LogoutPage, 
+      event: ev,
+      translucent: true
+    });
+  
+    await popover.present();
   }
 
   selectCred(cred: any, index: number) {

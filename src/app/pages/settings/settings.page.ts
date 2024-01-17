@@ -5,6 +5,8 @@ import { IonicModule } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router,RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { PopoverController } from '@ionic/angular';
+import {LogoutPage } from '../logout/logout.page';
 
 @Component({
   selector: 'app-settings',
@@ -16,7 +18,8 @@ import { TranslateModule } from '@ngx-translate/core';
 export class SettingsPage implements OnInit {
 
   constructor(    private authenticationService: AuthenticationService,
-    private router:Router
+    private router:Router,
+    private popoverController: PopoverController
     ) { }
   userName: string = '';
 
@@ -29,5 +32,15 @@ export class SettingsPage implements OnInit {
       this.router.navigate(['/login'], {})
 
     });
+  }
+  async openPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: LogoutPage, 
+      event: ev,
+      translucent: true,
+      cssClass: 'custom-popover'
+    });
+  
+    await popover.present();
   }
 }

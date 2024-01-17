@@ -1,8 +1,10 @@
 <ion-header [translucent]="false">
   <ion-toolbar style="padding-right: 0.5rem;">
     <img alt src="assets/icon/IDEP_blanc_400x200.png" width="auto" slot="start" height="35px"/>
-    <ion-text slot="primary" color="white">{{userName}}</ion-text>
-    <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
+    <ion-button slot="end" color="primary" class="toolbar-but" (click)="openPopover($event)">
+      {{userName}}
+      <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
@@ -19,10 +21,6 @@
       <ion-item [routerLink]="['/tabs/language-selector']">
        
         <ion-icon color="grey" name="globe-outline"  style="margin-right: 1rem;"></ion-icon>{{"language-selector.title"|translate}}
-      </ion-item>
-      <ion-item  (click)="logout()">
-       
-        <ion-icon color="grey" name="log-out-outline"  style="margin-right: 1rem;"></ion-icon>{{"menu.logout"|translate}}
       </ion-item>
   </ion-list>
 

@@ -29,10 +29,15 @@ export class HomePage implements OnInit {
   public alertButtons = ['OK'];
   toggleScan: boolean = false;
   escaneado = '';
+  from = '';
+  scaned_cred: boolean = false;
+  show_qr: boolean = false;
   //error : boolean = false;
 
   async startScan() {
     this.toggleScan = true;
+    this.show_qr = true;
+    console.log("from", this.from);
   }
 
 
@@ -48,32 +53,42 @@ export class HomePage implements OnInit {
     private route: ActivatedRoute,
 
   ) {
+    this.route.queryParams.subscribe((params) => {
+      this.toggleScan = params['toggleScan'];
+      this.from = params['from'];
+      this.show_qr = params['show_qr'];
+    })
   }
 
   ngOnInit() {
     this.escaneado = '';
     this.userName = this.authenticationService.getName();
+    this.scaned_cred = false;
     //this.error = false;
   }
 
   isCredOffer = false;
   untoggleScan(){
     this.toggleScan = false;
-
   }
+
   qrCodeEmit(qrCode: string) {
     this.escaneado = qrCode;
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
         if (qrCode.includes("credential_offer_uri")) {
           this.escaneado = '';
-          setTimeout(() => {
+          this.from = 'credential';
+          this.scaned_cred = true;
+          /*setTimeout(() => {
             this.isAlertOpen = false;
             this.router.navigate(['/tabs/credentials/'])
 
           }, TIME_IN_MS);
-          this.isAlertOpen = true;
+          this.isAlertOpen = true;*/
         } else {
+          this.show_qr = false;
+          this.from = '';
           // fixme: Sonar Lint: Need .then()
           this.router.navigate(['/tabs/vc-selector/'], {
             queryParams: {executionResponse: executionResponse},
@@ -100,6 +115,16 @@ export class HomePage implements OnInit {
         }
       },
     });
+  }
+
+  credentialClick() {
+    setTimeout(() => {
+      this.isAlertOpen = false;
+      this.router.navigate(['/tabs/credentials/'])
+    }, TIME_IN_MS);
+    this.show_qr = true;
+    this.scaned_cred = false;
+    this.from = '';
   }
 
   setOpen(isOpen: boolean) {

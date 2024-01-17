@@ -1,8 +1,10 @@
 <ion-header [translucent]="false">
   <ion-toolbar style="padding-right: 0.5rem;">
     <img alt src="assets/icon/IDEP_blanc_400x200.png" width="auto" slot="start" height="35px"/>
-    <ion-text slot="primary" color="white">{{userName}}</ion-text>
-    <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
+    <button (click)="openPopover($event)">
+      <ion-text slot="primary" color="white">{{userName}}</ion-text>
+      <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
+    </button>
   </ion-toolbar>
 </ion-header>
 
@@ -11,7 +13,6 @@
     <ion-row class="ion-justify-content-center"
     *ngFor="let cred of credList; let i = index">
     <ion-card (click)="sendCred(cred)" style="--ion-background-color: #DDE6F6; background-color: #DDE6F6; box-shadow: none;">
-
       <app-vc-view [credentialInput]="cred"></app-vc-view>
     </ion-card>
     </ion-row>
