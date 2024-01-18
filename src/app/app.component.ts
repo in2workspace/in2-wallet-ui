@@ -28,7 +28,6 @@ export class AppComponent {
     { title: 'faqs', url: '/faqs', icon: 'help' },
     { title: 'settings', url: '/settings', icon: 'cog' },
     { title: 'logout', url:'/login', icon:'log-out'},
-    { title: 'add-cred', url: '/scan-cred', icon:'camera'}
   ];
 
   showLanguageDropDown = false;

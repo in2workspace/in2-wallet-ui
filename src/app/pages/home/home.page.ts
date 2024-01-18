@@ -7,6 +7,8 @@ import {ActivatedRoute, Router,RouterModule} from '@angular/router';
 import {WalletService} from 'src/app/services/wallet.service';
 import {AuthenticationService} from 'src/app/services/authentication.service';
 import {TranslateModule} from '@ngx-translate/core';
+import { PopoverController } from '@ionic/angular';
+import {LogoutPage } from '../logout/logout.page';
 
 const TIME_IN_MS = 1500;
 
@@ -32,7 +34,6 @@ export class HomePage implements OnInit {
   from = '';
   scaned_cred: boolean = false;
   show_qr: boolean = false;
-  //error : boolean = false;
 
   async startScan() {
     this.toggleScan = true;
@@ -51,8 +52,8 @@ export class HomePage implements OnInit {
     private walletService: WalletService,
     private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
-
-  ) {
+    private popoverController: PopoverController,
+    ) {
     this.route.queryParams.subscribe((params) => {
       this.toggleScan = params['toggleScan'];
       this.from = params['from'];
@@ -64,12 +65,29 @@ export class HomePage implements OnInit {
     this.escaneado = '';
     this.userName = this.authenticationService.getName();
     this.scaned_cred = false;
-    //this.error = false;
   }
 
   isCredOffer = false;
   untoggleScan(){
     this.toggleScan = false;
+  }
+
+  logout(){
+    this.authenticationService.logout().subscribe(()=>{
+      this.router.navigate(['/login'], {})
+
+    });
+  }
+
+  async openPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: LogoutPage, 
+      event: ev,
+      translucent: true,
+      cssClass: 'custom-popover'
+    });
+  
+    await popover.present();
   }
 
   qrCodeEmit(qrCode: string) {
@@ -80,12 +98,6 @@ export class HomePage implements OnInit {
           this.escaneado = '';
           this.from = 'credential';
           this.scaned_cred = true;
-          /*setTimeout(() => {
-            this.isAlertOpen = false;
-            this.router.navigate(['/tabs/credentials/'])
-
-          }, TIME_IN_MS);
-          this.isAlertOpen = true;*/
         } else {
           this.show_qr = false;
           this.from = '';
@@ -96,6 +108,7 @@ export class HomePage implements OnInit {
           this.escaneado = '';
         }
       },
+      
       error: (err) => {
         if (err.status == 422) {
           setTimeout(() => {

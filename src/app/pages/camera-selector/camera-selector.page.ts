@@ -4,8 +4,11 @@ import {FormsModule} from '@angular/forms';
 import {IonicModule} from '@ionic/angular';
 import {BarcodeScannerComponent} from '../../components/barcode-scanner/barcode-scanner.component';
 import {CameraService} from 'src/app/services/camera.service';
-
+import {AuthenticationService} from 'src/app/services/authentication.service';
+import { PopoverController } from '@ionic/angular';
+import {LogoutPage } from '../logout/logout.page';
 import {TranslateModule} from '@ngx-translate/core';
+import {ActivatedRoute, Router,RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-camera-selector',
@@ -17,14 +20,24 @@ import {TranslateModule} from '@ngx-translate/core';
     CommonModule,
     FormsModule,
     BarcodeScannerComponent,
-    TranslateModule
+    TranslateModule,
+    RouterModule
   ],
 })
 export class CameraSelectorPage {
   selectedDevice: string = '';
+  userName: string = '';
   @Input() availableDevices: MediaDeviceInfo[] = []; 
   constructor( private cameraService:CameraService,
+    private router: Router,
+    private authenticationService: AuthenticationService,
+    private route: ActivatedRoute,
+    private popoverController: PopoverController,
   ) {}
+
+  ngOnInit() {
+    this.userName = this.authenticationService.getName();
+  }
 
   availableDevicesEmit(devices: MediaDeviceInfo[]) {
     this.availableDevices = devices;
@@ -41,6 +54,24 @@ export class CameraSelectorPage {
     } else {
       this.cameraService.noCamera();
     }
+  }
+
+  logout(){
+    this.authenticationService.logout().subscribe(()=>{
+      this.router.navigate(['/login'], {})
+
+    });
+  }
+
+  async openPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: LogoutPage, 
+      event: ev,
+      translucent: true,
+      cssClass: 'custom-popover'
+    });
+  
+    await popover.present();
   }
 
 }

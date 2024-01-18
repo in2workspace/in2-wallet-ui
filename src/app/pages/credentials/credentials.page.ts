@@ -9,6 +9,8 @@ import {VcViewComponent, VerifiableCredential} from "../../components/vc-view/vc
 import {TranslateModule} from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { PopoverController } from '@ionic/angular';
+import {LogoutPage } from '../logout/logout.page';
 
 @Component({
   selector: 'app-credentials',
@@ -27,7 +29,8 @@ export class CredentialsPage implements OnInit {
   currentDevice: any;
   private walletService = inject(WalletService);
   private router = inject(Router);
-  private authenticationService = inject(AuthenticationService)
+  private authenticationService = inject(AuthenticationService);
+  private popoverController= inject(PopoverController);
 
   ngOnInit() {
     this.userName = this.authenticationService.getName();
@@ -39,6 +42,25 @@ export class CredentialsPage implements OnInit {
       queryParams: { toggleScan: true, from: 'credential', show_qr: true },
     });
   }
+
+  logout(){
+    this.authenticationService.logout().subscribe(()=>{
+      this.router.navigate(['/login'], {})
+
+    });
+  }
+
+  async openPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: LogoutPage, 
+      event: ev,
+      translucent: true,
+      cssClass: 'custom-popover'
+    });
+  
+    await popover.present();
+  }
+
   refresh() {
     this.walletService.getAllVCs().subscribe((credentialListResponse: Array<VerifiableCredential>) => {
       this.credList = credentialListResponse;

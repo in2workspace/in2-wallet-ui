@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule,TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { PopoverController } from '@ionic/angular';
+import {LogoutPage } from '../logout/logout.page';
+import {ActivatedRoute, Router,RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-language-selector',
@@ -34,17 +37,38 @@ export class LanguageSelectorPage implements OnInit {
       code: "ca"
     }
   ]
-  constructor(    private authenticationService: AuthenticationService
+  constructor(
+    private router: Router,
+    private authenticationService: AuthenticationService,
+    private route: ActivatedRoute,
+    private popoverController: PopoverController,
     ) { }
 
   ngOnInit() {
     this.selected = this.translate.currentLang;
+    this.userName = this.authenticationService.getName();
   }
   languageChange(code:string){
     this.selected = code;
     this.translate.use(code);
+  }
 
-    
+  logout(){
+    this.authenticationService.logout().subscribe(()=>{
+      this.router.navigate(['/login'], {})
+
+    });
+  }
+
+  async openPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: LogoutPage, 
+      event: ev,
+      translucent: true,
+      cssClass: 'custom-popover'
+    });
+  
+    await popover.present();
   }
 
 }

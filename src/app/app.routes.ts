@@ -82,15 +82,6 @@ export const routes: Routes = [
           ),
       },
 
-      {
-        path: 'scan-cred',
-        canActivate: [authGuard],
-        loadComponent: () =>
-          import('./pages/scan-add-cred/scan-cred.page').then(
-            (m) => m.ScanCredPage
-          ),
-      },
-
       
   {
     path: 'camera-selector',
