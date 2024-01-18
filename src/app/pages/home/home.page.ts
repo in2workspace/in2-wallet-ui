@@ -100,7 +100,6 @@ export class HomePage implements OnInit {
         } else {
           this.show_qr = false;
           this.from = '';
-          // fixme: Sonar Lint: Need .then()
           this.router.navigate(['/tabs/vc-selector/'], {
             queryParams: {executionResponse: executionResponse},
           });
@@ -145,7 +144,6 @@ export class HomePage implements OnInit {
 
   setOpenNotFound(isOpen: boolean) {
     this.isAlertOpenNotFound = isOpen;
-    // fixme: Sonar Lint: Need .then()
     this.router.navigate(['/home'], {});
   }
 

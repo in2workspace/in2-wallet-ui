@@ -7,7 +7,7 @@ import {CameraService} from 'src/app/services/camera.service';
 import {AuthenticationService} from 'src/app/services/authentication.service';
 import {LogoutPage } from '../logout/logout.page';
 import {TranslateModule} from '@ngx-translate/core';
-import {ActivatedRoute, Router,RouterModule} from '@angular/router';
+import { Router,RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-camera-selector',
@@ -30,7 +30,6 @@ export class CameraSelectorPage {
   constructor( private cameraService:CameraService,
     private router: Router,
     private authenticationService: AuthenticationService,
-    private route: ActivatedRoute,
     private popoverController: PopoverController,
   ) {}
 
@@ -42,7 +41,6 @@ export class CameraSelectorPage {
     this.availableDevices = devices;
   }
 
-  // todo: Simplify function and pass logic to the service
   onDeviceSelectChange(selected: string) {
     this.selectedDevice = selected;
     if (selected != '') {

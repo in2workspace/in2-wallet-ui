@@ -34,7 +34,23 @@ export class LanguageSelectorPage implements OnInit {
       name: "Català",
       url: "assets/flags/ca.png",
       code: "ca"
-    }
+    },
+    {
+      name: "Italian",
+      url: "assets/flags/it.png",
+      code: "it"
+    },
+    {
+      name: "French",
+      url: "assets/flags/fr.png",
+      code: "fr"
+    },
+    {
+      name: "German",
+      url: "assets/flags/de.png",
+      code: "de"
+    },
+
   ]
   constructor(
     private router: Router,

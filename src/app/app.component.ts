@@ -4,7 +4,6 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
-import { StorageService } from './services/storage.service';
 
 @Component({
   selector: 'app-root',
