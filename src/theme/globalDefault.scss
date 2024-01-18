@@ -80,12 +80,10 @@ ion-item{
     font-weight: bold;
   }
   .custom-alert-delete {
-    font-family: Blinker;
     display: flex;
   }
 
   .custom-alert-delete .alert-title {
-    font-family: Blinker;
     font-weight: bold;
     font-size: 14px
   }
@@ -123,7 +121,6 @@ ion-item{
 
   .custom-popover {
     --background: #00ADD3;
-    //background-color: #00ADD3;
   }
   .logout-list {
     background-color: #00ADD3;

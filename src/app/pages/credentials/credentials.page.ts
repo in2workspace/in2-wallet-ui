@@ -1,7 +1,7 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {IonicModule} from '@ionic/angular';
+import {IonicModule, PopoverController} from '@ionic/angular';
 import {StorageService} from 'src/app/services/storage.service';
 import {QRCodeModule} from 'angular2-qrcode';
 import {WalletService} from 'src/app/services/wallet.service';
@@ -9,7 +9,6 @@ import {VcViewComponent, VerifiableCredential} from "../../components/vc-view/vc
 import {TranslateModule} from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { PopoverController } from '@ionic/angular';
 import {LogoutPage } from '../logout/logout.page';
 
 @Component({

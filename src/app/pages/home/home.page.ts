@@ -1,13 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {IonicModule} from '@ionic/angular';
+import {IonicModule, PopoverController} from '@ionic/angular';
 import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
 import {ActivatedRoute, Router,RouterModule} from '@angular/router';
 import {WalletService} from 'src/app/services/wallet.service';
 import {AuthenticationService} from 'src/app/services/authentication.service';
 import {TranslateModule} from '@ngx-translate/core';
-import { PopoverController } from '@ionic/angular';
 import {LogoutPage } from '../logout/logout.page';
 
 const TIME_IN_MS = 1500;

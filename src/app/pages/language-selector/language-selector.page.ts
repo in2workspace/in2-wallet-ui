@@ -1,12 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, PopoverController } from '@ionic/angular';
 import { TranslateModule,TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { PopoverController } from '@ionic/angular';
 import {LogoutPage } from '../logout/logout.page';
-import {ActivatedRoute, Router,RouterModule} from '@angular/router';
+import { Router} from '@angular/router';
 
 @Component({
   selector: 'app-language-selector',
@@ -40,7 +39,6 @@ export class LanguageSelectorPage implements OnInit {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
-    private route: ActivatedRoute,
     private popoverController: PopoverController,
     ) { }
 

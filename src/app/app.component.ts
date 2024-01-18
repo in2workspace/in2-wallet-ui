@@ -5,7 +5,6 @@ import { IonicModule } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
 import { StorageService } from './services/storage.service';
-import { scan } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +15,6 @@ import { scan } from 'rxjs';
 })
 export class AppComponent {
     private authenticationService = inject(AuthenticationService);
-    private storageService = inject(StorageService);
     private router = inject(Router);
   public appPages = [
     { title: 'home', url: '/home', icon: 'home' },

@@ -1,11 +1,10 @@
 import {Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {IonicModule} from '@ionic/angular';
+import {IonicModule, PopoverController} from '@ionic/angular';
 import {BarcodeScannerComponent} from '../../components/barcode-scanner/barcode-scanner.component';
 import {CameraService} from 'src/app/services/camera.service';
 import {AuthenticationService} from 'src/app/services/authentication.service';
-import { PopoverController } from '@ionic/angular';
 import {LogoutPage } from '../logout/logout.page';
 import {TranslateModule} from '@ngx-translate/core';
 import {ActivatedRoute, Router,RouterModule} from '@angular/router';

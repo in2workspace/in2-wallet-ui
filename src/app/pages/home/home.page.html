@@ -20,7 +20,7 @@
     <ion-grid  >
     
       <ion-text style="font-weight: bold;" *ngIf="from==='credential'">Add a credential</ion-text>
-      <ion-text style="font-weight: bold;;" *ngIf="from!=='credential'">Scan QR</ion-text>
+      <ion-text style="font-weight: bold;" *ngIf="from!=='credential'">Scan QR</ion-text>
       <ion-row class="ion-justify-content-center">
       <app-barcode-scanner *ngIf="show_qr" (qrCode)="qrCodeEmit($event)"></app-barcode-scanner>
     </ion-row>

@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
-import { PopoverController } from "@ionic/angular";
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router,RouterModule } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, PopoverController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 
 

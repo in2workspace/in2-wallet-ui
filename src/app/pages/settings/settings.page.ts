@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, PopoverController } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router,RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { PopoverController } from '@ionic/angular';
 import {LogoutPage } from '../logout/logout.page';
 
 @Component({

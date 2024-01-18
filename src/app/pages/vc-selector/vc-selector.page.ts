@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, PopoverController } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage.service';
 import { QRCodeModule } from 'angular2-qrcode';
 import { VCReply, WalletService } from 'src/app/services/wallet.service';
@@ -9,7 +9,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { VcViewComponent } from "../../components/vc-view/vc-view.component";
-import { PopoverController } from '@ionic/angular';
 import {LogoutPage } from '../logout/logout.page';
 
 @Component({
@@ -28,7 +27,6 @@ export class VcSelectorPage implements OnInit {
   size: number = 300;
   executionResponse: any;
   userName: string = '';
-  toolbarClick: boolean = false;
 
   _VCReply: VCReply = {
     selectedVcList: [],
@@ -38,7 +36,6 @@ export class VcSelectorPage implements OnInit {
 test: any=`<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style="border-radius: 2px">`;
   constructor(
     private router: Router,
-    private storageService: StorageService,
     private walletService: WalletService,
     private route: ActivatedRoute,    private authenticationService: AuthenticationService,
     private popoverController: PopoverController
@@ -61,10 +58,6 @@ test: any=`<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style=
 
   isClicked(index: number) {
     return this.isClick[index];
-  }
-
-  clickedToolbar() {
-    !this.toolbarClick;
   }
 
   async openPopover(ev: any) {
@@ -90,13 +83,6 @@ test: any=`<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style=
         next: (authenticationResponse) => {
           this.isAlertOpen = true;
           this.isAlertOpen = true;
-          /*let TIME_IN_MS = 1500;
-          setTimeout(() => {
-            this.isAlertOpen = false;
-          }, TIME_IN_MS);
-          setTimeout(() => {
-            this.router.navigate(['/tabs/home']);
-          }, 2000);*/
         },
         error: (err) => {
           let TIME_IN_MS = 1500;
