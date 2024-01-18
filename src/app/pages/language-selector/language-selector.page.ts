@@ -19,7 +19,6 @@ export class LanguageSelectorPage implements OnInit {
   userName: string = '';
 
   languageList = [
-    // todo: add more EU official languages, such as French, German, and Italian.
     {
       name: "English",
       url: "assets/flags/uk.png",
