@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  data_url: window["env"]["apiUrl"] || 'http://localhost:8086',
+  data_url: window["env"]["wcaUrl"] || 'http://localhost:8086',
   wca_url: window["env"]["dataUrl"] || 'http://localhost:8081',
   loginParams: {
     has_login: true,
