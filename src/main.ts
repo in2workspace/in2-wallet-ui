@@ -40,6 +40,9 @@ bootstrapApplication(AppComponent, {
         responseType: environment.loginParams.grant_type,
         silentRenew: true,
         useRefreshToken: true,
+        ignoreNonceAfterRefresh: true,
+        triggerRefreshWhenIdTokenExpired: false,
+        autoUserInfo: false,
         logLevel: LogLevel.Debug,
         secureRoutes:[environment.data_url,environment.wca_url]
       }

@@ -6,7 +6,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { QRCodeModule } from 'angular2-qrcode';
 import { VCReply, WalletService } from 'src/app/services/wallet.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { VcViewComponent } from "../../components/vc-view/vc-view.component";
 import {LogoutPage } from '../logout/logout.page';
@@ -38,7 +38,8 @@ test: any=`<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style=
     private router: Router,
     private walletService: WalletService,
     private route: ActivatedRoute,    private authenticationService: AuthenticationService,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    public translate: TranslateService
   ) {
     this.route.queryParams.subscribe((params) => {
       this.executionResponse = JSON.parse(params['executionResponse']);
@@ -94,7 +95,7 @@ test: any=`<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style=
       });
   }
 
-  public closeButton = [{text: 'Close',
+  public closeButton = [{text: this.translate.instant('vc-selector.close'),
   role: 'confirm',
   handler: () => {
     this.isAlertOpen=false;

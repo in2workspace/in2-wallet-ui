@@ -10,7 +10,7 @@
     "privacy-policy":"Politica de Privacitat",
     "faqs":"FAQs",
     "settings":"Settings",
-    "logout":"Logout"
+    "logout":"Tancar sessió"
 
     },
     "camera-selector":{
@@ -39,6 +39,7 @@
         "title":"Home",
         "hello":"Benvingut a IN2Wallet",
         "scan":"Escaneja el QR",
+        "add-credential": "Afegir una credencial",
         "access":"Accedeix a un espai",
         "get-cred":"Obtenir Credencial",
         "ok-header": "Enhorabona",
@@ -79,7 +80,8 @@
         "ok-header": "Enhorabona",
         "ok-message":"Login correcte",
         "ko-header":"Error",
-        "ko-message":"El login ha fallat"
+        "ko-message":"El login ha fallat",
+        "close": "Tancar"
     },
     "vc-view":{
         "warning-header": "Credencial",

@@ -1,16 +1,17 @@
 
 {
     "menu":{
-    "home":"Inicio",
-    "credentials":"Credenciales",
-    "dids":"Dids",
-    "camera-selector":"Selector de Camara",
-    "language-selector":"Selector de Idioma",
-    "terms-of-user":"Terminos de Uso",
-    "privacy-policy":"Politica de Privacidad",
-    "faqs":"FAQs",
-    "settings":"Ajustes",
-    "logout":"Logout"},
+        "home":"Inicio",
+        "credentials":"Credenciales",
+        "dids":"Dids",
+        "camera-selector":"Selector de Camara",
+        "language-selector":"Selector de Idioma",
+        "terms-of-user":"Terminos de Uso",
+        "privacy-policy":"Politica de Privacidad",
+        "faqs":"FAQs",
+        "settings":"Ajustes",
+        "logout":"Cerrar sesión"
+    },
     "camera-selector":{
         "title":"Camara",
         "settings": "Configuración de la camara",
@@ -39,6 +40,7 @@
         "title":"Home",
         "hello":"Bienvenido a IN2Wallet",
         "scan":"Escanea el QR",
+        "add-credential": "Añadir una credencial",
         "access":"Accede a un espacio",
         "get-cred":"Obtener Credencial",
         "ok-header": "Enhorabuena",
@@ -79,7 +81,8 @@
         "ok-header": "Enhorabuena",
         "ok-message":"Login correcto",
         "ko-header":"Error",
-        "ko-message":"El login ha fallado"
+        "ko-message":"El login ha fallado",
+        "close": "Cerrar"
     },
     "vc-view":{
         "warning-header": "Credencial",
@@ -87,6 +90,8 @@
         "qr-title": "Credencial QR",
         "qr-close": "Cerrar",
         "delete-header": "Estas seguro de eliminar la credencial?",
-        "delete-message": "Si eliminas la credencial de la aplicacion y necesitas recuperarla tendrás que pedir una nueva."
+        "delete-message": "Si eliminas la credencial de la aplicacion y necesitas recuperarla tendrás que pedir una nueva.",
+        "delete-confirm": "Sí, eliminala",
+        "delete-cancel": "Cancela"
     }
 }

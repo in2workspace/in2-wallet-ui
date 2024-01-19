@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
 import {IonicModule} from '@ionic/angular';
 import {QRCodeModule} from 'angular2-qrcode';
-import {TranslateModule} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
 export interface VerifiableCredential {
   credentialSubject: {
@@ -51,6 +51,10 @@ export class VcViewComponent implements OnInit {
   @Output() vcEmit: EventEmitter<VerifiableCredential> =
     new EventEmitter();
 
+    constructor(
+      public translate: TranslateService
+    ) {}
+
 
   isAlertOpenNotFound=false;
   isAlertOpenDeleteNotFound=false;
@@ -82,16 +86,17 @@ export class VcViewComponent implements OnInit {
       this.isModalOpen=true;
     }}];
 
-    public deleteButtons = [{text: 'Cancel·la',
+    public deleteButtons = [{text: this.translate.instant('vc-view.delete-cancel'),
       role: 'cancel',
       cssClass: 'cancel-button',
       handler: () => {
-        this.isModalDeleteOpen=false;
-      }}, {text: 'Sí, elimina-la',
+        this.isModalDeleteOpen=false;     
+    }},
+      {text: this.translate.instant('vc-view.delete-confirm'),
       role: 'confirm',
-      handler: () => {
-        this.isModalDeleteOpen=true;
-        this.vcEmit.emit(this.cred);      
+    handler: () => {
+      this.isModalDeleteOpen=true;
+      this.vcEmit.emit(this.cred); 
       }}]
   setOpenNotFound(isOpen: boolean) {
     this.isAlertOpenNotFound = isOpen;
