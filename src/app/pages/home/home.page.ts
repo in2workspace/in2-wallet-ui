@@ -131,7 +131,9 @@ export class HomePage implements OnInit {
   credentialClick() {
     setTimeout(() => {
       this.isAlertOpen = false;
-      this.router.navigate(['/tabs/credentials/'])
+      this.router.navigate(['/tabs/credentials/'], {
+        queryParams: { alertOpen: true },
+      });
     }, TIME_IN_MS);
     this.show_qr = true;
     this.scaned_cred = false;

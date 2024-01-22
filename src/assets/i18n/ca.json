@@ -43,7 +43,7 @@
         "access":"Accedeix a un espai",
         "get-cred":"Obtenir Credencial",
         "ok-header": "Enhorabona",
-        "ok-msg": "VC guardat",
+        "ok-msg": "La credencial s'ha guardat",
         "unsucces": "Sense èxit",
         "already-saved": "VC ja guardat",
         "no-credential": "No hi ha credencial vàlida emmagatzemada"
