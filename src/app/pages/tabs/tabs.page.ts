@@ -16,7 +16,8 @@ export class TabsPage implements OnInit {
 
   constructor(private route: ActivatedRoute) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    
   }
 
 }

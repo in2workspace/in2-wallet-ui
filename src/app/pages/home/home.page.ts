@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {IonicModule, PopoverController} from '@ionic/angular';
 import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
-import {ActivatedRoute, Router,RouterModule, NavigationExtras } from '@angular/router';
+import {ActivatedRoute, Router,RouterModule } from '@angular/router';
 import {WalletService} from 'src/app/services/wallet.service';
 import {AuthenticationService} from 'src/app/services/authentication.service';
 import {TranslateModule} from '@ngx-translate/core';
