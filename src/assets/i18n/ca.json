@@ -42,7 +42,15 @@
     "ok-msg": "VC guardat",
     "unsucces": "Sense èxit",
     "already-saved": "VC ja guardat",
-    "no-credential": "No hi ha credencial vàlida emmagatzemada"
+    "no-credential": "No hi ha credencial vàlida emmagatzemada",
+    "ebsi-popup": {
+      "info": "Copia aquest DID i aquest Credential Offer Endpoint per completar els prerequisits de l'emissió de la credencial EBSI.",
+      "did": "DID: ",
+      "credential-offer": "Credential Offer Endpoint: ",
+      "endpoint": "test-openid-credential-offer://",
+      "next": "Següent"
+    },
+    "error-ebsi": "No s'ha pogut retornar el did."
   },
   "language-selector": {
     "title": "Selector d'idioma"

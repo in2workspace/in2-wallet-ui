@@ -24,7 +24,7 @@ export class SettingsPage implements OnInit {
     private http: HttpClient
   ) { }
   userName: string = '';
-  showAlert: boolean = false;
+  isAlertOpen: boolean = false;
 
   ngOnInit() {
     this.userName = this.authenticationService.getName();
@@ -41,8 +41,11 @@ export class SettingsPage implements OnInit {
       this.router.navigate(['/tabs/home']);
     },
       (error) => {
-        this.showAlert = true;
+        this.isAlertOpen = true;
       })
+  }
+  toggleAlert() {
+    this.isAlertOpen = !this.isAlertOpen;
   }
   logout() {
     console.log("hola")

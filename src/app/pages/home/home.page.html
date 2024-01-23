@@ -52,11 +52,10 @@
 <div *ngIf="ebsiFlag" class="popup-bg-cover"></div>
 
 <div class="ebsi-popup" *ngIf="ebsiFlag">
-  <span>Copia este DID y este Credential Offer Endpoint para completar los prerequisitos de la emisión de la credencial
-    EBSI.</span>
+  <span>{{ 'home.ebsi-popup.info' | translate }}</span>
   <div class="did-data-wrapper">
-    <span><strong>DID: </strong>{{did}}</span>
-    <span><strong>Credential Offer Endpoint: </strong>test-openid-credential-offer://</span>
+    <span><strong>{{ 'home.ebsi-popup.did' | translate }} </strong>{{did}}</span>
+    <span><strong>{{ 'home.ebsi-popup.credential-offer' | translate }}</strong>{{ 'home.ebsi-popup.endpoint' | translate }}</span>
   </div>
-  <button class="next-button-ebsi" (click)="startScan()">Siguiente</button>
+  <button class="next-button-ebsi" (click)="startScan()">{{ 'home.ebsi-popup.next' | translate }}</button>
 </div>

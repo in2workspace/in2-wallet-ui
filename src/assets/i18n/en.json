@@ -42,7 +42,15 @@
     "ok-msg": "VC saved",
     "unsucces": "Unsuccesfull",
     "already-saved": "VC already saved",
-    "no-credential": "No stored valid credential"
+    "no-credential": "No stored valid credential",
+    "ebsi-popup": {
+      "info": "In order to fulfill the prerequisites of EBSI credential issue, copy this DID and Credential Offer Endpoint.",
+      "did": "DID: ",
+      "credential-offer": "Credential Offer Endpoint: ",
+      "endpoint": "test-openid-credential-offer://",
+      "next": "Next"
+    },
+    "error-ebsi": "The did could not be returned."
   },
   "language-selector": {
     "title": "Language Selector"
