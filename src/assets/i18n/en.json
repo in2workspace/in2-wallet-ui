@@ -44,7 +44,7 @@
         "access":"Access",
         "get-cred":"Get Credential",
         "ok-header": "Congratulations",
-        "ok-msg": "The credential has been saved",
+        "ok-msg": "Credential added",
         "unsucces": "Unsuccesfull",
         "already-saved": "VC already saved",
         "no-credential": "No stored valid credential"

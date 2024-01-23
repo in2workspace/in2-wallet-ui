@@ -27,17 +27,10 @@ const TIME_IN_MS = 1500;
 })
 export class HomePage implements OnInit {
 
-  public alertButtons = ['OK'];
-  toggleScan: boolean = false;
-  escaneado = '';
-  from = '';
-  scaned_cred: boolean = false;
-  show_qr: boolean = false;
-
   async startScan() {
-    this.toggleScan = true;
-    this.show_qr = true;
-    console.log("from", this.from);
+    this.router.navigate(['/tabs/credentials/'], {
+      queryParams: { toggleScan: true, from: 'home', show_qr: true },
+    });
   }
 
 
@@ -48,34 +41,9 @@ export class HomePage implements OnInit {
 
   constructor(
     private router: Router,
-    private walletService: WalletService,
     private authenticationService: AuthenticationService,
-    private route: ActivatedRoute,
     private popoverController: PopoverController,
     ) {
-    this.route.queryParams.subscribe((params) => {
-      this.toggleScan = params['toggleScan'];
-      this.from = params['from'];
-      this.show_qr = params['show_qr'];
-    })
-  }
-
-  ngOnInit() {
-    this.escaneado = '';
-    this.userName = this.authenticationService.getName();
-    this.scaned_cred = false;
-  }
-
-  isCredOffer = false;
-  untoggleScan(){
-    this.toggleScan = false;
-  }
-
-  logout(){
-    this.authenticationService.logout().subscribe(()=>{
-      this.router.navigate(['/login'], {})
-
-    });
   }
 
   async openPopover(ev: any) {
@@ -89,68 +57,15 @@ export class HomePage implements OnInit {
     await popover.present();
   }
 
-  qrCodeEmit(qrCode: string) {
-    this.escaneado = qrCode;
-    this.walletService.executeContent(qrCode).subscribe({
-      next: (executionResponse) => {
-        if (qrCode.includes("credential_offer_uri")) {
-          this.escaneado = '';
-          this.from = 'credential';
-          this.scaned_cred = true;
-        } else {
-          this.show_qr = false;
-          this.from = '';
-          this.router.navigate(['/tabs/vc-selector/'], {
-            queryParams: {executionResponse: executionResponse},
-          });
-          this.escaneado = '';
-        }
-      },
-      
-      error: (err) => {
-        if (err.status == 422) {
-          setTimeout(() => {
-            this.isAlertOpen = false;
-          }, TIME_IN_MS);
-          this.isAlertOpen = true;
-          this.escaneado = '';
-        } else if (err.status == 404) {
-          this.isAlertOpenNotFound = true;
-          this.escaneado = '';
-        } else {
-          setTimeout(() => {
-            this.isAlertOpenFail = false;
-          }, TIME_IN_MS);
-          this.isAlertOpenFail = true;
-          this.escaneado = '';
-        }
-      },
+  ngOnInit() {
+    this.userName = this.authenticationService.getName();
+  }
+
+  logout(){
+    this.authenticationService.logout().subscribe(()=>{
+      this.router.navigate(['/login'], {})
+
     });
   }
-
-  credentialClick() {
-    setTimeout(() => {
-      this.isAlertOpen = false;
-      this.router.navigate(['/tabs/credentials/'], {
-        queryParams: { alertOpen: true },
-      });
-    }, TIME_IN_MS);
-    this.show_qr = true;
-    this.scaned_cred = false;
-    this.from = '';
-  }
-
-  setOpen(isOpen: boolean) {
-    this.isAlertOpen = isOpen;
-  }
-
-  setOpenNotFound(isOpen: boolean) {
-    this.isAlertOpenNotFound = isOpen;
-    this.router.navigate(['/home'], {});
-  }
-
-  isAlertOpenNotFound = false;
-  isAlertOpenFail = false;
-  isAlertOpen = false;
 
 }
