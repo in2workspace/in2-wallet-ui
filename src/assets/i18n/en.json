@@ -1,91 +1,90 @@
-
 {
-    "menu":{
-
-    "home":"Home",
-    "credentials":"Credentials",
-    "dids":"Dids",
-    "camera-selector":"Camera Selector",
-    "language-selector":"Language Selector",
-    "terms-of-user":"Terms of User",
-    "privacy-policy":"Privacy Policy",
-    "faqs":"FAQs",
-    "settings":"Settings",
-    "logout":"Logout"
-    },
-    "camera-selector":{
-        "title":"Camera Selector",
-        "no-device": "No device"
-    },
-    "credential-offer":{
-        "title":"Credential Offer",
-        "generate":"Create Credential",
-        "ok-header": "Congratulations",
-        "vc-saved":"Credential saved"
-    },
-    "credentials":{
-        "title":"Credentials",
-        "add":"Add",
-        "nocred":"No credential loaded"
-
-
-    },
-    "dids":{
-        "title":"Dids"
-    },
-    "faqs":{
-        "title":"Faqs"
-    },
-    "home":{
-        "title":"Home",
-        "hello":"Welcome to IN2Wallet",
-        "scan":"Identify",
-        "access":"Access",
-        "get-cred":"Get Credential",
-        "ok-header": "Congratulations",
-        "ok-msg": "VC saved",
-        "unsucces": "Unsuccesfull",
-        "already-saved": "VC already saved",
-        "no-credential": "No stored valid credential"
-    },
-    "language-selector":{
-        "title":"Language Selector"
-    },
-    "login":{
-        "title":"Login",
-        "login":"Login",
-        "register":"Not registered? Sign up",
-        "error": "Username or password incorrect"
-    },
-    "privacy-policy":{
-        "title":"Privacy Policy"
-    },
-    "register":{
-        "title":"Register",
-        "register":"Register",
-        "login":"Go to Login",
-        "error": "There was an error",
-        "email-error":"Invalid email"
-    },
-    "settings":{
-        "title":"Settings"
-    },
-    "terms-of-use":{
-        "title":"Terms Of Use"
-    },
-    "vc-selector":{
-        "title":"Vc Selector",
-        "select-cred":"Select Credential",
-        "send-cred":"Send Credential",
-        "ok-header": "Congratulations",
-        "ok-message":"Log in completed",
-        "ko-header":"Error",
-        "ko-message":"Failed to Login"
-    },
-    "vc-view":{
-        "warning-header": "Credential",
-        "warning-msg": "By generating this code, you agree that the data contained in your permit, and its legal status, will be displayed on the reader device to verify its validity.",
-        "qr-title": "QR Credential",
-        "qr-close": "Close"
-    }
+  "menu": {
+    "home": "Home",
+    "credentials": "Credentials",
+    "dids": "Dids",
+    "camera-selector": "Camera Selector",
+    "language-selector": "Language Selector",
+    "terms-of-user": "Terms of User",
+    "privacy-policy": "Privacy Policy",
+    "faqs": "FAQs",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "camera-selector": {
+    "title": "Camera Selector",
+    "no-device": "No device"
+  },
+  "credential-offer": {
+    "title": "Credential Offer",
+    "generate": "Create Credential",
+    "ok-header": "Congratulations",
+    "vc-saved": "Credential saved"
+  },
+  "credentials": {
+    "title": "Credentials",
+    "add": "Add",
+    "nocred": "No credential loaded"
+  },
+  "dids": {
+    "title": "Dids"
+  },
+  "faqs": {
+    "title": "Faqs"
+  },
+  "home": {
+    "title": "Home",
+    "hello": "Welcome to IN2Wallet",
+    "scan": "Identify",
+    "access": "Access",
+    "get-cred": "Get Credential",
+    "ok-header": "Congratulations",
+    "ok-msg": "VC saved",
+    "unsucces": "Unsuccesfull",
+    "already-saved": "VC already saved",
+    "no-credential": "No stored valid credential"
+  },
+  "language-selector": {
+    "title": "Language Selector"
+  },
+  "ebsi": {
+    "title": "EBSI"
+  },
+  "login": {
+    "title": "Login",
+    "login": "Login",
+    "register": "Not registered? Sign up",
+    "error": "Username or password incorrect"
+  },
+  "privacy-policy": {
+    "title": "Privacy Policy"
+  },
+  "register": {
+    "title": "Register",
+    "register": "Register",
+    "login": "Go to Login",
+    "error": "There was an error",
+    "email-error": "Invalid email"
+  },
+  "settings": {
+    "title": "Settings"
+  },
+  "terms-of-use": {
+    "title": "Terms Of Use"
+  },
+  "vc-selector": {
+    "title": "Vc Selector",
+    "select-cred": "Select Credential",
+    "send-cred": "Send Credential",
+    "ok-header": "Congratulations",
+    "ok-message": "Log in completed",
+    "ko-header": "Error",
+    "ko-message": "Failed to Login"
+  },
+  "vc-view": {
+    "warning-header": "Credential",
+    "warning-msg": "By generating this code, you agree that the data contained in your permit, and its legal status, will be displayed on the reader device to verify its validity.",
+    "qr-title": "QR Credential",
+    "qr-close": "Close"
+  }
 }

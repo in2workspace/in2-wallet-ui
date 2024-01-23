@@ -1,6 +1,6 @@
 <ion-header [translucent]="false">
   <ion-toolbar style="padding-right: 0.5rem;">
-    <img alt src="assets/icon/IDEP_blanc_400x200.png" width="auto" slot="start" height="35px"/>
+    <img alt src="assets/icon/IDEP_blanc_400x200.png" width="auto" slot="start" height="35px" />
     <ion-text slot="primary" color="white">{{userName}}</ion-text>
     <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
   </ion-toolbar>
@@ -12,18 +12,27 @@
     {{"settings.title"|translate}}
   </b>
   <ion-list>
-      <ion-item [routerLink]="['/tabs/camera-selector']">
-       
-        <ion-icon color="grey" name="camera" style="margin-right: 1rem;"></ion-icon><ion-text>{{"camera-selector.title"|translate}}</ion-text>
-      </ion-item>
-      <ion-item [routerLink]="['/tabs/language-selector']">
-       
-        <ion-icon color="grey" name="globe-outline"  style="margin-right: 1rem;"></ion-icon>{{"language-selector.title"|translate}}
-      </ion-item>
-      <ion-item  (click)="logout()">
-       
-        <ion-icon color="grey" name="log-out-outline"  style="margin-right: 1rem;"></ion-icon>{{"menu.logout"|translate}}
-      </ion-item>
+    <ion-item [routerLink]="['/tabs/camera-selector']">
+
+      <ion-icon color="grey" name="camera"
+        style="margin-right: 1rem;"></ion-icon><ion-text>{{"camera-selector.title"|translate}}</ion-text>
+    </ion-item>
+    <ion-item [routerLink]="['/tabs/language-selector']">
+
+      <ion-icon color="grey" name="globe-outline"
+        style="margin-right: 1rem;"></ion-icon>{{"language-selector.title"|translate}}
+    </ion-item>
+    <ion-item (click)="goHomeWithEBSI()">
+
+      <ion-icon color="grey" name="id-card-outline" style="margin-right: 1rem;"></ion-icon>{{"ebsi.title"|translate}}
+    </ion-item>
+    <ion-item (click)="logout()">
+
+      <ion-icon color="grey" name="log-out-outline" style="margin-right: 1rem;"></ion-icon>{{"menu.logout"|translate}}
+    </ion-item>
   </ion-list>
+
+
+  <ion-alert [isOpen]="showAlert" class="custom-alert" [header]="'home.unsucces' | translate" [message]="'home.already-saved' | translate"></ion-alert>
 
 </ion-content>

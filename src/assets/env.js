@@ -1,6 +1,6 @@
 (function(window) {
     window["env"] = window["env"] || {};
-  
+
     // Environment variables
     window["env"]["wcaUrl"] = "http://localhost:8086";
     window["env"]["dataUrl"] = "http://localhost:8081";
