@@ -33,12 +33,12 @@ export class CredentialsPage implements OnInit {
 
   ngOnInit() {
     this.userName = this.authenticationService.getName();
-
     this.refresh();
   }
   scan(){
     this.router.navigate(['/tabs/home/'], {
       queryParams: { toggleScan: true, from: 'credential', show_qr: true },
+      replaceUrl: true,
     });
   }
 
