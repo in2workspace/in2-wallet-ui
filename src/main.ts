@@ -8,9 +8,21 @@ import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClient,
+  HttpClientModule,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage-angular';
-import { AuthModule, LogLevel, AuthInterceptor, authInterceptor } from 'angular-auth-oidc-client';
+import {
+  AuthModule,
+  LogLevel,
+  AuthInterceptor,
+  authInterceptor,
+} from 'angular-auth-oidc-client';
+import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
 
 if (environment.production) {
   enableProdMode();
@@ -19,35 +31,44 @@ if (environment.production) {
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    importProvidersFrom(IonicModule.forRoot({innerHTMLTemplatesEnabled:true})),
+    importProvidersFrom(
+      IonicModule.forRoot({ innerHTMLTemplatesEnabled: true })
+    ),
     importProvidersFrom(HttpClientModule),
     importProvidersFrom(
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: httpTranslateLoader,
-        deps: [HttpClient]
-      }
-    })),
+      TranslateModule.forRoot({
+        loader: {
+          provide: TranslateLoader,
+          useFactory: httpTranslateLoader,
+          deps: [HttpClient],
+        },
+      })
+    ),
     importProvidersFrom(IonicStorageModule.forRoot()),
-    importProvidersFrom( AuthModule.forRoot({
-      config: {
-        authority: environment.loginParams.login_url,
-        redirectUrl: window.location.origin,
-        postLogoutRedirectUri: window.location.origin,
-        clientId: environment.loginParams.client_id,
-        scope: environment.loginParams.scope,
-        responseType: environment.loginParams.grant_type,
-        silentRenew: true,
-        useRefreshToken: true,
-        logLevel: LogLevel.Debug,
-        secureRoutes:[environment.data_url,environment.wca_url]
-      }
-    })
+    importProvidersFrom(
+      AuthModule.forRoot({
+        config: {
+          authority: environment.loginParams.login_url,
+          redirectUrl: window.location.origin,
+          postLogoutRedirectUri: window.location.origin,
+          clientId: environment.loginParams.client_id,
+          scope: environment.loginParams.scope,
+          responseType: environment.loginParams.grant_type,
+          silentRenew: true,
+          useRefreshToken: true,
+          logLevel: LogLevel.Debug,
+          secureRoutes: [environment.data_url, environment.wca_url],
+        },
+      })
     ),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     provideHttpClient(withInterceptors([authInterceptor()])),
     provideRouter(routes),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+    },
   ],
 });
 export function httpTranslateLoader(http: HttpClient) {

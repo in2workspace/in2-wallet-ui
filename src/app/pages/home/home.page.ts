@@ -76,11 +76,9 @@ export class HomePage implements OnInit {
         if (qrCode.includes("credential_offer_uri")) {
           this.escaneado = '';
           setTimeout(() => {
-            this.isAlertOpen = false;
             this.router.navigate(['/tabs/credentials/'])
 
           }, TIME_IN_MS);
-          this.isAlertOpen = true;
         } else {
           // fixme: Sonar Lint: Need .then()
           this.router.navigate(['/tabs/vc-selector/'], {
@@ -90,38 +88,8 @@ export class HomePage implements OnInit {
         }
       },
       error: (err) => {
-        if (err.status == 422) {
-          setTimeout(() => {
-            this.isAlertOpen = false;
-          }, TIME_IN_MS);
-          this.isAlertOpen = true;
-          this.escaneado = '';
-        } else if (err.status == 404) {
-          this.isAlertOpenNotFound = true;
-          this.escaneado = '';
-        } else {
-          setTimeout(() => {
-            this.isAlertOpenFail = false;
-          }, TIME_IN_MS);
-          this.isAlertOpenFail = true;
-          this.escaneado = '';
-        }
+       
       },
     });
   }
-
-  setOpen(isOpen: boolean) {
-    this.isAlertOpen = isOpen;
-  }
-
-  setOpenNotFound(isOpen: boolean) {
-    this.isAlertOpenNotFound = isOpen;
-    // fixme: Sonar Lint: Need .then()
-    this.router.navigate(['/home'], {});
-  }
-
-  isAlertOpenNotFound = false;
-  isAlertOpenFail = false;
-  isAlertOpen = false;
-
 }

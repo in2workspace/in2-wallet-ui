@@ -38,15 +38,6 @@
         (click)="untoggleScan()">Enrere</ion-button>
     </ion-row>
   </ion-footer>
-  <ion-alert [isOpen]="isAlertOpen" class="custom-alert" [header]="'home.ok-msg' | translate"
-    message='<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style="border-radius: 2px">'
-    (didDismiss)="setOpen(false)"></ion-alert> <ion-alert [isOpen]="isAlertOpenFail" class="custom-alert"
-    [header]="'home.unsucces' | translate" [message]="'home.already-saved' | translate"
-    (didDismiss)="setOpen(false)"></ion-alert>
-  <ion-alert [isOpen]="isAlertOpenNotFound" class="custom-alert" [header]="'home.unsucces' | translate"
-    [message]="'home.no-credential' | translate" [buttons]="alertButtons"
-    (didDismiss)="setOpenNotFound(false)"></ion-alert>
-
 </ion-content>
 
 <div *ngIf="ebsiFlag" class="popup-bg-cover"></div>
