@@ -92,4 +92,28 @@ export class HomePage implements OnInit {
       },
     });
   }
+
+
+  copyToClipboard(textToCopy: string) {
+    let texto = '';
+
+    if (textToCopy === 'did-text') {
+      texto = document.getElementById('did-text')!.innerText;
+      const prefix = 'DID: ';
+      if (texto.startsWith(prefix)) {
+        texto = texto.substring(prefix.length);
+      }
+    } else if (textToCopy === 'endpoint-text') {
+      texto = 'test-openid-credential-offer://';
+    }
+
+    const textarea = document.createElement('textarea');
+    textarea.value = texto;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+  }
+
+
 }

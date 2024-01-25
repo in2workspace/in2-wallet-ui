@@ -39,7 +39,7 @@ ion-button {
 
   padding: 20px;
 
-  width: 20rem;
+  width: auto;
 
   text-align: center;
 
@@ -54,15 +54,21 @@ ion-button {
   background-color: white;
 }
 
-.did-data-wrapper {
+.did-data-wrapper div {
   display: flex;
-  flex-direction: column;
 
   word-break: break-all;
 }
 
+.did-data-wrapper button {
+  margin: 5px;
+
+  background-color: transparent;
+}
+
 .did-data-wrapper span {
   padding: 20px;
+  padding-right: 0px;
 }
 
 .next-button-ebsi {
@@ -82,4 +88,11 @@ ion-button {
 
 .next-button-ebsi:active {
   background-color: #007995;
+}
+
+#did-text {
+  max-width: 15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

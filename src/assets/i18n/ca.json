@@ -50,7 +50,8 @@
       "endpoint": "test-openid-credential-offer://",
       "next": "Següent"
     },
-    "error-ebsi": "No s'ha pogut retornar el did."
+    "error-ebsi": "No s'ha pogut retornar el did.",
+    "copy": "Copiar al porta-retalls"
   },
   "language-selector": {
     "title": "Selector d'idioma"
