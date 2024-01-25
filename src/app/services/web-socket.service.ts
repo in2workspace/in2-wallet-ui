@@ -1,0 +1,49 @@
+// websocket.service.ts
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class WebsocketService {
+  private socket!: WebSocket;
+  private messageSubject = new BehaviorSubject<string>("");
+
+  constructor() {}
+
+  connect(url: string): void {
+    this.socket = new WebSocket(url);
+
+    this.socket.onopen = () => {
+      console.log('Conexión WebSocket abierta');
+    };
+
+    this.socket.onmessage = (event) => {
+      console.log('Mensaje recibido:', event.data);
+    };
+
+    this.socket.onclose = () => {
+      console.log('Conexión WebSocket cerrada');
+    };
+  }
+
+  getMessageSubject() {
+    return this.messageSubject.asObservable();
+  }
+  
+  private handleIncomingMessage(message: string) {
+    this.messageSubject.next(message);
+  }
+
+  sendMessage(message: string): void {
+    if (this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(message);
+    } else {
+      console.error('La conexión WebSocket no está abierta.');
+    }
+  }
+
+  closeConnection(): void {
+    this.socket.close();
+  }
+}
