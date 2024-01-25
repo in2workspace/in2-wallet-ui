@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {IonicModule} from '@ionic/angular';
+import {IonicModule, LoadingController} from '@ionic/angular';
 import {AuthenticationService} from 'src/app/services/authentication.service';
 import {Router, RouterModule} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
@@ -33,6 +33,7 @@ export class RegisterPage {
   showEmailError: boolean = false;
 
   error: string = '';
+  private loadingCtrl = inject( LoadingController);
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -40,7 +41,11 @@ export class RegisterPage {
   ) {
   }
 
-  onSubmit() {
+  async onSubmit() {
+    const loading = await this.loadingCtrl.create({
+    });
+
+    loading.present();
     // fixme: .subscribe() is deprecated, use .toPromise() instead
     this.authenticationService.register(this.login.value).subscribe(() => {
         // fixme: this.router.navigate() needs then().
@@ -49,7 +54,9 @@ export class RegisterPage {
       (error) => {
         this.error = 'register.error';
       }
-    );
+    ).add(() => {
+      loading.dismiss();
+    });
   }
 
   handleEmailBlur() {

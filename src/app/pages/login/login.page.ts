@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {IonicModule} from '@ionic/angular';
+import {IonicModule, LoadingController} from '@ionic/angular';
 import {AuthenticationService} from 'src/app/services/authentication.service';
 import {Router, RouterModule} from '@angular/router';
 import {environment} from 'src/environments/environment';
@@ -29,19 +29,26 @@ export class LoginPage {
 
   private authenticationService = inject(AuthenticationService);
   private router = inject(Router);
+  private loadingCtrl = inject( LoadingController);
+  async onSubmit() {
+    const loading = await this.loadingCtrl.create({
+    });
 
-  onSubmit() {
+    loading.present();
     // fixme: .subscribe() is deprecated, use .toPromise() instead
-    this.authenticationService.login().subscribe(() => {
+    this.authenticationService.login().subscribe({
+      next: () => {
         // fixme: this.router.navigate() needs then().
         this.router.navigate(['/tabs/home/'], {})
       },
-      (error) => {
+      error: (error) => {
         console.log("ERR:", error);
         this.error = 'login.error';
         console.log("ERR2:", error);
-      }
-    );
+      }}
+    ).add(() => {
+      loading.dismiss();
+    });
   }
 
 }

@@ -16,13 +16,13 @@
           <ion-row class="ion-justify-content-center">
             <form [formGroup]="login" (ngSubmit)="onSubmit()">
               <ion-item class="item-username">
-                <ion-input placeholder="Username" labelPlacement="floating" type="text" required formControlName="username"></ion-input>
+                <ion-input label="Username" placeholder="Username" labelPlacement="floating" type="text" required formControlName="username"></ion-input>
                 <ion-icon name="person-outline" slot="start"></ion-icon>
   
               </ion-item >
               <br/>
               <ion-item class="item-username">
-                <ion-input placeholder="Email" labelPlacement="floating" type="email" required formControlName="email" (focusout)="handleEmailBlur()"></ion-input>
+                <ion-input label="Email" placeholder="Email" labelPlacement="floating" type="email" required formControlName="email" (focusout)="handleEmailBlur()"></ion-input>
                 <ion-icon name="mail-outline" slot="start"></ion-icon>
   
               </ion-item >
@@ -31,7 +31,7 @@
               </ion-item>
               <br/>
               <ion-item class="item-username">
-                <ion-input placeholder="Password" labelPlacement="floating" type="password" required formControlName="password"></ion-input>
+                <ion-input label="Password" placeholder="Password" labelPlacement="floating" type="password" required formControlName="password"></ion-input>
                 <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
   
               </ion-item>
