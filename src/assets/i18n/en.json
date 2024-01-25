@@ -50,7 +50,8 @@
       "endpoint": "test-openid-credential-offer://",
       "next": "Next"
     },
-    "error-ebsi": "The did could not be returned."
+    "error-ebsi": "The did could not be returned.",
+    "copy": "Copy to clipboard"
   },
   "language-selector": {
     "title": "Language Selector"
