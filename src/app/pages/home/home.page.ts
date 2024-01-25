@@ -33,6 +33,8 @@ export class HomePage implements OnInit {
   from = '';
   scaned_cred: boolean = false;
   show_qr: boolean = false;
+  isScaned: boolean = false;
+  isReady: boolean = true;
 
   async startScan() {
     this.toggleScan = true;
@@ -63,6 +65,12 @@ export class HomePage implements OnInit {
     this.escaneado = '';
     this.userName = this.authenticationService.getName();
     this.scaned_cred = false;
+    this.isScaned = false;
+    this.isReady = true;
+  }
+
+  ionViewWillLeave() {
+    this.scaned_cred = false;
   }
 
   isCredOffer = false;
@@ -90,6 +98,9 @@ export class HomePage implements OnInit {
 
   qrCodeEmit(qrCode: string) {
     this.escaneado = qrCode;
+    console.log(this.isScaned, this.isReady);
+    if (!this.isScaned && this.isReady) {
+      this.isReady = false;
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
         if (qrCode.includes("credential_offer_uri")) {
@@ -103,6 +114,7 @@ export class HomePage implements OnInit {
             queryParams: {executionResponse: executionResponse},
           });
           this.escaneado = '';
+          this.isScaned = true;
         }
       },
       
@@ -119,13 +131,17 @@ export class HomePage implements OnInit {
         } else {
           setTimeout(() => {
             this.isAlertOpenFail = false;
+            this.isReady = false;
           }, TIME_IN_MS);
           this.isAlertOpenFail = true;
+          this.scaned_cred = false;
           this.escaneado = '';
         }
         this.toggleScan = false;
       },
     });
+    }
+    console.log(this.isScaned);
   }
 
   credentialClick() {
@@ -140,6 +156,7 @@ export class HomePage implements OnInit {
 
   setOpen(isOpen: boolean) {
     this.isAlertOpen = isOpen;
+    this.isReady = true;
   }
 
   setOpenNotFound(isOpen: boolean) {

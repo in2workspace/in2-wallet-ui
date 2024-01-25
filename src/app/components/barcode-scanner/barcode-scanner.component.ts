@@ -18,15 +18,12 @@ export class BarcodeScannerComponent implements OnInit {
   cameraEnabled: boolean = false;
   hasDevices: boolean = false;
   formatsEnabled: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
-  isScaned: boolean = false;
 
   constructor(private cameraService: CameraService) {
-    this.isScaned = false;
     console.log("constructor");
   }
 
   ngOnInit(): void {
-    this.isScaned = false;
     this.cameraService.navEnabled$
       .subscribe(preferedDevice => {
           this.cameraEnabled = preferedDevice
@@ -48,10 +45,7 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
   onCodeResult(resultString: string) {
-    if (!this.isScaned) {
       const variable = this.qrCode.emit(resultString);
       console.log(variable);
-      this.isScaned = true;
-    }
   }
 }
