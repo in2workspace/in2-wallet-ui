@@ -45,21 +45,23 @@ bootstrapApplication(AppComponent, {
       })
     ),
     importProvidersFrom(IonicStorageModule.forRoot()),
-    importProvidersFrom(
-      AuthModule.forRoot({
-        config: {
-          authority: environment.loginParams.login_url,
-          redirectUrl: window.location.origin,
-          postLogoutRedirectUri: window.location.origin,
-          clientId: environment.loginParams.client_id,
-          scope: environment.loginParams.scope,
-          responseType: environment.loginParams.grant_type,
-          silentRenew: true,
-          useRefreshToken: true,
-          logLevel: LogLevel.Debug,
-          secureRoutes: [environment.data_url, environment.wca_url],
-        },
-      })
+    importProvidersFrom( AuthModule.forRoot({
+      config: {
+        authority: environment.loginParams.login_url,
+        redirectUrl: window.location.origin,
+        postLogoutRedirectUri: window.location.origin,
+        clientId: environment.loginParams.client_id,
+        scope: environment.loginParams.scope,
+        responseType: environment.loginParams.grant_type,
+        silentRenew: true,
+        useRefreshToken: true,
+        ignoreNonceAfterRefresh: true,
+        triggerRefreshWhenIdTokenExpired: false,
+        autoUserInfo: false,
+        logLevel: LogLevel.Debug,
+        secureRoutes:[environment.data_url,environment.wca_url]
+      }
+    })
     ),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     provideHttpClient(withInterceptors([authInterceptor()])),

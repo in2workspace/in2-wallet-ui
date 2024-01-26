@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, PopoverController } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { DataService } from 'src/app/services/data.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import {LogoutPage } from '../logout/logout.page';
 
 @Component({
   selector: 'app-settings',
@@ -21,8 +22,9 @@ export class SettingsPage implements OnInit {
   constructor(private authenticationService: AuthenticationService,
     private router: Router,
     private dataService: DataService,
-    private http: HttpClient
-  ) { }
+    private http: HttpClient,
+    private popoverController: PopoverController
+    ) { }
   userName: string = '';
   isAlertOpen: boolean = false;
 
@@ -52,5 +54,15 @@ export class SettingsPage implements OnInit {
     this.authenticationService.logout().subscribe(() => {
       this.router.navigate(['/login'], {})
     });
+  }
+  async openPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: LogoutPage, 
+      event: ev,
+      translucent: true,
+      cssClass: 'custom-popover'
+    });
+  
+    await popover.present();
   }
 }

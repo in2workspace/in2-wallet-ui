@@ -4,7 +4,10 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
+<<<<<<< HEAD
 import { WebsocketService } from './services/web-socket.service';
+=======
+>>>>>>> origin/feature/new_credential_added_page
 
 @Component({
   selector: 'app-root',

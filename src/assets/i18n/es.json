@@ -1,18 +1,20 @@
 {
   "menu": {
-    "home": "Inicio",
-    "credentials": "Credenciales",
-    "dids": "Dids",
-    "camera-selector": "Selector de Camara",
-    "language-selector": "Selector de Idioma",
-    "terms-of-user": "Terminos de Uso",
-    "privacy-policy": "Politica de Privacidad",
-    "faqs": "FAQs",
-    "settings": "Ajustes",
-    "logout": "Logout"
+        "home": "Inicio",
+        "credentials": "Credenciales",
+        "dids": "Dids",
+        "camera-selector": "Selector de Camara",
+        "language-selector": "Selector de Idioma",
+        "terms-of-user": "Terminos de Uso",
+        "privacy-policy": "Politica de Privacidad",
+        "faqs": "FAQs",
+        "settings": "Ajustes",
+        "logout": "Cerrar sesión"
+    
   },
   "camera-selector": {
-    "title": "Selector de Camara",
+    "title": "Camara",
+        "settings": "Configuración de la camara",
     "no-device": "Sin dispositivo"
   },
   "credential-offer": {
@@ -35,11 +37,12 @@
   "home": {
     "title": "Home",
     "hello": "Bienvenido a IN2Wallet",
-    "scan": "Identificate",
+    "scan": "Escanea el QR",
+        "add-credential": "Añadir una credencial",
     "access": "Accede a un espacio",
     "get-cred": "Obtener Credencial",
     "ok-header": "Enhorabuena",
-    "ok-msg": "VC guardado",
+    "ok-msg": "Credencial agregada",
     "unsucces": "Sin éxito",
     "already-saved": "VC ya guardado",
     "no-credential": "No hay credencial válida almacenada",
@@ -88,12 +91,17 @@
     "ok-header": "Enhorabuena",
     "ok-message": "Login correcto",
     "ko-header": "Error",
-    "ko-message": "El login ha fallado"
+    "ko-message": "El login ha fallado",
+        "close": "Cerrar"
   },
   "vc-view": {
     "warning-header": "Credencial",
     "warning-msg": "Al generar este código, aceptas que los datos contenidos en tu permiso, y su situación legal, se muestren en el dispositivo lector para verificar su validez.",
     "qr-title": "Credencial QR",
-    "qr-close": "Cerrar"
+    "qr-close": "Cerrar",
+        "delete-header": "Estas seguro de eliminar la credencial?",
+        "delete-message": "Si eliminas la credencial de la aplicacion y necesitas recuperarla tendrás que pedir una nueva.",
+        "delete-confirm": "Sí, eliminala",
+        "delete-cancel": "Cancela"
   }
 }

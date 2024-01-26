@@ -1,26 +1,58 @@
-<ion-header [translucent]="false">
-  <ion-toolbar style="padding-right: 0.5rem;">
-    <img alt src="assets/icon/IDEP_blanc_400x200.png" width="auto" slot="start" height="35px" />
-    <ion-text slot="primary" color="white">{{userName}}</ion-text>
-    <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+
+<ion-content [fullscreen]="true" class="ion-padding" style="--ion-background-color: #DDE6F6">
+
   <ion-grid>
     <ion-row class="ion-justify-content-center">
-      <ion-button style="margin-top:5rem;width: 15rem;height: 5rem;" size="large" *ngIf="!toggleScan"
-        (click)="startScan()">
-        <div class="custom-button-content"><ion-icon size="large" color="white"
-            name="qr-code"></ion-icon><ion-label>{{"home.scan"|translate}}</ion-label> </div>
+      <ion-button style="margin-top:5rem;width: 15rem;height: 5rem;" size="large" (click)="startScan()"> <div class="custom-button-content"><ion-icon size="large"color="white"name="qr-code"></ion-icon><ion-label>{{"home.scan"|translate}}</ion-label> </div></ion-button>
+    </ion-row>    
+  </ion-grid>
+  
+</ion-content>
+
+<ion-header [translucent]="false">
+  <ion-toolbar style="padding-right: 0.5rem">
+    <img alt src="assets/icon/dome_white_logo.png" width="auto" slot="start" height="35px"/>
+    <ion-button slot="end" color="primary" class="toolbar-but" (click)="openPopover($event)">
+      {{userName}}
+      <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
+    </ion-button>
+    </ion-toolbar>
+    </ion-header>
+
+    <ion-content [fullscreen]="true" class="ion-padding" style="--ion-background-color: #DDE6F6">
+      <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      
+      <ion-button
+        style="margin-top: 5rem; width: 15rem; height: 5rem"
+        size="large"
+        *ngIf="!toggleScan"
+        (click)="startScan()"
+      >
+        <div class="custom-button-content">
+          <ion-icon size="large" color="white" name="qr-code"></ion-icon
+          ><ion-label>{{"home.scan"|translate}}</ion-label>
+        </div>
       </ion-button>
     </ion-row>
 
     <ion-row class="ion-justify-content-center">
-      <ion-button style="width: 15rem;height: 5rem;" size="large" *ngIf="!toggleScan"
-        [routerLink]="['/tabs/credentials']">
-        <div class="custom-button-content"><ion-img style="height:2rem" color="white" name="qr-code"
-            src="assets/icon/Torno/torno-blanc.png"></ion-img><ion-label>{{"home.access"|translate}} </ion-label> </div>
+      <ion-button
+        style="width: 15rem; height: 5rem"
+        size="large"
+        *ngIf="!toggleScan"
+        [routerLink]="['/tabs/credentials']"
+      >
+        <div class="custom-button-content">
+          <ion-img
+            style="height: 2rem"
+            color="white"
+            name="qr-code"
+            src="assets/icon/Torno/torno-blanc.png"
+          ></ion-img
+          ><ion-label>{{"home.access"|translate}} </ion-label>
+        </div>
       </ion-button>
     </ion-row>
   </ion-grid>
@@ -28,14 +60,16 @@
   <div [hidden]="!toggleScan">
     <ion-grid>
       <ion-row class="ion-justify-content-center">
-        <app-barcode-scanner *ngIf="escaneado===''" (qrCode)="qrCodeEmit($event)"></app-barcode-scanner>
+        <app-barcode-scanner
+          *ngIf="escaneado===''"
+          (qrCode)="qrCodeEmit($event)"
+        ></app-barcode-scanner>
       </ion-row>
     </ion-grid>
   </div>
   <ion-footer [translucent]="false">
-
-    <ion-row *ngIf="toggleScan" class="ion-justify-content-center"> <ion-button
-        (click)="untoggleScan()">Enrere</ion-button>
+    <ion-row *ngIf="toggleScan" class="ion-justify-content-center">
+      <ion-button (click)="untoggleScan()">Enrere</ion-button>
     </ion-row>
   </ion-footer>
 </ion-content>
@@ -46,16 +80,28 @@
   <span>{{ 'home.ebsi-popup.info' | translate }}</span>
   <div class="did-data-wrapper">
     <div>
-      <span id="did-text"><strong>{{ 'home.ebsi-popup.did' | translate }} </strong>{{did}}</span><button
-        (click)="copyToClipboard('did-text')" title="{{ 'home.copy' | translate }}"><ion-icon name="copy-outline"
-          style="font-size: 30px;"></ion-icon></button>
+      <span id="did-text"
+        ><strong>{{ 'home.ebsi-popup.did' | translate }} </strong>{{did}}</span
+      ><button
+        (click)="copyToClipboard('did-text')"
+        title="{{ 'home.copy' | translate }}"
+      >
+        <ion-icon name="copy-outline" style="font-size: 30px"></ion-icon>
+      </button>
     </div>
     <div>
-      <span><strong>{{ 'home.ebsi-popup.credential-offer' | translate }}</strong>{{ 'home.ebsi-popup.endpoint' |
-        translate
-        }}</span><button (click)="copyToClipboard('endpoint-text')" title="{{ 'home.copy' | translate }}"><ion-icon
-          name="copy-outline" style="font-size: 30px;"></ion-icon></button>
+      <span
+        ><strong>{{ 'home.ebsi-popup.credential-offer' | translate }}</strong>{{
+        'home.ebsi-popup.endpoint' | translate }}</span
+      ><button
+        (click)="copyToClipboard('endpoint-text')"
+        title="{{ 'home.copy' | translate }}"
+      >
+        <ion-icon name="copy-outline" style="font-size: 30px"></ion-icon>
+      </button>
     </div>
   </div>
-  <button class="next-button-ebsi" (click)="startScan()">{{ 'home.ebsi-popup.next' | translate }}</button>
+  <button class="next-button-ebsi" (click)="startScan()">
+    {{ 'home.ebsi-popup.next' | translate }}
+  </button>
 </div>

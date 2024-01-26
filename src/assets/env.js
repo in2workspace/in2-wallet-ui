@@ -2,8 +2,8 @@
     window["env"] = window["env"] || {};
 
     // Environment variables
-    window["env"]["wcaUrl"] = "http://localhost:8086";
-    window["env"]["dataUrl"] = "http://localhost:8081";
+    window["env"]["wcaUrl"] = "http://localhost:8081";
+    window["env"]["dataUrl"] = "http://localhost:8086";
     window["env"]["loginUrl"] = "http://localhost:9099/realms/wallet";
     window["env"]["registerUrl"] = "http://localhost:8085";
     window["env"]["execContUri"] = "/api/v2/execute-content";

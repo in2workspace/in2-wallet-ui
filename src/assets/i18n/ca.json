@@ -9,10 +9,11 @@
     "privacy-policy": "Politica de Privacitat",
     "faqs": "FAQs",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Tancar sessió"
   },
   "camera-selector": {
-    "title": "Selector de Camara",
+    "title": "Camara",
+        "settings": "Configuració de la camara",
     "no-device": "Sense dispositiu"
   },
   "credential-offer": {
@@ -35,11 +36,12 @@
   "home": {
     "title": "Home",
     "hello": "Benvingut a IN2Wallet",
-    "scan": "Identifica't",
+    "scan": "Escaneja el QR",
+        "add-credential": "Afegir una credencial",
     "access": "Accedeix a un espai",
     "get-cred": "Obtenir Credencial",
     "ok-header": "Enhorabona",
-    "ok-msg": "VC guardat",
+    "ok-msg": "S'ha afegit la credencial",
     "unsucces": "Sense èxit",
     "already-saved": "VC ja guardat",
     "no-credential": "No hi ha credencial vàlida emmagatzemada",
@@ -88,12 +90,17 @@
     "ok-header": "Enhorabona",
     "ok-message": "Login correcte",
     "ko-header": "Error",
-    "ko-message": "El login ha fallat"
+    "ko-message": "El login ha fallat",
+        "close": "Tancar"
   },
   "vc-view": {
     "warning-header": "Credencial",
     "warning-msg": "Al generar aquest codi, acceptes que les dades contingudes en el teu permís, i la seva situació legal, es mostrin en el dispositiu lector per verificar la seva validesa.",
     "qr-title": "Credencial QR",
-    "qr-close": "Tancar"
+    "qr-close": "Tancar",
+        "delete-header": "Estàs segur d'eliminar la credencial?",
+        "delete-message": "Si elimines la credencial de l'aplicació i necessites recuperar-la hauràs de demanar-ne una de nova.",
+        "delete-confirm": "Sí, elimina-la",
+        "delete-cancel": "Cancel·la"
   }
 }

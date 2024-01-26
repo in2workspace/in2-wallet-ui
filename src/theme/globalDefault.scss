@@ -37,6 +37,7 @@ ion-alert.custom-alert {
 
 .content {
     --background: url("../../customAssets/icon/background.png") center/cover fixed no-repeat;
+    
 }
 
 .item-trns {
@@ -44,7 +45,7 @@ ion-alert.custom-alert {
 	color: #B0FF2B; 
 }
 ion-item{
-    --border-color:#B0FF2B;
+    --border-color:#ffffff;
 }
 .custom-button-content {
     display: flex;
@@ -63,4 +64,64 @@ ion-item{
   }
   .login-row{
     margin-top: 2rem;
+  }
+
+  .custom-button-row {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 60px;
+    margin-right: 20px;
+  }
+
+  .pages_titles {
+    margin: 20px;
+    font-size: 1em;
+    font-weight: bold;
+  }
+  .custom-alert-delete {
+    display: flex;
+  }
+
+  .custom-alert-delete .alert-title {
+    font-weight: bold;
+    font-size: 14px
+  }
+
+  .alert-button-role-confirm {
+    color: black !important;
+    text-transform: none !important;
+    font-weight: bold !important;
+  }
+
+  .alert-button-role-cancel {
+    color: black !important;
+    text-transform: none !important;
+  }
+
+  .alert-button-group {
+    display: flex;
+    justify-content: space-between !important;
+  }
+
+  .alert.head {
+    font-size: 12px !important;
+  }
+
+  .toolbar-container {
+    flex-direction: column !important;
+    display: flex !important;
+    justify-content: end !important;
+  }
+
+  ion-button.toolbar-but {
+    --box-shadow: none !important;
+    text-transform: none;
+  }
+
+  .custom-popover {
+    --background: #00ADD3;
+  }
+  .logout-list {
+    background-color: #00ADD3;
   }

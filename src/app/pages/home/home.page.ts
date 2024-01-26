@@ -1,13 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { BarcodeScannerComponent } from 'src/app/components/barcode-scanner/barcode-scanner.component';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { WalletService } from 'src/app/services/wallet.service';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-import { TranslateModule } from '@ngx-translate/core';
+
 import { DataService } from 'src/app/services/data.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {IonicModule, PopoverController} from '@ionic/angular';
+import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
+import {ActivatedRoute, Router,RouterModule} from '@angular/router';
+import {WalletService} from 'src/app/services/wallet.service';
+import {AuthenticationService} from 'src/app/services/authentication.service';
+import {TranslateModule} from '@ngx-translate/core';
+import {LogoutPage } from '../logout/logout.page';
 
 const TIME_IN_MS = 1500;
 
@@ -36,6 +38,9 @@ export class HomePage implements OnInit {
   async startScan() {
     this.toggleScan = true;
     this.ebsiFlag = false;
+    this.router.navigate(['/tabs/credentials/'], {
+      queryParams: { toggleScan: true, from: 'home', show_qr: true },
+    });
   }
 
 
@@ -46,16 +51,26 @@ export class HomePage implements OnInit {
 
   constructor(
     private router: Router,
-    private walletService: WalletService,
     private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
-    private dataService: DataService
+    private dataService: DataService,
+    private popoverController: PopoverController,
+    private walletService: WalletService
+    ) {
+  }
 
-  ) {
+  async openPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: LogoutPage, 
+      event: ev,
+      translucent: true,
+      cssClass: 'custom-popover'
+    });
+  
+    await popover.present();
   }
 
   ngOnInit() {
-    this.escaneado = '';
     this.userName = this.authenticationService.getName();
     this.ebsiFlag = false;
     this.dataService.listenDid().subscribe((data) => {
@@ -115,5 +130,13 @@ export class HomePage implements OnInit {
     document.body.removeChild(textarea);
   }
 
+
+
+  logout(){
+    this.authenticationService.logout().subscribe(()=>{
+      this.router.navigate(['/login'], {})
+
+    });
+  }
 
 }

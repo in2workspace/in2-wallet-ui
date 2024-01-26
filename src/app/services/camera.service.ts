@@ -28,7 +28,6 @@ export class CameraService {
   changeCamera(camara: MediaDeviceInfo) {
     this.enabled.next(true);
     this.camara.next(camara);
-    // fixme: this.router.navigate() needs then().
     this.storageService.set('camara', camara);
   }
 
@@ -43,7 +42,6 @@ export class CameraService {
 
   noCamera() {
     this.enabled.next(false);
-    // fixme: this.router.navigate() needs then().
     this.storageService.remove('camara');
   }
 
