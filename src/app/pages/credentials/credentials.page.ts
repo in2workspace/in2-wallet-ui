@@ -60,10 +60,16 @@ export class CredentialsPage implements OnInit {
     this.scaned_cred = false;
     this.refresh();
   }
+
   scan(){
     this.toggleScan = true;
     this.show_qr = true;
     console.log("from", this.from);
+    this.refresh();
+    this.router.navigate(['/tabs/home/'], {
+      queryParams: { toggleScan: true, from: 'credential', show_qr: true },
+      replaceUrl: true,
+    });
   }
 
   logout(){

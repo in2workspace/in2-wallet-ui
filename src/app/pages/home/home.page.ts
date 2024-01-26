@@ -5,7 +5,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {IonicModule, PopoverController} from '@ionic/angular';
 import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
-import {ActivatedRoute, Router,RouterModule} from '@angular/router';
+import {ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {WalletService} from 'src/app/services/wallet.service';
 import {AuthenticationService} from 'src/app/services/authentication.service';
 import {TranslateModule} from '@ngx-translate/core';
@@ -38,10 +38,17 @@ export class HomePage implements OnInit {
   async startScan() {
     this.toggleScan = true;
     this.ebsiFlag = false;
+    this.show_qr = true;
     this.router.navigate(['/tabs/credentials/'], {
       queryParams: { toggleScan: true, from: 'home', show_qr: true },
     });
   }
+  from = '';
+  scaned_cred: boolean = false;
+  show_qr: boolean = false;
+  isScaned: boolean = false;
+  isReady: boolean = true;
+
 
 
   @Input() availableDevices: MediaDeviceInfo[] = [];
@@ -55,9 +62,24 @@ export class HomePage implements OnInit {
     private route: ActivatedRoute,
     private dataService: DataService,
     private popoverController: PopoverController,
-    private walletService: WalletService
+    private walletService: WalletService,
     ) {
+      this.route.queryParams.subscribe((params) => {
+        this.toggleScan = params['toggleScan'];
+        this.from = params['from'];
+        this.show_qr = params['show_qr'];
+      })
   }
+
+
+  ionViewWillLeave() {
+    this.scaned_cred = false;
+  }
+
+  isCredOffer = false;
+
+
+
 
   async openPopover(ev: any) {
     const popover = await this.popoverController.create({
@@ -71,6 +93,11 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
+    this.escaneado = '';
+    this.userName = this.authenticationService.getName();
+    this.scaned_cred = false;
+    this.isScaned = false;
+    this.isReady = true;
     this.userName = this.authenticationService.getName();
     this.ebsiFlag = false;
     this.dataService.listenDid().subscribe((data) => {
@@ -79,13 +106,15 @@ export class HomePage implements OnInit {
     })
   }
 
-  isCredOffer = false;
   untoggleScan() {
     this.toggleScan = false;
 
   }
   qrCodeEmit(qrCode: string) {
     this.escaneado = qrCode;
+    console.log(this.isScaned, this.isReady);
+    if (!this.isScaned && this.isReady) {
+      this.isReady = false;
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
         if (qrCode.includes("credential_offer_uri")) {
@@ -100,12 +129,19 @@ export class HomePage implements OnInit {
             queryParams: { executionResponse: executionResponse },
           });
           this.escaneado = '';
+          this.isScaned = true;
         }
       },
       error: (err) => {
        
+          this.scaned_cred = false;
+          this.escaneado = '';
+        
+        this.toggleScan = false;
       },
     });
+    }
+    console.log(this.isScaned);
   }
 
 

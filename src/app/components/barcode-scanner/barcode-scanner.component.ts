@@ -20,6 +20,7 @@ export class BarcodeScannerComponent implements OnInit {
   formatsEnabled: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
 
   constructor(private cameraService: CameraService) {
+    console.log("constructor");
   }
 
   ngOnInit(): void {
@@ -38,13 +39,13 @@ export class BarcodeScannerComponent implements OnInit {
     }, 1000)
   }
 
-
   async onCamerasFound(devices: MediaDeviceInfo[]): Promise<void> {
     this.availableDevices.emit(devices);
 
   }
 
   onCodeResult(resultString: string) {
-    this.qrCode.emit(resultString);
+      const variable = this.qrCode.emit(resultString);
+      console.log(variable);
   }
 }
