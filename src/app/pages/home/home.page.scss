@@ -16,3 +16,24 @@ ion-button {
         bottom: 10px;
         right: 0;
     }
+.scan-button {
+    margin-top:5rem;
+    width: 15rem;
+    height: 5rem;
+}
+
+.home-text {
+    font-weight: bold;
+}
+
+.alert-ok {
+    border-radius: 2px;
+}
+
+.home-content {
+    --ion-background-color: #DDE6F6;
+}
+
+.toolbar {
+    padding-right: 0.5rem;
+}

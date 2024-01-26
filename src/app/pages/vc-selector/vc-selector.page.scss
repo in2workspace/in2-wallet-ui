@@ -17,3 +17,18 @@ ion-button:focus {
     color: #000000;
   }
   
+  .vc-selector-content {
+    --ion-background-color: #DDE6F6 !important;
+    box-shadow: none;
+  }
+
+  .vc-selector-card {
+    --ion-background-color: #DDE6F6;
+    background-color: #DDE6F6;
+    box-shadow: none;
+  }
+
+  .vc-selector-alert {
+    border-radius: 2px;
+    max-width: 60%;
+  }

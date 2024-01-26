@@ -1,5 +1,5 @@
 <ion-header [translucent]="false">
-  <ion-toolbar style="padding-right: 0.5rem;">
+  <ion-toolbar class="toolbar">
     <img alt src="assets/icon/dome_white_logo.png" width="auto" slot="start" height="35px"/>
     <ion-button slot="end" color="primary" class="toolbar-but" (click)="openPopover($event)">
       {{userName}}
@@ -8,19 +8,19 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding" style="--ion-background-color: #DDE6F6">
+<ion-content [fullscreen]="true" class="ion-padding home-content">
 
       <ion-grid>
         <ion-row class="ion-justify-content-center">
-          <ion-button style="margin-top:5rem;width: 15rem;height: 5rem;" size="large" *ngIf="!toggleScan" (click)="startScan()"> <div class="custom-button-content"><ion-icon size="large"color="white"name="qr-code"></ion-icon><ion-label>{{"home.scan"|translate}}</ion-label> </div></ion-button>
+          <ion-button class="scan-button" size="large" *ngIf="!toggleScan" (click)="startScan()"> <div class="custom-button-content"><ion-icon size="large"color="white"name="qr-code"></ion-icon><ion-label>{{"home.scan"|translate}}</ion-label> </div></ion-button>
         </ion-row>    
       </ion-grid>
 
   <div [hidden]="!toggleScan">
     <ion-grid  >
     
-      <ion-text style="font-weight: bold;" *ngIf="from==='credential'">{{"home.add-credential"|translate}}</ion-text>
-      <ion-text style="font-weight: bold;" *ngIf="from!=='credential'">{{"home.scan"|translate}}</ion-text>
+      <ion-text class="home-text" *ngIf="from==='credential'">{{"home.add-credential"|translate}}</ion-text>
+      <ion-text class="home-text" *ngIf="from!=='credential'">{{"home.scan"|translate}}</ion-text>
       <ion-row class="ion-justify-content-center">
       <app-barcode-scanner *ngIf="show_qr" (qrCode)="qrCodeEmit($event)"></app-barcode-scanner>
     </ion-row>
@@ -35,7 +35,7 @@
   [isOpen]="isAlertOpen"
   class="custom-alert"
   [header]="'home.ok-msg' | translate"
-  message='<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style="border-radius: 2px">'
+  message='<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" class="alert-ok">'
   (didDismiss)="setOpen(false)"
 ></ion-alert>  <ion-alert
 [isOpen]="isAlertOpenFail"
