@@ -44,7 +44,7 @@
         "access":"Accede a un espacio",
         "get-cred":"Obtener Credencial",
         "ok-header": "Enhorabuena",
-        "ok-msg": "VC guardado",
+        "ok-msg": "Credencial agregada",
         "unsucces": "Sin éxito",
         "already-saved": "VC ya guardado",
         "no-credential": "No hay credencial válida almacenada"
