@@ -25,5 +25,5 @@ export const environment = {
     ebsi_did_uri: window["env"]["ebsiDid"] || '/api/v2/ebsi-did',
     websocket: window["env"]["websocket"] || '/api/v2/pin'
   },
-  websocket_url: "ws://localhost:8081"
+  websocket_url: "ws://localhost:8081/api/v2/pin"
 };
