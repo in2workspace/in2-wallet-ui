@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
 import { WebsocketService } from './services/web-socket.service';
+import { AlertService } from './services/alert.service';
 
 @Component({
   selector: 'app-root',
@@ -26,18 +27,30 @@ export class AppComponent {
 
   messageSubscription: any;
   
-  constructor(public translate: TranslateService) {
+  constructor(public translate: TranslateService,
+    private alertService: AlertService
+    ) {
     translate.addLangs(['en']);
     translate.setDefaultLang('en');
     this.messageSubscription = this.websocketService
       .getMessageSubject()
-      .subscribe((message: any) => {
+      .subscribe(async (message: any) => {
         console.log('Mensaje recibido en otro componente:', message);
+        this.presentPinInputAlert();
+
       });
   }
   logout() {
     this.authenticationService.logout().subscribe(() => {
       this.router.navigate(['/login'], {});
     });
+  }
+  
+  ngOnDestroy() {
+    this.messageSubscription.unsubscribe();
+  }
+  async presentPinInputAlert() {
+    const pin = await this.alertService.showPinInputAlert();
+    this.websocketService.sendMessage(pin);
   }
 }
