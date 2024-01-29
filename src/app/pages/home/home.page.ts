@@ -71,7 +71,7 @@ export class HomePage implements OnInit {
       })
   }
 
-
+  credentialClick(){}
   ionViewWillLeave() {
     this.scaned_cred = false;
   }
