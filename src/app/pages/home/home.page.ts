@@ -1,6 +1,6 @@
 
 import { DataService } from 'src/app/services/data.service';
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {IonicModule, PopoverController} from '@ionic/angular';
@@ -10,6 +10,8 @@ import {WalletService} from 'src/app/services/wallet.service';
 import {AuthenticationService} from 'src/app/services/authentication.service';
 import {TranslateModule} from '@ngx-translate/core';
 import {LogoutPage } from '../logout/logout.page';
+import { WebsocketService } from 'src/app/services/web-socket.service';
+import { environment } from 'src/environments/environment';
 
 const TIME_IN_MS = 1500;
 
@@ -49,6 +51,7 @@ export class HomePage implements OnInit {
   isScaned: boolean = false;
   isReady: boolean = true;
 
+  private websocketService = inject(WebsocketService);
 
 
   @Input() availableDevices: MediaDeviceInfo[] = [];
@@ -63,6 +66,7 @@ export class HomePage implements OnInit {
     private dataService: DataService,
     private popoverController: PopoverController,
     private walletService: WalletService,
+
     ) {
       this.route.queryParams.subscribe((params) => {
         this.toggleScan = params['toggleScan'];
@@ -114,7 +118,8 @@ export class HomePage implements OnInit {
     this.escaneado = qrCode;
     if (!this.isScaned && this.isReady) {
       this.isReady = false;
-    this.walletService.executeContent(qrCode).subscribe({
+      this.websocketService.sendMessage(this.authenticationService.token);
+      this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
         if (qrCode.includes("credential_offer_uri")) {
           this.escaneado = '';

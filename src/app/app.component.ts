@@ -6,6 +6,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
 import { WebsocketService } from './services/web-socket.service';
 import { AlertService } from './services/alert.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -32,6 +33,8 @@ export class AppComponent {
     ) {
     translate.addLangs(['en']);
     translate.setDefaultLang('en');
+    this.websocketService.connect(environment.websocker_url);
+
     this.messageSubscription = this.websocketService
       .getMessageSubject()
       .subscribe(async (message: any) => {

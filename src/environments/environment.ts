@@ -24,5 +24,6 @@ export const environment = {
     users_uri: window["env"]["userUri"] || '/api/v2/users',
     ebsi_did_uri: window["env"]["ebsiDid"] || '/api/v2/ebsi-did',
     websocket: window["env"]["websocket"] || '/api/v2/pin'
-  }
+  },
+  websocker_url: "ws://localhost:8081"
 };
