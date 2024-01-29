@@ -1,12 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { WalletPage } from './credentials.page';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { CredentialsPage } from './credentials.page';
 
 describe('WalletPage', () => {
-  let component: WalletPage;
-  let fixture: ComponentFixture<WalletPage>;
+  let component: CredentialsPage;
+  let fixture: ComponentFixture<CredentialsPage>;
 
-  beforeEach(async(() => {
-    fixture = TestBed.createComponent(WalletPage);
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(CredentialsPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

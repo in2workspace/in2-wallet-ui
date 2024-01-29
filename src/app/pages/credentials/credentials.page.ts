@@ -98,7 +98,6 @@ export class CredentialsPage implements OnInit {
 
   vcDelete(cred: VerifiableCredential) {
     this.walletService.deleteVC(cred.id).subscribe((response: any) => {
-      console.log(response)
       this.refresh()
     })
   }

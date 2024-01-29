@@ -24,7 +24,6 @@ export class DidViewComponent implements OnInit{
   new EventEmitter();
 
   ngOnInit(): void {
-    console.log(this.didInput)
     this.did = this.didInput
     }
     deleteDid(){

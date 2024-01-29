@@ -112,7 +112,6 @@ export class HomePage implements OnInit {
   }
   qrCodeEmit(qrCode: string) {
     this.escaneado = qrCode;
-    console.log(this.isScaned, this.isReady);
     if (!this.isScaned && this.isReady) {
       this.isReady = false;
     this.walletService.executeContent(qrCode).subscribe({
@@ -141,7 +140,6 @@ export class HomePage implements OnInit {
       },
     });
     }
-    console.log(this.isScaned);
   }
 
 
