@@ -1,6 +1,7 @@
 // websocket.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,13 +10,15 @@ export class WebsocketService {
   private socket!: WebSocket;
   private messageSubject = new BehaviorSubject<string>("");
 
-  constructor() {}
+  constructor(  private authenticationService: AuthenticationService,
+    ) {}
 
   connect(url: string): void {
     this.socket = new WebSocket(url);
 
     this.socket.onopen = () => {
       console.log('Conexión WebSocket abierta');
+      this.sendMessage(this.authenticationService.token);
     };
 
     this.socket.onmessage = (event) => {

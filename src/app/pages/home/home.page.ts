@@ -118,7 +118,6 @@ export class HomePage implements OnInit {
     this.escaneado = qrCode;
     if (!this.isScaned && this.isReady) {
       this.isReady = false;
-      this.websocketService.sendMessage(this.authenticationService.token);
       this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
         if (qrCode.includes("credential_offer_uri")) {
