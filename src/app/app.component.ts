@@ -33,7 +33,7 @@ export class AppComponent {
     ) {
     translate.addLangs(['en']);
     translate.setDefaultLang('en');
-    this.websocketService.connect(environment.websocker_url);
+    this.websocketService.connect(environment.websocket_url);
 
     this.messageSubscription = this.websocketService
       .getMessageSubject()

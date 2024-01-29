@@ -23,5 +23,7 @@ export const environment = {
     credentials_by_id_uri: window["env"]["credIdUri"] || '/api/v2/credentials?credentialId=',
     users_uri: window["env"]["userUri"] || '/api/v2/users',
     ebsi_did_uri: window["env"]["ebsiDid"] || '/api/v2/ebsi-did'
-  }
+  },
+  websocket_url: "ws://localhost:8081"
+
 };
