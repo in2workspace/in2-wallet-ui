@@ -11,6 +11,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import {LogoutPage } from '../logout/logout.page';
+import { WebsocketService } from 'src/app/services/websocket.service';
 
 const TIME_IN_MS = 10000;
 
@@ -37,7 +38,7 @@ export class CredentialsPage implements OnInit {
   private router = inject(Router);
   private authenticationService = inject(AuthenticationService);
   private popoverController= inject(PopoverController);
-
+  private websocket = inject(WebsocketService);
   toggleScan: boolean = false;
   escaneado = '';
   from = '';
@@ -99,7 +100,7 @@ export class CredentialsPage implements OnInit {
   qrCodeEmit(qrCode: string) {
     this.escaneado = qrCode;
     this.toggleScan = false;
-
+    this.websocket.connect("ws://localhost:8081/api/v2/pin")
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
         if (qrCode.includes("credential_offer_uri")) {
