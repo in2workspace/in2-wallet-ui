@@ -17,7 +17,7 @@ export class WebsocketService {
 
     this.socket.onopen = () => {
       console.log('Conexión WebSocket abierta');
-      this.sendMessage("{ 'id':'" + this.authenticationService.token + "'}");
+      this.sendMessage(JSON.stringify({ id: this.authenticationService.token }));
     };
 
     this.socket.onmessage = (event) => {
