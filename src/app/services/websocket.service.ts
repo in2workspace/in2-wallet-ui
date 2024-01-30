@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { BehaviorSubject } from 'rxjs';
+import { AlertController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,8 @@ export class WebsocketService {
   private messageSubject = new BehaviorSubject<string>("");
 
   constructor(  private authenticationService: AuthenticationService,
+    private alertController: AlertController
+
     ) {}
 
   connect(url: string): void {
@@ -20,8 +23,36 @@ export class WebsocketService {
       this.sendMessage(JSON.stringify({ id: this.authenticationService.token }));
     };
 
-    this.socket.onmessage = (event) => {
+    this.socket.onmessage = async (event) => {
       console.log('Mensaje recibido:', event.data);
+
+      const alert = await this.alertController.create({
+        header: 'Introducir PIN',
+        inputs: [
+          {
+            name: 'pin',
+            type: 'number',
+            placeholder: 'PIN',
+          },
+        ],
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+          },
+          {
+            text: 'Enviar',
+            handler: (data) => {
+              return data.pin;
+            },
+          },
+        ],
+      });
+  
+      await alert.present();
+      const result = await alert.onDidDismiss();
+       this.sendMessage(JSON.stringify({ pin: result.data?.values.pin || '' }));
+
     };
 
     this.socket.onclose = () => {
