@@ -48,6 +48,18 @@
         "unsucces": "Sin éxito",
         "already-saved": "VC ya guardado",
         "no-credential": "No hay credencial válida almacenada"
+        "ebsi-popup": {
+          "info": "Copia este DID y este Credential Offer Endpoint para completar los prerrequisitos de la emisión de la credencial EBSI.",
+          "did": "DID: ",
+          "credential-offer": "Credential Offer Endpoint: ",
+          "endpoint": "test-openid-credential-offer://",
+          "next": "Siguiente"
+        },
+        "error-ebsi": "No se ha podido retornar el did.",
+        "copy": "Copiar al portapapeles"
+    },
+    "ebsi": {
+      "title": "EBSI"
     },
     "language-selector":{
         "title":"Selector de idioma"

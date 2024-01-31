@@ -12,6 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import {LogoutPage } from '../logout/logout.page';
 import { WebsocketService } from 'src/app/services/websocket.service';
+import { DataService } from 'src/app/services/data.service';
 
 const TIME_IN_MS = 10000;
 
@@ -44,8 +45,11 @@ export class CredentialsPage implements OnInit {
   from = '';
   scaned_cred: boolean = false;
   show_qr: boolean = false;
+  public ebsiFlag: boolean = true;
+  public did: string = '';
 
   constructor(
+    private dataService: DataService,
     private route: ActivatedRoute,
     ) {
     this.route.queryParams.subscribe((params) => {
@@ -58,15 +62,42 @@ export class CredentialsPage implements OnInit {
   ngOnInit() {
     this.userName = this.authenticationService.getName();
     this.escaneado = '';
+    this.ebsiFlag = false;
     this.scaned_cred = false;
+    this.dataService.listenDid().subscribe((data) => {
+      this.ebsiFlag = true;
+      this.did = data;
+    })
     this.refresh();
   }
   scan(){
     this.toggleScan = true;
     this.show_qr = true;
+    this.ebsiFlag = false;
+
     console.log("from", this.from);
   }
 
+  copyToClipboard(textToCopy: string) {
+    let texto = '';
+
+    if (textToCopy === 'did-text') {
+      texto = document.getElementById('did-text')!.innerText;
+      const prefix = 'DID: ';
+      if (texto.startsWith(prefix)) {
+        texto = texto.substring(prefix.length);
+      }
+    } else if (textToCopy === 'endpoint-text') {
+      texto = 'test-openid-credential-offer://';
+    }
+
+    const textarea = document.createElement('textarea');
+    textarea.value = texto;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+  }
   logout(){
     this.authenticationService.logout().subscribe(()=>{
       this.router.navigate(['/login'], {})

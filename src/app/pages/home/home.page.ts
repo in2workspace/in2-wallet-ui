@@ -52,14 +52,11 @@ export class HomePage implements OnInit {
       component: LogoutPage, 
       event: ev,
       translucent: true,
-      cssClass: 'custom-popover'
     });
-  
-    await popover.present();
   }
-
   ngOnInit() {
     this.userName = this.authenticationService.getName();
+
   }
 
   logout(){
