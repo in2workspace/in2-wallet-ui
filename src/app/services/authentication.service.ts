@@ -29,10 +29,10 @@ export class AuthenticationService {
   userData: any;
 
   constructor(public oidcSecurityService: OidcSecurityService) {
-    this.oidcSecurityService.checkAuth().subscribe(({isAuthenticated, userData, accessToken}) => {
+    this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken }) => {
       this.isAuthenticated.next(isAuthenticated);
       this.userData = userData;
-      this.token = accessToken
+      this.token = accessToken;
     });
   }
 
