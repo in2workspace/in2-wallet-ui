@@ -48,6 +48,7 @@ export class VcViewComponent implements OnInit {
       gender: ""
     }, id: "", vcType: ['', '']
   };
+  vcType = "";
   @Output() vcEmit: EventEmitter<VerifiableCredential> =
     new EventEmitter();
 
@@ -60,7 +61,19 @@ export class VcViewComponent implements OnInit {
   isAlertOpenDeleteNotFound=false;
 
   ngOnInit(): void {
-    this.cred = this.credentialInput
+    this.cred = this.credentialInput;
+    console.log(this.cred);
+    console.log(typeof this.cred['vcType'][0])
+    let i = 0;
+    const v_cred: string = 'VerifiableCredential';
+    const v_atest: string = 'VerifiableAttestation';
+    while(i < this.cred.vcType.length) {
+      if (this.cred['vcType'][i] !== v_cred && this.cred['vcType'][i] !== v_atest) {
+        this.vcType = this.cred['vcType'][i];
+        console.log(this.vcType);
+      }
+      i++;
+    }
     }
     qrView(){
       this.isModalOpen = true;
