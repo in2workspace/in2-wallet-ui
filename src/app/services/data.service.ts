@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, catchError, map } from 'rxjs';
+import { BehaviorSubject, catchError, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 export class DataService {
   private ebsiFlag: boolean = false;
   private did: string = '';
-  private didSubject = new Subject<string>();
+  private didSubject = new BehaviorSubject<string>("");
 
   constructor(private http: HttpClient) { }
 
@@ -17,8 +17,8 @@ export class DataService {
     this.didSubject.next(did);
   }
 
-  listenDid(): Observable<any> {
-    return this.didSubject.asObservable();
+  listenDid(): any {
+    return this.didSubject;
   }
 
   getDid() {
@@ -27,7 +27,7 @@ export class DataService {
         return data.toString()
       }),
       catchError((err) => {
-        throw "Err";
+        throw new Error("Err");
       })
     )
   }

@@ -45,7 +45,7 @@ export class CredentialsPage implements OnInit {
   from = '';
   scaned_cred: boolean = false;
   show_qr: boolean = false;
-  public ebsiFlag: boolean = true;
+  public ebsiFlag: boolean = false;
   public did: string = '';
 
   constructor(
@@ -57,17 +57,16 @@ export class CredentialsPage implements OnInit {
       this.from = params['from'];
       this.show_qr = params['show_qr'];
     })
+    this.dataService.listenDid().subscribe((data: any) => {
+      this.ebsiFlag = true;
+      this.did = data;
+    })
   }
 
   ngOnInit() {
     this.userName = this.authenticationService.getName();
     this.escaneado = '';
-    this.ebsiFlag = false;
     this.scaned_cred = false;
-    this.dataService.listenDid().subscribe((data) => {
-      this.ebsiFlag = true;
-      this.did = data;
-    })
     this.refresh();
   }
   scan(){
@@ -107,16 +106,17 @@ export class CredentialsPage implements OnInit {
 
   async openPopover(ev: any) {
     const popover = await this.popoverController.create({
-      component: LogoutPage, 
+      component: LogoutPage,
       event: ev,
       translucent: true,
       cssClass: 'custom-popover'
     });
-  
+
     await popover.present();
   }
 
   refresh() {
+
     this.walletService.getAllVCs().subscribe((credentialListResponse: Array<VerifiableCredential>) => {
       this.credList = credentialListResponse.reverse();
     })
@@ -148,7 +148,7 @@ export class CredentialsPage implements OnInit {
           this.escaneado = '';
         }
       },
-      
+
       error: (err) => {
         this.toggleScan = true;
 

@@ -1,7 +1,5 @@
-import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { environment } from 'src/environments/environment';
-import { BehaviorSubject, of } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { StorageService } from './storage.service';
