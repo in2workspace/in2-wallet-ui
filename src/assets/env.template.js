@@ -12,4 +12,7 @@
   window["env"]["credIdUri"] = "${CREDID_URI}";
   window["env"]["userUri"] = "${USER_URI}";
   window["env"]["debug"] = "${DEBUG}";
+  window["env"]["client_id"] = "${CLIENT_ID}";
+  window["env"]["scope"] = "${SCOPE}";
+  window["env"]["grant_type"] = "${GRANT_TYPE}";
 })(this);

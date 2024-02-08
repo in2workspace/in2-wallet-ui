@@ -5,9 +5,9 @@ export const environment = {
   loginParams: {
     has_login: true,
     login_url: window["env"]["loginUrl"] || 'http://localhost:9099/realms/wallet',
-    client_id: 'auth-client',
-    scope: 'openid profile email offline_access',
-    grant_type: 'code'
+    client_id: window["env"]["client_id"] || 'auth-client',
+    scope: window["env"]["scope"] || 'openid profile email offline_access',
+    grant_type: window["env"]["grant_type"] || 'code'
   },
   registerParams: {
     has_register: true,
