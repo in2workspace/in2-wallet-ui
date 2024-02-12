@@ -2,10 +2,9 @@ name: Deploy Production
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   deploy-prod:
     name: deploy-prod
     runs-on: ubuntu-latest
@@ -14,6 +13,15 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
+      - name: Install jq
+        run: sudo apt-get install jq
+
+      - name: Extract project version
+        run: echo "PROJECT_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+
+      - name: Use Project Version
+        run: echo "The project version is $PROJECT_VERSION"
 
       - name: Build and Push docker image
         run: |
@@ -26,4 +34,4 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           DOCKER_HUB_CLIENT_NAME: ${{ secrets.DOCKER_HUB_CLIENT_NAME }}
           COMPONENT_NAME: wallet-driving-application
-          VERSION: 2.0.0
+          VERSION: ${{ PROJECT_VERSION }}
