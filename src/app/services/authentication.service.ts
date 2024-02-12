@@ -62,14 +62,6 @@ export class AuthenticationService {
     );
   }
 
-  public register(userData: any) {
-    return this.http.post(
-      environment.registerParams.register_url + environment.walletUri.users_uri,
-      userData,
-      options
-    );
-  }
-
   public getName() {
     return this.userData.preferred_username;
   }

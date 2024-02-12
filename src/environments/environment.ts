@@ -9,13 +9,6 @@ export const environment = {
     scope: 'openid profile email offline_access',
     grant_type: 'code'
   },
-  registerParams: {
-    has_register: true,
-    register_url: 'http://localhost:8085',
-    client_id: '',
-    client_secret: '',
-    grant_type: ''
-  },
   walletUri: {
     execute_content_uri: '/api/v2/execute-content',
     verifiable_presentation_uri: '/api/v2/verifiable-presentation',
@@ -23,5 +16,9 @@ export const environment = {
     credentials_by_id_uri: '/api/v2/credentials?credentialId=',
     users_uri: '/api/v2/users',
     ebsi_did_uri: '/api/v2/ebsi-did'
+  },
+  websocket:{
+    url:'ws://localhost:8081',
+    uri:'/api/v2/pin'
   }
 };

@@ -30,11 +30,9 @@ The application is based on the following architecture:
 
 ## Main Features
 // TODO: Add the main features of the application
-- User registration
 - User login
 - User logout
 - User QR Scaning
-- User DID management
 - User Verifiable Credentials management
 - User Prefered Language management
 - User Prefered Scaning Camera management

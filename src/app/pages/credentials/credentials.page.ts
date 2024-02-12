@@ -13,6 +13,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import {LogoutPage } from '../logout/logout.page';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { DataService } from 'src/app/services/data.service';
+import { environment } from 'src/environments/environment';
 
 const TIME_IN_MS = 10000;
 
@@ -131,7 +132,7 @@ export class CredentialsPage implements OnInit {
   qrCodeEmit(qrCode: string) {
     this.escaneado = qrCode;
     this.toggleScan = false;
-    this.websocket.connect("ws://localhost:8081/api/v2/pin")
+    this.websocket.connect(environment.websocket.uri + environment.websocket.url)
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
         if (qrCode.includes("credential_offer_uri")) {
