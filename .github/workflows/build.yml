@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: build and analyze
+    name: build
     if: success()
     runs-on: ubuntu-latest
 
