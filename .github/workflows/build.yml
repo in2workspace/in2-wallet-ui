@@ -10,7 +10,7 @@ on:
 jobs:
 
   build:
-    name: build
+    name: build and analyze
     if: success()
     runs-on: ubuntu-latest
 
