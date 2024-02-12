@@ -12,7 +12,7 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule,TranslateModule,RouterModule]
 })
-export class TabsPage implements OnInit {
+export class TabsPage {
 
   constructor(private route: ActivatedRoute) { }
 
