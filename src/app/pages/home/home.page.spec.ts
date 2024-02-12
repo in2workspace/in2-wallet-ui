@@ -8,7 +8,6 @@ import { of } from 'rxjs';
 import { HomePage } from './home.page';
 import { WalletService } from 'src/app/services/wallet.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { LogoutPage } from '../logout/logout.page';
 
 describe('HomePage', () => {
   let component: HomePage;
@@ -38,11 +37,7 @@ describe('HomePage', () => {
       ],
     }).compileComponents();
 
-    routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
-    walletServiceSpy = TestBed.inject(WalletService) as jasmine.SpyObj<WalletService>;
     authServiceSpy = TestBed.inject(AuthenticationService) as jasmine.SpyObj<AuthenticationService>;
-    popoverControllerSpy = TestBed.inject(PopoverController) as jasmine.SpyObj<PopoverController>;
-    activatedRoute = TestBed.inject(ActivatedRoute);
   }));
 
   beforeEach(() => {
@@ -55,10 +50,8 @@ describe('HomePage', () => {
     expect(component).toBeTruthy();
   });
 
-  // Add more test cases based on your component's behavior
 
-  // Example: Test the ngOnInit method
-  /*
+
   it('should set userName from AuthenticationService on ngOnInit', () => {
     const userName = 'JohnDoe';
     authServiceSpy.getName.and.returnValue(userName);
@@ -69,46 +62,5 @@ describe('HomePage', () => {
   });
 
 
-  it('should call AuthenticationService.logout and navigate to login page on logout', () => {
-    const navigateSpy = routerSpy.navigate.and.returnValue(Promise.resolve(true));
 
-    component.logout();
-
-    expect(authServiceSpy.logout).toHaveBeenCalled();
-    expect(navigateSpy).toHaveBeenCalledWith(['/login'], {});
-  });
-
-*/
 });
-
-
-
-/*import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HomePage } from './home.page';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateModule } from '@ngx-translate/core';
-import { StsConfigLoader } from 'angular-auth-oidc-client';
-
-describe('HomePage', () => {
-  let component: HomePage;
-  let fixture: ComponentFixture<HomePage>;
-
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        TranslateModule.forRoot(),
-      ],
-      providers: [StsConfigLoader]
-    });
-    fixture = TestBed.createComponent(HomePage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});*/

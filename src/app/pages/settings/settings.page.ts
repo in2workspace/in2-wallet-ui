@@ -33,13 +33,15 @@ export class SettingsPage implements OnInit {
 
   }
   goHomeWithEBSI() {
-    this.dataService.getDid().subscribe((did) => {
+    this.dataService.getDid().subscribe({
+      next: (did) => {
       this.dataService.sendDid(did);
       this.router.navigate(['/tabs/credentials']);
     },
-      (error) => {
+     error: (error) => {
         this.isAlertOpen = true;
-      })
+      }
+    })
   }
   toggleAlert() {
     this.isAlertOpen = !this.isAlertOpen;

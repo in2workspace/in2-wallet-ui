@@ -42,7 +42,7 @@ describe('WalletService', () => {
     expect(service).toBeTruthy();
   }));
 
-  /*
+  
   it('should execute content', () => {
     const mockUrl = 'mock-url';
     const mockResponse = 'mock-response';
@@ -81,7 +81,7 @@ describe('WalletService', () => {
     expect(req.request.body).toEqual(mockVCReply);
 
     req.flush(mockResponse);
-  });*/
+  });
 
   // Add more test cases for other methods as needed
 });

@@ -28,7 +28,7 @@ describe('StorageService', () => {
     expect(storageService).toBeTruthy();
   });
 
-  /*
+  
   it('should initialize storage', waitForAsync(() => {
     spyOn(storageService, 'init').and.callThrough();
 
@@ -38,29 +38,7 @@ describe('StorageService', () => {
     });
   }));
 
-  it('should set a value in storage', waitForAsync(() => {
-    const key = 'testKey';
-    const value = 'testValue';
 
-    storageService.set(key, value).then(() => {
-      expect(storageMock.set).toHaveBeenCalledWith(key, value);
-    });
-  }));
-
-  it('should get all values from storage', waitForAsync(() => {
-    const size = 3;
-    const items = ['item1', 'item2', 'item3'];
-
-    storageMock.length.and.returnValue(Promise.resolve(size));
-
-    for (let i = 0; i < size; i++) {
-      storageMock.get.withArgs(i.toString()).and.returnValue(Promise.resolve(items[i]));
-    }
-
-    storageService.getAll().then((result) => {
-      expect(result).toEqual(items);
-    });
-  }));
 
   it('should get a value from storage', waitForAsync(() => {
     const key = 'testKey';
@@ -73,12 +51,6 @@ describe('StorageService', () => {
     });
   }));
 
-  it('should remove a value from storage', waitForAsync(() => {
-    const key = 'testKey';
 
-    storageService.remove(key).then(() => {
-      expect(storageMock.remove).toHaveBeenCalledWith(key);
-    });
-  }));
-  */
+  
 });
