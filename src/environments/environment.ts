@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
-  data_url: window["env"]["dataUrl"] || 'http://localhost:8086',
-  wca_url: window["env"]["wcaUrl"] || 'http://localhost:8081',
+  data_url: 'http://localhost:8086',
+  wca_url: 'http://localhost:8081',
   loginParams: {
     has_login: true,
     login_url: 'http://localhost:9099/realms/wallet',
@@ -17,11 +17,11 @@ export const environment = {
     grant_type: ''
   },
   walletUri: {
-    execute_content_uri: window["env"]["execContUri"] || '/api/v2/execute-content',
-    verifiable_presentation_uri: window["env"]["vPUri"] || '/api/v2/verifiable-presentation',
-    credentials_uri: window["env"]["credUri"] || '/api/v2/credentials',
-    credentials_by_id_uri: window["env"]["credIdUri"] || '/api/v2/credentials?credentialId=',
-    users_uri: window["env"]["userUri"] || '/api/v2/users',
-    ebsi_did_uri: window["env"]["ebsiDid"] || '/api/v2/ebsi-did'
+    execute_content_uri: '/api/v2/execute-content',
+    verifiable_presentation_uri: '/api/v2/verifiable-presentation',
+    credentials_uri: '/api/v2/credentials',
+    credentials_by_id_uri: '/api/v2/credentials?credentialId=',
+    users_uri: '/api/v2/users',
+    ebsi_did_uri: '/api/v2/ebsi-did'
   }
 };
