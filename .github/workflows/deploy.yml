@@ -35,5 +35,5 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           DOCKER_HUB_CLIENT_NAME: ${{ secrets.DOCKER_HUB_CLIENT_NAME }}
           COMPONENT_NAME: wallet-driving-application
-          VERSION: $PROJECT_VERSION
+          VERSION: ${{ PROJECT_VERSION }}
 
