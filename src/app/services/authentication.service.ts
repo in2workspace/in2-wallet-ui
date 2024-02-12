@@ -29,6 +29,7 @@ export class AuthenticationService {
   userData: any;
 
   constructor(public oidcSecurityService: OidcSecurityService) {
+    //valorar passar esto fuera del constructor (ej. IDEP)
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken }) => {
       this.isAuthenticated.next(isAuthenticated);
       this.userData = userData;
