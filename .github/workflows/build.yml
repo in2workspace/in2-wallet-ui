@@ -31,7 +31,10 @@ jobs:
       - name: Build Angular Project
         run: npm run build -- --configuration=development
 
-      - name: SonarCloud Scan
+      - name: Build Angular Project
+        run: npm run test
+
+      - name: SonarCloud Scan  
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
