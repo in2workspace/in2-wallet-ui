@@ -32,7 +32,7 @@ jobs:
         run: npm run build -- --configuration=development
 
       - name: Build Angular Project
-        run: npm run test
+        run: npm run test:ci
 
       - name: SonarCloud Scan  
         uses: SonarSource/sonarcloud-github-action@master
