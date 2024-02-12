@@ -8,7 +8,6 @@ export class StorageService {
   private _storage: Storage | null = null;
 
   constructor(private storage: Storage) {
-    // fixme: this.router.navigate() needs then().
     this.init();
   }
 

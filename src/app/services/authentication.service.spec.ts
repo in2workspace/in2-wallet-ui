@@ -26,7 +26,7 @@ describe('AuthenticationService', () => {
     authenticationService = TestBed.inject(AuthenticationService);
     oidcSecurityServiceSpy = TestBed.inject(OidcSecurityService) as jasmine.SpyObj<OidcSecurityService>;
     storageServiceSpy = TestBed.inject(StorageService) as jasmine.SpyObj<StorageService>;
-    
+
   });
 
   it('should be created', () => {
@@ -79,7 +79,7 @@ describe('AuthenticationService', () => {
   it('should register user successfully', inject([HttpClientTestingModule], () => {
     const userData = { username: 'testuser', password: 'testpassword' };
     const expectedUrl = environment.registerParams.register_url + environment.walletUri.users_uri;
-    
+
     authenticationService.register(userData).subscribe(() => {
       // Expect any additional logic you may have in your register method
       expect(true).toBeTruthy();

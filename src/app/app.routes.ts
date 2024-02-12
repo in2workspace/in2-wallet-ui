@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { authGuard, notAuthGuard } from './guards/auth.guard';
-import { StorageService } from './services/storage.service';
 import { AutoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 
 export const routes: Routes = [
@@ -30,11 +28,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/faqs/faqs.page').then((m) => m.FaqsPage),
   },
-  /* 
-  {
-    path: 'register',
-    loadComponent: () => import('./pages/register/register.page').then( m => m.RegisterPage)
-  },*/
   {
     path: 'tabs',
     loadComponent: () => import('./pages/tabs/tabs.page').then(m => m.TabsPage),

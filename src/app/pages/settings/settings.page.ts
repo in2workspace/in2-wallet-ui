@@ -8,7 +8,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import {LogoutPage } from '../logout/logout.page';
 import { DataService } from 'src/app/services/data.service';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-settings',
@@ -34,11 +33,6 @@ export class SettingsPage implements OnInit {
 
   }
   goHomeWithEBSI() {
-    /* this.http.get(environment.wca_url + environment.walletUri.ebsi_did_uri, { responseType: 'text' }).subscribe((did) => {
-      console.log(did)
-      this.dataService.sendDid(did);
-      this.router.navigate(['/tabs/home']);
-    }) */
     this.dataService.getDid().subscribe((did) => {
       this.dataService.sendDid(did);
       this.router.navigate(['/tabs/credentials']);
@@ -58,12 +52,12 @@ export class SettingsPage implements OnInit {
   }
   async openPopover(ev: any) {
     const popover = await this.popoverController.create({
-      component: LogoutPage, 
+      component: LogoutPage,
       event: ev,
       translucent: true,
       cssClass: 'custom-popover'
     });
-  
+
     await popover.present();
   }
 }

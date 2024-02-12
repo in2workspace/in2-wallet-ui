@@ -13,12 +13,7 @@ import { Router } from '@angular/router';
 })
 export class CallbackPage implements OnInit {
   private router = inject(Router);
-
-  constructor() { }
-
   ngOnInit() {
-   // this.router.navigate(['/tabs/home'], {})
-
   }
 
 }

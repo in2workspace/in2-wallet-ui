@@ -9,7 +9,6 @@ import { environment } from './environments/environment';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
-//import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { AuthModule, LogLevel, AuthInterceptor, authInterceptor } from 'angular-auth-oidc-client';
 
