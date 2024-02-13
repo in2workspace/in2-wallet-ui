@@ -29,10 +29,11 @@ export class AuthenticationService {
   userData: any;
 
   constructor(public oidcSecurityService: OidcSecurityService) {
-    this.oidcSecurityService.checkAuth().subscribe(({isAuthenticated, userData, accessToken}) => {
+    //valorar passar esto fuera del constructor (ej. IDEP)
+    this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken }) => {
       this.isAuthenticated.next(isAuthenticated);
       this.userData = userData;
-      this.token = accessToken
+      this.token = accessToken;
     });
   }
 
@@ -58,14 +59,6 @@ export class AuthenticationService {
       tap((_) => {
         this.isAuthenticated.next(true);
       })
-    );
-  }
-
-  public register(userData: any) {
-    return this.http.post(
-      environment.registerParams.register_url + environment.walletUri.users_uri,
-      userData,
-      options
     );
   }
 

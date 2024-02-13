@@ -4,7 +4,6 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
-import { StorageService } from './services/storage.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +14,6 @@ import { StorageService } from './services/storage.service';
 })
 export class AppComponent {
     private authenticationService = inject(AuthenticationService);
-    private storageService = inject(StorageService);
     private router = inject(Router);
   public appPages = [
     { title: 'home', url: '/home', icon: 'home' },
@@ -26,7 +24,7 @@ export class AppComponent {
     { title: 'privacy-policy', url: '/privacy-policy', icon: 'book' },
     { title: 'faqs', url: '/faqs', icon: 'help' },
     { title: 'settings', url: '/settings', icon: 'cog' },
-    { title: 'logout', url:'/login', icon:'log-out'}
+    { title: 'logout', url:'/login', icon:'log-out'},
   ];
 
   showLanguageDropDown = false;

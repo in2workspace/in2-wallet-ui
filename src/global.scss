@@ -25,3 +25,8 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 @import "theme/globalDefault.scss";
+
+@font-face {
+  font-family: 'Blinker-Regular';
+  src: url('./assets/fonts/Blinker-Regular.ttf') format('truetype');
+}

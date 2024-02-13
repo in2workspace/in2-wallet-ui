@@ -227,8 +227,9 @@
               }
             ],
             "styles": ["src/theme/variables.scss", "src/global.scss"],
-            "scripts": []
-          },
+            "scripts": [],
+            "codeCoverage": true,
+            "karmaConfig": "karma.conf.js"          },
           "configurations": {
             "ci": {
               "progress": false,

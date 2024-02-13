@@ -10,7 +10,7 @@ on:
 jobs:
 
   build:
-    name: build
+    name: build and analyze
     if: success()
     runs-on: ubuntu-latest
 
@@ -31,7 +31,10 @@ jobs:
       - name: Build Angular Project
         run: npm run build -- --configuration=development
 
-      - name: SonarCloud Scan
+      - name: Generate Testing Sources
+        run: npm run test:ci
+
+      - name: SonarCloud Scan  
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -50,7 +53,8 @@ jobs:
 
       - name: Build and Push docker image
         run: |
-          IMAGE_TAG="$COMPONENT_NAME:v$VERSION$SUFFIX"
+          echo "PROJECT_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+          IMAGE_TAG="$COMPONENT_NAME:v$PROJECT_VERSION$SUFFIX"
           docker build . --file Dockerfile --tag $DOCKER_HUB_CLIENT_NAME/$IMAGE_TAG
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker push $DOCKER_HUB_CLIENT_NAME/$IMAGE_TAG
@@ -59,5 +63,4 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           DOCKER_HUB_CLIENT_NAME: ${{ secrets.DOCKER_HUB_CLIENT_NAME }}
           COMPONENT_NAME: wallet-driving-application
-          VERSION: 2.0.0
           SUFFIX: -SNAPSHOT

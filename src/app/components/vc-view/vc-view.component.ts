@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
 import {IonicModule} from '@ionic/angular';
 import {QRCodeModule} from 'angular2-qrcode';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
 export interface VerifiableCredential {
   credentialSubject: {
@@ -21,7 +22,7 @@ export interface VerifiableCredential {
   selector: 'app-vc-view',
   templateUrl: './vc-view.component.html',
   standalone: true,
-  imports: [IonicModule, QRCodeModule],
+  imports: [IonicModule, QRCodeModule, TranslateModule],
 })
 export class VcViewComponent implements OnInit {
 
@@ -47,15 +48,32 @@ export class VcViewComponent implements OnInit {
       gender: ""
     }, id: "", vcType: ['', '']
   };
+  vcType = "";
   @Output() vcEmit: EventEmitter<VerifiableCredential> =
     new EventEmitter();
+
+    constructor(
+      public translate: TranslateService
+    ) {}
 
 
   isAlertOpenNotFound=false;
   isAlertOpenDeleteNotFound=false;
 
   ngOnInit(): void {
-    this.cred = this.credentialInput
+    this.cred = this.credentialInput;
+    console.log(this.cred);
+    console.log(typeof this.cred['vcType'][0])
+    let i = 0;
+    const v_cred: string = 'VerifiableCredential';
+    const v_atest: string = 'VerifiableAttestation';
+    while(i < this.cred.vcType.length) {
+      if (this.cred['vcType'][i] !== v_cred && this.cred['vcType'][i] !== v_atest) {
+        this.vcType = this.cred['vcType'][i];
+        console.log(this.vcType);
+      }
+      i++;
+    }
     }
     qrView(){
       this.isModalOpen = true;
@@ -81,15 +99,17 @@ export class VcViewComponent implements OnInit {
       this.isModalOpen=true;
     }}];
 
-    public deleteButtons = [{text: 'Cancel·la',
+    public deleteButtons = [{text: this.translate.instant('vc-view.delete-cancel'),
       role: 'cancel',
+      cssClass: 'cancel-button',
       handler: () => {
-        this.isModalDeleteOpen=false;
-      }}, {text: 'Sí, elimina-la',
+        this.isModalDeleteOpen=false;     
+    }},
+      {text: this.translate.instant('vc-view.delete-confirm'),
       role: 'confirm',
-      handler: () => {
-        this.isModalDeleteOpen=true;
-        this.vcEmit.emit(this.cred);      
+    handler: () => {
+      this.isModalDeleteOpen=true;
+      this.vcEmit.emit(this.cred); 
       }}]
   setOpenNotFound(isOpen: boolean) {
     this.isAlertOpenNotFound = isOpen;

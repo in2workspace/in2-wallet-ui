@@ -14,8 +14,10 @@
     "logout":"Logout"
     },
     "camera-selector":{
-        "title":"Camera Selector",
+        "title":"Camera",
+        "settings": "Camera settings",
         "no-device": "No device"
+
     },
     "credential-offer":{
         "title":"Credential Offer",
@@ -26,9 +28,7 @@
     "credentials":{
         "title":"Credentials",
         "add":"Add",
-        "nocred":"No credential loaded"
-
-
+        "nocred":"You do not have any credentials uploaded"
     },
     "dids":{
         "title":"Dids"
@@ -39,17 +39,30 @@
     "home":{
         "title":"Home",
         "hello":"Welcome to IN2Wallet",
-        "scan":"Identify",
+        "scan":"Scan QR",
+        "add-credential": "Add a credential",
         "access":"Access",
         "get-cred":"Get Credential",
         "ok-header": "Congratulations",
-        "ok-msg": "VC saved",
+        "ok-msg": "Credential added",
         "unsucces": "Unsuccesfull",
         "already-saved": "VC already saved",
-        "no-credential": "No stored valid credential"
+        "no-credential": "No stored valid credential",
+        "ebsi-popup": {
+          "info": "In order to fulfill the prerequisites of EBSI credential issue, copy this DID and Credential Offer Endpoint.",
+          "did": "DID: ",
+          "credential-offer": "Credential Offer Endpoint: ",
+          "endpoint": "test-openid-credential-offer://",
+          "next": "Next"
+        },
+        "error-ebsi": "The did could not be returned.",
+        "copy": "Copy to clipboard"
     },
     "language-selector":{
-        "title":"Language Selector"
+        "title":"Select language"
+    },
+    "ebsi": {
+      "title": "EBSI"
     },
     "login":{
         "title":"Login",
@@ -77,15 +90,20 @@
         "title":"Vc Selector",
         "select-cred":"Select Credential",
         "send-cred":"Send Credential",
-        "ok-header": "Congratulations",
+        "ok-header": "Log in successfully",
         "ok-message":"Log in completed",
         "ko-header":"Error",
-        "ko-message":"Failed to Login"
+        "ko-message":"Failed to Login",
+        "close": "Close"
     },
     "vc-view":{
         "warning-header": "Credential",
         "warning-msg": "By generating this code, you agree that the data contained in your permit, and its legal status, will be displayed on the reader device to verify its validity.",
         "qr-title": "QR Credential",
-        "qr-close": "Close"
+        "qr-close": "Close",
+        "delete-header": "Are you sure to delete this credential?",
+        "delete-message": "If you delete the credential from the app and need to recover it, you will need to request a new one.",
+        "delete-confirm": "Yes, delete",
+        "delete-cancel": "Cancel"
     }
 }

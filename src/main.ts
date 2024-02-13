@@ -21,6 +21,7 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     importProvidersFrom(IonicModule.forRoot({innerHTMLTemplatesEnabled:true})),
     importProvidersFrom(HttpClientModule),
+    //importProvidersFrom(HttpClientTestingModule),
     importProvidersFrom(
     TranslateModule.forRoot({
       loader: {
@@ -32,14 +33,18 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(IonicStorageModule.forRoot()),
     importProvidersFrom( AuthModule.forRoot({
       config: {
+        postLoginRoute: '/tabs/home',
         authority: environment.loginParams.login_url,
-        redirectUrl: window.location.origin,
+        redirectUrl: `${window.location.origin}/callback`,
         postLogoutRedirectUri: window.location.origin,
         clientId: environment.loginParams.client_id,
         scope: environment.loginParams.scope,
         responseType: environment.loginParams.grant_type,
         silentRenew: true,
         useRefreshToken: true,
+        ignoreNonceAfterRefresh: true,
+        triggerRefreshWhenIdTokenExpired: false,
+        autoUserInfo: false,
         logLevel: LogLevel.Debug,
         secureRoutes:[environment.data_url,environment.wca_url]
       }

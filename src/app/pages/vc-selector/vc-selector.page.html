@@ -1,17 +1,18 @@
 <ion-header [translucent]="false">
-  <ion-toolbar style="padding-right: 0.5rem;">
-    <img alt src="assets/icon/IDEP_blanc_400x200.png" width="auto" slot="start" height="35px"/>
-    <ion-text slot="primary" color="white">{{userName}}</ion-text>
-    <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
+  <ion-toolbar class="toolbar-padding">
+    <img alt src="assets/icon/dome_white_logo.png" width="auto" slot="start" height="35px"/>
+    <ion-button slot="end" color="primary" class="toolbar-but" (click)="openPopover($event)">
+      {{userName}}
+      <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="vc-selector-content">
   <ion-grid >
     <ion-row class="ion-justify-content-center"
     *ngFor="let cred of credList; let i = index">
-    <ion-card (click)="sendCred(cred)">
-
+    <ion-card (click)="sendCred(cred)" class="vc-selector-card">
       <app-vc-view [credentialInput]="cred"></app-vc-view>
     </ion-card>
     </ion-row>
@@ -23,9 +24,11 @@
   [isOpen]="isAlertOpen"
   class="custom-alert"
   [header]=" 'vc-selector.ok-header' | translate"
-  message='<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style="border-radius: 2px">'
-  (didDismiss)="setOpen(false)"
-></ion-alert>  
+  message='<img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" class="vs-selector-alert">'
+  [buttons] = "closeButton"
+  cssClass="custom-close-button"
+  >
+</ion-alert>  
 <ion-alert
 [isOpen]="isAlertOpenFail"
 class="custom-alert"
