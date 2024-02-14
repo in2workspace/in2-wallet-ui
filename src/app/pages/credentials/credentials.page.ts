@@ -55,7 +55,6 @@ export class CredentialsPage implements OnInit {
     private route: ActivatedRoute,
     ) {
     this.route.queryParams.subscribe((params) => {
-      console.log("PARAMS", params);
       this.toggleScan = params['toggleScan'];
       this.from = params['from'];
       this.show_qr = params['show_qr'];
@@ -73,7 +72,6 @@ export class CredentialsPage implements OnInit {
     this.scaned_cred = false;
     this.refresh();
     if(this.credentialOfferUri !== '') {
-      console.log("ENTRA EN IF");
       this.generateCred();
     }
   }
@@ -81,8 +79,6 @@ export class CredentialsPage implements OnInit {
     this.toggleScan = true;
     this.show_qr = true;
     this.ebsiFlag = false;
-
-    console.log("from", this.from);
   }
 
   copyToClipboard(textToCopy: string) {
@@ -181,7 +177,6 @@ export class CredentialsPage implements OnInit {
   }
 
   generateCred() {
-    console.log("GENERATE CREDENTIAL", this.credentialOfferUri);
     this.walletService.requestCredential(this.credentialOfferUri).subscribe({
       next: (executionResponse) => {
         this.refresh();
