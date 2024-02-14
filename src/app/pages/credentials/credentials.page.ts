@@ -46,6 +46,7 @@ export class CredentialsPage implements OnInit {
   from = '';
   scaned_cred: boolean = false;
   show_qr: boolean = false;
+  credentialOfferUri = '';
   public ebsiFlag: boolean = false;
   public did: string = '';
 
@@ -54,9 +55,11 @@ export class CredentialsPage implements OnInit {
     private route: ActivatedRoute,
     ) {
     this.route.queryParams.subscribe((params) => {
+      console.log("PARAMS", params);
       this.toggleScan = params['toggleScan'];
       this.from = params['from'];
       this.show_qr = params['show_qr'];
+      this.credentialOfferUri = params['credentialOfferUri'];
     })
     this.dataService.listenDid().subscribe((data: any) => {
       this.ebsiFlag = true;
@@ -69,6 +72,10 @@ export class CredentialsPage implements OnInit {
     this.escaneado = '';
     this.scaned_cred = false;
     this.refresh();
+    if(this.credentialOfferUri !== '') {
+      console.log("ENTRA EN IF");
+      this.generateCred();
+    }
   }
   scan(){
     this.toggleScan = true;
@@ -171,6 +178,32 @@ export class CredentialsPage implements OnInit {
         }
       },
     });
+  }
+
+  generateCred() {
+    console.log("GENERATE CREDENTIAL", this.credentialOfferUri);
+    this.walletService.requestCredential(this.credentialOfferUri).subscribe({
+      next: (executionResponse) => {
+        this.refresh();
+      },
+      error: (err) => {
+        if (err.status == 422) {
+          setTimeout(() => {
+            this.isAlertOpen = false;
+          }, ERROR_TIME_IN_MS);
+          this.isAlertOpen = true;
+          this.escaneado = '';
+        } else if (err.status == 404) {
+          this.isAlertOpenNotFound = true;
+          this.escaneado = '';
+        } else {
+          setTimeout(() => {
+            this.isAlertOpenFail = false;
+          }, ERROR_TIME_IN_MS);
+          this.isAlertOpenFail = true;
+      }
+    },
+  })
   }
 
   isCredOffer = false;

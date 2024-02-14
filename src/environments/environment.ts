@@ -11,6 +11,7 @@ export const environment = {
   },
   walletUri: {
     execute_content_uri: '/api/v2/execute-content',
+    request_credential_uri: '/api/v2/request-credential',
     verifiable_presentation_uri: '/api/v2/verifiable-presentation',
     credentials_uri: '/api/v2/credentials',
     credentials_by_id_uri: '/api/v2/credentials?credentialId=',
