@@ -179,6 +179,7 @@ export class CredentialsPage implements OnInit {
   }
 
   generateCred() {
+    this.websocket.connect(environment.websocket.url + environment.websocket.uri)
     this.walletService.requestCredential(this.credentialOfferUri).subscribe({
       next: (executionResponse) => {
         this.refresh();
