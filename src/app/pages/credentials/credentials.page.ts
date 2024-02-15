@@ -137,7 +137,7 @@ export class CredentialsPage implements OnInit {
   qrCodeEmit(qrCode: string) {
     this.escaneado = qrCode;
     this.toggleScan = false;
-    this.websocket.connect(environment.websocket.uri + environment.websocket.url)
+    this.websocket.connect(environment.websocket.url + environment.websocket.uri)
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
         if (qrCode.includes("credential_offer_uri")) {
