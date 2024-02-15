@@ -61,8 +61,10 @@ export class CredentialsPage implements OnInit {
       this.credentialOfferUri = params['credentialOfferUri'];
     })
     this.dataService.listenDid().subscribe((data: any) => {
-      this.ebsiFlag = true;
+      if(data!=""){
+        this.ebsiFlag = true;
       this.did = data;
+      }
     })
   }
 
