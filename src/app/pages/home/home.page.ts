@@ -55,7 +55,12 @@ export class HomePage implements OnInit {
   }
   ngOnInit() {
     this.userName = this.authenticationService.getName();
-
+    this.route.queryParams.subscribe(params => {
+      const credentialOfferUri = params['credential_offer_uri'];
+      if (credentialOfferUri) {
+        this.router.navigate(['/tabs/credentials'], {queryParams: { credentialOfferUri: credentialOfferUri}})
+      }
+    });
   }
 
   logout(){

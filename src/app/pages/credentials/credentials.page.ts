@@ -46,6 +46,7 @@ export class CredentialsPage implements OnInit {
   from = '';
   scaned_cred: boolean = false;
   show_qr: boolean = false;
+  credentialOfferUri = '';
   public ebsiFlag: boolean = false;
   public did: string = '';
 
@@ -57,10 +58,13 @@ export class CredentialsPage implements OnInit {
       this.toggleScan = params['toggleScan'];
       this.from = params['from'];
       this.show_qr = params['show_qr'];
+      this.credentialOfferUri = params['credentialOfferUri'];
     })
     this.dataService.listenDid().subscribe((data: any) => {
-      this.ebsiFlag = true;
+      if(data!=""){
+        this.ebsiFlag = true;
       this.did = data;
+      }
     })
   }
 
@@ -69,13 +73,14 @@ export class CredentialsPage implements OnInit {
     this.escaneado = '';
     this.scaned_cred = false;
     this.refresh();
+    if(this.credentialOfferUri !== '') {
+      this.generateCred();
+    }
   }
   scan(){
     this.toggleScan = true;
     this.show_qr = true;
     this.ebsiFlag = false;
-
-    console.log("from", this.from);
   }
 
   copyToClipboard(textToCopy: string) {
@@ -101,7 +106,6 @@ export class CredentialsPage implements OnInit {
   logout(){
     this.authenticationService.logout().subscribe(()=>{
       this.router.navigate(['/login'], {})
-
     });
   }
 
@@ -132,7 +136,7 @@ export class CredentialsPage implements OnInit {
   qrCodeEmit(qrCode: string) {
     this.escaneado = qrCode;
     this.toggleScan = false;
-    this.websocket.connect(environment.websocket.uri + environment.websocket.url)
+    this.websocket.connect(environment.websocket.url + environment.websocket.uri)
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
         if (qrCode.includes("credential_offer_uri")) {
@@ -171,6 +175,32 @@ export class CredentialsPage implements OnInit {
         }
       },
     });
+  }
+
+  generateCred() {
+    this.websocket.connect(environment.websocket.url + environment.websocket.uri)
+    this.walletService.requestCredential(this.credentialOfferUri).subscribe({
+      next: (executionResponse) => {
+        this.refresh();
+      },
+      error: (err) => {
+        if (err.status == 422) {
+          setTimeout(() => {
+            this.isAlertOpen = false;
+          }, ERROR_TIME_IN_MS);
+          this.isAlertOpen = true;
+          this.escaneado = '';
+        } else if (err.status == 404) {
+          this.isAlertOpenNotFound = true;
+          this.escaneado = '';
+        } else {
+          setTimeout(() => {
+            this.isAlertOpenFail = false;
+          }, ERROR_TIME_IN_MS);
+          this.isAlertOpenFail = true;
+      }
+    },
+  })
   }
 
   isCredOffer = false;
