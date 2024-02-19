@@ -63,7 +63,7 @@ export class CredentialsPage implements OnInit {
     this.dataService.listenDid().subscribe((data: any) => {
       if(data!=""){
         this.ebsiFlag = true;
-      this.did = data;
+        this.did = data;
       }
     })
   }
