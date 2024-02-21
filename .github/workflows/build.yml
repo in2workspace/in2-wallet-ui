@@ -31,11 +31,7 @@ jobs:
       - name: Build Angular Project
         run: npm run build -- --configuration=development
 
-<<<<<<< HEAD
-      - name: Build Angular Project
-=======
       - name: Generate Testing Sources
->>>>>>> main
         run: npm run test:ci
 
       - name: SonarCloud Scan  
