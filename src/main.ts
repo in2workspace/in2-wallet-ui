@@ -21,6 +21,7 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     importProvidersFrom(IonicModule.forRoot({innerHTMLTemplatesEnabled:true})),
     importProvidersFrom(HttpClientModule),
+    //importProvidersFrom(HttpClientTestingModule),
     importProvidersFrom(
     TranslateModule.forRoot({
       loader: {

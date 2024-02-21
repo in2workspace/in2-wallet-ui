@@ -26,5 +26,3 @@ export class AuthenticationService {
   public getName():string {
     return this.userData.preferred_username;
   }
-
-}

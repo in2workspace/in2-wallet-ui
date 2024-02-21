@@ -17,7 +17,8 @@ jobs:
 
       - name: Build and Push docker image
         run: |
-          IMAGE_TAG="$COMPONENT_NAME:v$VERSION$SUFFIX"
+          echo "PROJECT_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+          IMAGE_TAG="$COMPONENT_NAME:v1.0.0$SUFFIX"
           docker build . --file Dockerfile --tag $DOCKER_HUB_CLIENT_NAME/$IMAGE_TAG
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker push $DOCKER_HUB_CLIENT_NAME/$IMAGE_TAG
@@ -26,4 +27,3 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           DOCKER_HUB_CLIENT_NAME: ${{ secrets.DOCKER_HUB_CLIENT_NAME }}
           COMPONENT_NAME: wallet-driving-application
-          VERSION: 2.0.0

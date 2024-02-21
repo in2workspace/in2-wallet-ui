@@ -8,8 +8,13 @@ import { VCReply, WalletService } from 'src/app/services/wallet.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+<<<<<<< HEAD
 import { VcViewComponent } from '../../components/vc-view/vc-view.component';
 import { LogoutPage } from '../logout/logout.page';
+=======
+import { VcViewComponent } from "../../components/vc-view/vc-view.component";
+import {LogoutPage } from '../logout/logout.page';
+>>>>>>> main
 
 @Component({
   selector: 'app-vc-selector',
@@ -44,8 +49,12 @@ export class VcSelectorPage implements OnInit {
   constructor(
     private router: Router,
     private walletService: WalletService,
+<<<<<<< HEAD
     private route: ActivatedRoute,
     private authenticationService: AuthenticationService,
+=======
+    private route: ActivatedRoute,    private authenticationService: AuthenticationService,
+>>>>>>> main
     private popoverController: PopoverController,
     public translate: TranslateService
   ) {
@@ -71,11 +80,19 @@ export class VcSelectorPage implements OnInit {
 
   async openPopover(ev: any) {
     const popover = await this.popoverController.create({
+<<<<<<< HEAD
       component: LogoutPage,
       event: ev,
       translucent: true,
     });
 
+=======
+      component: LogoutPage, 
+      event: ev,
+      translucent: true
+    });
+  
+>>>>>>> main
     await popover.present();
   }
 
@@ -85,6 +102,7 @@ export class VcSelectorPage implements OnInit {
   }
   sendCred(cred: any) {
     this.selCredList.push(cred);
+<<<<<<< HEAD
     this._VCReply.selectedVcList = this.selCredList;
     this.walletService.executeVC(this._VCReply).subscribe({
       next: (authenticationResponse) => {
@@ -111,6 +129,32 @@ export class VcSelectorPage implements OnInit {
       },
     },
   ];
+=======
+    this._VCReply.selectedVcList=this.selCredList;
+    this.walletService
+      .executeVC(this._VCReply)
+      .subscribe({
+        next: (authenticationResponse) => {
+          this.isAlertOpen = true;
+          this.isAlertOpen = true;
+        },
+        error: (err) => {
+          let TIME_IN_MS = 1500;
+          setTimeout(() => {
+            this.isAlertOpenFail = false;
+          }, TIME_IN_MS);
+          this.isAlertOpenFail = true;
+        }
+      });
+  }
+
+  public closeButton = [{text: this.translate.instant('vc-selector.close'),
+  role: 'confirm',
+  handler: () => {
+    this.isAlertOpen=false;
+    this.router.navigate(['/tabs/home']);
+  }}]
+>>>>>>> main
 
   isAlertOpenFail = false;
 

@@ -54,6 +54,19 @@ export class WalletService {
     );
   }
 
+  public requestCredential(credentialOfferUri: string): Observable<any> {
+    const options = {
+      headers: headers,
+      redirect: 'follow',
+      responseType: 'text' as 'json',
+    };
+    return this.http.post(
+      environment.wca_url + environment.walletUri.request_credential_uri,
+      {credential_offer_uri: credentialOfferUri},
+      options
+    );
+  }
+
   // Send the Selected VC List to the WCA to create the Verifiable Presentation
   public executeVC(_VCReply: VCReply): Observable<any> {
     return this.http.post(

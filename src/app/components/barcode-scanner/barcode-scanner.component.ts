@@ -38,6 +38,6 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
   onCodeResult(resultString: string) {
-    this.qrCode.emit(resultString);
+      this.qrCode.emit(resultString);
   }
 }
