@@ -42,10 +42,7 @@ export class CredentialsPage implements OnInit {
   private popoverController= inject(PopoverController);
   private websocket = inject(WebsocketService);
   toggleScan: boolean = false;
-<<<<<<< HEAD
   credOfferEndpoint="";
-=======
->>>>>>> main
   escaneado = '';
   from = '';
   scaned_cred: boolean = false;
@@ -58,10 +55,7 @@ export class CredentialsPage implements OnInit {
     private dataService: DataService,
     private route: ActivatedRoute,
     ) {
-<<<<<<< HEAD
       this.credOfferEndpoint=window.location.href;
-=======
->>>>>>> main
     this.route.queryParams.subscribe((params) => {
       this.toggleScan = params['toggleScan'];
       this.from = params['from'];
@@ -71,11 +65,7 @@ export class CredentialsPage implements OnInit {
     this.dataService.listenDid().subscribe((data: any) => {
       if(data!=""){
         this.ebsiFlag = true;
-<<<<<<< HEAD
         this.did = data;
-=======
-      this.did = data;
->>>>>>> main
       }
     })
   }
@@ -105,11 +95,7 @@ export class CredentialsPage implements OnInit {
         texto = texto.substring(prefix.length);
       }
     } else if (textToCopy === 'endpoint-text') {
-<<<<<<< HEAD
       texto = this.credOfferEndpoint;
-=======
-      texto = 'test-openid-credential-offer://';
->>>>>>> main
     }
 
     const textarea = document.createElement('textarea');
@@ -122,10 +108,6 @@ export class CredentialsPage implements OnInit {
   logout(){
     this.authenticationService.logout().subscribe(()=>{
       this.router.navigate(['/login'], {})
-<<<<<<< HEAD
-
-=======
->>>>>>> main
     });
   }
 
@@ -156,11 +138,7 @@ export class CredentialsPage implements OnInit {
   qrCodeEmit(qrCode: string) {
     this.escaneado = qrCode;
     this.toggleScan = false;
-<<<<<<< HEAD
     this.websocket.connect(environment.websocket_url + environment.websocket_uri)
-=======
-    this.websocket.connect(environment.websocket.url + environment.websocket.uri)
->>>>>>> main
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
         if (qrCode.includes("credential_offer_uri")) {

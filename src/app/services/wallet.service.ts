@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AuthenticationService } from './authentication.service';
 
 export interface VCReply {
   selectedVcList: any[];
@@ -50,19 +49,6 @@ export class WalletService {
     return this.http.post(
       environment.server_url + environment.server_uri.request_credential_uri,
       { credential_offer_uri: credentialOfferUri },
-      options
-    );
-  }
-
-  public requestCredential(credentialOfferUri: string): Observable<any> {
-    const options = {
-      headers: headers,
-      redirect: 'follow',
-      responseType: 'text' as 'json',
-    };
-    return this.http.post(
-      environment.wca_url + environment.walletUri.request_credential_uri,
-      {credential_offer_uri: credentialOfferUri},
       options
     );
   }
