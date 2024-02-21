@@ -25,7 +25,7 @@ describe('WalletService', () => {
         triggerRefreshWhenIdTokenExpired: false,
         autoUserInfo: false,
         //logLevel: LogLevel.Debug,
-        secureRoutes:[environment.data_url,environment.wca_url]
+        secureRoutes:[environment.server_url,environment.server_url]
       }})],
       providers: [WalletService, OidcSecurityService, Storage],
     });
@@ -52,7 +52,7 @@ describe('WalletService', () => {
     });
 
     const req = httpTestingController.expectOne(
-      environment.wca_url + environment.walletUri.execute_content_uri
+      environment.server_url + environment.server_uri.execute_content_uri
     );
 
     expect(req.request.method).toBe('POST');
@@ -74,7 +74,7 @@ describe('WalletService', () => {
     });
 
     const req = httpTestingController.expectOne(
-      environment.wca_url + environment.walletUri.verifiable_presentation_uri
+      environment.server_url + environment.server_uri.verifiable_presentation_uri
     );
 
     expect(req.request.method).toBe('POST');

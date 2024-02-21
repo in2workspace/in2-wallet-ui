@@ -47,7 +47,7 @@
         "ok-msg": "Credencial agregada",
         "unsucces": "Sin éxito",
         "already-saved": "VC ya guardado",
-        "no-credential": "No hay credencial válida almacenada"
+        "no-credential": "No hay credencial válida almacenada",
         "ebsi-popup": {
           "info": "Copia este DID y este Credential Offer Endpoint para completar los prerrequisitos de la emisión de la credencial EBSI.",
           "did": "DID: ",

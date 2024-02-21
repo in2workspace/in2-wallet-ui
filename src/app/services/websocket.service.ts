@@ -20,7 +20,7 @@ export class WebsocketService {
 
     this.socket.onopen = () => {
       console.log('Conexión WebSocket abierta');
-      this.sendMessage(JSON.stringify({ id: this.authenticationService.token }));
+      this.sendMessage(JSON.stringify({ id: this.authenticationService.getToken() }));
     };
 
     this.socket.onmessage = async (event) => {
@@ -58,14 +58,6 @@ export class WebsocketService {
     this.socket.onclose = () => {
       console.log('Conexión WebSocket cerrada');
     };
-  }
-
-  getMessageSubject() {
-    return this.messageSubject.asObservable();
-  }
-  
-  private handleIncomingMessage(message: string) {
-    this.messageSubject.next(message);
   }
 
   sendMessage(message: string): void {

@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  data_url: window["env"]["dataUrl"] || 'http://localhost:8086',
-  wca_url: window["env"]["wcaUrl"] || 'http://localhost:8081',
+  server_url: window["env"]["dataUrl"] || 'http://localhost:8086',
+  server_url: window["env"]["wcaUrl"] || 'http://localhost:8081',
   loginParams: {
     has_login: true,
     login_url: window["env"]["loginUrl"] || 'http://localhost:9099/realms/wallet',
@@ -9,7 +9,7 @@ export const environment = {
     scope: window["env"]["scope"] || 'openid profile email offline_access',
     grant_type: window["env"]["grant_type"] || 'code'
   },
-  walletUri: {
+  server_uri: {
     execute_content_uri: window["env"]["execContUri"] || '/api/v2/execute-content',
     request_credential_uri: '/api/v2/request-credential',
     verifiable_presentation_uri: window["env"]["vPUri"] || '/api/v2/verifiable-presentation',
