@@ -42,6 +42,7 @@ export class CredentialsPage implements OnInit {
   private popoverController= inject(PopoverController);
   private websocket = inject(WebsocketService);
   toggleScan: boolean = false;
+  credOfferEndpoint="";
   escaneado = '';
   from = '';
   scaned_cred: boolean = false;
@@ -54,6 +55,7 @@ export class CredentialsPage implements OnInit {
     private dataService: DataService,
     private route: ActivatedRoute,
     ) {
+      this.credOfferEndpoint=window.location.href;
     this.route.queryParams.subscribe((params) => {
       this.toggleScan = params['toggleScan'];
       this.from = params['from'];
@@ -63,7 +65,7 @@ export class CredentialsPage implements OnInit {
     this.dataService.listenDid().subscribe((data: any) => {
       if(data!=""){
         this.ebsiFlag = true;
-      this.did = data;
+        this.did = data;
       }
     })
   }
@@ -93,7 +95,7 @@ export class CredentialsPage implements OnInit {
         texto = texto.substring(prefix.length);
       }
     } else if (textToCopy === 'endpoint-text') {
-      texto = 'test-openid-credential-offer://';
+      texto = this.credOfferEndpoint;
     }
 
     const textarea = document.createElement('textarea');
@@ -136,7 +138,7 @@ export class CredentialsPage implements OnInit {
   qrCodeEmit(qrCode: string) {
     this.escaneado = qrCode;
     this.toggleScan = false;
-    this.websocket.connect(environment.websocket.url + environment.websocket.uri)
+    this.websocket.connect(environment.websocket_url + environment.websocket_uri)
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
         if (qrCode.includes("credential_offer_uri")) {
@@ -178,7 +180,7 @@ export class CredentialsPage implements OnInit {
   }
 
   generateCred() {
-    this.websocket.connect(environment.websocket.url + environment.websocket.uri)
+    this.websocket.connect(environment.websocket_url + environment.websocket_uri)
     this.walletService.requestCredential(this.credentialOfferUri).subscribe({
       next: (executionResponse) => {
         this.refresh();

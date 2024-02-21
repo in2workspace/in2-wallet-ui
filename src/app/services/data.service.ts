@@ -22,7 +22,7 @@ export class DataService {
   }
 
   getDid() {
-    return this.http.get(environment.wca_url + environment.walletUri.ebsi_did_uri, { responseType: 'text' }).pipe(
+    return this.http.get(environment.server_url + environment.server_uri.ebsi_did_uri, { responseType: 'text' }).pipe(
       map((data) => {
         return data.toString()
       }),

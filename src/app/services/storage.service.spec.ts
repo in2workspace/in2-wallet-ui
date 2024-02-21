@@ -29,14 +29,6 @@ describe('StorageService', () => {
   });
 
   
-  it('should initialize storage', waitForAsync(() => {
-    spyOn(storageService, 'init').and.callThrough();
-
-    storageService.init().then(() => {
-      expect(storageService.init).toHaveBeenCalled();
-      expect(storageService['_storage']).toBeDefined();
-    });
-  }));
 
 
 

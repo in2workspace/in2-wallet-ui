@@ -1,15 +1,15 @@
 export const environment = {
-  production: false,
-  data_url: window["env"]["dataUrl"] || 'http://localhost:8086',
-  wca_url: window["env"]["wcaUrl"] || 'http://localhost:8081',
-  loginParams: {
-    has_login: true,
-    login_url: window["env"]["loginUrl"] || 'http://localhost:9099/realms/wallet',
-    client_id: window["env"]["client_id"] || 'auth-client',
+  production: true,
+  server_url:window["env"]["serverUrl"] || 'http://localhost:8081',
+  iam_url: window["env"]["iamUrl"] || 'http://localhost:9099',
+  websocket_url: window["env"]["websocketUrl"] || 'ws://localhost:8081',
+  iam_params: {
+    iam_uri: window["env"]["iamUri"] || '/realms/wallet',
+    client_id: window["env"]["client_id"] ||  'auth-client',
     scope: window["env"]["scope"] || 'openid profile email offline_access',
     grant_type: window["env"]["grant_type"] || 'code'
   },
-  walletUri: {
+  server_uri: {
     execute_content_uri: window["env"]["execContUri"] || '/api/v2/execute-content',
     request_credential_uri: '/api/v2/request-credential',
     verifiable_presentation_uri: window["env"]["vPUri"] || '/api/v2/verifiable-presentation',
@@ -18,8 +18,5 @@ export const environment = {
     users_uri: window["env"]["userUri"] || '/api/v2/users',
     ebsi_did_uri: window["env"]["ebsiDid"] || '/api/v2/ebsi-did'
   },
-  websocket:{
-    url: window["env"]["websocketUrl"] || 'ws://localhost:8081',
-    uri: window["env"]["websocketUri"] || '/api/v2/pin'
-  }
+  websocket_uri: window["env"]["websocketUri"] || '/api/v2/pin'
 };
