@@ -55,7 +55,7 @@ export class CredentialsPage implements OnInit {
     private dataService: DataService,
     private route: ActivatedRoute,
     ) {
-      this.credOfferEndpoint=window.location.href;
+      this.credOfferEndpoint=window.location.origin+"/tabs/home";
     this.route.queryParams.subscribe((params) => {
       this.toggleScan = params['toggleScan'];
       this.from = params['from'];
