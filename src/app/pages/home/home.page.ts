@@ -47,12 +47,16 @@ export class HomePage implements OnInit {
   }
 
   async openPopover(ev: any) {
-    await this.popoverController.create({
+    const popover = await this.popoverController.create({
       component: LogoutPage,
       event: ev,
       translucent: true,
+      cssClass: 'custom-popover'
     });
+
+    await popover.present();
   }
+
   ngOnInit() {
     this.userName = this.authenticationService.getName();
     this.route.queryParams.subscribe(params => {
