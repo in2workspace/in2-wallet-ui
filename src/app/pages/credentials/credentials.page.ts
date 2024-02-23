@@ -6,7 +6,7 @@ import {StorageService} from 'src/app/services/storage.service';
 import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
 import {QRCodeModule} from 'angular2-qrcode';
 import {WalletService} from 'src/app/services/wallet.service';
-import {VcViewComponent, VerifiableCredential} from "../../components/vc-view/vc-view.component";
+import {VcViewComponent} from "../../components/vc-view/vc-view.component";
 import {TranslateModule} from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -14,6 +14,7 @@ import {LogoutPage } from '../logout/logout.page';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { DataService } from 'src/app/services/data.service';
 import { environment } from 'src/environments/environment';
+import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 
 const TIME_IN_MS = 10000;
 
@@ -124,7 +125,7 @@ export class CredentialsPage implements OnInit {
 
   refresh() {
 
-    this.walletService.getAllVCs().subscribe((credentialListResponse: Array<VerifiableCredential>) => {
+    this.walletService.getAllVCs().subscribe((credentialListResponse: VerifiableCredential[]) => {
       this.credList = credentialListResponse.reverse();
     })
   }

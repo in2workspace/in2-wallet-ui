@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  server_url: 'http://localhost:8081',
+  server_url: 'http://localhost:8080',
   iam_url:'http://localhost:9099',
   websocket_url:'ws://localhost:8081',
   iam_params: {

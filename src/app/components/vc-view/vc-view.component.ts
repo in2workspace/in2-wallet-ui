@@ -2,20 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { QRCodeModule } from 'angular2-qrcode';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-
-export interface VerifiableCredential {
-  credentialSubject: {
-    mobile_phone: string;
-    email: string;
-    title: string;
-    first_name: string;
-    last_name: string;
-    dateOfBirth: string;
-    gender: string;
-  };
-  id: string;
-  vcType: ['', ''];
-}
+import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 
 @Component({
   selector: 'app-vc-view',
