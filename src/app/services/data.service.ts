@@ -7,8 +7,6 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class DataService {
-  private ebsiFlag: boolean = false;
-  private did: string = '';
   private didSubject = new BehaviorSubject<string>("");
 
   constructor(private http: HttpClient) { }
