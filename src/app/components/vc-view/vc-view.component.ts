@@ -47,8 +47,6 @@ export class VcViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.cred = this.credentialInput;
-    console.log(this.cred);
-    console.log(typeof this.cred['vcType'][0]);
     let i = 0;
     const v_cred: string = 'VerifiableCredential';
     const v_atest: string = 'VerifiableAttestation';
@@ -58,7 +56,6 @@ export class VcViewComponent implements OnInit {
         this.cred['vcType'][i] !== v_atest
       ) {
         this.vcType = this.cred['vcType'][i];
-        console.log(this.vcType);
       }
       i++;
     }

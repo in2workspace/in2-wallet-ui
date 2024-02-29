@@ -24,10 +24,17 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         // Handle the error globally
           switch (error.status) {
             case 422:
-              this.toastServiceHandler.showErrorAlert( 'home.unsucces', 'home.no-credential' || error.message);
+              this.toastServiceHandler.showErrorAlert( 'home.unsucces',  error.message);
               break;
             case 404:
-              this.toastServiceHandler.showErrorAlert('', error.message || 'Ha ocurrido un error');
+              this.toastServiceHandler.showErrorAlert('home.unsucces', error.message);
+              break;
+            case 500:
+              console.log("error")
+              this.toastServiceHandler.showErrorAlert('home.unsucces', error.message).subscribe();;
+              break;
+             case 0:
+              this.toastServiceHandler.showErrorAlert('home.unsucces', error.message );
               break;
           }
 

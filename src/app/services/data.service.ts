@@ -11,19 +11,15 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
-  sendDid(did: string) {
-    this.didSubject.next(did);
-  }
-
-  listenDid(): any {
+  listenDid(): BehaviorSubject<string> {
     return this.didSubject;
   }
 
   getDid() {
     return this.http.get(environment.server_url + environment.server_uri.ebsi_did_uri, { responseType: 'text' }).pipe(
-      map((data) => {
-        return data.toString()
-      }),
+      map((didResponse) => {
+        this.didSubject.next(didResponse);
+     }),
       catchError((err) => {
         throw new Error("Err");
       })

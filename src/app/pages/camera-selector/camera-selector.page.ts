@@ -55,7 +55,7 @@ export class CameraSelectorPage {
 
   logout(){
     this.authenticationService.logout().subscribe(()=>{
-      this.router.navigate(['/login'], {})
+      this.router.navigate(['/home'], {})
 
     });
   }

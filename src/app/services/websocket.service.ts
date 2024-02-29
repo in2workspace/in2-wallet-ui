@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { BehaviorSubject } from 'rxjs';
 import { AlertController } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,8 @@ export class WebsocketService {
 
     ) {}
 
-  connect(url: string): void {
-    this.socket = new WebSocket(url);
+  connect(): void {
+    this.socket = new WebSocket(environment.websocket_url+environment.websocket_uri);
 
     this.socket.onopen = () => {
       console.log('Conexión WebSocket abierta');

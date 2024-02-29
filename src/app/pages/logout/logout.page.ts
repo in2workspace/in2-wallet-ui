@@ -18,7 +18,7 @@ export class LogoutPage {
         private router:Router) {}
     logout () {
         this.authenticationService.logout().subscribe(()=>{
-            this.router.navigate(['/login'], {})
+            this.router.navigate(['/home'], {})
       
           });
         this.popOverController.dismiss();

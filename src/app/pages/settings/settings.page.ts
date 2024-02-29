@@ -7,7 +7,6 @@ import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import {LogoutPage } from '../logout/logout.page';
 import { DataService } from 'src/app/services/data.service';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-settings',
@@ -21,7 +20,6 @@ export class SettingsPage implements OnInit {
   constructor(private authenticationService: AuthenticationService,
     private router: Router,
     private dataService: DataService,
-    private http: HttpClient,
     private popoverController: PopoverController
 
   ) { }
@@ -34,12 +32,12 @@ export class SettingsPage implements OnInit {
   }
   goHomeWithEBSI() {
     this.dataService.getDid().subscribe({
-      next: (did) => {
-      this.dataService.sendDid(did);
+      next: () => {
       this.router.navigate(['/tabs/credentials']);
     },
      error: (error) => {
         this.isAlertOpen = true;
+        console.error(error)
       }
     })
   }
@@ -47,9 +45,8 @@ export class SettingsPage implements OnInit {
     this.isAlertOpen = !this.isAlertOpen;
   }
   logout() {
-    console.log("hola")
     this.authenticationService.logout().subscribe(() => {
-      this.router.navigate(['/login'], {})
+      this.router.navigate(['/home'], {})
     });
   }
   async openPopover(ev: any) {
