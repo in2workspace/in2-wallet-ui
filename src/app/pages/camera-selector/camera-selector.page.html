@@ -1,19 +1,9 @@
-<ion-header [translucent]="false">
-  <ion-toolbar>
-    <img alt src="assets/icon/dome_white_logo.png" width="auto" slot="start" height="35px"/>
-    <ion-button slot="end" color="primary" class="toolbar-but" (click)="openPopover($event)">
-      {{userName}}
-      <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
-    </ion-button>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true" class="camera-selector-content" >
   <ion-grid>
     <b class="pages_titles">{{"camera-selector.settings" | translate}}</b>
     <p class="camera-selector-title">{{"camera-selector.title" | translate}}</p>
     <ion-row class="ion-justify-content-start" class="camera-row">
-      <ion-select [(ngModel)]="selectedDevice" (ionChange)="onDeviceSelectChange($any($event).target?.value)" interface="popover" class="camera-select">
+      <ion-select [ngModel]="selectedDevice | async" (ionChange)="onDeviceSelectChange($any($event).target?.value)" interface="popover" class="camera-select">
         <ion-select-option value="">No Device</ion-select-option>
         <ion-select-option *ngFor="let camera of availableDevices" [value]="camera.deviceId">
           {{ camera.label }}

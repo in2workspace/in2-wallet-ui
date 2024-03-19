@@ -19,7 +19,6 @@ const options = {
 export class WalletService {
   private http = inject(HttpClient);
 
-  // Send a request to the WCA to execute the content of a QR code
   public executeContent(url: string): Observable<any> {
 
     return this.http.post<JSON>(
@@ -28,6 +27,18 @@ export class WalletService {
       options
     );
   }
+  public getVCinCBOR(credential:VerifiableCredential):Observable<any> {
+    const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text' };
+    return this.http.post(
+      environment.server_url+ '/api/vp/cbor', credential,
+      options)
+  }
+  public getVCinJWT(credential:VerifiableCredential):Observable<any> {
+    const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text'  };
+    return this.http.get(
+      environment.server_url + '/api/credentials/id?credentialId=' + credential.id + '&format=vc_jwt',
+      options)
+    }
 
   public requestCredential(credentialOfferUri: string): Observable<any> {
     return this.http.post<JSON>(

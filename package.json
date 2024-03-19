@@ -35,7 +35,7 @@
     "@zxing/library": "^0.19.2",
     "@zxing/ngx-scanner": "^3.8.1",
     "angular-auth-oidc-client": "^16.0.1",
-    "angular2-qrcode": "^2.0.3",
+    "angularx-qrcode": "^15.0.1",
     "ionicons": "^7.0.0",
     "ngx-indexed-db": "^16.0.0",
     "rxjs": "~7.5.0",

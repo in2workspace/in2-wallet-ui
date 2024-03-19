@@ -1,14 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {IonicModule, PopoverController} from '@ionic/angular';
+import {IonicModule } from '@ionic/angular';
 import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
 import {ActivatedRoute, Router, RouterModule } from '@angular/router';
-import {AuthenticationService} from 'src/app/services/authentication.service';
 import {TranslateModule} from '@ngx-translate/core';
-import {LogoutPage } from '../logout/logout.page';
 
-const TIME_IN_MS = 1500;
 
 @Component({
   selector: 'app-home',
@@ -40,25 +37,12 @@ export class HomePage implements OnInit {
 
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService,
-    private popoverController: PopoverController,
     private route: ActivatedRoute,
     ) {
   }
 
-  async openPopover(ev: any) {
-    const popover = await this.popoverController.create({
-      component: LogoutPage,
-      event: ev,
-      translucent: true,
-      cssClass: 'custom-popover'
-    });
-
-    await popover.present();
-  }
 
   ngOnInit() {
-    this.userName = this.authenticationService.getName();
     this.route.queryParams.subscribe(params => {
       const credentialOfferUri = params['credential_offer_uri'];
       if (credentialOfferUri) {
@@ -67,11 +51,5 @@ export class HomePage implements OnInit {
     });
   }
 
-  logout(){
-    this.authenticationService.logout().subscribe(()=>{
-      this.router.navigate(['/home'], {})
-
-    });
-  }
 
 }

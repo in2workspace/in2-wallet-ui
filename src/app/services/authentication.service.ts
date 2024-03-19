@@ -1,5 +1,6 @@
 import { Injectable} from '@angular/core';
 import { OidcSecurityService} from 'angular-auth-oidc-client';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 
 
 @Injectable({
@@ -7,15 +8,21 @@ import { OidcSecurityService} from 'angular-auth-oidc-client';
 })
 export class AuthenticationService {
 
-
+  name: BehaviorSubject<string> = new BehaviorSubject<string>(
+    ""
+  );
   private token!: string;
   private userData: any;
 
   constructor(public oidcSecurityService: OidcSecurityService) {
-    this.oidcSecurityService.checkAuth().subscribe(({ userData, accessToken }) => {
+    this.checkAuth().subscribe();
+  }
+  checkAuth(){
+    return this.oidcSecurityService.checkAuth().pipe(map(({ userData, accessToken}) => {
       this.userData = userData;
+      this.name.next(this.userData.name);
       this.token = accessToken;
-    });
+    }));
   }
   public logout() {
     return this.oidcSecurityService.logoff();
@@ -23,7 +30,7 @@ export class AuthenticationService {
   public getToken():string{
     return  this.token;
   }
-  public getName():string {
-    return this.userData.preferred_username;
+  public getName(): Observable<string> {
+    return this.name;
   }
 }

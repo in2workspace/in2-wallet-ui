@@ -1,11 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, PopoverController } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { TranslateModule,TranslateService } from '@ngx-translate/core';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-import {LogoutPage } from '../logout/logout.page';
-import { Router} from '@angular/router';
+import { StorageService } from 'src/app/services/storage.service';
+import { BehaviorSubject, distinctUntilChanged, map, shareReplay } from 'rxjs';
 
 @Component({
   selector: 'app-language-selector',
@@ -15,73 +14,51 @@ import { Router} from '@angular/router';
 })
 export class LanguageSelectorPage implements OnInit {
   public translate= inject(TranslateService);
-  selected : string = '';
+  private storageService = inject(StorageService);
+  selected = {name:"",code:""} ;
+  language = {name:"",code:""};
   userName: string = '';
-
+  private languages = new BehaviorSubject<any>("");
   languageList = [
     {
-      name: "English",
-      url: "assets/flags/uk.png",
-      code: "en"
+      name : "English",
+      code : "en"
     },
     {
       name: "Castellano",
-      url: "assets/flags/es.png",
-      code: "es"
+      code : "es"
     },
     {
       name: "Català",
-      url: "assets/flags/ca.png",
-      code: "ca"
-    },
-    {
-      name: "Italian",
-      url: "assets/flags/it.png",
-      code: "it"
-    },
-    {
-      name: "French",
-      url: "assets/flags/fr.png",
-      code: "fr"
-    },
-    {
-      name: "German",
-      url: "assets/flags/de.png",
-      code: "de"
-    },
-
+      code : "ca"
+    }
   ]
-  constructor(
-    private router: Router,
-    private authenticationService: AuthenticationService,
-    private popoverController: PopoverController,
-    ) { }
+  languageSelected = this.languages.pipe(
+    map((device) => {
+      let lang = {};
+       this.languageList.forEach((language) =>{
+        if (language.code === device) {
+          lang = language;
+        }})
+        return lang
+  }),
+    distinctUntilChanged(),
+    shareReplay(1)
+  );  
 
   ngOnInit() {
-    this.selected = this.translate.currentLang;
-    this.userName = this.authenticationService.getName();
-  }
-  languageChange(code:string){
-    this.selected = code;
-    this.translate.use(code);
-  }
-
-  logout(){
-    this.authenticationService.logout().subscribe(()=>{
-      this.router.navigate(['/home'], {})
-
+    this.storageService.get("language").then((datos)=>{
+      this.languages.next(datos);
     });
+    let lang = this.languageList.forEach((language) =>{
+      if (language.code === this.translate.currentLang) {
+        this.selected = language;
+      }})
+    if(lang!= undefined)this.selected = lang;
+    if(this.translate.currentLang == undefined) this.selected = this.languageList[2];
   }
-
-  async openPopover(ev: any) {
-    const popover = await this.popoverController.create({
-      component: LogoutPage, 
-      event: ev,
-      translucent: true,
-      cssClass: 'custom-popover'
-    });
-  
-    await popover.present();
+  languageChange(code:any){
+    this.translate.use(code.code);
+    this.storageService.set("language",code.code);
   }
-
 }

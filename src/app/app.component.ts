@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, PopoverController } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
+import { LogoutPage } from './pages/logout/logout.page';
+import { StorageService } from './services/storage.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,39 +15,40 @@ import { AuthenticationService } from './services/authentication.service';
   standalone: true,
   imports: [IonicModule, RouterLink, RouterLinkActive, CommonModule,TranslateModule ],
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
     private authenticationService = inject(AuthenticationService);
     private router = inject(Router);
-  public appPages = [
-    { title: 'home', url: '/home', icon: 'home' },
-    { title: 'credentials', url: '/credentials', icon: 'wallet' },
-    { title: 'camera-selector', url: '/camera-selector', icon: 'camera' },
-    { title: 'language-selector', url: '/language-selector', icon: 'flag' },
-    { title: 'terms-of-user', url: '/terms-of-use', icon: 'document-text' },
-    { title: 'privacy-policy', url: '/privacy-policy', icon: 'book' },
-    { title: 'faqs', url: '/faqs', icon: 'help' },
-    { title: 'settings', url: '/settings', icon: 'cog' },
-    { title: 'logout', url:'/login', icon:'log-out'},
-  ];
+  userName:Observable<string> | undefined;
 
-  showLanguageDropDown = false;
-
-  toggleLanguageDropdown() {
-    this.showLanguageDropDown = !this.showLanguageDropDown;
-  }
-
-  changeLanguage(language: string) {
-    this.showLanguageDropDown = false;
-  }
   constructor(public translate: TranslateService,
-    ) {
-      translate.addLangs(['en']);
-      translate.setDefaultLang('en');
+    private popoverController: PopoverController,
+    private storageService:StorageService
+    )  {
+      translate.addLangs(['en','es','ca']);
+      translate.setDefaultLang('ca');
+      this.storageService.get("language").then((res)=>{
+        if(res)translate.setDefaultLang(res);
+        else this.storageService.set("language","ca")
+      })
     }
+  ngOnInit(): void {
+    this.userName = this.authenticationService.getName();
+ }
     logout(){
       this.authenticationService.logout().subscribe(() => {
         this.router.navigate(['/home'], {})
 
       });
     }
+    
+  async openPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: LogoutPage,
+      event: ev,
+      translucent: true,
+      cssClass: 'custom-popover'
+    });
+
+    await popover.present();
+  }
 }

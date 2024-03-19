@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, PopoverController } from '@ionic/angular';
-import { QRCodeModule } from 'angular2-qrcode';
+import { IonicModule } from '@ionic/angular';
+import { QRCodeModule } from 'angularx-qrcode';
 import { WalletService } from 'src/app/services/wallet.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { AuthenticationService } from 'src/app/services/authentication.service';
 import { VcViewComponent } from '../../components/vc-view/vc-view.component';
-import { LogoutPage } from '../logout/logout.page';
 import { VCReply } from 'src/app/interfaces/verifiable-credential-reply';
 
 @Component({
@@ -43,8 +41,6 @@ export class VcSelectorPage implements OnInit {
     private router: Router,
     private walletService: WalletService,
     private route: ActivatedRoute,
-    private authenticationService: AuthenticationService,
-    private popoverController: PopoverController,
     public translate: TranslateService
   ) {
     this.route.queryParams.subscribe((params) => {
@@ -55,8 +51,6 @@ export class VcSelectorPage implements OnInit {
   }
 
   ngOnInit() {
-    this.userName = this.authenticationService.getName();
-
     this.credList = this.executionResponse['selectableVcList'];
     this.credList.forEach((credential) => {
       this.isClick.push(false);
@@ -67,15 +61,6 @@ export class VcSelectorPage implements OnInit {
     return this.isClick[index];
   }
 
-  async openPopover(ev: any) {
-    const popover = await this.popoverController.create({
-      component: LogoutPage,
-      event: ev,
-      translucent: true,
-    });
-
-    await popover.present();
-  }
 
   selectCred(cred: any, index: number) {
     this.selCredList.push(cred);

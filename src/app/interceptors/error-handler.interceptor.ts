@@ -13,7 +13,7 @@ import { ToastServiceHandler } from '../services/toast.service';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
-  private toastServiceHandler = inject( ToastServiceHandler);
+  private toastServiceHandler = inject(ToastServiceHandler);
 
   intercept(
     request: HttpRequest<any>,
@@ -30,7 +30,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               this.toastServiceHandler.showErrorAlert('home.unsucces', error.message);
               break;
             case 500:
-              console.log("error")
+              console.error("error")
               this.toastServiceHandler.showErrorAlert('home.unsucces', error.message).subscribe();;
               break;
              case 0:

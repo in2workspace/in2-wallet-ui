@@ -2,12 +2,14 @@ export interface VerifiableCredential {
     credentialSubject: {
       mobile_phone: string;
       email: string;
-      title: string;
-      first_name: string;
-      last_name: string;
+      title?: string;
+      firstName: string;
+      lastName: string;
+      organizationalUnit:string;
       dateOfBirth: string;
       gender: string;
     };
     id: string;
+    expirationDate:Date;
     vcType: ['', ''];
   }
