@@ -12,21 +12,21 @@ export class ToastServiceHandler {
     private translate: TranslateService
   ) { }
 
-  showErrorAlert(headerMessage: string, message: string): Observable<any> {
+  showErrorAlert(headerMessage: string, messageKey: string): Observable<any> {
     return this.translate.get(headerMessage).pipe(
-      mergeMap(translatedHeader => this.translate.get(headerMessage).pipe(
-        map(async translatedMessage => {
-
-          const alert = await this.toastController.create({
-            header: translatedHeader,
-            [message]: translatedMessage,
-            buttons: ['OK']
-          });
-
-          await alert.present();
-        })
-      )));
-
-
+      mergeMap(translatedHeader =>
+        this.translate.get(messageKey).pipe(
+          map(async translatedMessage => {
+            const alert = await this.toastController.create({
+              header: translatedHeader,
+              message: translatedMessage,
+              buttons: ['OK']
+            });
+            await alert.present();
+          })
+        )
+      )
+    );
   }
+
 }

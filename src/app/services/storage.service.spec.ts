@@ -1,48 +1,72 @@
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { StorageService } from './storage.service';
 import { Storage } from '@ionic/storage-angular';
 
 describe('StorageService', () => {
-  let storageService: StorageService;
-  let storageMock: jasmine.SpyObj<Storage>;
+  let service: StorageService;
+  let storageSpy: jasmine.SpyObj<Storage>;
 
   beforeEach(() => {
-    const storageSpy = jasmine.createSpyObj('Storage', ['create', 'set', 'get', 'remove', 'length']);
-
+    const spy = jasmine.createSpyObj('Storage', ['create', 'get', 'set', 'remove', 'length', 'keys']);
     TestBed.configureTestingModule({
       providers: [
-        { provide: Storage, useValue: storageSpy },
         StorageService,
-      ],
+        { provide: Storage, useValue: spy }
+      ]
     });
-
-    storageService = TestBed.inject(StorageService);
-    storageMock = TestBed.inject(Storage) as jasmine.SpyObj<Storage>;
-
-    // Configuramos el mock para devolver valores predeterminados
-    storageMock.create.and.returnValue(Promise.resolve(storageMock));
-    storageMock.length.and.returnValue(Promise.resolve(0));
+    service = TestBed.inject(StorageService);
+    storageSpy = TestBed.inject(Storage) as jasmine.SpyObj<Storage>;
+    storageSpy.create.and.resolveTo(spy as any);
+    (service as any)._storage = spy;
   });
+
 
   it('should be created', () => {
-    expect(storageService).toBeTruthy();
+    expect(service).toBeTruthy();
   });
 
-  
-
-
-
-  it('should get a value from storage', waitForAsync(() => {
+  it('should set a value in storage', fakeAsync(() => {
     const key = 'testKey';
     const value = 'testValue';
+    storageSpy.set.and.returnValue(Promise.resolve());
 
-    storageMock.get.withArgs(key).and.returnValue(Promise.resolve(value));
+    service.set(key, value);
+    tick();
 
-    storageService.get(key).then((result) => {
-      expect(result).toEqual(value);
-    });
+    expect(storageSpy.set.calls.count()).toBe(1);
+    expect(storageSpy.set.calls.mostRecent().args).toEqual([key, value]);
   }));
 
+  it('should get a value from storage', async () => {
+    const key = 'testKey';
+    const value = 'testValue';
+    storageSpy.get.and.returnValue(Promise.resolve(value));
 
-  
+    const result = await service.get(key);
+    expect(result).toEqual(value);
+    expect(storageSpy.get).toHaveBeenCalledWith(key);
+  });
+
+  it('should get all values from storage', async () => {
+
+    const expectedValues = ['', ''];
+    storageSpy.length.and.returnValue(Promise.resolve(expectedValues.length));
+
+    expectedValues.forEach((value, index) => {
+      storageSpy.get.withArgs(index.toString()).and.returnValue(Promise.resolve(value));
+    });
+
+    const result = await service.getAll();
+
+    expect(result.length).toEqual(expectedValues.length);
+    expect(result).toEqual(expectedValues);
+  });
+
+  it('should remove a value from storage', async () => {
+    const key = 'testKey';
+    storageSpy.remove.and.returnValue(Promise.resolve());
+
+    await service.remove(key);
+    expect(storageSpy.remove).toHaveBeenCalledWith(key);
+  });
 });
