@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ToastServiceHandler } from '../services/toast.service';
 import { HttpErrorInterceptor } from './error-handler.interceptor';
 
@@ -68,15 +68,18 @@ describe('HttpErrorInterceptor with HttpClient', () => {
 
   it('should show error toast on network error (status 0)', () => {
     const spy = spyOn(mockToastServiceHandler, 'showErrorAlert');
+    const consoleErrorSpy = spyOn(console, 'error');
 
     httpClient.get('/testNetworkError').subscribe({
       error: (error) => {
         expect(spy).toHaveBeenCalledWith('home.unsucces', 'Http failure response for /testNetworkError: 0 ');
+        expect(consoleErrorSpy).toHaveBeenCalledWith('Error occurred:', jasmine.any(HttpErrorResponse));
       }
     });
 
     const req = httpMock.expectOne('/testNetworkError');
     req.error(new ErrorEvent('Network error'), { status: 0 });
   });
+
 });
 

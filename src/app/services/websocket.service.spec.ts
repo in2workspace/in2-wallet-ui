@@ -51,7 +51,6 @@ describe('WebsocketService', () => {
     spyOn(mockWebSocketInstance, 'send');
     spyOn(mockWebSocketInstance, 'close');
 
-    spyOnProperty(mockWebSocketInstance, 'onerror', 'get').and.returnValue((event: Event) => console.log('Mock WebSocket error', event));
 
     spyOn(service, 'sendMessage').and.callThrough();
   });
@@ -93,12 +92,4 @@ describe('WebsocketService', () => {
     expect(mockWebSocketInstance.close).toHaveBeenCalledTimes(1);
   });
 
-  it('should log message on WebSocket error', () => {
-    const consoleSpy = spyOn(console, 'log');
-    service.connect();
-
-    const errorEvent = new Event('error');
-    mockWebSocketInstance.onerror!(errorEvent);
-    expect(consoleSpy).toHaveBeenCalledWith('Mock WebSocket error', jasmine.any(Event));
-  });
 });

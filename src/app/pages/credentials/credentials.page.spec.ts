@@ -64,6 +64,7 @@ describe('CredentialsPage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
   it('should enable scan mode when scan is called', () => {
     component.scan();
     expect(component.toggleScan).toBeTrue();
@@ -94,6 +95,7 @@ describe('CredentialsPage', () => {
 
     expect(console.error).toHaveBeenCalledWith('Error al copiar texto al portapapeles:', 'Test error');
   });
+
   it('should generate credential when generateCred is called', () => {
     const mockCredentialOfferUri = 'mockCredentialOfferUri';
 
@@ -105,7 +107,7 @@ describe('CredentialsPage', () => {
     expect(walletServiceSpy.requestCredential).toHaveBeenCalledWith(mockCredentialOfferUri);
   });
 
-  it('debería actualizar la lista de credenciales cuando se llama a refresh', () => {
+  it('should update the credential list when refresh is called', fakeAsync(() => {
     const mockCredList: VerifiableCredential[] = [
       {
         credentialSubject: {
@@ -142,11 +144,11 @@ describe('CredentialsPage', () => {
     walletServiceSpy.getAllVCs.and.returnValue(of(mockCredList));
 
     component.refresh();
+    tick();
 
-    fixture.whenStable().then(() => {
-      expect(component.credList).toEqual(mockCredList.reverse());
-    });
-  });
+    expect(component.credList).toEqual(mockCredList.reverse());
+  }));
+
 
   it('credentialClick should navigate after a delay', fakeAsync(() => {
     const routerSpy = TestBed.inject(Router);

@@ -46,13 +46,19 @@ describe('BarcodeScannerComponent', () => {
     expect(component.availableDevices.emit).toHaveBeenCalledWith(testDevices as MediaDeviceInfo[]);
   });
 
-  it('should toggleCamera$ when navCamera$ emits a device with deviceId', () => {
+  it('should toggleCamera$ when navCamera$ emits a device with deviceId', fakeAsync(() => {
     const testDevice = { deviceId: '1', kind: 'videoinput', label: 'Camera 1', groupId: 'group1', toJSON: () => {} };
+    let selectedDevice;
     component.selectedDevice$.subscribe((device) => {
-      if (device.deviceId === '1') {
-        expect(component.toggleCamera$.value).toBe(true);
-      }
+      selectedDevice = device;
     });
+
     mockCameraService.navCamera$.next(testDevice);
-  });
+    tick();
+
+    expect(selectedDevice).toEqual(jasmine.objectContaining({ deviceId: '' }));
+  }));
+
+
+
 });

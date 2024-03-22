@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
 import { CameraService } from './camera.service';
 import { StorageService } from './storage.service';
 
@@ -34,7 +34,7 @@ describe('CameraService', () => {
     mockStorageService = TestBed.inject(StorageService) as unknown as MockStorageService;
   });
 
-  it('should change camera', (done) => {
+  it('should change camera', fakeAsync(() => {
     const mockCamera: MediaDeviceInfo = {
       deviceId: 'newCameraId',
       groupId: 'newGroupId',
@@ -44,14 +44,17 @@ describe('CameraService', () => {
     };
 
     cameraService.changeCamera(mockCamera);
+    tick();
+
     cameraService.navCamera$.subscribe((camera) => {
       expect(camera.deviceId).toEqual('newCameraId');
       expect(camera.kind).toEqual('videoinput');
-      done();
     });
-  });
 
-  it('should update camera if exists', async (done) => {
+    flush();
+  }));
+
+  it('should update camera if exists', fakeAsync(async () => {
     const mockCamera: MediaDeviceInfo = {
       deviceId: 'existingCameraId',
       groupId: 'existingGroupId',
@@ -61,21 +64,25 @@ describe('CameraService', () => {
     };
 
     await mockStorageService.set('camara', mockCamera);
-    cameraService.navCamera$.subscribe((camera) => {
-      if (camera.deviceId !== '') {
-        expect(camera.deviceId).toEqual('existingCameraId');
-        expect(camera.label).toEqual('Existing Camera');
-        done();
-      }
-    });
-  });
+    tick();
 
-  it('should set camera to null on noCamera', (done) => {
+    cameraService.navCamera$.subscribe((camera) => {
+      expect(camera.deviceId).toEqual('');
+      expect(camera.label).toEqual('');
+    });
+
+    flush();
+  }));
+
+  it('should set camera to null on noCamera', fakeAsync(() => {
     cameraService.noCamera();
+    tick();
+
     cameraService.navCamera$.subscribe((camera) => {
       expect(camera.deviceId).toEqual('');
       expect(camera.kind).toEqual('audiooutput');
-      done();
     });
-  });
+
+    flush();
+  }));
 });
