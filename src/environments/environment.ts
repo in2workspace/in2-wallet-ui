@@ -17,6 +17,7 @@ export const environment = {
     credentials_by_id_uri: '/api/v2/credentials?credentialId=',
     users_uri: '/api/v2/users',
     ebsi_did_uri: '/api/v2/ebsi-did',
+    cbor: '/api/v2/vp/cbor'    
   },
   websocket_uri:'/api/v2/pin'
 
