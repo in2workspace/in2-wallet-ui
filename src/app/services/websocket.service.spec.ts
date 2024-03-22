@@ -91,5 +91,4 @@ describe('WebsocketService', () => {
 
     expect(mockWebSocketInstance.close).toHaveBeenCalledTimes(1);
   });
-
 });
