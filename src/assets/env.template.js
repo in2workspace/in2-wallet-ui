@@ -16,5 +16,6 @@
   window["env"]["credentials_by_id_uri"] = "${CREDID_URI}";
   window["env"]["users_uri"] = "${USER_URI}";
   window["env"]["ebsi_did_uri"] = "${EBSI_URI}";
+  window["env"]["cbor_uri"] = "${CBOR_URI}";
   window["env"]["websocket_uri"] = "${WEBSOCKET_URI}";
 })(this);

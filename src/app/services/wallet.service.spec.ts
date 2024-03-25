@@ -49,7 +49,7 @@ describe('WalletService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.server_url}/api/vp/cbor`);
+    const req = httpTestingController.expectOne(`${environment.server_url}/api/v2/vp/cbor`);
     expect(req.request.method).toEqual('POST');
     req.flush(mockResponse);
   });

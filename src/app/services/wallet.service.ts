@@ -30,7 +30,7 @@ export class WalletService {
   public getVCinCBOR(credential:VerifiableCredential):Observable<any> {
     const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text' };
     return this.http.post(
-      environment.server_url+ '/api/vp/cbor', credential,
+      environment.server_url+ environment.server_uri.cbor, credential,
       options)
   }
   public getVCinJWT(credential:VerifiableCredential):Observable<any> {
