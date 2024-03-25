@@ -61,7 +61,7 @@ bootstrapApplication(AppComponent, {
         triggerRefreshWhenIdTokenExpired: false,
         autoUserInfo: false,
         logLevel: LogLevel.Debug,
-        secureRoutes:[environment.server_url,environment.server_url]
+        secureRoutes:[environment.server_url]
       }
     })
     ),
