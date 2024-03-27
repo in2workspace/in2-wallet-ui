@@ -36,6 +36,7 @@ The application is based on the following architecture:
 - User Verifiable Credentials management
 - User Prefered Language management
 - User Prefered Scaning Camera management
+- CBOR Credential Presentation.
 
 # Getting Started
 This aplication is developed, builded and tested in Visual Studio Code 
