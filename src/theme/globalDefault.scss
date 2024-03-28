@@ -1,11 +1,16 @@
 .main-content{
   margin-top: 4rem;
 }
+.toast-custom{
+  color: black !important;
+}
 ion-alert.custom-alert {   
     --ion-text-color:black;
     --backdrop-opacity: 0.7;
   }
-
+.vc-view-button{
+  color:black;
+}
   ion-modal#example-modal {
     --width: fit-content;
     --min-width: 20rem;

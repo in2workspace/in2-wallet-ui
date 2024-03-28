@@ -20,6 +20,7 @@ export class ToastServiceHandler {
             const alert = await this.toastController.create({
               header: translatedHeader,
               message: translatedMessage,
+              cssClass: 'toast-custom',
               buttons: ['OK']
             });
             await alert.present();
