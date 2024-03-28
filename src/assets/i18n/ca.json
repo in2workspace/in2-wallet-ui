@@ -27,7 +27,13 @@
     "credentials":{
         "title":"Credencials",
         "add":"Afegeix",
-        "nocred":"No tens cap credencial carregada"
+        "nocred":"No tens cap credencial carregada",
+        "expiration":"Caducada",
+        "expiredCredential":"Credencial caducada",
+        "expiredText":"Aquesta credencial està caducada i ja no la pots fer servir.",
+        "close":"Tancar",
+        "addVC":"Afegeix la credencial",
+        "identify": "Identifica't"
     },
     "dids":{
         "title":"Dids"

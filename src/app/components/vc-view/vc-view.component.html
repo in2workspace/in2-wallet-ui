@@ -54,8 +54,8 @@
   <ion-alert
     [isOpen]="isAlertOpenNotFound"
     class="custom-alert"
-    header="Alerta"
-    message="Al generar este código, aceptas que los datos contenidos en tu permiso, y su situación legal, se muestren en el dispositivo lector para verificar su validez."
+    [header]="'vc-view.warning-header' | translate" 
+    [message]="'vc-view.warning-msg' | translate" 
     [buttons]="alertButtons"
     (didDismiss)="setOpenNotFound(false)"
   ></ion-alert>
@@ -72,7 +72,7 @@
       <div class="wrapper">
         <ion-header> 
           <ion-toolbar>
-            <ion-title>QR IDEP</ion-title>
+            <ion-title>QR</ion-title>
             <ion-buttons slot="end">
               <ion-button (click)="setOpen(false)">
                 <ion-img src="assets/icon/close-button.png" style="width: 24px; height: 24px;"></ion-img>
@@ -91,8 +91,8 @@
   <ion-alert
     [isOpen]="isModalDeleteOpen"
     class="custom-alert"
-    header="Vols eliminar la credencial?"
-    message="Si elimines la credencial de l'aplicació i necessites recuperar-la hauràs de demanar-ne una de nova."
+    [header]="'vc-view.delete-header' | translate" 
+    [message]="'vc-view.delete-message' | translate" 
     [buttons]="deleteButtons"
     (didDismiss)="setOpenDeleteNotFound(false)"
   ></ion-alert>

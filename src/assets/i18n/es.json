@@ -26,9 +26,13 @@
     "credentials":{
         "title":"Credenciales",
         "add":"Añade",
-        "nocred":"No tienes ninguna credencial cargada"
-
-
+        "nocred":"No tienes ninguna credencial cargada",
+        "expiration":"Caducado",
+        "expiredCredential":"Credencial caducado",
+        "expiredText":"Esta credencial está caducada y ya no puedes utilizarla.",
+        "close":"Cerrar",
+        "addVC":"Añade la credencial",
+        "identify": "Identifícate"
     },
     "dids":{
         "title":"Dids"

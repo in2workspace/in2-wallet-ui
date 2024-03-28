@@ -28,8 +28,13 @@
     "credentials":{
         "title":"Credentials",
         "add":"Add",
-        "nocred":"You do not have any credentials uploaded"
-    },
+        "nocred":"No credential loaded",
+        "expiration":"Expired",
+        "expiredCredential":"Credential expired",
+        "expiredText":"This credential has expired and you can no longer use it.",
+        "close":"Close",
+        "addVC":"Add Credential",
+        "identify": "Identify yourself"    },
     "dids":{
         "title":"Dids"
     },
