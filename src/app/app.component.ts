@@ -25,10 +25,10 @@ export class AppComponent implements OnInit{
     private storageService:StorageService
     )  {
       translate.addLangs(['en','es','ca']);
-      translate.setDefaultLang('ca');
+      translate.setDefaultLang('en');
       this.storageService.get("language").then((res)=>{
         if(res)translate.setDefaultLang(res);
-        else this.storageService.set("language","ca")
+        else this.storageService.set("language","en")
       })
     }
   ngOnInit(): void {
@@ -40,7 +40,7 @@ export class AppComponent implements OnInit{
 
       });
     }
-    
+
   async openPopover(ev: any) {
     const popover = await this.popoverController.create({
       component: LogoutPage,

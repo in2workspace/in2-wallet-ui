@@ -1,6 +1,7 @@
 <ion-card style="background-color: white; width:200px; height:285px; border-radius: 20px;">
   <div style="position: absolute; top: 0; right: 10; width: 50%; height: 50%; background-color: #ffffff; border-radius: 0% 0% 75% 75%; transform: translateX(85%) translateY(-90%); z-index: 1;"></div>
 <ion-card-header style="background-color:var(--ion-color-primary); padding: 12px;"> </ion-card-header>
+<div style="height: 10%;"></div>
   <ion-col>
     <img alt src="assets/icon/bannerLogo2.png" width="auto" height="40px"/>
     <ion-col style="margin-left: 35px">
@@ -14,28 +15,29 @@
     </ion-col>
     <ion-col>
 
-        <ion-col size="12">
-          <ion-card-header style="padding: 0% !important; margin-left:35px; margin-bottom: 10px;">
-            <ion-row>
-              <ion-card-title style="color:grey; font-size:12px; font-weight: bold;"
-                >{{ cred["credentialSubject"]["organizationalUnit"] }}</ion-card-title
-              >
-            </ion-row>
-            <ion-row>
-              <ion-card-title style="color:black; font-size:12px; font-weight: bold;"
-                >{{ cred["credentialSubject"]["lastName"] }}</ion-card-title
-              >
-            </ion-row>
-            <ion-row>
-              <ion-card-title style="color:black; font-size:12px; font-weight: bold;"
-                >{{ cred["credentialSubject"]["firstName"] }}</ion-card-title
-              >
-            </ion-row>
+      <ion-col size="12" >
+        <ion-card-header style="padding: 0% !important; margin-left:35px; height: 50px;">
+          <ion-row >
+            <ion-card-title style="color:grey; font-size:12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; ">
+              {{ cred["credentialSubject"]["organizationalUnit"] }}
+            </ion-card-title>
+          </ion-row>
+          <ion-row >
+            <ion-card-title style="color:black; font-size:12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; ">
+              {{ cred["credentialSubject"]["lastName"] }}
+            </ion-card-title>
+          </ion-row>
+          <ion-row>
+            <ion-card-title style="color:black; font-size:12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; ">
+              {{ cred["credentialSubject"]["firstName"] }}
+            </ion-card-title>
+          </ion-row>
+        </ion-card-header>
+      </ion-col>
 
-          </ion-card-header>
-        </ion-col>
+
         <ion-col size="12" align-self-end style="margin-left:12px">
-          <img  (click)="qrView()" alt src="assets/icon/41.png" width="auto" height="40px"/>      
+          <img  (click)="qrView()" alt src="assets/icon/41.png" width="auto" height="40px"/>
           <span *ngIf="this.isExpired" style="color:red; font-size:20px; font-weight: bold; position: absolute; top: -23px;">{{"credentials.expiration"|translate}}</span>
             <ion-row style="justify-content: end;">
               <ion-button color="secondary"
@@ -54,23 +56,23 @@
   <ion-alert
     [isOpen]="isAlertOpenNotFound"
     class="custom-alert"
-    [header]="'vc-view.warning-header' | translate" 
-    [message]="'vc-view.warning-msg' | translate" 
+    [header]="'vc-view.warning-header' | translate"
+    [message]="'vc-view.warning-msg' | translate"
     [buttons]="alertButtons"
     (didDismiss)="setOpenNotFound(false)"
   ></ion-alert>
   <ion-alert
     [isOpen]="isAlertExpirationOpenNotFound"
     class="custom-alert"
-    [header]="'credentials.expiredCredential' | translate"  
-    [message]="'credentials.expiredText' | translate" 
+    [header]="'credentials.expiredCredential' | translate"
+    [message]="'credentials.expiredText' | translate"
     [buttons]="[{ text: 'credentials.close' | translate, role: 'confirm' }]"
     (didDismiss)="setOpenExpirationNotFound(false)"
   ></ion-alert>
   <ion-modal [isOpen]="isModalOpen" style="--min-height: 20rem" id="example-modal" #modal>
     <ng-template>
       <div class="wrapper">
-        <ion-header> 
+        <ion-header>
           <ion-toolbar>
             <ion-title>QR</ion-title>
             <ion-buttons slot="end">
@@ -91,8 +93,8 @@
   <ion-alert
     [isOpen]="isModalDeleteOpen"
     class="custom-alert"
-    [header]="'vc-view.delete-header' | translate" 
-    [message]="'vc-view.delete-message' | translate" 
+    [header]="'vc-view.delete-header' | translate"
+    [message]="'vc-view.delete-message' | translate"
     [buttons]="deleteButtons"
     (didDismiss)="setOpenDeleteNotFound(false)"
   ></ion-alert>

@@ -4,9 +4,9 @@
 .toast-custom{
   color: black !important;
 }
-ion-alert.custom-alert {   
-    --ion-text-color:black;
-    --backdrop-opacity: 0.7;
+ion-alert.custom-alert {
+  background-color: white !important;
+  color: red !important;
   }
 .vc-view-button{
   color:black;
@@ -18,22 +18,22 @@ ion-alert.custom-alert {
     --border-radius: 6px;
     --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
   }
-  
+
   ion-modal#example-modal h1 {
     margin: 20px 20px 10px 20px;
   }
-  
+
   ion-modal#example-modal ion-icon {
     margin-right: 6px;
-  
+
     width: 48px;
     height: 48px;
-  
+
     padding: 4px 0;
-  
+
     color: #aaaaaa;
   }
-  
+
   ion-modal#example-modal .wrapper {
     margin-bottom: 10px;
   }
@@ -45,12 +45,12 @@ ion-alert.custom-alert {
 
 .content {
     --background: url("../../customAssets/icon/background.png") center/cover fixed no-repeat;
-    
+
 }
 
 .item-trns {
     --ion-item-background: transparent;
-	color: #B0FF2B; 
+	color: #B0FF2B;
 }
 ion-item{
     --border-color:#ffffff;
@@ -157,7 +157,18 @@ ion-item{
     width: 15px;
     height: 15px;
   }
-  
+
   .radio-items {
     --border-color: #DDE6F6;
   }
+
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
