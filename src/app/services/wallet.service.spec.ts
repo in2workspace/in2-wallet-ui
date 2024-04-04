@@ -29,19 +29,49 @@ describe('WalletService', () => {
 
   it('should fetch VC in CBOR format', () => {
     const mockCredential: VerifiableCredential = {
-      credentialSubject: {
-        mobile_phone: '1234567890',
-        email: 'test@example.com',
-        title: 'Test Title',
-        firstName: 'John',
-        lastName: 'Doe',
-        organizationalUnit: 'Testing',
-        dateOfBirth: '1990-01-01',
-        gender: 'male'
+      "@context": ["https://www.w3.org/ns/credentials/v2"],
+      "id": "test-credential-id",
+      "type": ["VerifiableCredential", "LEARCredentialEmployee"],
+      "issuer": {
+        "id": "did:web:provider.dome.fiware.dev"
       },
-      id: 'test-credential-id',
-      expirationDate: new Date('2025-01-01'),
-      vcType: ['', '']
+      "issuanceDate": "2024-04-02T09:23:22.637345122Z",
+      "validFrom": "2024-04-02T09:23:22.637345122Z",
+      "expirationDate": "2025-01-01T00:00:00Z",
+      "credentialSubject": {
+        "mandate": {
+          "id": "mandateId1",
+          "mandator": {
+            "organizationIdentifier": "orgId1",
+            "commonName": "Common Name",
+            "emailAddress": "email@example.com",
+            "serialNumber": "serialNumber1",
+            "organization": "Organization Name",
+            "country": "Country"
+          },
+          "mandatee": {
+            "id": "personId1",
+            "first_name": "John",
+            "last_name": "Doe",
+            "gender": "male",
+            "email": "test@example.com",
+            "mobile_phone": "+1234567890"
+          },
+          "power": [
+            {
+              "id": "powerId1",
+              "tmf_type": "Domain",
+              "tmf_domain": ["DOME"],
+              "tmf_function": "Onboarding",
+              "tmf_action": ["Execute"]
+            }
+          ],
+          "life_span": {
+            "start_date_time": "2024-04-02T09:23:22.637345122Z",
+            "end_date_time": "2025-01-01T00:00:00Z"
+          }
+        }
+      }
     };
     const mockResponse = 'mock-cbor-data';
 
@@ -53,6 +83,7 @@ describe('WalletService', () => {
     expect(req.request.method).toEqual('POST');
     req.flush(mockResponse);
   });
+
 
   it('should fetch VC in JWT format', () => {
     const mockCredentialId = 'test-credential-id';
@@ -101,19 +132,49 @@ describe('WalletService', () => {
 
   it('should fetch all Verifiable Credentials', () => {
     const mockResponse: VerifiableCredential[] = [{
-      credentialSubject: {
-        mobile_phone: '0987654321',
-        email: 'example@test.com',
-        title: 'Example Title',
-        firstName: 'Jane',
-        lastName: 'Doe',
-        organizationalUnit: 'Example Unit',
-        dateOfBirth: '1985-02-15',
-        gender: 'female'
+      "@context": ["https://www.w3.org/ns/credentials/v2"],
+      "id": "example-credential-id",
+      "type": ["VerifiableCredential", "LEARCredentialEmployee"],
+      "issuer": {
+        "id": "did:web:provider.dome.fiware.dev"
       },
-      id: 'example-credential-id',
-      expirationDate: new Date('2030-01-01'),
-      vcType: ['', '']
+      "issuanceDate": "2024-04-02T09:23:22.637345122Z",
+      "validFrom": "2024-04-02T09:23:22.637345122Z",
+      "expirationDate": "2030-01-01T00:00:00Z",
+      "credentialSubject": {
+        "mandate": {
+          "id": "mandateId1",
+          "mandator": {
+            "organizationIdentifier": "orgId1",
+            "commonName": "Example Unit",
+            "emailAddress": "example@test.com",
+            "serialNumber": "serialNumber1",
+            "organization": "Organization Name",
+            "country": "Country"
+          },
+          "mandatee": {
+            "id": "personId1",
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "gender": "female",
+            "email": "example@test.com",
+            "mobile_phone": "+0987654321"
+          },
+          "power": [
+            {
+              "id": "powerId1",
+              "tmf_type": "Domain",
+              "tmf_domain": ["SomeDomain"],
+              "tmf_function": "SomeFunction",
+              "tmf_action": ["SomeAction"]
+            }
+          ],
+          "life_span": {
+            "start_date_time": "2024-04-02T09:23:22.637345122Z",
+            "end_date_time": "2030-01-01T00:00:00Z"
+          }
+        }
+      }
     }];
 
     service.getAllVCs().subscribe(credentials => {
@@ -126,22 +187,53 @@ describe('WalletService', () => {
     req.flush(mockResponse);
   });
 
+
   it('should fetch a single Verifiable Credential by id', () => {
     const data = 'test-id';
     const mockResponse: VerifiableCredential = {
-      credentialSubject: {
-        mobile_phone: '1234567890',
-        email: 'single@test.com',
-        title: 'Single Test',
-        firstName: 'Single',
-        lastName: 'Credential',
-        organizationalUnit: 'Test Unit',
-        dateOfBirth: '1995-07-19',
-        gender: 'other'
+      "@context": ["https://www.w3.org/ns/credentials/v2"],
+      "id": "single-test-credential-id",
+      "type": ["VerifiableCredential", "LEARCredentialEmployee"],
+      "issuer": {
+        "id": "did:web:provider.dome.fiware.dev"
       },
-      id: 'single-test-credential-id',
-      expirationDate: new Date('2030-01-01'),
-      vcType: ['', '']
+      "issuanceDate": "2024-04-02T09:23:22.637345122Z",
+      "validFrom": "2024-04-02T09:23:22.637345122Z",
+      "expirationDate": "2030-01-01T00:00:00Z", // Correctly formatted as a string
+      "credentialSubject": {
+        "mandate": {
+          "id": "mandateId1",
+          "mandator": {
+            "organizationIdentifier": "orgId1",
+            "commonName": "Test Unit",
+            "emailAddress": "single@test.com",
+            "serialNumber": "serialNumber1",
+            "organization": "Organization Name",
+            "country": "Country"
+          },
+          "mandatee": {
+            "id": "personId1",
+            "first_name": "Single",
+            "last_name": "Credential",
+            "gender": "other",
+            "email": "single@test.com",
+            "mobile_phone": "+1234567890"
+          },
+          "power": [
+            {
+              "id": "powerId1",
+              "tmf_type": "Domain",
+              "tmf_domain": ["SomeDomain"],
+              "tmf_function": "SomeFunction",
+              "tmf_action": ["SomeAction"]
+            }
+          ],
+          "life_span": {
+            "start_date_time": "2024-04-02T09:23:22.637345122Z",
+            "end_date_time": "2030-01-01T00:00:00Z"
+          }
+        }
+      }
     };
 
     service.getOne(data).subscribe(credential => {
@@ -152,6 +244,7 @@ describe('WalletService', () => {
     expect(req.request.method).toBe('GET');
     req.flush(mockResponse);
   });
+
 
   it('should delete a Verifiable Credential by id', () => {
     const VC = 'test-vc-id';

@@ -110,34 +110,49 @@ describe('CredentialsPage', () => {
   it('should update the credential list when refresh is called', fakeAsync(() => {
     const mockCredList: VerifiableCredential[] = [
       {
-        credentialSubject: {
-          mobile_phone: '1234567890',
-          email: 'ejemplo@correo.com',
-          title: 'Dr.',
-          firstName: 'Juan',
-          lastName: 'Pérez',
-          organizationalUnit: 'Desarrollo',
-          dateOfBirth: '1990-01-01',
-          gender: 'masculino',
+        "@context": ["https://www.w3.org/ns/credentials/v2"],
+        "id": "1",
+        "type": ["VerifiableCredential", "SomeType"],
+        "issuer": {
+          "id": "issuerId1"
         },
-        id: 'credencial1',
-        expirationDate: new Date('2025-12-31'),
-        vcType: ['', ''],
-      },
-      {
-        credentialSubject: {
-          mobile_phone: '0987654321',
-          email: 'ejemplo2@correo.com',
-          title: 'Ing.',
-          firstName: 'María',
-          lastName: 'González',
-          organizationalUnit: 'Innovación',
-          dateOfBirth: '1985-07-15',
-          gender: 'femenino',
-        },
-        id: 'credencial2',
-        expirationDate: new Date('2024-11-30'),
-        vcType: ['', ''],
+        "issuanceDate": "2021-01-01T00:00:00Z",
+        "validFrom": "2021-01-01T00:00:00Z",
+        "expirationDate": "2025-12-31T23:59:59Z",
+        "credentialSubject": {
+          "mandate": {
+            "id": "mandateId1",
+            "mandator": {
+              "organizationIdentifier": "orgId1",
+              "commonName": "Common Name",
+              "emailAddress": "email@example.com",
+              "serialNumber": "serialNumber1",
+              "organization": "Organization Name",
+              "country": "Country"
+            },
+            "mandatee": {
+              "id": "personId1",
+              "first_name": "First",
+              "last_name": "Last",
+              "gender": "Gender",
+              "email": "email@example.com",
+              "mobile_phone": "+1234567890"
+            },
+            "power": [
+              {
+                "id": "powerId1",
+                "tmf_type": "Domain",
+                "tmf_domain": ["SomeDomain"],
+                "tmf_function": "SomeFunction",
+                "tmf_action": ["SomeAction"]
+              }
+            ],
+            "life_span": {
+              "start_date_time": "2021-01-01T00:00:00Z",
+              "end_date_time": "2025-12-31T23:59:59Z"
+            }
+          }
+        }
       }
     ];
 
@@ -150,6 +165,7 @@ describe('CredentialsPage', () => {
   }));
 
 
+
   it('credentialClick should navigate after a delay', fakeAsync(() => {
     const routerSpy = TestBed.inject(Router);
     spyOn(routerSpy, 'navigate');
@@ -160,26 +176,58 @@ describe('CredentialsPage', () => {
 
   it('vcDelete should call deleteVC on the wallet service with the correct ID and refresh the list', () => {
     const testCredential: VerifiableCredential = {
-      id: 'testCredentialId',
-      credentialSubject: {
-        mobile_phone: '',
-        email: '',
-        title: '',
-        firstName: '',
-        lastName: '',
-        organizationalUnit: '',
-        dateOfBirth: '',
-        gender: '',
+      "@context": ["https://www.w3.org/ns/credentials/v2"],
+      "id": "testCredentialId",
+      "type": ["VerifiableCredential", "SomeType"],
+      "issuer": {
+        "id": "issuerId1"
       },
-      expirationDate: new Date(),
-      vcType: ['','']
+      "issuanceDate": "2024-04-02T09:23:22.637345122Z",
+      "validFrom": "2024-04-02T09:23:22.637345122Z",
+      "expirationDate": "2025-04-02T09:23:22.637345122Z",
+      "credentialSubject": {
+        "mandate": {
+          "id": "mandateId1",
+          "mandator": {
+            "organizationIdentifier": "orgId1",
+            "commonName": "Common Name",
+            "emailAddress": "email@example.com",
+            "serialNumber": "serialNumber1",
+            "organization": "Organization Name",
+            "country": "Country"
+          },
+          "mandatee": {
+            "id": "personId1",
+            "first_name": "First",
+            "last_name": "Last",
+            "gender": "Gender",
+            "email": "email@example.com",
+            "mobile_phone": "+1234567890"
+          },
+          "power": [
+            {
+              "id": "powerId1",
+              "tmf_type": "Domain",
+              "tmf_domain": ["SomeDomain"],
+              "tmf_function": "SomeFunction",
+              "tmf_action": ["SomeAction"]
+            }
+          ],
+          "life_span": {
+            "start_date_time": "2024-04-02T09:23:22.637345122Z",
+            "end_date_time": "2025-04-02T09:23:22.637345122Z"
+          }
+        }
+      }
     };
+
     walletServiceSpy.deleteVC.and.returnValue(of('Success'));
     spyOn(component, 'refresh');
     component.vcDelete(testCredential);
     expect(walletServiceSpy.deleteVC).toHaveBeenCalledWith(testCredential.id);
     expect(component.refresh).toHaveBeenCalled();
   });
+
 
   it('ngOnInit should initialize component properties and call refresh', () => {
     spyOn(component, 'refresh');
