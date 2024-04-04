@@ -20,40 +20,20 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
+      catchError((error: Error) => {
+        this.toastServiceHandler.showError(error.message).subscribe();
+        console.error('Error occurred:', error);
+        return throwError(() => error);
+      }),
       catchError((error: HttpErrorResponse) => {
-        // Handle the error globally
-        switch (error.status) {
-          case 422:
-            this.toastServiceHandler.showErrorAlert(
-              'home.unsucces',
-              error.message
-            ).subscribe();
-            break;
-          case 404:
-            this.toastServiceHandler.showErrorAlert(
-              'home.unsucces',
-              error.message
-            ).subscribe();
-            break;
-          case 500:
-            console.error('error');
-            this.toastServiceHandler
-              .showErrorAlert('home.unsucces', error.message)
-              .subscribe();
-            break;
-          case 0:
-            this.toastServiceHandler.showErrorAlert(
-              'home.unsucces',
-              error.message
-            );
-            break;
-          default:
-            this.toastServiceHandler.showErrorAlert(
-              'home.unsucces',
-              error.message
-            ).subscribe();
-            break;
+        if (error.status === 404) {
+          console.error('Resource not found:', error.message);
+        } else if (error.status === 401) {
+            console.error('Unauthorized:', error.message);
+        } else {
+            console.error('An HTTP error occurred:', error.message);
         }
+        this.toastServiceHandler.showErrorAlert(error.error.message).subscribe();
 
         console.error('Error occurred:', error);
         return throwError(() => error);

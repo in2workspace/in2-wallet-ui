@@ -110,5 +110,13 @@
         "delete-message": "Si elimines la credencial de l'aplicació i necessites recuperar-la hauràs de demanar-ne una de nova.",
         "delete-confirm": "Sí, elimina-la",
         "delete-cancel": "Cancel·la"
+    },
+    "errors":{
+        "invalid-qr":"El QR presentat és invàlid",
+        "expired-credentialOffer":"La oferta de credencial està expirada o ja utilitzada",
+        "invalid-credentialOffer":"La oferta de credencial no és vàlida",
+        "invalid-issuerMetadata":"Les metadades del Issuer són incorrectes",
+        "cannot-get-VC":"No s'ha pogut obtenir la credencial del Issuer",
+        "cannot-save-VC":"No s'ha pogut guardar correctamente la credencial"
     }
 }
