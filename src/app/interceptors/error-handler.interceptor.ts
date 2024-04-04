@@ -20,11 +20,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
-      catchError((error: Error) => {
-        this.toastServiceHandler.showError(error.message).subscribe();
-        console.error('Error occurred:', error);
-        return throwError(() => error);
-      }),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 404) {
           console.error('Resource not found:', error.message);
