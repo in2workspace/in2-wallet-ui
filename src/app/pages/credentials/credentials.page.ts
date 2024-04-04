@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage.service';
 import { BarcodeScannerComponent } from 'src/app/components/barcode-scanner/barcode-scanner.component';
 import { QRCodeModule } from 'angularx-qrcode';
@@ -30,7 +30,7 @@ export class CredentialsPage implements OnInit {
   private websocket = inject(WebsocketService);
   private dataService = inject(DataService);
   private route = inject(ActivatedRoute)
-  
+
   public alertButtons = ['OK'];
   userName: string = '';
 
@@ -49,7 +49,7 @@ export class CredentialsPage implements OnInit {
   public ebsiFlag: boolean = false;
   public did: string = '';
 
-  constructor() {
+  constructor(private alertController: AlertController) {
     this.credOfferEndpoint = window.location.origin + "/tabs/home";
     this.route.queryParams.subscribe((params) => {
       this.toggleScan = params['toggleScan'];
@@ -166,16 +166,37 @@ export class CredentialsPage implements OnInit {
     this.toggleScan = false;
   }
 
-  credentialClick() {
-    setTimeout(() => {
-      this.isAlertOpen = false;
-      this.toggleScan = false;
-      this.router.navigate(['/tabs/credentials/'])
-    }, TIME_IN_MS);
-    this.isAlertOpen = true;
-    this.show_qr = true;
-    this.scaned_cred = false;
-    this.from = '';
+  async credentialClick() {
+    const alert = await this.alertController.create({
+      header: 'Confirmación',
+      message: '¿Quieres escoger esta credencial?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Usuario canceló');
+          }
+        }, {
+          text: 'Aceptar',
+          handler: () => {
+            console.log('Usuario aceptó');
+            setTimeout(() => {
+              this.isAlertOpen = false;
+              this.toggleScan = false;
+              this.router.navigate(['/tabs/credentials/']);
+            }, TIME_IN_MS);
+            this.isAlertOpen = true;
+            this.show_qr = true;
+            this.scaned_cred = false;
+            this.from = '';
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
+
   isAlertOpen = false;
 }

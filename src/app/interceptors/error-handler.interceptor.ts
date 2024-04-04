@@ -22,21 +22,38 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         // Handle the error globally
-          switch (error.status) {
-            case 422:
-              this.toastServiceHandler.showErrorAlert( 'home.unsucces',  error.message);
-              break;
-            case 404:
-              this.toastServiceHandler.showErrorAlert('home.unsucces', error.message);
-              break;
-            case 500:
-              console.error("error")
-              this.toastServiceHandler.showErrorAlert('home.unsucces', error.message).subscribe();;
-              break;
-             case 0:
-              this.toastServiceHandler.showErrorAlert('home.unsucces', error.message );
-              break;
-          }
+        switch (error.status) {
+          case 422:
+            this.toastServiceHandler.showErrorAlert(
+              'home.unsucces',
+              error.message
+            );
+            break;
+          case 404:
+            this.toastServiceHandler.showErrorAlert(
+              'home.unsucces',
+              error.message
+            );
+            break;
+          case 500:
+            console.error('error');
+            this.toastServiceHandler
+              .showErrorAlert('home.unsucces', error.message)
+              .subscribe();
+            break;
+          case 0:
+            this.toastServiceHandler.showErrorAlert(
+              'home.unsucces',
+              error.message
+            );
+            break;
+          default:
+            this.toastServiceHandler.showErrorAlert(
+              'home.unsucces',
+              error.message
+            );
+            break;
+        }
 
         console.error('Error occurred:', error);
         return throwError(() => error);
