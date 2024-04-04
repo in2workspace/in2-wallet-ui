@@ -3,6 +3,11 @@
 }
 .toast-custom{
   color: black !important;
+ 
+  color: red !important;
+  .toast-wrapper{
+    background-color: white !important;
+  }
 }
 ion-alert.custom-alert {
   background-color: white !important;

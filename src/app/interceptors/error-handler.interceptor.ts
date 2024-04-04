@@ -27,13 +27,13 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             this.toastServiceHandler.showErrorAlert(
               'home.unsucces',
               error.message
-            );
+            ).subscribe();
             break;
           case 404:
             this.toastServiceHandler.showErrorAlert(
               'home.unsucces',
               error.message
-            );
+            ).subscribe();
             break;
           case 500:
             console.error('error');
@@ -51,7 +51,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             this.toastServiceHandler.showErrorAlert(
               'home.unsucces',
               error.message
-            );
+            ).subscribe();
             break;
         }
 
