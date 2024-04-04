@@ -19,8 +19,7 @@ export class VcViewComponent implements OnInit{
   private walletService = inject(WalletService);
   cred_cbor: string = ""
   constructor() {}
-  @Input() credentialInput: VerifiableCredential = {credentialSubject:{mobile_phone:"",email:"",organizationalUnit:"",firstName:"",lastName:"",dateOfBirth:"",gender:""},id:"",expirationDate:new Date,vcType:['','']} ;
-  cred: VerifiableCredential ={credentialSubject:{mobile_phone:"",email:"",organizationalUnit:"",firstName:"",lastName:"",dateOfBirth:"",gender:""},id:"",expirationDate:new Date,vcType:['','']};
+  @Input() credentialInput!: VerifiableCredential;
   @Output() vcEmit: EventEmitter<VerifiableCredential> =
   new EventEmitter();
 
@@ -31,12 +30,12 @@ export class VcViewComponent implements OnInit{
   isExpired: boolean = false;
 
   ngOnInit(): void {
-    this.cred = this.credentialInput
+    this.credentialInput = this.credentialInput
     this.checkExpirationVC();
     }
     qrView(){
       if (!this.isExpired) {
-        this.walletService.getVCinCBOR(this.cred).subscribe(
+        this.walletService.getVCinCBOR(this.credentialInput).subscribe(
           (value: string) => {
             this.isAlertOpenNotFound = true;
             this.cred_cbor = value
@@ -56,9 +55,9 @@ export class VcViewComponent implements OnInit{
     }
     checkExpirationVC() {
 
-          const expirationDate = new Date(this.cred.expirationDate);
+          const expirationDate = new Date(this.credentialInput.expirationDate);
           // Assuming each credential has an 'id' property
-          const credentialId = this.cred.id;
+          const credentialId = this.credentialInput.id;
 
           // Store the expiration date for the specific credential in localStorage
           localStorage.setItem(`vcExpirationDate_${credentialId}`, expirationDate.toISOString());
@@ -94,7 +93,7 @@ export class VcViewComponent implements OnInit{
       role: 'confirm',
       handler: () => {
         this.isModalDeleteOpen=true;
-        this.vcEmit.emit(this.cred);
+        this.vcEmit.emit(this.credentialInput);
       }}]
   setOpenNotFound(isOpen: boolean) {
     this.isAlertOpenNotFound = isOpen;
