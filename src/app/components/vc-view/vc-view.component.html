@@ -19,22 +19,26 @@
         <ion-card-header style="padding: 0% !important; margin-left:35px; height: 28%;">
           <ion-row >
             <ion-card-title style="color:grey; font-size:12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; ">
-              {{ cred["credentialSubject"]["organizationalUnit"] }}
+              {{ credentialInput.type[0]}}
+            </ion-card-title>
+          </ion-row>
+          <ion-row >
+            <ion-card-title style="color:grey; font-size:12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; ">
+            {{ credentialInput.credentialSubject.mandate.mandator.organization}}  
             </ion-card-title>
           </ion-row>
           <ion-row >
             <ion-card-title style="color:black; font-size:12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; ">
-              {{ cred["credentialSubject"]["lastName"] }}
+              {{ credentialInput.credentialSubject.mandate.mandatee.first_name }}
             </ion-card-title>
           </ion-row>
           <ion-row>
             <ion-card-title style="color:black; font-size:12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; ">
-              {{ cred["credentialSubject"]["firstName"] }}
+              {{ credentialInput.credentialSubject.mandate.mandatee.first_name }}
             </ion-card-title>
           </ion-row>
         </ion-card-header>
       </ion-col>
-
 
         <ion-col size="12" align-self-end style="margin-left:12px">
           <img  (click)="qrView()" alt src="assets/icon/41.png" width="auto" height="40px"/>
