@@ -118,5 +118,10 @@
         "invalid-issuerMetadata":"Issuer metadata is incorrect",
         "cannot-get-VC":"Issuer credential could not be obtained",
         "cannot-save-VC":"The credential could not be saved successfully"
+    },
+    "confirmation":{
+        "header":"¿Enviar Credencial?",
+        "ok":"Ok",
+        "cancel":"Cancelar"
     }
 }

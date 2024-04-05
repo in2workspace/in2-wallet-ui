@@ -25,73 +25,7 @@ const TIME_IN_MS = 10000;
   imports: [IonicModule, CommonModule, FormsModule, QRCodeModule, VcViewComponent, TranslateModule, BarcodeScannerComponent,]
 })
 export class CredentialsPage implements OnInit {
-  testi:VerifiableCredential={
-    "@context": [
-      "https://www.w3.org/ns/credentials/v2",
-      "https://www.evidenceledger.eu/2022/credentials/employee/v1"
-    ],
-    "id": "1f33e8dc-bd3b-4395-8061-ebc6be7d06dd",
-    "type": [
-      "VerifiableCredential",
-      "LEARCredentialEmployee"
-    ],
-    "issuer": {
-      "id": "did:web:provider.dome.fiware.dev"
-    },
-    "issuanceDate": "2024-04-02 09:23:22.637345122 +0000 UTC",
-    "validFrom": "2024-04-02 09:23:22.637345122 +0000 UTC",
-    "expirationDate": "2025-04-02 09:23:22.637345122 +0000 UTC",
-    "credentialSubject": {
-      "mandate": {
-        "id": "4e3c02b8-5c57-4679-8aa5-502d62484af5",
-        "mandator": {
-          "organizationIdentifier": "VATES-B60645900",
-          "commonName": "IN2",
-          "emailAddress": "rrhh@in2.es",
-          "serialNumber": "B60645900",
-          "organization": "IN2, Ingeniería de la Información, S.L.",
-          "country": "ES"
-        },
-        "mandatee": {
-          "id": "did:key:...",
-          "first_name": "Oriol",
-          "last_name": "Canadés",
-          "gender": "M",
-          "email": "oriol.canades@in2.es",
-          "mobile_phone": "+34666336699"
-        },
-        "power": [
-          {
-            "id": "6b8f3137-a57a-46a5-97e7-1117a20142fb",
-            "tmf_type": "Domain",
-            "tmf_domain": [
-              "DOME"
-            ],
-            "tmf_function": "Onboarding",
-            "tmf_action": [
-              "Execute"
-            ]
-          },
-          {
-            "id": "ad9b1509-60ea-47d4-9878-18b581d8e19b",
-            "tmf_type": "Domain",
-            "tmf_domain": [
-              "DOME"
-            ],
-            "tmf_function": "ProductOffering",
-            "tmf_action": [
-              "Create",
-              "Update"
-            ]
-          }
-        ],
-        "life_span": {
-          "start_date_time": "2024-04-02 09:23:22.637345122 +0000 UTC",
-          "end_date_time": "2025-04-02 09:23:22.637345122 +0000 UTC"
-        }
-      }
-    }
-  }
+  
   private walletService = inject(WalletService);
   private router = inject(Router);
   private websocket = inject(WebsocketService);
