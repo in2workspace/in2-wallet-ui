@@ -42,7 +42,7 @@ describe('VcViewComponent', () => {
   });
 
   it('should set isExpired to true if expiration date is in the past', () => {
-    component.credentialInput.expirationDate = new Date('2022-01-01');
+    component.credentialInput.expirationDate = new Date('2022-01-01').toISOString();
     component.checkExpirationVC();
     expect(component.isExpired).toBeTruthy();
   });

@@ -1,18 +1,25 @@
 .main-content{
   margin-top: 4rem;
 }
-.toast-custom{
-  color: black !important;
- 
+
+.toast-custom {
   color: red !important;
-  .toast-wrapper{
-    background-color: white !important;
-  }
+  font-weight: bold;
+  transform: translateY(-7%);
 }
+
+ion-toast::part(container) {
+  background-color: #f2f2f2 !important;
+  border: 1px solid black !important;
+  border-radius: 5px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 6px 20px rgba(0, 0, 0, 0.19) !important;
+}
+
 ion-alert.custom-alert {
   background-color: white !important;
   color: red !important;
   }
+
 .vc-view-button{
   color:black;
 }

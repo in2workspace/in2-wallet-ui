@@ -33,31 +33,22 @@ describe('ToastServiceHandler', () => {
   });
 
   it('showErrorAlert should display translated message in a toast', fakeAsync(() => {
-    spyOn(translateService, 'get').and.callFake((key) => {
-      switch (key) {
-        case 'HEADER_KEY':
-          return of('HEADER_KEY_translated');
-        case 'MESSAGE_KEY':
-          return of('MESSAGE_KEY_translated');
-        default:
-          return of('');
-      }
-    });
+    const errorMessage = "The received QR content cannot be processed";
+    spyOn(translateService, 'get').and.returnValue(of('Invalid QR Code'));
     const toastSpy = spyOn(toastCtrl, 'create').and.returnValue(Promise.resolve({
-      present: () => Promise.resolve()
+      present: () => Promise.resolve(),
+      dismiss: () => Promise.resolve()
     }) as any);
 
-    service.showErrorAlert('HEADER_KEY', 'MESSAGE_KEY').subscribe();
+    service.showErrorAlert(errorMessage).subscribe();
 
     tick();
 
-    expect(translateService.get).toHaveBeenCalledWith('HEADER_KEY');
-    expect(translateService.get).toHaveBeenCalledTimes(2);
-
+    expect(translateService.get).toHaveBeenCalledWith('errors.invalid-qr');
     expect(toastSpy).toHaveBeenCalledWith(jasmine.objectContaining({
-      header: 'HEADER_KEY_translated',
-      message: jasmine.any(String),
+      message: 'Invalid QR Code',
       buttons: ['OK']
     }));
   }));
+
 });

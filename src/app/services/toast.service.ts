@@ -13,30 +13,6 @@ export class ToastServiceHandler {
     private translate: TranslateService
   ) { }
 
-  showError(message: string): Observable<any> {
-    let messageBody = "home.unsuccess"
-    
-    return this.translate.get(messageBody).pipe(
-      mergeMap(translatedHeader => this.translate.get(messageBody).pipe(
-        map(async translatedMessage => {
-
-          const alert = await this.toastController.create({
-            header: message,
-            [message]: message,
-            cssClass: 'toast-custom',
-            buttons: ['OK']
-          });
-
-          await alert.present();
-
-          setTimeout(() => {
-            alert.dismiss();
-          }, TIME_IN_MS);
-        })
-      )));
-
-
-  }
 
   showErrorAlert(message: string): Observable<any> {
     let messageBody = "home.unsuccess"
