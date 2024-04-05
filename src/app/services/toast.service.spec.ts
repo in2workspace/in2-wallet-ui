@@ -4,7 +4,7 @@ import { ToastController } from '@ionic/angular';
 import { TranslateService, TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { TranslateFakeLoader } from '@ngx-translate/core';
-/*
+const TIME_IN_MS = 3000;
 describe('ToastServiceHandler', () => {
   let service: ToastServiceHandler;
   let translateService: TranslateService;
@@ -32,24 +32,16 @@ describe('ToastServiceHandler', () => {
     expect(service).toBeTruthy();
   });
 
-  it('showErrorAlert should display translated message in a toast', fakeAsync(() => {
-    const errorMessage = "The received QR content cannot be processed";
-    spyOn(translateService, 'get').and.returnValue(of('Invalid QR Code'));
-    const toastSpy = spyOn(toastCtrl, 'create').and.returnValue(Promise.resolve({
-      present: () => Promise.resolve(),
-      dismiss: () => Promise.resolve()
-    }) as any);
+  it('should display a toast for an error message', fakeAsync(() => {
 
+    spyOn(toastCtrl, 'create').and.callThrough();
+
+    const errorMessage = "Error processing Verifiable Credential";
     service.showErrorAlert(errorMessage).subscribe();
 
-    tick();
 
-    expect(translateService.get).toHaveBeenCalledWith('errors.invalid-qr');
-    expect(toastSpy).toHaveBeenCalledWith(jasmine.objectContaining({
-      message: 'Invalid QR Code',
-      buttons: ['OK']
-    }));
+    tick(TIME_IN_MS);
+
+    expect(toastCtrl.create).toHaveBeenCalled();
   }));
-
 });
-*/
