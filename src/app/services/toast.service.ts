@@ -15,7 +15,7 @@ export class ToastServiceHandler {
 
 
   showErrorAlert(message: string): Observable<any> {
-    let messageBody = "home.unsuccess"
+    let messageBody = "errors.default"
     if (message.startsWith("The received QR content cannot be processed")) {
       messageBody = "errors.invalid-qr"
     }

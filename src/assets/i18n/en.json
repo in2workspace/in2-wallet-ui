@@ -112,6 +112,7 @@
         "delete-cancel": "Cancel"
     },
     "errors":{
+        "default":"Error not recognized",
         "invalid-qr":"The QR presented is invalid",
         "expired-credentialOffer":"The credential offer is expired or already used",
         "invalid-credentialOffer":"Credential offer is invalid",
