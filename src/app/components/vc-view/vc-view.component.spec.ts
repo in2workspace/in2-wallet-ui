@@ -22,11 +22,9 @@ describe('VcViewComponent', () => {
       imports: [
         HttpClientTestingModule,
         TranslateModule.forRoot(),
-        VcViewComponent
+        VcViewComponent,
       ],
-      providers: [
-        { provide: WalletService, useClass: WalletServiceMock }
-      ]
+      providers: [{ provide: WalletService, useClass: WalletServiceMock }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(VcViewComponent);
@@ -50,7 +48,7 @@ describe('VcViewComponent', () => {
             emailAddress: '',
             serialNumber: '',
             organization: '',
-            country: ''
+            country: '',
           },
           mandatee: {
             id: 'mandateeId',
@@ -58,21 +56,23 @@ describe('VcViewComponent', () => {
             last_name: '',
             gender: '',
             email: '',
-            mobile_phone: ''
+            mobile_phone: '',
           },
-          power: [{
-            id: '',
-            tmf_type: '',
-            tmf_domain: [''],
-            tmf_function: '',
-            tmf_action: ['']
-          }],
+          power: [
+            {
+              id: '',
+              tmf_type: '',
+              tmf_domain: [''],
+              tmf_function: '',
+              tmf_action: [''],
+            },
+          ],
           life_span: {
             start_date_time: '',
-            end_date_time: ''
-          }
-        }
-      }
+            end_date_time: '',
+          },
+        },
+      },
     };
 
     fixture.detectChanges();
@@ -89,13 +89,18 @@ describe('VcViewComponent', () => {
 
     component.qrView();
 
-    expect(walletService.getVCinCBOR).toHaveBeenCalledWith(component.credentialInput);
+    expect(walletService.getVCinCBOR).toHaveBeenCalledWith(
+      component.credentialInput
+    );
     expect(component.cred_cbor).toEqual(mockCBOR);
     expect(component.isAlertOpenNotFound).toBeTrue();
   });
 
   it('checkExpirationVC should set isExpired to true if credential is expired', () => {
-    component.credentialInput = { id: 'testId', expirationDate: new Date(Date.now() - 86400000).toISOString() } as VerifiableCredential;
+    component.credentialInput = {
+      id: 'testId',
+      expirationDate: new Date(Date.now() - 86400000).toISOString(),
+    } as VerifiableCredential;
 
     component.checkExpirationVC();
 
@@ -103,7 +108,10 @@ describe('VcViewComponent', () => {
   });
 
   it('checkExpirationVC should set isExpired to false if credential is not expired', () => {
-    component.credentialInput = { id: 'testId', expirationDate: new Date(Date.now() + 86400000).toISOString() } as VerifiableCredential;
+    component.credentialInput = {
+      id: 'testId',
+      expirationDate: new Date(Date.now() + 86400000).toISOString(),
+    } as VerifiableCredential;
 
     component.checkExpirationVC();
 
@@ -142,4 +150,39 @@ describe('VcViewComponent', () => {
     expect(component.isAlertExpirationOpenNotFound).toBeFalse();
   });
 
+  it('deleteVC should set isModalDeleteOpen to true', () => {
+    component.deleteVC();
+    expect(component.isModalDeleteOpen).toBeTrue();
+  });
+
+  it('setOpen should correctly set isModalOpen based on the input', () => {
+    component.setOpen(true);
+    expect(component.isModalOpen).toBeTrue();
+
+    component.setOpen(false);
+    expect(component.isModalOpen).toBeFalse();
+  });
+
+  it('clicking on delete button in deleteButtons should change isModalDeleteOpen accordingly', () => {
+    spyOn(component.vcEmit, 'emit');
+
+    component.deleteButtons[0].handler();
+    expect(component.isModalDeleteOpen).toBeFalse();
+
+    component.isModalDeleteOpen = false;
+
+    component.deleteButtons[1].handler();
+    expect(component.isModalDeleteOpen).toBeTrue();
+    expect(component.vcEmit.emit).toHaveBeenCalledWith(
+      component.credentialInput
+    );
+  });
+
+  it('clicking on OK button in alertButtons should set handlerMessage and isModalOpen correctly', () => {
+    spyOn(component, 'setOpen');
+
+    component.setOpen(true);
+
+    expect(component.setOpen).toHaveBeenCalledWith(true);
+  });
 });

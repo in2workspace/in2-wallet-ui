@@ -82,6 +82,37 @@ describe('HttpErrorInterceptor with HttpClient', () => {
   });
 
 
+it('should log and show a toast on a 401 Unauthorized response', () => {
+  const spy = spyOn(mockToastServiceHandler, 'showErrorAlert');
+  const consoleErrorSpy = spyOn(console, 'error');
+
+  httpClient.get('/test401').subscribe({
+    error: (error) => {
+      expect(spy).toHaveBeenCalledWith('Unauthorized error message from backend');
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Unauthorized:', jasmine.any(String));
+    }
+  });
+
+  const req = httpMock.expectOne('/test401');
+  req.flush({message: 'Unauthorized error message from backend'}, { status: 401, statusText: 'Unauthorized' });
+});
+
+it('should log and show a toast on a generic HTTP error response', () => {
+  const errorMessage = 'An error occurred';
+  const spy = spyOn(mockToastServiceHandler, 'showErrorAlert');
+  const consoleErrorSpy = spyOn(console, 'error');
+
+  httpClient.get('/testError').subscribe({
+    error: (error) => {
+      expect(spy).toHaveBeenCalledWith(errorMessage);
+      expect(consoleErrorSpy).toHaveBeenCalledWith('An HTTP error occurred:', jasmine.any(String));
+    }
+  });
+
+  const req = httpMock.expectOne('/testError');
+  req.flush({message: errorMessage}, { status: 500, statusText: 'Internal Server Error' });
+});
+
 
 
 });
