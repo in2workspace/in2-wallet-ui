@@ -32,11 +32,71 @@ describe('ToastServiceHandler', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should display a toast for an error message', fakeAsync(() => {
+  it('should display a toast for an error message 6', fakeAsync(() => {
 
     spyOn(toastCtrl, 'create').and.callThrough();
 
     const errorMessage = "Error processing Verifiable Credential";
+    service.showErrorAlert(errorMessage).subscribe();
+
+
+    tick(TIME_IN_MS);
+
+    expect(toastCtrl.create).toHaveBeenCalled();
+  }));
+  it('should display a toast for an error message 1', fakeAsync(() => {
+
+    spyOn(toastCtrl, 'create').and.callThrough();
+
+    const errorMessage = "The received QR content cannot be processed";
+    service.showErrorAlert(errorMessage).subscribe();
+
+
+    tick(TIME_IN_MS);
+
+    expect(toastCtrl.create).toHaveBeenCalled();
+  }));
+  it('should display a toast for an error message 2', fakeAsync(() => {
+
+    spyOn(toastCtrl, 'create').and.callThrough();
+
+    const errorMessage = "Error while fetching credentialOffer from the issuer";
+    service.showErrorAlert(errorMessage).subscribe();
+
+
+    tick(TIME_IN_MS);
+
+    expect(toastCtrl.create).toHaveBeenCalled();
+  }));
+    it('should display a toast for an error message 3', fakeAsync(() => {
+
+    spyOn(toastCtrl, 'create').and.callThrough();
+
+    const errorMessage = "Error while deserializing CredentialOffer";
+    service.showErrorAlert(errorMessage).subscribe();
+
+
+    tick(TIME_IN_MS);
+
+    expect(toastCtrl.create).toHaveBeenCalled();
+  }));
+  it('should display a toast for an error message 4', fakeAsync(() => {
+
+    spyOn(toastCtrl, 'create').and.callThrough();
+
+    const errorMessage = "Error while processing Credential Issuer Metadata from the Issuer";
+    service.showErrorAlert(errorMessage).subscribe();
+
+
+    tick(TIME_IN_MS);
+
+    expect(toastCtrl.create).toHaveBeenCalled();
+  }));
+  it('should display a toast for an error message 5', fakeAsync(() => {
+
+    spyOn(toastCtrl, 'create').and.callThrough();
+
+    const errorMessage = "Error while fetching  Credential from Issuer";
     service.showErrorAlert(errorMessage).subscribe();
 
 
