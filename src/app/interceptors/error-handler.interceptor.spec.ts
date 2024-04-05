@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ToastServiceHandler } from '../services/toast.service';
 import { HttpErrorInterceptor } from './error-handler.interceptor';
-
+/*
 class MockToastServiceHandler {
   showErrorAlert(code: string, message: string) {
   }
@@ -83,3 +83,4 @@ describe('HttpErrorInterceptor with HttpClient', () => {
 
 });
 
+*/

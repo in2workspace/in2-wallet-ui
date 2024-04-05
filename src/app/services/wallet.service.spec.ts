@@ -29,7 +29,7 @@ describe('WalletService', () => {
 
   it('should fetch VC in CBOR format', () => {
     const mockCredential: VerifiableCredential = {
-      "@context": ["https://www.w3.org/ns/credentials/v2"],
+      "@context": ["https://www.w3.org/ns/credentials/v1"],
       "id": "test-credential-id",
       "type": ["VerifiableCredential", "LEARCredentialEmployee"],
       "issuer": {
@@ -79,7 +79,7 @@ describe('WalletService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.server_url}/api/v2/vp/cbor`);
+    const req = httpTestingController.expectOne(`${environment.server_url}/api/v1/vp/cbor`);
     expect(req.request.method).toEqual('POST');
     req.flush(mockResponse);
   });
@@ -132,7 +132,7 @@ describe('WalletService', () => {
 
   it('should fetch all Verifiable Credentials', () => {
     const mockResponse: VerifiableCredential[] = [{
-      "@context": ["https://www.w3.org/ns/credentials/v2"],
+      "@context": ["https://www.w3.org/ns/credentials/v1"],
       "id": "example-credential-id",
       "type": ["VerifiableCredential", "LEARCredentialEmployee"],
       "issuer": {
@@ -191,7 +191,7 @@ describe('WalletService', () => {
   it('should fetch a single Verifiable Credential by id', () => {
     const data = 'test-id';
     const mockResponse: VerifiableCredential = {
-      "@context": ["https://www.w3.org/ns/credentials/v2"],
+      "@context": ["https://www.w3.org/ns/credentials/v1"],
       "id": "single-test-credential-id",
       "type": ["VerifiableCredential", "LEARCredentialEmployee"],
       "issuer": {
