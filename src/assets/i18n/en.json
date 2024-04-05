@@ -120,8 +120,9 @@
         "cannot-save-VC":"The credential could not be saved successfully"
     },
     "confirmation":{
-        "header":"¿Enviar Credencial?",
+        "header":"Send credential?",
         "ok":"Ok",
-        "cancel":"Cancelar"
+        "cancel":"cancel"
     }
+
 }

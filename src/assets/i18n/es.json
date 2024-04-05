@@ -119,8 +119,8 @@
         "cannot-save-VC":"No se pudo guardar correctamente la credencial"
     },
     "confirmation":{
-        "header":"Send credential?",
+        "header":"¿Enviar Credencial?",
         "ok":"Ok",
-        "cancel":"cancel"
+        "cancel":"Cancelar"
     }
 }
