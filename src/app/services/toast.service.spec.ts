@@ -102,5 +102,17 @@ describe('ToastServiceHandler', () => {
     tick(TIME_IN_MS);
 
     expect(toastCtrl.create).toHaveBeenCalled();
+  })); 
+  it('should display a toast for an error message 5', fakeAsync(() => {
+
+    spyOn(toastCtrl, 'create').and.callThrough();
+
+    const errorMessage = "Incorrect PIN";
+    service.showErrorAlert(errorMessage).subscribe();
+
+
+    tick(TIME_IN_MS);
+
+    expect(toastCtrl.create).toHaveBeenCalled();
   }));
 });
