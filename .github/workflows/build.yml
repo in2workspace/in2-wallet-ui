@@ -54,7 +54,7 @@ jobs:
       - name: Build and Push docker image
         run: |
           echo "PROJECT_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
-          IMAGE_TAG="$COMPONENT_NAME:v1.1.0$SUFFIX"
+          IMAGE_TAG="$COMPONENT_NAME:v1.1.1$SUFFIX"
           docker build . --file Dockerfile --tag $DOCKER_HUB_CLIENT_NAME/$IMAGE_TAG
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker push $DOCKER_HUB_CLIENT_NAME/$IMAGE_TAG

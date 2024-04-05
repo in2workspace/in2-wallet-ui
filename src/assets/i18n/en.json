@@ -118,7 +118,8 @@
         "invalid-credentialOffer":"Credential offer is invalid",
         "invalid-issuerMetadata":"Issuer metadata is incorrect",
         "cannot-get-VC":"Issuer credential could not be obtained",
-        "cannot-save-VC":"The credential could not be saved successfully"
+        "cannot-save-VC":"The credential could not be saved successfully",
+        "incorrect-pin": "Incorrect pin"
     },
     "confirmation":{
         "header":"Send credential?",

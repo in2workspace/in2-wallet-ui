@@ -117,7 +117,8 @@
         "invalid-credentialOffer":"La oferta de credencial no es válida",
         "invalid-issuerMetadata":"Los metadatos del Issuer son incorrectos",
         "cannot-get-VC":"No se pudo obtener la credencial del Issuer",
-        "cannot-save-VC":"No se pudo guardar correctamente la credencial"
+        "cannot-save-VC":"No se pudo guardar correctamente la credencial",
+        "incorrect-pin":"Pin incorrecto"
     },
     "confirmation":{
         "header":"¿Enviar Credencial?",

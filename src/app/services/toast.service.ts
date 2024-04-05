@@ -34,6 +34,9 @@ export class ToastServiceHandler {
     else if (message.startsWith("Error processing Verifiable Credential")) {
       messageBody = "errors.cannot-save-VC"
     }
+    else if (message.startsWith("Incorrect PIN")) {
+      messageBody = "errors.incorrect-pin"
+    }
     return this.translate.get(messageBody).pipe(
       mergeMap(translatedHeader => this.translate.get(messageBody).pipe(
         map(async translatedMessage => {
