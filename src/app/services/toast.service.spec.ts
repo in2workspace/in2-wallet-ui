@@ -2,7 +2,6 @@ import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ToastServiceHandler } from './toast.service';
 import { ToastController } from '@ionic/angular';
 import { TranslateService, TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { of } from 'rxjs';
 import { TranslateFakeLoader } from '@ngx-translate/core';
 const TIME_IN_MS = 3000;
 describe('ToastServiceHandler', () => {

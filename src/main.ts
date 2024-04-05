@@ -60,7 +60,6 @@ bootstrapApplication(AppComponent, {
         ignoreNonceAfterRefresh: true,
         triggerRefreshWhenIdTokenExpired: false,
         autoUserInfo: false,
-        //logLevel: LogLevel.Debug,
         secureRoutes:[environment.server_url]
       }
     })

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Output, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { BarcodeFormat } from '@zxing/library';
 import { ZXingScannerModule,ZXingScannerComponent } from '@zxing/ngx-scanner';
-import { BehaviorSubject, Observable, distinctUntilChanged, map, scan, shareReplay, startWith } from 'rxjs';
+import { BehaviorSubject, Observable, distinctUntilChanged, map, shareReplay } from 'rxjs';
 import { CameraService } from 'src/app/services/camera.service';
 
 @Component({

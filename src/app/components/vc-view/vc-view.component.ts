@@ -30,19 +30,19 @@ export class VcViewComponent implements OnInit{
   isExpired: boolean = false;
 
   ngOnInit(): void {
-    this.credentialInput = this.credentialInput
     this.checkExpirationVC();
     }
     qrView(){
       if (!this.isExpired) {
-        this.walletService.getVCinCBOR(this.credentialInput).subscribe(
-          (value: string) => {
+        this.walletService.getVCinCBOR(this.credentialInput).subscribe({
+          next:(value: string) => {
             this.isAlertOpenNotFound = true;
             this.cred_cbor = value
           },
-          (error: any) => {
+          error: (error: any) => {
             console.error(error); // Handle errors
           }
+        }
         );
       }
       else {
@@ -66,8 +66,7 @@ export class VcViewComponent implements OnInit{
           if (expirationDate < currentDate) {
             this.isExpired = true;
           } 
-          else {
-          }
+
         }
     isModalDeleteOpen = false;
     deleteVC(){
