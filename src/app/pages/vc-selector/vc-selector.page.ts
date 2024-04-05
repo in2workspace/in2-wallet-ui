@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 import { QRCodeModule } from 'angularx-qrcode';
 import { WalletService } from 'src/app/services/wallet.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -41,7 +41,9 @@ export class VcSelectorPage implements OnInit {
     private router: Router,
     private walletService: WalletService,
     private route: ActivatedRoute,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private alertController: AlertController
+
   ) {
     this.route.queryParams.subscribe((params) => {
       this.executionResponse = JSON.parse(params['executionResponse']);
@@ -66,7 +68,26 @@ export class VcSelectorPage implements OnInit {
     this.selCredList.push(cred);
     this.isClick[index] = !this.isClick[index];
   }
-  sendCred(cred: any) {
+  async sendCred(cred: any) {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('confirmation.header'),
+      buttons: [
+        {
+          text: this.translate.instant('confirmation.cancel'),
+          role: 'cancel',
+        },
+        {
+          text: this.translate.instant('confirmation.ok'),
+          role:'ok',
+        },
+      ],
+    });
+
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    console.log(result);
+
+    if(result.role==='ok'){
     this.selCredList.push(cred);
     this._VCReply.selectedVcList = this.selCredList;
     this.walletService.executeVC(this._VCReply).subscribe({
@@ -76,7 +97,10 @@ export class VcSelectorPage implements OnInit {
       error: (err) => {
         console.error(err);
       },
-    });
+      complete: () =>{
+        this.selCredList = [];
+      }
+    });}
   }
 
   public closeButton = [

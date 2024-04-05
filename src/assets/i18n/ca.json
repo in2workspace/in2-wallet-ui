@@ -118,5 +118,10 @@
         "invalid-issuerMetadata":"Les metadades del Issuer són incorrectes",
         "cannot-get-VC":"No s'ha pogut obtenir la credencial del Issuer",
         "cannot-save-VC":"No s'ha pogut guardar correctamente la credencial"
+    },
+    "confirmation":{
+        "header":"Enviar credencial?",
+        "ok":"Ok",
+        "cancel":"Cancelar"
     }
 }

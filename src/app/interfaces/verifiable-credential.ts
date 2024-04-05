@@ -1,7 +1,7 @@
 export interface VerifiableCredential {
   '@context': string[];
   id: string;
-  type: string[];
+  type?: string[];
   issuer: Issuer;
   issuanceDate: string;
   validFrom: string;
