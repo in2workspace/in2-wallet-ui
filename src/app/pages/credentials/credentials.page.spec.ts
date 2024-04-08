@@ -27,11 +27,11 @@ describe('CredentialsPage', () => {
     websocketServiceSpy = jasmine.createSpyObj('WebsocketService', ['connect']);
     const dataServiceSpyObj = jasmine.createSpyObj('DataService', ['listenDid']);
     const authServiceSpyObj = jasmine.createSpyObj('AuthenticationService', ['getName']);
-    walletServiceSpy.requestCredential.and.returnValue(of({}));
+    walletServiceSpy.requestCredential.and.returnValue(of({} as any));
 
     dataServiceSpyObj.listenDid.and.returnValue(of('someDidValue'));
-    walletServiceSpy.executeContent.and.returnValue(of({}));
-    walletServiceSpy.requestCredential.and.returnValue(of(null));
+    walletServiceSpy.executeContent.and.returnValue(of({} as any));
+    walletServiceSpy.requestCredential.and.returnValue(of({} as any));
 
     TestBed.configureTestingModule({
       imports: [

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -11,33 +11,36 @@ import { DataService } from 'src/app/services/data.service';
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterModule, TranslateModule]
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    TranslateModule,
+  ],
 })
-export class SettingsPage implements OnInit {
+// eslint-disable-next-line @angular-eslint/component-class-suffix
+export class SettingsPage {
+  public userName = '';
+  public isAlertOpen = false;
 
-  constructor(
+  public constructor(
     private router: Router,
-    private dataService: DataService,
+    private dataService: DataService
+  ) {}
 
-  ) { }
-  userName: string = '';
-  isAlertOpen: boolean = false;
-
-  ngOnInit() {
-
-  }
-  goHomeWithEBSI() {
+  public goHomeWithEBSI() {
     this.dataService.getDid().subscribe({
       next: () => {
-      this.router.navigate(['/tabs/credentials']);
-    },
-     error: (error) => {
+        this.router.navigate(['/tabs/credentials']);
+      },
+      error: (error) => {
         this.isAlertOpen = true;
-        console.error(error)
-      }
-    })
+        console.error(error);
+      },
+    });
   }
-  toggleAlert() {
+  public toggleAlert() {
     this.isAlertOpen = !this.isAlertOpen;
   }
 }

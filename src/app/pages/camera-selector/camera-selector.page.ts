@@ -19,27 +19,32 @@ import { distinctUntilChanged, map, shareReplay } from 'rxjs';
     BarcodeScannerComponent,
   ],
 })
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CameraSelectorPage {
-  private cameraService = inject(CameraService);
-  selectedDevice = this.cameraService.navCamera$.pipe(
+  @Input() public availableDevices: MediaDeviceInfo[] = [];
+  public cameraService = inject(CameraService);
+
+  public selectedDevice = this.cameraService.navCamera$.pipe(
     map((device) => {
-    return device.deviceId;
-  }),
+      return device.deviceId;
+    }),
     distinctUntilChanged(),
     shareReplay(1)
   );
-  @Input() availableDevices: MediaDeviceInfo[] = []; 
-  availableDevicesEmit(devices: MediaDeviceInfo[]) {
+
+  public availableDevicesEmit(devices: MediaDeviceInfo[]) {
     this.availableDevices = devices;
   }
-  onDeviceSelectChange(selected: string) {
+
+  public onDeviceSelectChange(selected: string) {
     if (selected != '') {
-      const device:MediaDeviceInfo|undefined = this.availableDevices.find((x) => x.deviceId === selected);
-      if(device!=undefined){
+      const device: MediaDeviceInfo | undefined = this.availableDevices.find(
+        (x) => x.deviceId === selected
+      );
+      if (device != undefined) {
         this.cameraService.changeCamera(device);
       }
-    }
-    else{
+    } else {
       this.cameraService.noCamera();
     }
   }

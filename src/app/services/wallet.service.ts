@@ -19,28 +19,41 @@ const options = {
 export class WalletService {
   private http = inject(HttpClient);
 
-  public executeContent(url: string): Observable<any> {
-
+  public executeContent(url: string): Observable<JSON> {
     return this.http.post<JSON>(
       environment.server_url + environment.server_uri.execute_content_uri,
       { qr_content: url },
       options
     );
   }
-  public getVCinCBOR(credential:VerifiableCredential):Observable<any> {
-    const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text' };
+  public getVCinCBOR(credential: VerifiableCredential): Observable<string> {
+    const options = {
+      headers: headers,
+      redirect: 'follow',
+      responseType: 'text' as const,
+    };
     return this.http.post(
-      environment.server_url+ environment.server_uri.cbor, credential,
-      options)
+      environment.server_url + environment.server_uri.cbor,
+      credential,
+      options
+    );
   }
-  public getVCinJWT(credential:VerifiableCredential):Observable<any> {
-    const options = { headers: headers, redirect : 'follow',responseType:'text' as 'text'  };
+  public getVCinJWT(credential: VerifiableCredential): Observable<string> {
+    const options = {
+      headers: headers,
+      redirect: 'follow',
+      responseType: 'text' as const,
+    };
     return this.http.get(
-      environment.server_url + '/api/credentials/id?credentialId=' + credential.id + '&format=vc_jwt',
-      options)
-    }
+      environment.server_url +
+        '/api/credentials/id?credentialId=' +
+        credential.id +
+        '&format=vc_jwt',
+      options
+    );
+  }
 
-  public requestCredential(credentialOfferUri: string): Observable<any> {
+  public requestCredential(credentialOfferUri: string): Observable<JSON> {
     return this.http.post<JSON>(
       environment.server_url + environment.server_uri.request_credential_uri,
       { credential_offer_uri: credentialOfferUri },
@@ -49,7 +62,7 @@ export class WalletService {
   }
 
   // Send the Selected VC List to the WCA to create the Verifiable Presentation
-  public executeVC(_VCReply: VCReply): Observable<any> {
+  public executeVC(_VCReply: VCReply): Observable<string> {
     return this.http.post<string>(
       environment.server_url +
         environment.server_uri.verifiable_presentation_uri,
@@ -77,6 +90,7 @@ export class WalletService {
   }
 
   // Deprecated
+  // eslint-disable-next-line @typescript-eslint/ban-types
   public submitCredential(arg0: {}) {
     return this.http.post<string>(
       environment.server_url + environment.server_uri.credentials_uri,
@@ -86,7 +100,7 @@ export class WalletService {
   }
 
   // Delete the selected Verifiable Credential from the Wallet Data
-  deleteVC(VC: string) {
+  public deleteVC(VC: string) {
     return this.http.delete<string>(
       environment.server_url +
         environment.server_uri.credentials_by_id_uri +

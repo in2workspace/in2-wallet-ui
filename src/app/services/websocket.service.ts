@@ -11,12 +11,12 @@ export class WebsocketService {
   private socket!: WebSocket;
   private messageSubject = new BehaviorSubject<string>('');
 
-  constructor(
+  public constructor(
     private authenticationService: AuthenticationService,
     private alertController: AlertController
   ) {}
 
-  connect(): void {
+  public connect(): void {
     this.socket = new WebSocket(
       environment.websocket_url + environment.websocket_uri
     );
@@ -67,7 +67,7 @@ export class WebsocketService {
     };
   }
 
-  sendMessage(message: string): void {
+  public sendMessage(message: string): void {
     if (this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(message);
     } else {
@@ -75,7 +75,7 @@ export class WebsocketService {
     }
   }
 
-  closeConnection(): void {
+  public closeConnection(): void {
     this.socket.close();
   }
 }

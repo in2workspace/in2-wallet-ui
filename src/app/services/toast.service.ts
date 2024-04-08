@@ -5,16 +5,15 @@ import { mergeMap, map, Observable } from 'rxjs';
 const TIME_IN_MS = 3000;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ToastServiceHandler {
-
-  constructor(private toastController: ToastController,
+  public constructor(
+    private toastController: ToastController,
     private translate: TranslateService
-  ) { }
+  ) {}
 
-
-  showErrorAlert(message: string): Observable<any> {
+ public showErrorAlert(message: string): Observable<unknown> {
     let messageBody = "errors.default"
     if (message.startsWith("The received QR content cannot be processed")) {
       messageBody = "errors.invalid-qr"
@@ -38,26 +37,25 @@ export class ToastServiceHandler {
       messageBody = "errors.incorrect-pin"
     }
     return this.translate.get(messageBody).pipe(
-      mergeMap(translatedHeader => this.translate.get(messageBody).pipe(
-        map(async translatedMessage => {
+      mergeMap((translatedHeader) =>
+        this.translate.get(messageBody).pipe(
+          map(async (translatedMessage) => {
+            const alert = await this.toastController.create({
+              header: translatedHeader,
+              [message]: translatedMessage,
+              cssClass: 'toast-custom',
 
-          const alert = await this.toastController.create({
-            header: translatedHeader,
-            [message]: translatedMessage,
-            cssClass: 'toast-custom',
+              buttons: ['OK'],
+            });
 
-            buttons: ['OK']
-          });
+            await alert.present();
 
-          await alert.present();
-
-          setTimeout(() => {
-            alert.dismiss();
-          }, TIME_IN_MS);
-        })
-      )));
-
-
+            setTimeout(() => {
+              alert.dismiss();
+            }, TIME_IN_MS);
+          })
+        )
+      )
+    );
   }
-
 }

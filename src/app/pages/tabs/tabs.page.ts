@@ -9,10 +9,15 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
   selector: 'app-tabs',
   templateUrl: './tabs.page.html',
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule,TranslateModule,RouterModule]
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    TranslateModule,
+    RouterModule,
+  ],
 })
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class TabsPage {
-
-  constructor(private route: ActivatedRoute) { }
-
+  public constructor(private route: ActivatedRoute) {}
 }

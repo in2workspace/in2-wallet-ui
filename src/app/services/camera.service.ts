@@ -11,32 +11,34 @@ export class CameraService {
     groupId: '',
     kind: 'audiooutput',
     label: '',
-    toJSON() {
-    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    toJSON() {},
   };
-  private camara =
-    new BehaviorSubject<MediaDeviceInfo>(this.mediaDeviceInfoNull);
-  navCamera$ = this.camara.asObservable();
-  constructor(private storageService: StorageService) {
+  public camara = new BehaviorSubject<MediaDeviceInfo>(
+    this.mediaDeviceInfoNull
+  );
+  public navCamera$ = this.camara.asObservable();
+
+  public constructor(private storageService: StorageService) {
     this.updateCamera();
   }
 
-  changeCamera(camara: MediaDeviceInfo) {
+  public changeCamera(camara: MediaDeviceInfo) {
     this.camara.next(camara);
     this.storageService.set('camara', camara);
   }
 
-  updateCamera() {
-    this.storageService.get('camara').then((result) => {
+  public updateCamera() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.storageService.get('camara').then((result: any) => {
       if (result != null) {
         this.camara.next(result);
       }
     });
   }
 
-  noCamera() {
+  public noCamera() {
     this.storageService.remove('camara');
     this.camara.next(this.mediaDeviceInfoNull);
   }
-
 }

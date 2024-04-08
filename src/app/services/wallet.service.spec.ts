@@ -100,16 +100,16 @@ describe('WalletService', () => {
 
   it('should request a new credential', () => {
     const mockCredentialOfferUri = 'test-offer-uri';
-    const mockResponse = { message: 'Credential request successful' };
+    const expectedResponse = { message: 'Credential request successful' } as any;
 
     service.requestCredential(mockCredentialOfferUri).subscribe(response => {
-      expect(response).toEqual(mockResponse);
+      expect(response).toEqual(expectedResponse);
     });
 
     const req = httpTestingController.expectOne(`${environment.server_url + environment.server_uri.request_credential_uri}`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ credential_offer_uri: mockCredentialOfferUri });
-    req.flush(mockResponse);
+    req.flush(expectedResponse);
   });
 
   it('should execute Verifiable Credential and return response', () => {

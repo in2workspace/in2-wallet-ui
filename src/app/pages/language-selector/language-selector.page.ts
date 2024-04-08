@@ -12,53 +12,64 @@ import { BehaviorSubject, distinctUntilChanged, map, shareReplay } from 'rxjs';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule,TranslateModule]
 })
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class LanguageSelectorPage implements OnInit {
-  public translate= inject(TranslateService);
-  private storageService = inject(StorageService);
-  selected = {name:"",code:""} ;
-  language = {name:"",code:""};
-  userName: string = '';
-  private languages = new BehaviorSubject<any>("");
-  languageList = [
+  public translate = inject(TranslateService);
+
+  public selected = { name: '', code: '' };
+  public language = { name: '', code: '' };
+  public userName = '';
+  public languages = new BehaviorSubject<unknown>('');
+
+  public languageList = [
     {
-      name : "English",
-      code : "en"
+      name: 'English',
+      code: 'en',
     },
     {
-      name: "Castellano",
-      code : "es"
+      name: 'Castellano',
+      code: 'es',
     },
     {
-      name: "Català",
-      code : "ca"
-    }
-  ]
-  languageSelected = this.languages.pipe(
+      name: 'Català',
+      code: 'ca',
+    },
+  ];
+
+  public languageSelected = this.languages.pipe(
     map((device) => {
       let lang = {};
-       this.languageList.forEach((language) =>{
+      this.languageList.forEach((language) => {
         if (language.code === device) {
           lang = language;
-        }})
-        return lang
-  }),
+        }
+      });
+      return lang;
+    }),
     distinctUntilChanged(),
     shareReplay(1)
-  );  
+  );
 
-  ngOnInit() {
-    this.storageService.get("language").then((datos)=>{
+  private storageService = inject(StorageService);
+
+
+  public ngOnInit() {
+    this.storageService.get('language').then((datos) => {
       this.languages.next(datos);
     });
-    let lang = this.languageList.forEach((language) =>{
+    const lang = this.languageList.forEach((language) => {
       if (language.code === this.translate.currentLang) {
         this.selected = language;
-      }})
-    if(lang!= undefined)this.selected = lang;
-    if(this.translate.currentLang == undefined) this.selected = this.languageList[2];
+      }
+    });
+    if (lang != undefined) this.selected = lang;
+    if (this.translate.currentLang == undefined)
+      this.selected = this.languageList[2];
   }
-  languageChange(code:any){
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public languageChange(code: any) {
     this.translate.use(code.code);
-    this.storageService.set("language",code.code);
+    this.storageService.set('language', code.code);
   }
 }
