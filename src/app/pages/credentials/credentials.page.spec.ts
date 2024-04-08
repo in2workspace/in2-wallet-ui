@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -235,4 +235,50 @@ describe('CredentialsPage', () => {
 
     expect(router.navigate).toHaveBeenCalledWith(['/tabs/vc-selector/'], { queryParams: { executionResponse: JSON.stringify({}) } });
   }));
+
+  it('should handle alert Cancel correctly', fakeAsync(() => {
+    let alertController = TestBed.inject(AlertController);
+    spyOn(alertController, 'create').and.returnValue(Promise.resolve({
+      present: () => Promise.resolve(),
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {}
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {}
+        }
+      ]
+    } as any));
+
+    component.credentialClick();
+    tick();
+  }));
+
+  it('should handle alert Accept correctly', fakeAsync(() => {
+    let alertController = TestBed.inject(AlertController);
+    spyOn(alertController, 'create').and.returnValue(Promise.resolve({
+      present: () => Promise.resolve(),
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {}
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+          }
+        }
+      ]
+    } as any));
+
+    component.credentialClick();
+    tick();
+  }));
+
+
+
 });

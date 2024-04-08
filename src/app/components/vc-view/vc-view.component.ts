@@ -31,6 +31,8 @@ export class VcViewComponent implements OnInit {
   public isModalOpen = false;
   public isModalDeleteOpen = false;
 
+  public showChip = false;
+
   public handlerMessage = '';
   public alertButtons = [
     {
@@ -65,8 +67,13 @@ export class VcViewComponent implements OnInit {
 
   public ngOnInit(): void {
     this.checkExpirationVC();
+    this.checkAvailableFormats();
   }
-
+  public checkAvailableFormats() {
+    if (this.credentialInput && this.credentialInput.available_formats) {
+      this.showChip = this.credentialInput.available_formats.includes('cwt_vc');
+    }
+  }
   public qrView() {
     if (!this.isExpired) {
       this.walletService.getVCinCBOR(this.credentialInput).subscribe({
@@ -75,7 +82,7 @@ export class VcViewComponent implements OnInit {
           this.cred_cbor = value;
         },
         error: (error: unknown) => {
-          console.error(error); // Handle errors
+          console.error(error);
         },
       });
     } else {
@@ -94,10 +101,8 @@ export class VcViewComponent implements OnInit {
 
   public checkExpirationVC() {
     const expirationDate = new Date(this.credentialInput.expirationDate);
-    // Assuming each credential has an 'id' property
     const credentialId = this.credentialInput.id;
 
-    // Store the expiration date for the specific credential in localStorage
     localStorage.setItem(
       `vcExpirationDate_${credentialId}`,
       expirationDate.toISOString()

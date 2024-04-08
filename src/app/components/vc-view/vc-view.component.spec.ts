@@ -185,4 +185,24 @@ describe('VcViewComponent', () => {
 
     expect(component.setOpen).toHaveBeenCalledWith(true);
   });
+
+  it('should set showChip to true if "cwt_vc" is in available_formats', () => {
+    component.credentialInput.available_formats = ['cwt_vc'];
+    component.checkAvailableFormats();
+    expect(component.showChip).toBeTrue();
+  });
+
+  it('should set showChip to false if "cwt_vc" is not in available_formats', () => {
+    component.credentialInput.available_formats = ['other_format'];
+    component.checkAvailableFormats();
+    expect(component.showChip).toBeFalse();
+  });
+
+  it('should not set showChip if available_formats is undefined', () => {
+    component.credentialInput.available_formats = undefined;
+    const initialShowChip = component.showChip;
+    component.checkAvailableFormats();
+    expect(component.showChip).toBe(initialShowChip);
+  });
+
 });

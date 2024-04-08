@@ -7,6 +7,7 @@ export interface VerifiableCredential {
   validFrom: string;
   expirationDate: string;
   credentialSubject: CredentialSubject;
+  available_formats?: string[];
 }
 
 export interface Issuer {
