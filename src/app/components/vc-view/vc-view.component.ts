@@ -31,7 +31,7 @@ export class VcViewComponent implements OnInit {
   public isModalOpen = false;
   public isModalDeleteOpen = false;
 
-  public showChip = false;
+  public showChip = true;
 
   public handlerMessage = '';
   public alertButtons = [
