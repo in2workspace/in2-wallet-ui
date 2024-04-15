@@ -1,28 +1,28 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { Router,RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { IonicModule, PopoverController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import {TranslateModule} from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 
-
-@Component ({
-    selector: 'app.logout',
-    templateUrl: './logout.page.html',
-    standalone: true,
-    imports: [IonicModule, CommonModule, RouterModule, TranslateModule]
+@Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'app.logout',
+  templateUrl: './logout.page.html',
+  standalone: true,
+  imports: [IonicModule, CommonModule, RouterModule, TranslateModule],
 })
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class LogoutPage {
-    constructor(private popOverController: PopoverController,
-        private authenticationService: AuthenticationService,
-        private router:Router) {}
-    logout () {
-        this.authenticationService.logout().subscribe(()=>{
-            this.router.navigate(['/login'], {})
-      
-          });
-        this.popOverController.dismiss();
-    }
+  public constructor(
+    private popOverController: PopoverController,
+    private authenticationService: AuthenticationService,
+    private router: Router
+  ) {}
+  public logout() {
+    this.authenticationService.logout().subscribe(() => {
+      this.router.navigate(['/home'], {});
+    });
+    this.popOverController.dismiss();
+  }
 }
-
-

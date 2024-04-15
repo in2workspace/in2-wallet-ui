@@ -1,6 +1,10 @@
 {
-    "sonarlint.connectedMode.project": {
-        "connectionId": "in2workspace",
-        "projectKey": "in2workspace_wallet-driving-application"
-    }
+  "sonarlint.connectedMode.project": {
+    "connectionId": "in2workspace",
+    "projectKey": "in2workspace_wallet-driving-application"
+  },
+  "eslint.validate": ["javascript", "typescript"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  }
 }

@@ -1,14 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {IonicModule, PopoverController} from '@ionic/angular';
-import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
-import {ActivatedRoute, Router, RouterModule } from '@angular/router';
-import {AuthenticationService} from 'src/app/services/authentication.service';
-import {TranslateModule} from '@ngx-translate/core';
-import {LogoutPage } from '../logout/logout.page';
-
-const TIME_IN_MS = 1500;
+import { Component, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
+import { BarcodeScannerComponent } from 'src/app/components/barcode-scanner/barcode-scanner.component';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
@@ -21,53 +17,31 @@ const TIME_IN_MS = 1500;
     FormsModule,
     BarcodeScannerComponent,
     TranslateModule,
-    RouterModule
+    RouterModule,
   ],
 })
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class HomePage implements OnInit {
+  @Input() public availableDevices: MediaDeviceInfo[] = [];
+  public userName = '';
+  public desactivar = true;
 
-  async startScan() {
+  public constructor(private router: Router, private route: ActivatedRoute) {}
+
+  public async startScan() {
     this.router.navigate(['/tabs/credentials/'], {
       queryParams: { toggleScan: true, from: 'home', show_qr: true },
     });
   }
 
-
-  @Input() availableDevices: MediaDeviceInfo[] = [];
-
-  userName: string = '';
-  desactivar: boolean = true;
-
-  constructor(
-    private router: Router,
-    private authenticationService: AuthenticationService,
-    private popoverController: PopoverController,
-    private route: ActivatedRoute,
-    ) {
-  }
-
-  async openPopover(ev: any) {
-    await this.popoverController.create({
-      component: LogoutPage,
-      event: ev,
-      translucent: true,
-    });
-  }
-  ngOnInit() {
-    this.userName = this.authenticationService.getName();
-    this.route.queryParams.subscribe(params => {
+  public ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
       const credentialOfferUri = params['credential_offer_uri'];
       if (credentialOfferUri) {
-        this.router.navigate(['/tabs/credentials'], {queryParams: { credentialOfferUri: credentialOfferUri}})
+        this.router.navigate(['/tabs/credentials'], {
+          queryParams: { credentialOfferUri: credentialOfferUri },
+        });
       }
     });
   }
-
-  logout(){
-    this.authenticationService.logout().subscribe(()=>{
-      this.router.navigate(['/login'], {})
-
-    });
-  }
-
 }

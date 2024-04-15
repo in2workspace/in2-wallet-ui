@@ -1,8 +1,8 @@
 export const environment = {
   production: false,
-  server_url: 'http://localhost:8081',
+  server_url: 'http://localhost:8080',
   iam_url:'http://localhost:9099',
-  websocket_url:'ws://localhost:8081',
+  websocket_url:'ws://localhost:8080',
   iam_params: {
     iam_uri:'/realms/wallet',
     client_id: 'auth-client',
@@ -10,14 +10,15 @@ export const environment = {
     grant_type: 'code'
   },
   server_uri: {
-    execute_content_uri: '/api/v2/execute-content',
-    request_credential_uri: '/api/v2/request-credential',
-    verifiable_presentation_uri: '/api/v2/verifiable-presentation',
-    credentials_uri: '/api/v2/credentials',
-    credentials_by_id_uri: '/api/v2/credentials?credentialId=',
-    users_uri: '/api/v2/users',
-    ebsi_did_uri: '/api/v2/ebsi-did',
+    execute_content_uri: '/api/v1/execute-content',
+    request_credential_uri: '/api/v1/request-credential',
+    verifiable_presentation_uri: '/api/v1/verifiable-presentation',
+    credentials_uri: '/api/v1/credentials',
+    credentials_by_id_uri: '/api/v1/credentials?credentialId=',
+    users_uri: '/api/v1/users',
+    ebsi_did_uri: '/api/v1/ebsi-did',
+    cbor: '/api/v1/vp/cbor'
   },
-  websocket_uri:'/api/v2/pin'
+  websocket_uri:'/api/v1/pin'
 
 };

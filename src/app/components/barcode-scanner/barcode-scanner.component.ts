@@ -1,7 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { BarcodeFormat } from '@zxing/library';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { ZXingScannerModule, ZXingScannerComponent } from '@zxing/ngx-scanner';
+import {
+  BehaviorSubject,
+  Observable,
+  distinctUntilChanged,
+  map,
+  shareReplay,
+} from 'rxjs';
 import { CameraService } from 'src/app/services/camera.service';
 
 @Component({
@@ -11,33 +24,50 @@ import { CameraService } from 'src/app/services/camera.service';
   imports: [CommonModule, ZXingScannerModule],
 })
 export class BarcodeScannerComponent implements OnInit {
-  @Output() availableDevices: EventEmitter<MediaDeviceInfo[]> =
+  @Output() public availableDevices: EventEmitter<MediaDeviceInfo[]> =
     new EventEmitter();
-  @Output() qrCode: EventEmitter<string> = new EventEmitter();
-  currentDevice: MediaDeviceInfo = this.cameraService.mediaDeviceInfoNull;
-  cameraEnabled: boolean = false;
-  hasDevices: boolean = false;
-  formatsEnabled: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
+  @Output() public qrCode: EventEmitter<string> = new EventEmitter();
+  @ViewChild('scanner') public scanner!: ZXingScannerComponent;
 
-  constructor(private cameraService: CameraService) { }
+  public allowedFormats = [BarcodeFormat.QR_CODE];
 
-  ngOnInit(): void {
-    this.cameraService.navEnabled$.subscribe((preferedDevice) => {
-      this.cameraEnabled = preferedDevice;
-    });
-    this.cameraService.navCamera$.subscribe((preferedDevice) => {
-      this.currentDevice = preferedDevice;
-    });
+  public devices$ = new BehaviorSubject<MediaDeviceInfo[]>([]);
+
+  public toggleCamera$ = new BehaviorSubject<boolean>(false);
+  public enable$ = this.toggleCamera$.pipe(
+    map((value) => {
+      return value;
+    }),
+    distinctUntilChanged(),
+    shareReplay(1)
+  );
+  public selectedDevice$: Observable<MediaDeviceInfo> =
+    this.cameraService.navCamera$.pipe(
+      map((device) => {
+        this.toggleCamera$.next(device.deviceId != '');
+        return device;
+      }),
+      distinctUntilChanged(),
+      shareReplay(1)
+    );
+
+  public scanSuccess$ = new BehaviorSubject<string>('');
+  public constructor(private cameraService: CameraService) {}
+  public ngOnInit(): void {
     setTimeout(() => {
       this.cameraService.updateCamera();
-    }, 1000);
+    }, 2000);
   }
 
-  async onCamerasFound(devices: MediaDeviceInfo[]): Promise<void> {
+  public onCodeResult(resultString: string) {
+    this.qrCode.emit(resultString);
+  }
+
+  public async onCamerasFound(devices: MediaDeviceInfo[]): Promise<void> {
     this.availableDevices.emit(devices);
   }
 
-  onCodeResult(resultString: string) {
-      this.qrCode.emit(resultString);
+  public scanError(error: Error) {
+    console.error(error);
   }
 }

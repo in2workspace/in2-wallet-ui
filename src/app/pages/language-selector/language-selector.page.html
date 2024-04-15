@@ -1,22 +1,12 @@
-<ion-header [translucent]="false">
-  <ion-toolbar style="padding-right: 0.5rem;">
-    <img alt src="assets/icon/dome_white_logo.png" width="auto" slot="start" height="35px"/>
-    <ion-button slot="end" color="primary" class="toolbar-but" (click)="openPopover($event)">
-      {{userName}}
-      <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
-    </ion-button>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true" class="background-content">
+<ion-content [fullscreen]="true">
   <ion-grid>
     <p style="font-weight: bold;">{{"language-selector.title"|translate}}</p>
     <ion-row class="ion-justify-content-start">
-      <ion-list class="language-list">
-        <ion-radio-group [(ngModel)]="selected" (ionChange)="languageChange($any($event).target?.value)">
-          <ion-item *ngFor="let language of languageList" class="radio-items">
-            <ion-label class="language-label-name">{{ language.name }}</ion-label>
-            <ion-radio class="language-radio" [value]="language.code"  slot="start"></ion-radio>
+      <ion-list>
+        <ion-radio-group [ngModel]="languageSelected | async" (ionChange)="languageChange($any($event).target?.value)">
+          <ion-item *ngFor="let language of languageList">
+            <ion-label>{{ language.name }}</ion-label>
+            <ion-radio [value]="language" mode="md" slot="start"></ion-radio>
           </ion-item>
         </ion-radio-group>
       </ion-list>

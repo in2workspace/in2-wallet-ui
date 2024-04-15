@@ -8,9 +8,21 @@ import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClient,
+  HttpClientModule,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage-angular';
-import { AuthModule, LogLevel, AuthInterceptor, authInterceptor } from 'angular-auth-oidc-client';
+import {
+  AuthModule,
+  LogLevel,
+  AuthInterceptor,
+  authInterceptor,
+} from 'angular-auth-oidc-client';
+import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
 
 if (environment.production) {
   enableProdMode();
@@ -19,17 +31,20 @@ if (environment.production) {
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    importProvidersFrom(IonicModule.forRoot({innerHTMLTemplatesEnabled:true})),
+    importProvidersFrom(
+      IonicModule.forRoot({ innerHTMLTemplatesEnabled: true })
+    ),
     importProvidersFrom(HttpClientModule),
     //importProvidersFrom(HttpClientTestingModule),
     importProvidersFrom(
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: httpTranslateLoader,
-        deps: [HttpClient]
-      }
-    })),
+      TranslateModule.forRoot({
+        loader: {
+          provide: TranslateLoader,
+          useFactory: httpTranslateLoader,
+          deps: [HttpClient],
+        },
+      })
+    ),
     importProvidersFrom(IonicStorageModule.forRoot()),
     importProvidersFrom( AuthModule.forRoot({
       config: {
@@ -45,14 +60,19 @@ bootstrapApplication(AppComponent, {
         ignoreNonceAfterRefresh: true,
         triggerRefreshWhenIdTokenExpired: false,
         autoUserInfo: false,
-        logLevel: LogLevel.Debug,
-        secureRoutes:[environment.server_url,environment.server_url]
+        secureRoutes:[environment.server_url]
       }
     })
     ),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     provideHttpClient(withInterceptors([authInterceptor()])),
     provideRouter(routes),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+    },
   ],
 });
 export function httpTranslateLoader(http: HttpClient) {

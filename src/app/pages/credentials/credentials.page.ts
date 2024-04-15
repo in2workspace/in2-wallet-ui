@@ -1,23 +1,19 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {IonicModule, PopoverController} from '@ionic/angular';
-import {StorageService} from 'src/app/services/storage.service';
-import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
-import {QRCodeModule} from 'angular2-qrcode';
-import {WalletService} from 'src/app/services/wallet.service';
-import {VcViewComponent, VerifiableCredential} from "../../components/vc-view/vc-view.component";
-import {TranslateModule} from '@ngx-translate/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AlertController, IonicModule } from '@ionic/angular';
+import { StorageService } from 'src/app/services/storage.service';
+import { BarcodeScannerComponent } from 'src/app/components/barcode-scanner/barcode-scanner.component';
+import { QRCodeModule } from 'angularx-qrcode';
+import { WalletService } from 'src/app/services/wallet.service';
+import { VcViewComponent } from '../../components/vc-view/vc-view.component';
+import { TranslateModule } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-import {LogoutPage } from '../logout/logout.page';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { DataService } from 'src/app/services/data.service';
-import { environment } from 'src/environments/environment';
+import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 
 const TIME_IN_MS = 10000;
-
-const ERROR_TIME_IN_MS = 1500;
 
 @Component({
   selector: 'app-credentials',
@@ -25,212 +21,193 @@ const ERROR_TIME_IN_MS = 1500;
   styleUrls: ['./credentials.page.scss'],
   standalone: true,
   providers: [StorageService],
-  imports: [IonicModule, CommonModule, FormsModule, QRCodeModule, VcViewComponent, TranslateModule, BarcodeScannerComponent,]
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    QRCodeModule,
+    VcViewComponent,
+    TranslateModule,
+    BarcodeScannerComponent,
+  ],
 })
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CredentialsPage implements OnInit {
+  @Input() public availableDevices: MediaDeviceInfo[] = [];
   public alertButtons = ['OK'];
-  userName: string = '';
+  public userName = '';
+  public credList: Array<VerifiableCredential> = [];
+  public size = 300;
+  public credDataList: unknown[] = [];
+  public currentDevice: unknown;
+  public isAlertOpen = false;
+  public toggleScan = false;
+  public credOfferEndpoint = '';
+  public from = '';
+  public scaned_cred = false;
+  public show_qr = false;
+  public credentialOfferUri = '';
+  public ebsiFlag = false;
+  public did = '';
+  public isCredOffer = false;
 
-  credList: Array<VerifiableCredential> = [];
-  size: number = 300;
-  credDataList: any[] = [];
-  @Input() availableDevices: MediaDeviceInfo[] = [];
-  currentDevice: any;
   private walletService = inject(WalletService);
   private router = inject(Router);
-  private authenticationService = inject(AuthenticationService);
-  private popoverController= inject(PopoverController);
   private websocket = inject(WebsocketService);
-  toggleScan: boolean = false;
-  credOfferEndpoint="";
-  escaneado = '';
-  from = '';
-  scaned_cred: boolean = false;
-  show_qr: boolean = false;
-  credentialOfferUri = '';
-  public ebsiFlag: boolean = false;
-  public did: string = '';
+  private dataService = inject(DataService);
+  private route = inject(ActivatedRoute);
 
-  constructor(
-    private dataService: DataService,
-    private route: ActivatedRoute,
-    ) {
-      this.credOfferEndpoint=window.location.origin+"/tabs/home";
+  public constructor(private alertController: AlertController) {
+    this.credOfferEndpoint = window.location.origin + '/tabs/home';
     this.route.queryParams.subscribe((params) => {
       this.toggleScan = params['toggleScan'];
       this.from = params['from'];
       this.show_qr = params['show_qr'];
       this.credentialOfferUri = params['credentialOfferUri'];
-    })
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.dataService.listenDid().subscribe((data: any) => {
-      if(data!=""){
+      if (data != '') {
         this.ebsiFlag = true;
         this.did = data;
       }
-    })
+    });
   }
 
-  ngOnInit() {
-    this.userName = this.authenticationService.getName();
-    this.escaneado = '';
+  public ngOnInit() {
     this.scaned_cred = false;
     this.refresh();
-    if(this.credentialOfferUri !== '') {
+    if (this.credentialOfferUri !== '') {
       this.generateCred();
     }
   }
-  scan(){
+  public scan() {
     this.toggleScan = true;
     this.show_qr = true;
     this.ebsiFlag = false;
   }
 
-  copyToClipboard(textToCopy: string) {
-    let texto = '';
+  public async copyToClipboard(textToCopy: string) {
+    let text = '';
 
     if (textToCopy === 'did-text') {
-      texto = document.getElementById('did-text')!.innerText;
-      const prefix = 'DID: ';
-      if (texto.startsWith(prefix)) {
-        texto = texto.substring(prefix.length);
+      const didTextElement = document.getElementById('did-text');
+      if (didTextElement) {
+        text = didTextElement.innerText.trim();
+        const prefix = 'DID: ';
+        if (text.startsWith(prefix)) {
+          text = text.substring(prefix.length);
+        }
+      } else {
+        console.error('Element with id "did-text" not found.');
+        return;
       }
     } else if (textToCopy === 'endpoint-text') {
-      texto = this.credOfferEndpoint;
+      text = this.credOfferEndpoint || '';
+    } else {
+      console.error('Invalid text to copy:', textToCopy);
+      return;
     }
 
-    const textarea = document.createElement('textarea');
-    textarea.value = texto;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (error) {
+      console.error('Error al copiar texto al portapapeles:', error);
+    }
   }
-  logout(){
-    this.authenticationService.logout().subscribe(()=>{
-      this.router.navigate(['/login'], {})
+
+  public refresh() {
+    this.walletService
+      .getAllVCs()
+      .subscribe((credentialListResponse: VerifiableCredential[]) => {
+        this.credList = credentialListResponse.slice().reverse(); // Copiar el array y luego invertirlo
+      });
+  }
+
+  public vcDelete(cred: VerifiableCredential) {
+    this.walletService.deleteVC(cred.id).subscribe(() => {
+      this.refresh();
     });
   }
 
-  async openPopover(ev: any) {
-    const popover = await this.popoverController.create({
-      component: LogoutPage,
-      event: ev,
-      translucent: true,
-      cssClass: 'custom-popover'
-    });
-
-    await popover.present();
-  }
-
-  refresh() {
-
-    this.walletService.getAllVCs().subscribe((credentialListResponse: Array<VerifiableCredential>) => {
-      this.credList = credentialListResponse.reverse();
-    })
-  }
-
-  vcDelete(cred: VerifiableCredential) {
-    this.walletService.deleteVC(cred.id).subscribe((response: any) => {
-      this.refresh()
-    })
-  }
-
-  qrCodeEmit(qrCode: string) {
-    this.escaneado = qrCode;
+  public qrCodeEmit(qrCode: string) {
     this.toggleScan = false;
-    this.websocket.connect(environment.websocket_url + environment.websocket_uri)
+    this.websocket.connect();
     this.walletService.executeContent(qrCode).subscribe({
       next: (executionResponse) => {
-        if (qrCode.includes("credential_offer_uri")) {
-          this.refresh();
-          this.escaneado = '';
+        if (qrCode.includes('credential_offer_uri')) {
           this.from = 'credential';
+          this.isAlertOpen = true;
           this.scaned_cred = true;
+          setTimeout(() => {
+            this.isAlertOpen = false;
+            this.scaned_cred = false;
+          }, TIME_IN_MS);
+          this.refresh();
         } else {
           this.show_qr = false;
           this.from = '';
           this.router.navigate(['/tabs/vc-selector/'], {
-            queryParams: {executionResponse: executionResponse},
+            queryParams: {
+              executionResponse: JSON.stringify(executionResponse),
+            },
           });
-          this.escaneado = '';
         }
       },
 
       error: (err) => {
         this.toggleScan = true;
-
-        if (err.status == 422) {
-          setTimeout(() => {
-            this.isAlertOpen = false;
-          }, ERROR_TIME_IN_MS);
-          this.isAlertOpen = true;
-          this.escaneado = '';
-        } else if (err.status == 404) {
-          this.isAlertOpenNotFound = true;
-          this.escaneado = '';
-        } else {
-          setTimeout(() => {
-            this.isAlertOpenFail = false;
-          }, ERROR_TIME_IN_MS);
-          this.isAlertOpenFail = true;
-          this.escaneado = '';
-        }
+        console.error(err);
       },
     });
   }
 
-  generateCred() {
-    this.websocket.connect(environment.websocket_url + environment.websocket_uri)
+  public generateCred() {
+    this.websocket.connect();
     this.walletService.requestCredential(this.credentialOfferUri).subscribe({
-      next: (executionResponse) => {
+      next: () => {
         this.refresh();
       },
       error: (err) => {
-        if (err.status == 422) {
-          setTimeout(() => {
-            this.isAlertOpen = false;
-          }, ERROR_TIME_IN_MS);
-          this.isAlertOpen = true;
-          this.escaneado = '';
-        } else if (err.status == 404) {
-          this.isAlertOpenNotFound = true;
-          this.escaneado = '';
-        } else {
-          setTimeout(() => {
-            this.isAlertOpenFail = false;
-          }, ERROR_TIME_IN_MS);
-          this.isAlertOpenFail = true;
-      }
-    },
-  })
+        console.error(err);
+      },
+    });
   }
 
-  isCredOffer = false;
-  untoggleScan(){
+  public untoggleScan() {
     this.toggleScan = false;
   }
 
-  setOpen(isOpen: boolean) {
-    this.isAlertOpen = isOpen;
-  }
+  public async credentialClick() {
+    const alert = await this.alertController.create({
+      header: 'Confirmación',
+      message: '¿Quieres escoger esta credencial?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Usuario canceló');
+          },
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            console.log('Usuario aceptó');
+            setTimeout(() => {
+              this.isAlertOpen = false;
+              this.toggleScan = false;
+              this.router.navigate(['/tabs/credentials/']);
+            }, TIME_IN_MS);
+            this.isAlertOpen = true;
+            this.show_qr = true;
+            this.scaned_cred = false;
+            this.from = '';
+          },
+        },
+      ],
+    });
 
-  setOpenNotFound(isOpen: boolean) {
-    this.isAlertOpenNotFound = isOpen;
-    this.router.navigate(['/home'], {});
+    await alert.present();
   }
-
-  credentialClick() {
-    setTimeout(() => {
-      this.isAlertOpen = false;
-      this.toggleScan = false;
-      this.router.navigate(['/tabs/credentials/'])
-    }, TIME_IN_MS);
-    this.isAlertOpen = true;
-    this.show_qr = true;
-    this.scaned_cred = false;
-    this.from = '';
-  }
-  isAlertOpenNotFound = false;
-  isAlertOpenFail = false;
-  isAlertOpen = false;
 }

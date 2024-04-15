@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
-import {StorageService} from './storage.service';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,38 +11,34 @@ export class CameraService {
     groupId: '',
     kind: 'audiooutput',
     label: '',
-    toJSON() {
-    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    toJSON() {},
   };
-  private camara: BehaviorSubject<MediaDeviceInfo> =
-    new BehaviorSubject<MediaDeviceInfo>(this.mediaDeviceInfoNull);
-  navCamera$ = this.camara.asObservable();
-  private enabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
+  public camara = new BehaviorSubject<MediaDeviceInfo>(
+    this.mediaDeviceInfoNull
   );
-  navEnabled$ = this.enabled.asObservable();
+  public navCamera$ = this.camara.asObservable();
 
-  constructor(private storageService: StorageService) {
+  public constructor(private storageService: StorageService) {
+    this.updateCamera();
   }
 
-  changeCamera(camara: MediaDeviceInfo) {
-    this.enabled.next(true);
+  public changeCamera(camara: MediaDeviceInfo) {
     this.camara.next(camara);
     this.storageService.set('camara', camara);
   }
 
-  updateCamera() {
-    this.storageService.get('camara').then((result) => {
+  public updateCamera() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.storageService.get('camara').then((result: any) => {
       if (result != null) {
-        this.enabled.next(true);
         this.camara.next(result);
       }
     });
   }
 
-  noCamera() {
-    this.enabled.next(false);
+  public noCamera() {
     this.storageService.remove('camara');
+    this.camara.next(this.mediaDeviceInfoNull);
   }
-
 }

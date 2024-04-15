@@ -1,97 +1,39 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { QRCodeModule } from 'angular2-qrcode';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-
-export interface VerifiableCredential {
-  credentialSubject: {
-    mobile_phone: string;
-    email: string;
-    title: string;
-    first_name: string;
-    last_name: string;
-    dateOfBirth: string;
-    gender: string;
-  };
-  id: string;
-  vcType: ['', ''];
-}
+import { QRCodeModule } from 'angularx-qrcode';
+import { WalletService } from 'src/app/services/wallet.service';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 
 @Component({
   selector: 'app-vc-view',
   templateUrl: './vc-view.component.html',
   standalone: true,
-  imports: [IonicModule, QRCodeModule, TranslateModule],
+  imports: [IonicModule, QRCodeModule, TranslateModule, CommonModule],
 })
 export class VcViewComponent implements OnInit {
-  @Input() credentialInput: VerifiableCredential = {
-    credentialSubject: {
-      mobile_phone: '',
-      email: '',
-      title: '',
-      first_name: '',
-      last_name: '',
-      dateOfBirth: '',
-      gender: '',
-    },
-    id: '',
-    vcType: ['', ''],
-  };
-  cred: VerifiableCredential = {
-    credentialSubject: {
-      mobile_phone: '',
-      email: '',
-      title: '',
-      first_name: '',
-      last_name: '',
-      dateOfBirth: '',
-      gender: '',
-    },
-    id: '',
-    vcType: ['', ''],
-  };
-  vcType = '';
-  @Output() vcEmit: EventEmitter<VerifiableCredential> = new EventEmitter();
+  @Input() public credentialInput!: VerifiableCredential;
+  @Output() public vcEmit: EventEmitter<VerifiableCredential> = new EventEmitter();
 
-  constructor(public translate: TranslateService) {}
+  public cred_cbor = '';
+  public isAlertOpenNotFound = false;
+  public isAlertExpirationOpenNotFound = false;
+  public isAlertOpenDeleteNotFound = false;
+  public isExpired = false;
+  public isModalOpen = false;
+  public isModalDeleteOpen = false;
 
-  isAlertOpenNotFound = false;
-  isAlertOpenDeleteNotFound = false;
+  public showChip = true;
 
-  ngOnInit(): void {
-    this.cred = this.credentialInput;
-    console.log(this.cred);
-    console.log(typeof this.cred['vcType'][0]);
-    let i = 0;
-    const v_cred: string = 'VerifiableCredential';
-    const v_atest: string = 'VerifiableAttestation';
-    while (i < this.cred.vcType.length) {
-      if (
-        this.cred['vcType'][i] !== v_cred &&
-        this.cred['vcType'][i] !== v_atest
-      ) {
-        this.vcType = this.cred['vcType'][i];
-        console.log(this.vcType);
-      }
-      i++;
-    }
-  }
-  qrView() {
-    this.isModalOpen = true;
-  }
-  isModalOpen = false;
-  deleteView() {
-    this.isModalDeleteOpen = true;
-  }
-  isModalDeleteOpen = false;
-  deleteVC() {
-    this.isModalDeleteOpen = true;
-  }
-  setOpen(isOpen: boolean) {
-    this.isModalOpen = isOpen;
-  }
-
-  handlerMessage = '';
+  public handlerMessage = '';
   public alertButtons = [
     {
       text: 'OK',
@@ -105,26 +47,80 @@ export class VcViewComponent implements OnInit {
 
   public deleteButtons = [
     {
-      text: this.translate.instant('vc-view.delete-cancel'),
+      text: 'Cancel·la',
       role: 'cancel',
-      cssClass: 'cancel-button',
       handler: () => {
         this.isModalDeleteOpen = false;
       },
     },
     {
-      text: this.translate.instant('vc-view.delete-confirm'),
+      text: 'Sí, elimina-la',
       role: 'confirm',
       handler: () => {
         this.isModalDeleteOpen = true;
-        this.vcEmit.emit(this.cred);
+        this.vcEmit.emit(this.credentialInput);
       },
     },
   ];
-  setOpenNotFound(isOpen: boolean) {
+
+  private walletService = inject(WalletService);
+
+  public ngOnInit(): void {
+    this.checkExpirationVC();
+    this.checkAvailableFormats();
+  }
+  public checkAvailableFormats() {
+    if (this.credentialInput && this.credentialInput.available_formats) {
+      this.showChip = this.credentialInput.available_formats.includes('cwt_vc');
+    }
+  }
+  public qrView() {
+    if (!this.isExpired) {
+      this.walletService.getVCinCBOR(this.credentialInput).subscribe({
+        next: (value: string) => {
+          this.isAlertOpenNotFound = true;
+          this.cred_cbor = value;
+        },
+        error: (error: unknown) => {
+          console.error(error);
+        },
+      });
+    } else {
+      this.isAlertExpirationOpenNotFound = true;
+    }
+  }
+  public deleteVC() {
+    this.isModalDeleteOpen = true;
+  }
+  public setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
+  }
+  public deleteView() {
+    this.isModalDeleteOpen = true;
+  }
+
+  public checkExpirationVC() {
+    const expirationDate = new Date(this.credentialInput.expirationDate);
+    const credentialId = this.credentialInput.id;
+
+    localStorage.setItem(
+      `vcExpirationDate_${credentialId}`,
+      expirationDate.toISOString()
+    );
+
+    const currentDate = new Date();
+    if (expirationDate < currentDate) {
+      this.isExpired = true;
+    }
+  }
+
+  public setOpenNotFound(isOpen: boolean) {
     this.isAlertOpenNotFound = isOpen;
   }
-  setOpenDeleteNotFound(isOpen: boolean) {
+  public setOpenDeleteNotFound(isOpen: boolean) {
     this.isAlertOpenDeleteNotFound = isOpen;
+  }
+  public setOpenExpirationNotFound(isOpen: boolean) {
+    this.isAlertExpirationOpenNotFound = isOpen;
   }
 }

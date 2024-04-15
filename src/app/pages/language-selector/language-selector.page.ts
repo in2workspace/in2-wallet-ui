@@ -1,11 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, PopoverController } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { TranslateModule,TranslateService } from '@ngx-translate/core';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-import {LogoutPage } from '../logout/logout.page';
-import { Router} from '@angular/router';
+import { StorageService } from 'src/app/services/storage.service';
+import { BehaviorSubject, distinctUntilChanged, map, shareReplay } from 'rxjs';
 
 @Component({
   selector: 'app-language-selector',
@@ -13,75 +12,64 @@ import { Router} from '@angular/router';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule,TranslateModule]
 })
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class LanguageSelectorPage implements OnInit {
-  public translate= inject(TranslateService);
-  selected : string = '';
-  userName: string = '';
+  public translate = inject(TranslateService);
 
-  languageList = [
-    {
-      name: "English",
-      url: "assets/flags/uk.png",
-      code: "en"
-    },
-    {
-      name: "Castellano",
-      url: "assets/flags/es.png",
-      code: "es"
-    },
-    {
-      name: "Català",
-      url: "assets/flags/ca.png",
-      code: "ca"
-    },
-    {
-      name: "Italian",
-      url: "assets/flags/it.png",
-      code: "it"
-    },
-    {
-      name: "French",
-      url: "assets/flags/fr.png",
-      code: "fr"
-    },
-    {
-      name: "German",
-      url: "assets/flags/de.png",
-      code: "de"
-    },
+  public selected = { name: '', code: '' };
+  public language = { name: '', code: '' };
+  public userName = '';
+  public languages = new BehaviorSubject<unknown>('');
 
-  ]
-  constructor(
-    private router: Router,
-    private authenticationService: AuthenticationService,
-    private popoverController: PopoverController,
-    ) { }
+  public languageList = [
+    {
+      name: 'English',
+      code: 'en',
+    },
+    {
+      name: 'Castellano',
+      code: 'es',
+    },
+    {
+      name: 'Català',
+      code: 'ca',
+    },
+  ];
 
-  ngOnInit() {
-    this.selected = this.translate.currentLang;
-    this.userName = this.authenticationService.getName();
-  }
-  languageChange(code:string){
-    this.selected = code;
-    this.translate.use(code);
-  }
+  public languageSelected = this.languages.pipe(
+    map((device) => {
+      let lang = {};
+      this.languageList.forEach((language) => {
+        if (language.code === device) {
+          lang = language;
+        }
+      });
+      return lang;
+    }),
+    distinctUntilChanged(),
+    shareReplay(1)
+  );
 
-  logout(){
-    this.authenticationService.logout().subscribe(()=>{
-      this.router.navigate(['/login'], {})
+  private storageService = inject(StorageService);
 
+
+  public ngOnInit() {
+    this.storageService.get('language').then((datos) => {
+      this.languages.next(datos);
     });
-  }
-
-  async openPopover(ev: any) {
-    const popover = await this.popoverController.create({
-      component: LogoutPage, 
-      event: ev,
-      translucent: true,
-      cssClass: 'custom-popover'
+    const lang = this.languageList.forEach((language) => {
+      if (language.code === this.translate.currentLang) {
+        this.selected = language;
+      }
     });
-  
-    await popover.present();
+    if (lang != undefined) this.selected = lang;
+    if (this.translate.currentLang == undefined)
+      this.selected = this.languageList[2];
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public languageChange(code: any) {
+    this.translate.use(code.code);
+    this.storageService.set('language', code.code);
+  }
 }

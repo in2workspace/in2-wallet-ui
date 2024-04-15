@@ -9,5 +9,6 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CallbackPage{
 }

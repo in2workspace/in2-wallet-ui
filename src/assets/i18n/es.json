@@ -26,9 +26,13 @@
     "credentials":{
         "title":"Credenciales",
         "add":"Añade",
-        "nocred":"No tienes ninguna credencial cargada"
-
-
+        "nocred":"No tienes ninguna credencial cargada",
+        "expiration":"Caducado",
+        "expiredCredential":"Credencial caducado",
+        "expiredText":"Esta credencial está caducada y ya no puedes utilizarla.",
+        "close":"Cerrar",
+        "addVC":"Añade la credencial",
+        "identify": "Identifícate"
     },
     "dids":{
         "title":"Dids"
@@ -105,5 +109,20 @@
         "delete-message": "Si eliminas la credencial de la aplicacion y necesitas recuperarla tendrás que pedir una nueva.",
         "delete-confirm": "Sí, eliminala",
         "delete-cancel": "Cancela"
+    },
+    "errors":{
+        "default":"Error no reconocido",
+        "invalid-qr":"El QR presentado es inválido",
+        "expired-credentialOffer":"La oferta de credencial está expirada o ya utilizada",
+        "invalid-credentialOffer":"La oferta de credencial no es válida",
+        "invalid-issuerMetadata":"Los metadatos del Issuer son incorrectos",
+        "cannot-get-VC":"No se pudo obtener la credencial del Issuer",
+        "cannot-save-VC":"No se pudo guardar correctamente la credencial",
+        "incorrect-pin":"PIN incorrecto"
+    },
+    "confirmation":{
+        "header":"¿Enviar Credencial?",
+        "ok":"Ok",
+        "cancel":"Cancelar"
     }
 }

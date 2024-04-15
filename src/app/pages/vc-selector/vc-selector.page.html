@@ -1,12 +1,4 @@
-<ion-header [translucent]="false">
-  <ion-toolbar class="toolbar-padding">
-    <img alt src="assets/icon/dome_white_logo.png" width="auto" slot="start" height="35px"/>
-    <ion-button slot="end" color="primary" class="toolbar-but" (click)="openPopover($event)">
-      {{userName}}
-      <ion-icon slot="end" class="ion-icon-home" size="small" name="person"></ion-icon>
-    </ion-button>
-  </ion-toolbar>
-</ion-header>
+
 
 <ion-content [fullscreen]="true" class="vc-selector-content">
   <ion-grid >
@@ -18,7 +10,7 @@
     </ion-row>
   </ion-grid>
 
-
+<!-- el punto 5  -->
 
   <ion-alert
   [isOpen]="isAlertOpen"
@@ -28,14 +20,8 @@
   [buttons] = "closeButton"
   cssClass="custom-close-button"
   >
-</ion-alert>  
-<ion-alert
-[isOpen]="isAlertOpenFail"
-class="custom-alert"
-[header]=" 'vc-selector.ko-header' | translate"
-[message]=" 'vc-selector.ko-message' | translate"
-(didDismiss)="setOpen(false)"
-></ion-alert>
+</ion-alert>
+
 </ion-content>
 <ion-footer [translucent]="false">
 

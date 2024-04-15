@@ -1,65 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, PopoverController } from '@ionic/angular';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import { IonicModule } from '@ionic/angular';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import {LogoutPage } from '../logout/logout.page';
 import { DataService } from 'src/app/services/data.service';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterModule, TranslateModule]
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    TranslateModule,
+  ],
 })
-export class SettingsPage implements OnInit {
+// eslint-disable-next-line @angular-eslint/component-class-suffix
+export class SettingsPage {
+  public userName = '';
+  public isAlertOpen = false;
 
-  constructor(private authenticationService: AuthenticationService,
+  public constructor(
     private router: Router,
-    private dataService: DataService,
-    private http: HttpClient,
-    private popoverController: PopoverController
+    private dataService: DataService
+  ) {}
 
-  ) { }
-  userName: string = '';
-  isAlertOpen: boolean = false;
-
-  ngOnInit() {
-    this.userName = this.authenticationService.getName();
-
-  }
-  goHomeWithEBSI() {
+  public goHomeWithEBSI() {
     this.dataService.getDid().subscribe({
-      next: (did) => {
-      this.dataService.sendDid(did);
-      this.router.navigate(['/tabs/credentials']);
-    },
-     error: (error) => {
+      next: () => {
+        this.router.navigate(['/tabs/credentials']);
+      },
+      error: (error) => {
         this.isAlertOpen = true;
-      }
-    })
+        console.error(error);
+      },
+    });
   }
-  toggleAlert() {
+  public toggleAlert() {
     this.isAlertOpen = !this.isAlertOpen;
-  }
-  logout() {
-    console.log("hola")
-    this.authenticationService.logout().subscribe(() => {
-      this.router.navigate(['/login'], {})
-    });
-  }
-  async openPopover(ev: any) {
-    const popover = await this.popoverController.create({
-      component: LogoutPage,
-      event: ev,
-      translucent: true,
-      cssClass: 'custom-popover'
-    });
-
-    await popover.present();
   }
 }

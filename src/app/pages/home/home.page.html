@@ -1,29 +1,3 @@
-<ion-header [translucent]="false">
-  <ion-toolbar class="toolbar">
-    <img
-      alt
-      src="assets/icon/dome_white_logo.png"
-      width="auto"
-      slot="start"
-      height="35px"
-    />
-    <ion-button
-      slot="end"
-      color="primary"
-      class="toolbar-but"
-      (click)="openPopover($event)"
-    >
-      {{userName}}
-      <ion-icon
-        slot="end"
-        class="ion-icon-home"
-        size="small"
-        name="person"
-      ></ion-icon>
-    </ion-button>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true" class="ion-padding home-content">
   <ion-grid>
     <ion-row class="ion-justify-content-center">
@@ -38,5 +12,6 @@
         </div></ion-button
       >
     </ion-row>
+
   </ion-grid>
 </ion-content>
