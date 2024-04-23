@@ -11,7 +11,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { WalletService } from 'src/app/services/wallet.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
+import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 
 @Component({
   selector: 'app-vc-view',
@@ -30,7 +30,6 @@ export class VcViewComponent implements OnInit {
   public isExpired = false;
   public isModalOpen = false;
   public isModalDeleteOpen = false;
-
   public showChip = true;
 
   public handlerMessage = '';
@@ -68,6 +67,7 @@ export class VcViewComponent implements OnInit {
   public ngOnInit(): void {
     this.checkExpirationVC();
     this.checkAvailableFormats();
+    this.isCredentialGenerated();
   }
   public checkAvailableFormats() {
     if (this.credentialInput && this.credentialInput.available_formats) {
@@ -123,4 +123,22 @@ export class VcViewComponent implements OnInit {
   public setOpenExpirationNotFound(isOpen: boolean) {
     this.isAlertExpirationOpenNotFound = isOpen;
   }
+
+  public isCredentialGenerated(): boolean {
+    return this.credentialInput?.status === CredentialStatus.ISSUED;
+  }
+
+  public retrieveCredential(): void {
+    if (this.isCredentialGenerated() && !this.isExpired) {
+      this.walletService.requestSignature(this.credentialInput).subscribe({
+        next: (response) => {
+          console.log('Signature requested successfully', response);
+        },
+        error: (error) => {
+          console.error('There was an error requesting the signature', error);
+        }
+      });
+    }
+  }
+
 }

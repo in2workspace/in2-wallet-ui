@@ -108,4 +108,14 @@ export class WalletService {
       options
     );
   }
+
+  public requestSignature(credential: VerifiableCredential): Observable<any> {
+    const requestSignatureUrl = `${environment.server_url}/api/request-signature`;
+
+    const body = {
+      credentialId: credential.id
+    };
+
+    return this.http.post<any>(requestSignatureUrl, body, options);
+  }
 }

@@ -1,9 +1,31 @@
-<ion-card style="background-color: white; width:200px; height:285px; border-radius: 20px;">
-  <div style="position: absolute; top: 0; right: 10; width: 50%; height: 50%; background-color: #ffffff; border-radius: 0% 0% 75% 75%; transform: translateX(85%) translateY(-90%); z-index: 1;"></div>
-<ion-card-header style="background-color:var(--ion-color-primary); padding: 12px;"> </ion-card-header>
-<div style="height: 2%;"></div>
+<ion-card
+  style="
+    background-color: white;
+    width: 200px;
+    height: 285px;
+    border-radius: 20px;
+  "
+>
+  <div
+    style="
+      position: absolute;
+      top: 0;
+      right: 10;
+      width: 50%;
+      height: 50%;
+      background-color: #ffffff;
+      border-radius: 0% 0% 75% 75%;
+      transform: translateX(85%) translateY(-90%);
+      z-index: 1;
+    "
+  ></div>
+  <ion-card-header
+    style="background-color: var(--ion-color-primary); padding: 12px"
+  >
+  </ion-card-header>
+  <div style="height: 2%"></div>
   <ion-col>
-    <img alt src="assets/icon/bannerLogo2.png" width="auto" height="40px"/>
+    <img alt src="assets/icon/bannerLogo2.png" width="auto" height="40px" />
     <ion-col style="margin-left: 35px">
       <img
         width="70"
@@ -14,47 +36,133 @@
       />
     </ion-col>
     <ion-col>
-
-      <ion-col size="12" >
-        <ion-card-header style="padding: 0% !important; margin-left:35px; height: 28%;">
-          <ion-row >
-            <ion-card-title style="color:grey; font-size:12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; ">
-              {{ credentialInput.type === undefined?"":credentialInput.type[1]}}
-            </ion-card-title>
-          </ion-row>
-          <ion-row >
-            <ion-card-title style="color:grey; font-size:12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; ">
-            {{ credentialInput.credentialSubject?.mandate?.mandator?.organization}}
-            </ion-card-title>
-          </ion-row>
-          <ion-row >
-            <ion-card-title style="color:black; font-size:12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; ">
-              {{ credentialInput.credentialSubject?.mandate?.mandatee?.first_name }}
+      <ion-col size="12">
+        <ion-card-header
+          style="padding: 0% !important; margin-left: 35px; height: 28%"
+        >
+          <ion-row>
+            <ion-card-title
+              style="
+                color: grey;
+                font-size: 12px;
+                font-weight: bold;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              "
+            >
+              {{
+                credentialInput.type === undefined
+                  ? ""
+                  : credentialInput.type[1]
+              }}
             </ion-card-title>
           </ion-row>
           <ion-row>
-            <ion-card-title style="color:black; font-size:12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; ">
-              {{ credentialInput.credentialSubject?.mandate?.mandatee?.last_name }}
+            <ion-card-title
+              style="
+                color: grey;
+                font-size: 12px;
+                font-weight: bold;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              "
+            >
+              {{
+                credentialInput.credentialSubject?.mandate?.mandator
+                  ?.organization
+              }}
             </ion-card-title>
           </ion-row>
-
+          <ion-row>
+            <ion-card-title
+              style="
+                color: black;
+                font-size: 12px;
+                font-weight: bold;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              "
+            >
+              {{
+                credentialInput.credentialSubject?.mandate?.mandatee?.first_name
+              }}
+            </ion-card-title>
+          </ion-row>
+          <ion-row>
+            <ion-card-title
+              style="
+                color: black;
+                font-size: 12px;
+                font-weight: bold;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              "
+            >
+              {{
+                credentialInput.credentialSubject?.mandate?.mandatee?.last_name
+              }}
+            </ion-card-title>
+          </ion-row>
         </ion-card-header>
       </ion-col>
 
-        <ion-col size="12" align-self-end style="margin-left:12px">
-          <img *ngIf="showChip" (click)="qrView()" alt src="assets/icon/41.png" width="auto" height="40px"/>
-          <span *ngIf="this.isExpired" style="color:red; font-size:20px; font-weight: bold; position: absolute; top: -23px; left: 74px;">{{"credentials.expiration"|translate}}</span>
-            <ion-row style="justify-content: end;">
-              <ion-button color="secondary"
-                  class="vc-view-button"
-                  size="small"
-                  style="padding: 0%;"
-                  (click)="deleteVC()"
-                  ><ion-icon name="trash-outline"></ion-icon
-                ></ion-button>
-            </ion-row>
-        </ion-col>
+      <ion-col size="12" align-self-end style="margin-left: 12px">
+        <img
+          *ngIf="showChip"
+          (click)="qrView()"
+          alt
+          src="assets/icon/41.png"
+          width="auto"
+          height="40px"
+        />
 
+        <!-- <span *ngIf="this.isExpired" style="color:red; font-size:20px; font-weight: bold; position: absolute; top: -23px; left: 74px;">
+          {{"credentials.expiration"|translate}}
+        </span> -->
+
+        <span
+          *ngIf="!isCredentialGenerated()"
+          style="
+            color: red;
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            top: -23px;
+            left: 74px;
+          "
+        >
+        {{"vc-view.unsigned"|translate}}
+        </span>
+        <ion-row style="justify-content: end">
+
+          <ion-button
+          *ngIf="!isCredentialGenerated()"
+          style="width: auto; height: auto;"
+          color="primary"
+          class="retrieve-credential-button"
+          (click)="retrieveCredential()"
+        >
+          <img
+            src="../../../assets/icon/firma.png"
+            alt="sign"
+            style="width: 20px; height: 20px; "
+          />
+        </ion-button>
+          <ion-button
+            color="secondary"
+            class="vc-view-button"
+            size="small"
+            style="padding: 0%"
+            (click)="deleteVC()"
+          >
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-row>
+      </ion-col>
     </ion-col>
   </ion-col>
   <span></span>
@@ -74,7 +182,12 @@
     [buttons]="[{ text: 'credentials.close' | translate, role: 'confirm' }]"
     (didDismiss)="setOpenExpirationNotFound(false)"
   ></ion-alert>
-  <ion-modal [isOpen]="isModalOpen" style="--min-height: 20rem" id="example-modal" #modal>
+  <ion-modal
+    [isOpen]="isModalOpen"
+    style="--min-height: 20rem"
+    id="example-modal"
+    #modal
+  >
     <ng-template>
       <div class="wrapper">
         <ion-header>
@@ -82,17 +195,24 @@
             <ion-title>QR</ion-title>
             <ion-buttons slot="end">
               <ion-button (click)="setOpen(false)">
-                <ion-img src="assets/icon/close-button.png" style="width: 24px; height: 24px;"></ion-img>
+                <ion-img
+                  src="assets/icon/close-button.png"
+                  style="width: 24px; height: 24px"
+                ></ion-img>
               </ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
-        <ion-content style="min-height: 20rem" >
-          <qrcode [qrdata]="this.cred_cbor" [width]="315" [errorCorrectionLevel]="'L'" [margin]="5"></qrcode>
+        <ion-content style="min-height: 20rem">
+          <qrcode
+            [qrdata]="this.cred_cbor"
+            [width]="315"
+            [errorCorrectionLevel]="'L'"
+            [margin]="5"
+          ></qrcode>
         </ion-content>
       </div>
     </ng-template>
-
   </ion-modal>
 
   <ion-alert
@@ -104,7 +224,15 @@
     (didDismiss)="setOpenDeleteNotFound(false)"
   ></ion-alert>
 
-  <ion-row style="position: absolute; bottom: 0; width: 100%; background-color: var(--ion-color-primary); padding: 4px;">
+  <ion-row
+    style="
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background-color: var(--ion-color-primary);
+      padding: 4px;
+    "
+  >
     <ion-col></ion-col>
   </ion-row>
 </ion-card>

@@ -108,7 +108,8 @@
         "delete-header": "Estas seguro de eliminar la credencial?",
         "delete-message": "Si eliminas la credencial de la aplicacion y necesitas recuperarla tendrás que pedir una nueva.",
         "delete-confirm": "Sí, eliminala",
-        "delete-cancel": "Cancela"
+        "delete-cancel": "Cancela",
+        "unsigned": "Sin firmar"
     },
     "errors":{
         "default":"Error no reconocido",

@@ -8,6 +8,7 @@ export interface VerifiableCredential {
   expirationDate: string;
   credentialSubject: CredentialSubject;
   available_formats?: string[];
+  status: CredentialStatus;
 }
 
 export interface Issuer {
@@ -55,4 +56,10 @@ export interface Power {
 export interface LifeSpan {
   start_date_time: string;
   end_date_time: string;
+}
+
+export enum CredentialStatus {
+  VALID = 'VALID',
+  ISSUED = 'ISSUED',
+  REVOKED = 'REVOKED'
 }
