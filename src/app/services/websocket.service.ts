@@ -30,8 +30,17 @@ export class WebsocketService {
 
     this.socket.onmessage = async (event) => {
       console.log('Mensaje recibido:', event.data);
+      const data = JSON.parse(event.data);
+
+
+      let description = '';
+      if (data.tx_code && data.tx_code.description) {
+        description = data.tx_code.description;
+      }
+
       const alert = await this.alertController.create({
         header: 'Introducir PIN',
+        message: description,
         inputs: [
           {
             name: 'pin',
@@ -50,16 +59,15 @@ export class WebsocketService {
           },
           {
             text: 'Enviar',
-            handler: (data) => {
-              return data.pin;
+            handler: (alertData) => {
+              const message = data.pin ? { pin: alertData.pin } : { tx_code: alertData.pin };
+              this.sendMessage(JSON.stringify(message));
             },
           },
         ],
       });
 
       await alert.present();
-      const result = await alert.onDidDismiss();
-      this.sendMessage(JSON.stringify({ pin: result.data?.values.pin || '' }));
     };
 
     this.socket.onclose = () => {
