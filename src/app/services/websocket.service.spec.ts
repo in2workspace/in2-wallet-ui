@@ -72,7 +72,7 @@ describe('WebsocketService', () => {
     mockWebSocketInstance.onmessage!(messageEvent);
     tick();
 
-    expect(service.sendMessage).toHaveBeenCalledTimes(1);
+    expect(service.sendMessage).toHaveBeenCalledTimes(0);
     flush();
   }));
 

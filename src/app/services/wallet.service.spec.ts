@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { WalletService } from './wallet.service';
 import { environment } from 'src/environments/environment';
-import { VerifiableCredential } from '../interfaces/verifiable-credential';
+import { CredentialStatus, VerifiableCredential } from '../interfaces/verifiable-credential';
 
 interface VCReply {
   selectedVcList: any[];
@@ -71,7 +71,8 @@ describe('WalletService', () => {
             "end_date_time": "2025-01-01T00:00:00Z"
           }
         }
-      }
+      },
+      status: CredentialStatus.ISSUED
     };
     const mockResponse = 'mock-cbor-data';
 
@@ -174,7 +175,8 @@ describe('WalletService', () => {
             "end_date_time": "2030-01-01T00:00:00Z"
           }
         }
-      }
+      },
+      status: CredentialStatus.ISSUED
     }];
 
     service.getAllVCs().subscribe(credentials => {
@@ -199,7 +201,7 @@ describe('WalletService', () => {
       },
       "issuanceDate": "2024-04-02T09:23:22.637345122Z",
       "validFrom": "2024-04-02T09:23:22.637345122Z",
-      "expirationDate": "2030-01-01T00:00:00Z", // Correctly formatted as a string
+      "expirationDate": "2030-01-01T00:00:00Z",
       "credentialSubject": {
         "mandate": {
           "id": "mandateId1",
@@ -233,7 +235,8 @@ describe('WalletService', () => {
             "end_date_time": "2030-01-01T00:00:00Z"
           }
         }
-      }
+      },
+      status: CredentialStatus.ISSUED
     };
 
     service.getOne(data).subscribe(credential => {

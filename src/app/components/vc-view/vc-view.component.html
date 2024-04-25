@@ -120,12 +120,12 @@
           height="40px"
         />
 
-        <!-- <span *ngIf="this.isExpired" style="color:red; font-size:20px; font-weight: bold; position: absolute; top: -23px; left: 74px;">
+        <span *ngIf="isExpired && isCredentialGenerated()" style="color:red; font-size:20px; font-weight: bold; position: absolute; top: -23px; left: 74px;">
           {{"credentials.expiration"|translate}}
-        </span> -->
+        </span>
 
         <span
-          *ngIf="!isCredentialGenerated()"
+        *ngIf="!isCredentialGenerated()"
           style="
             color: red;
             font-size: 18px;
@@ -163,6 +163,7 @@
           </ion-button>
         </ion-row>
       </ion-col>
+
     </ion-col>
   </ion-col>
   <span></span>

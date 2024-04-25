@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { VcViewComponent } from './vc-view.component';
 import { WalletService } from 'src/app/services/wallet.service';
-import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
+import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { of } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule } from '@ngx-translate/core';
@@ -73,6 +73,7 @@ describe('VcViewComponent', () => {
           },
         },
       },
+      status: CredentialStatus.ISSUED
     };
 
     fixture.detectChanges();
