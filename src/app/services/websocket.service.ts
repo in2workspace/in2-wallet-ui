@@ -60,8 +60,7 @@ export class WebsocketService {
           {
             text: 'Enviar',
             handler: (alertData) => {
-              const message = data.pin ? { pin: alertData.pin } : { tx_code: alertData.pin };
-              this.sendMessage(JSON.stringify(message));
+              this.sendMessage(JSON.stringify({ pin: alertData.pin }));
             },
           },
         ],
