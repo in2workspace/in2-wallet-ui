@@ -69,7 +69,7 @@ handler: () => {
 private walletService = inject(WalletService);
 
 public ngOnInit(): void {
-  this.credentialInput;
+  this.credentialInput.status ;
   this.checkExpirationVC();
   this.checkAvailableFormats();
   console.log('Estado inicial de la credencial:', this.credentialInput.status);
@@ -108,10 +108,15 @@ this.isModalOpen = isOpen;
 }
 
 public checkExpirationVC(): void {
-const expirationDate: Date = new Date(this.credentialInput.expirationDate);
-const currentDate: Date = new Date();
-this.isExpired = expirationDate < currentDate;
-console.log('Expired status:', this.isExpired);
+
+  if (this.credentialInput.status !== CredentialStatus.ISSUED) {
+    const expirationDate: Date = new Date(this.credentialInput.expirationDate);
+    const currentDate: Date = new Date();
+    this.isExpired = expirationDate < currentDate;
+  } else {
+    this.isExpired = false;
+  }
+  console.log('Expired status:', this.isExpired);
 }
 
 public setOpenNotFound(isOpen: boolean): void {
