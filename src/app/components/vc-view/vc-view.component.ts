@@ -72,7 +72,7 @@ export class VcViewComponent implements OnInit {
   public constructor(private toastServiceHandler: ToastServiceHandler,  private router: Router) {}
 
   public ngOnInit(): void {
-    this.credentialInput.status ;
+    this.credentialInput.status;
     this.checkExpirationVC();
     this.checkAvailableFormats();
   }
