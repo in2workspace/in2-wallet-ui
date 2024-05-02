@@ -90,12 +90,11 @@ describe('VcViewComponent', () => {
 
     component.qrView();
 
-    expect(walletService.getVCinCBOR).toHaveBeenCalledWith(
-      component.credentialInput
-    );
+    expect(walletService.getVCinCBOR).toHaveBeenCalledWith(component.credentialInput);
     expect(component.cred_cbor).toEqual(mockCBOR);
-    expect(component.isAlertOpenNotFound).toBeTrue();
+    expect(component.isAlertOpenNotFound).toBeFalse();
   });
+
 
   it('checkExpirationVC should set isExpired to true if credential is expired', () => {
     component.credentialInput = {

@@ -72,7 +72,7 @@ export class VcViewComponent implements OnInit {
   public constructor(private toastServiceHandler: ToastServiceHandler,  private router: Router) {}
 
   public ngOnInit(): void {
-    this.credentialInput.status;
+    this.credentialInput.status = CredentialStatus.ISSUED;
     this.checkExpirationVC();
     this.checkAvailableFormats();
   }
@@ -152,7 +152,7 @@ export class VcViewComponent implements OnInit {
 
           setTimeout(() => {
             this.toastServiceHandler.showErrorAlert('Unsigned').subscribe();
-          }, 2000);
+          });
         }
       });
     }
