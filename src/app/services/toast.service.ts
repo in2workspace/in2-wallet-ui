@@ -35,6 +35,8 @@ export class ToastServiceHandler {
     }
     else if (message.startsWith("Incorrect PIN")) {
       messageBody = "errors.incorrect-pin"
+    }else if (message.startsWith("Unsigned")) {
+      messageBody = "errors.unsigned"
     }
     return this.translate.get(messageBody).pipe(
       mergeMap((translatedHeader) =>

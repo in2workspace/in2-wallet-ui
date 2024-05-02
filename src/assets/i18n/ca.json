@@ -120,7 +120,8 @@
         "invalid-issuerMetadata":"Les metadades del Issuer són incorrectes",
         "cannot-get-VC":"No s'ha pogut obtenir la credencial del Issuer",
         "cannot-save-VC":"No s'ha pogut guardar correctamente la credencial",
-        "incorrect-pin":"PIN incorrecte"
+        "incorrect-pin":"PIN incorrecte",
+        "unsigned": "Credecianl sense signatura"
     },
     "confirmation":{
         "header":"Enviar credencial?",
