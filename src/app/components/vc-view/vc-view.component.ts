@@ -143,9 +143,6 @@ export class VcViewComponent implements OnInit {
       this.walletService.requestSignature(this.credentialInput.id).subscribe({
         next: (signedCredential: string) => {
           console.log('Credential signed:', signedCredential);
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate([location.pathname]);
-          });
         },
         error: (error: HttpErrorResponse) => {
           console.error('Error requesting signature:', error.message);
