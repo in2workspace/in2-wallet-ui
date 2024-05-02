@@ -120,12 +120,26 @@
           height="40px"
         />
 
-        <span *ngIf="isExpired && isCredentialGenerated()" style="color:red; font-size:20px; font-weight: bold; position: absolute; top: -23px; left: 74px;">
-          {{"credentials.expiration"|translate}}
+        <span
+          *ngIf="
+            isExpired && credentialInput.status !== credentialStatus.ISSUED
+          "
+          style="
+            color: red;
+            font-size: 20px;
+            font-weight: bold;
+            position: absolute;
+            top: -23px;
+            left: 74px;
+          "
+        >
+          {{ "credentials.expiration" | translate }}
         </span>
 
         <span
-        *ngIf="!isCredentialGenerated()"
+          *ngIf="
+            credentialInput.status === credentialStatus.ISSUED && !isExpired
+          "
           style="
             color: red;
             font-size: 18px;
@@ -135,23 +149,52 @@
             left: 74px;
           "
         >
-        {{"vc-view.unsigned"|translate}}
+          {{ "vc-view.unsigned" | translate }}
         </span>
-        <ion-row style="justify-content: end">
 
-          <ion-button
-          *ngIf="!isCredentialGenerated()"
-          style="width: auto; height: auto;"
-          color="primary"
-          class="retrieve-credential-button"
-          (click)="retrieveCredential()"
+        <span
+          *ngIf="credentialInput.status === credentialStatus.VALID"
+          style="
+            color: green;
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            top: -23px;
+            left: 74px;
+          "
         >
-          <img
-            src="../../../assets/icon/firma.png"
-            alt="sign"
-            style="width: 20px; height: 20px; "
-          />
-        </ion-button>
+          {{ "credentials.valid" | translate }}
+        </span>
+
+        <span
+          *ngIf="credentialInput.status === credentialStatus.REVOKED"
+          style="
+            color: orange;
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            top: -23px;
+            left: 74px;
+          "
+        >
+          {{ "credentials.revoked" | translate }}
+        </span>
+
+        <ion-row style="justify-content: end">
+          <ion-button
+            *ngIf="isCredentialIssuedAndNotExpired()"
+            style="width: auto; height: auto"
+            (click)="requestSignature()"
+            color="primary"
+            class="request-signature-button"
+          >
+            <img
+              src="../../../assets/icon/firma.png"
+              alt="sign"
+              style="width: 20px; height: 20px"
+            />
+          </ion-button>
+
           <ion-button
             color="secondary"
             class="vc-view-button"
