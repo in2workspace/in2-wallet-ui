@@ -15,7 +15,7 @@ export const environment = {
     verifiable_presentation_uri: '/api/v1/verifiable-presentation',
     credentials_uri: '/api/v1/credentials',
     credentials_by_id_uri: '/api/v1/credentials?credentialId=',
-    credentials_signed_by_id_uri: '/api/v1/request-signed-credentials?credentialId=',
+    credentials_signed_by_id_uri: '/api/v1/request-signed-credentials',
     users_uri: '/api/v1/users',
     ebsi_did_uri: '/api/v1/ebsi-did',
     cbor: '/api/v1/vp/cbor'

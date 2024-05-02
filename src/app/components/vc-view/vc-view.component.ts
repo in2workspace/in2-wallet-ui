@@ -69,7 +69,7 @@ handler: () => {
 private walletService = inject(WalletService);
 
 public ngOnInit(): void {
-  this.credentialInput.status ;
+  this.credentialInput.status;
   this.checkExpirationVC();
   this.checkAvailableFormats();
   console.log('Estado inicial de la credencial:', this.credentialInput.status);
