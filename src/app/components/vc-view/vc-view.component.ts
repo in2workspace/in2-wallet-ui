@@ -141,11 +141,11 @@ export class VcViewComponent implements OnInit {
   }
 
   public requestSignature(): void {
-    console.log('Credential requested');
+
     if (this.credentialInput && this.credentialInput.id) {
       this.walletService.requestSignature(this.credentialInput.id).subscribe({
-        next: (signedCredential: string) => {
-          console.log('Credential signed:', signedCredential);
+        next: () => {
+          console.log('Credential signed:');
         },
         error: (error: HttpErrorResponse) => {
           console.error('Error requesting signature:', error.message);
