@@ -1,19 +1,9 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  inject,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject, ChangeDetectorRef } from '@angular/core';
 import { QRCodeModule } from 'angularx-qrcode';
 import { WalletService } from 'src/app/services/wallet.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import {
-  CredentialStatus,
-  VerifiableCredential,
-} from 'src/app/interfaces/verifiable-credential';
+import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { IonicModule } from '@ionic/angular';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
@@ -27,8 +17,7 @@ import { Router } from '@angular/router';
 })
 export class VcViewComponent implements OnInit {
   @Input() public credentialInput!: VerifiableCredential;
-  @Output() public vcEmit: EventEmitter<VerifiableCredential> =
-    new EventEmitter();
+  @Output() public vcEmit: EventEmitter<VerifiableCredential> = new EventEmitter();
 
   public cred_cbor = '';
   public isAlertOpenNotFound = false;
@@ -68,11 +57,17 @@ export class VcViewComponent implements OnInit {
       },
     },
   ];
+
   private walletService = inject(WalletService);
+  private changeDetectorRef: ChangeDetectorRef;
+
   public constructor(
     private toastServiceHandler: ToastServiceHandler,
-    private router: Router
-  ) {}
+    private router: Router,
+    changeDetectorRef: ChangeDetectorRef
+  ) {
+    this.changeDetectorRef = changeDetectorRef;
+  }
 
   public ngOnInit(): void {
     this.credentialInput.status;
@@ -145,11 +140,12 @@ export class VcViewComponent implements OnInit {
       this.walletService.requestSignature(this.credentialInput.id).subscribe({
         next: (response: HttpResponse<string>) => {
           if (response.status === 204) {
-            console.log(
-              'Credential request completed successfully, no content returned.'
-            );
-
-            this.toastServiceHandler.showErrorAlert('Unsigned').subscribe();
+            console.log('Credential request completed successfully, no content returned.');
+            this.toastServiceHandler.showErrorAlert('Unsigned').subscribe({
+              complete: () => {
+                this.refreshComponent();
+              }
+            });
           }
         },
         error: (error: HttpErrorResponse) => {
@@ -158,5 +154,11 @@ export class VcViewComponent implements OnInit {
         },
       });
     }
+  }
+
+  private refreshComponent(): void {
+    this.checkExpirationVC();
+    this.checkAvailableFormats();
+    this.changeDetectorRef.detectChanges();
   }
 }
