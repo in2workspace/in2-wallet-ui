@@ -145,7 +145,7 @@ export class VcViewComponent implements OnInit {
     if (this.credentialInput && this.credentialInput.id) {
       this.walletService.requestSignature(this.credentialInput.id).subscribe({
         next: () => {
-          console.log('Credential signed:');
+          //console.log('Credential signed:');
         },
         error: (error: HttpErrorResponse) => {
           console.error('Error requesting signature:', error.message);
