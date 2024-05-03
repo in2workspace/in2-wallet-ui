@@ -162,7 +162,7 @@ export class VcViewComponent implements OnInit {
     }
   }
   public forcePageReload(): void {
-    this.router.navigate(['/credentials']).then(() => {
+    this.router.navigate(['/tabs/credentials']).then(() => {
       window.location.reload();
     });
   }
