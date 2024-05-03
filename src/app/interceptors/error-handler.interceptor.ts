@@ -27,7 +27,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             console.error('Resource not found:', error.message);
           } else if (error.status === 401) {
             console.error('Unauthorized:', error.message);
-          }  else if (error.status === 202) {
+          }  else if (error.status === 200) {
             console.error('dont signed credential:', error.message);
           }
           else {

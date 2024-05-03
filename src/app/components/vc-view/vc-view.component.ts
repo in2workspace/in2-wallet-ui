@@ -69,7 +69,10 @@ export class VcViewComponent implements OnInit {
     },
   ];
   private walletService = inject(WalletService);
-  public constructor(private toastServiceHandler: ToastServiceHandler,  private router: Router) {}
+  public constructor(
+    private toastServiceHandler: ToastServiceHandler,
+    private router: Router
+  ) {}
 
   public ngOnInit(): void {
     this.credentialInput.status;
@@ -147,10 +150,8 @@ export class VcViewComponent implements OnInit {
         error: (error: HttpErrorResponse) => {
           console.error('Error requesting signature:', error.message);
 
-          setTimeout(() => {
-            this.toastServiceHandler.showErrorAlert('Unsigned').subscribe();
-          });
-        }
+          this.toastServiceHandler.showErrorAlert('Unsigned').subscribe();
+        },
       });
     }
   }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { mergeMap, map, Observable } from 'rxjs';
-const TIME_IN_MS = 3000;
+const TIME_IN_MS = 5000;
 
 @Injectable({
   providedIn: 'root',
