@@ -121,7 +121,8 @@
         "cannot-get-VC":"No s'ha pogut obtenir la credencial del Issuer",
         "cannot-save-VC":"No s'ha pogut guardar correctamente la credencial",
         "incorrect-pin":"PIN incorrecte",
-        "unsigned": "Credecianl sense signatura"
+        "unsigned": "Credecianl sense signatura",
+        "Errunsigned": "No s'ha pogut obtenir la credencial"
     },
     "confirmation":{
         "header":"Enviar credencial?",

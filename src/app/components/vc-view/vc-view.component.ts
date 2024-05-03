@@ -15,7 +15,7 @@ import {
   VerifiableCredential,
 } from 'src/app/interfaces/verifiable-credential';
 import { IonicModule } from '@ionic/angular';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
 import { Router } from '@angular/router';
 
@@ -75,7 +75,7 @@ export class VcViewComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.credentialInput.status;
+    this.credentialInput.status = CredentialStatus.ISSUED;
     this.checkExpirationVC();
     this.checkAvailableFormats();
   }
@@ -141,16 +141,20 @@ export class VcViewComponent implements OnInit {
   }
 
   public requestSignature(): void {
-
     if (this.credentialInput && this.credentialInput.id) {
       this.walletService.requestSignature(this.credentialInput.id).subscribe({
-        next: () => {
-          //console.log('Credential signed:');
+        next: (response: HttpResponse<string>) => {
+          if (response.status === 204) {
+            console.log(
+              'Credential request completed successfully, no content returned.'
+            );
+
+            this.toastServiceHandler.showErrorAlert('Unsigned').subscribe();
+          }
         },
         error: (error: HttpErrorResponse) => {
           console.error('Error requesting signature:', error.message);
-
-          this.toastServiceHandler.showErrorAlert('Unsigned').subscribe();
+          this.toastServiceHandler.showErrorAlert('ErrorUnsigned').subscribe();
         },
       });
     }

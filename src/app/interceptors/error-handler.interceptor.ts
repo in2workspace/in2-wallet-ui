@@ -30,11 +30,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             console.error('Resource not found:', error.message);
           } else if (error.status === 401) {
             console.error('Unauthorized:', error.message);
-          } else if (error.status === 204) {
-            console.error('dont signed credential:', error.message);
-          } else if (error.status === 202) {
-            console.error('dont signed credential:', error.message);
-          } else {
+          }  else {
             console.error('An HTTP error occurred:', error.message);
           }
           this.toastServiceHandler
