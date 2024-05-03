@@ -145,11 +145,12 @@ export class VcViewComponent implements OnInit {
       this.walletService.requestSignature(this.credentialInput.id).subscribe({
         next: (response: HttpResponse<string>) => {
           if (response.status === 204) {
-            console.log(
-              'Credential request completed successfully, no content returned.'
-            );
-
-            this.toastServiceHandler.showErrorAlert('Unsigned').subscribe();
+            console.log('Credential request completed successfully, no content returned.');
+            this.toastServiceHandler.showErrorAlert('Unsigned').subscribe({
+              complete: () => {
+                this.forcePageReload();
+              }
+            });
           }
         },
         error: (error: HttpErrorResponse) => {
@@ -159,4 +160,9 @@ export class VcViewComponent implements OnInit {
       });
     }
   }
+
+  public forcePageReload(): void {
+    window.location.reload();
+  }
+
 }
