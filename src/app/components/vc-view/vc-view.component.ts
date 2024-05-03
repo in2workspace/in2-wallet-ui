@@ -75,7 +75,7 @@ export class VcViewComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.credentialInput.status = CredentialStatus.ISSUED;
+    this.credentialInput.status;
     this.checkExpirationVC();
     this.checkAvailableFormats();
   }
