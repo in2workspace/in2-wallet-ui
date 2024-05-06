@@ -254,5 +254,12 @@ describe('VcViewComponent', () => {
 
     expect(component.requestSignature).toHaveBeenCalled();
   }));
-
+  it('should call deleteVC on Enter key press on delete button', fakeAsync(() => {
+    spyOn(component, 'deleteVC');
+    const deleteButton = fixture.debugElement.query(By.css('.vc-view-button'));
+    const enterKeyEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+    deleteButton.nativeElement.dispatchEvent(enterKeyEvent);
+    tick();
+    expect(component.deleteVC).toHaveBeenCalled();
+  }));
 });

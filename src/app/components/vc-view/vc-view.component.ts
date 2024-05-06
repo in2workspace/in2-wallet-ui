@@ -175,8 +175,14 @@ export class VcViewComponent implements OnInit {
       event.preventDefault();
     }
   }
-
-
-
-
+  public handleButtonKeydown(event: KeyboardEvent, action: string): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      if (action === 'delete') {
+        this.deleteVC();
+      } else if (action === 'close') {
+        this.setOpen(false);
+      }
+      event.preventDefault();
+    }
+  }
 }
