@@ -262,4 +262,27 @@ describe('VcViewComponent', () => {
     tick();
     expect(component.deleteVC).toHaveBeenCalled();
   }));
+
+  it('should call deleteVC when keydown event with key "Enter" and action "delete"', fakeAsync(() => {
+    spyOn(component, 'deleteVC');
+    const event = new KeyboardEvent('keydown', { key: 'Enter' });
+    component.handleButtonKeydown(event, 'delete');
+    tick();
+    expect(component.deleteVC).toHaveBeenCalled();
+  }));
+  it('should call setOpen when keydown event with key " " and action "close"', fakeAsync(() => {
+    spyOn(component, 'setOpen');
+    const event = new KeyboardEvent('keydown', { key: ' ' });
+    component.handleButtonKeydown(event, 'close');
+    tick();
+    expect(component.setOpen).toHaveBeenCalledWith(false);
+  }));
+  it('should prevent default behavior for button keydown event', fakeAsync(() => {
+    const event = new KeyboardEvent('keydown', { key: 'Enter' });
+    spyOn(event, 'preventDefault');
+    component.handleButtonKeydown(event, 'delete');
+    tick();
+    expect(event.preventDefault).toHaveBeenCalled();
+  }));
 });
+
