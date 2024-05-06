@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { VcViewComponent } from './vc-view.component';
 import { WalletService } from 'src/app/services/wallet.service';
 import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -205,4 +205,18 @@ describe('VcViewComponent', () => {
     expect(component.showChip).toBe(initialShowChip);
   });
 
+  it('qrView should set isAlertExpirationOpenNotFound when credential is expired', () => {
+    component.isExpired = true;
+    component.qrView();
+    expect(component.isAlertExpirationOpenNotFound).toBeTrue();
+  });
+  it('qrView should handle HTTP errors correctly', () => {
+    component.isExpired = false;
+    const mockError = new Error('Network issue');
+    spyOn(walletService, 'getVCinCBOR').and.returnValue(throwError(() => mockError));
+
+    component.qrView();
+
+    expect(component.isAlertOpenNotFound).toBeTrue();
+  })
 });
