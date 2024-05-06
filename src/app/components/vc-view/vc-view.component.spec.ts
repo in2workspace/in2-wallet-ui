@@ -2,13 +2,17 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { VcViewComponent } from './vc-view.component';
 import { WalletService } from 'src/app/services/wallet.service';
 import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
-import { of, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule } from '@ngx-translate/core';
+import { HttpResponse } from '@angular/common/http';
 
 class WalletServiceMock {
   getVCinCBOR(credential: VerifiableCredential) {
     return of('mock_cbor_string');
+  }
+  requestSignature(credentialId: string): Observable<any> {
+    return of({ success: true });
   }
 }
 
@@ -219,4 +223,13 @@ describe('VcViewComponent', () => {
 
     expect(component.isAlertOpenNotFound).toBeTrue();
   })
+
+  it('requestSignature should force page reload on successful response with non-204 status', () => {
+    spyOn((component as any).walletService, 'requestSignature').and.returnValue(of(new HttpResponse({ status: 200 })));
+    spyOn(component, 'forcePageReload');
+
+    component.requestSignature();
+
+    expect(component.forcePageReload).toHaveBeenCalled();
+  });
 });
