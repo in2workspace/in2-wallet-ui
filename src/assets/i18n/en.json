@@ -121,7 +121,7 @@
         "cannot-get-VC":"Issuer credential could not be obtained",
         "cannot-save-VC":"The credential could not be saved successfully",
         "incorrect-pin": "Incorrect PIN",
-        "unsigned": "Unsigned Credential",
+        "unsigned": "The signed credential is not yet available",
         "Errunsigned": "Credential could not be obtained"
     },
     "confirmation":{

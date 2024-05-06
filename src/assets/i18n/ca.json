@@ -110,7 +110,7 @@
         "delete-message": "Si elimines la credencial de l'aplicació i necessites recuperar-la hauràs de demanar-ne una de nova.",
         "delete-confirm": "Sí, elimina-la",
         "delete-cancel": "Cancel·la",
-        "unsigned": "Sense signatura"
+        "unsigned": "La crencial encara no te signatura"
     },
     "errors":{
         "default":"Error no reconegut",

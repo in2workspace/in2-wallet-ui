@@ -13,7 +13,7 @@ import { WebsocketService } from 'src/app/services/websocket.service';
 import { DataService } from 'src/app/services/data.service';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 
-const TIME_IN_MS = 10000;
+const TIME_IN_MS = 3000;
 
 @Component({
   selector: 'app-credentials',
