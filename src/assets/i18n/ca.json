@@ -110,7 +110,7 @@
         "delete-message": "Si elimines la credencial de l'aplicació i necessites recuperar-la hauràs de demanar-ne una de nova.",
         "delete-confirm": "Sí, elimina-la",
         "delete-cancel": "Cancel·la",
-        "unsigned": "La crencial encara no te signatura"
+        "unsigned": "Sense signatura"
     },
     "errors":{
         "default":"Error no reconegut",
@@ -121,7 +121,7 @@
         "cannot-get-VC":"No s'ha pogut obtenir la credencial del Issuer",
         "cannot-save-VC":"No s'ha pogut guardar correctamente la credencial",
         "incorrect-pin":"PIN incorrecte",
-        "unsigned": "Credecianl sense signatura",
+        "unsigned": "La credencial signada encara no està disponible",
         "Errunsigned": "No s'ha pogut obtenir la credencial"
     },
     "confirmation":{
