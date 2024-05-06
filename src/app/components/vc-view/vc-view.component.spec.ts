@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { VcViewComponent } from './vc-view.component';
 import { WalletService } from 'src/app/services/wallet.service';
 import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
@@ -6,6 +6,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { HttpResponse } from '@angular/common/http';
+import { By } from '@angular/platform-browser';
 
 class WalletServiceMock {
   getVCinCBOR(credential: VerifiableCredential) {
@@ -232,4 +233,25 @@ describe('VcViewComponent', () => {
 
     expect(component.forcePageReload).toHaveBeenCalled();
   });
+  it('should call requestSignature on Enter key', fakeAsync(() => {
+    spyOn(component, 'requestSignature');
+
+    const button = fixture.debugElement.query(By.css('.request-signature-button'));
+    const event = new KeyboardEvent('keydown', { key: 'Enter' });
+    button.nativeElement.dispatchEvent(event);
+    tick();
+
+    expect(component.requestSignature).toHaveBeenCalled();
+  }));
+
+  it('should call requestSignature on Space key', fakeAsync(() => {
+    spyOn(component, 'requestSignature');
+
+    const button = fixture.debugElement.query(By.css('.request-signature-button'));
+    const event = new KeyboardEvent('keydown', { key: ' ' });
+    button.nativeElement.dispatchEvent(event);
+    tick();
+
+    expect(component.requestSignature).toHaveBeenCalled();
+  }));
 });

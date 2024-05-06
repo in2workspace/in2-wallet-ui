@@ -180,18 +180,20 @@
 
         <ion-row style="justify-content: end">
           <ion-button
-            *ngIf="isCredentialIssuedAndNotExpired()"
-            style="width: auto; height: auto"
-            (click)="requestSignature()"
-            color="primary"
-            class="request-signature-button"
-          >
-            <img
-              src="../../../assets/icon/firma.png"
-              alt="sign"
-              style="width: 20px; height: 20px"
-            />
-          </ion-button>
+          *ngIf="isCredentialIssuedAndNotExpired()"
+          (click)="requestSignature()"
+          (keydown)="handleKeydown($event)"
+          color="primary"
+          class="request-signature-button"
+          style="width: auto; height: auto"
+        >
+          <img
+            src="../../../assets/icon/firma.png"
+            alt="sign"
+            style="width: 20px; height: 20px"
+          />
+        </ion-button>
+
 
           <ion-button
             color="secondary"
