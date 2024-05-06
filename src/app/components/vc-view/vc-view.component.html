@@ -114,10 +114,12 @@
         <img
           *ngIf="showChip"
           (click)="qrView()"
-          alt
+          (keydown)="handleKeydown($event, 'qr')"
           src="assets/icon/41.png"
-          width="auto"
-          height="40px"
+          alt="qr"
+          tabindex="0"
+          role="button"
+          style="width: auto; height: 40px; cursor: pointer"
         />
 
         <span
@@ -180,20 +182,19 @@
 
         <ion-row style="justify-content: end">
           <ion-button
-          *ngIf="isCredentialIssuedAndNotExpired()"
-          (click)="requestSignature()"
-          (keydown)="handleKeydown($event)"
-          color="primary"
-          class="request-signature-button"
-          style="width: auto; height: auto"
-        >
-          <img
-            src="../../../assets/icon/firma.png"
-            alt="sign"
-            style="width: 20px; height: 20px"
-          />
-        </ion-button>
-
+            *ngIf="isCredentialIssuedAndNotExpired()"
+            (click)="requestSignature()"
+            (keydown)="handleKeydown($event)"
+            color="primary"
+            class="request-signature-button"
+            style="width: auto; height: auto"
+          >
+            <img
+              src="../../../assets/icon/firma.png"
+              alt="sign"
+              style="width: 20px; height: 20px"
+            />
+          </ion-button>
 
           <ion-button
             color="secondary"
@@ -206,7 +207,6 @@
           </ion-button>
         </ion-row>
       </ion-col>
-
     </ion-col>
   </ion-col>
   <span></span>

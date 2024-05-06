@@ -254,4 +254,5 @@ describe('VcViewComponent', () => {
 
     expect(component.requestSignature).toHaveBeenCalled();
   }));
+
 });

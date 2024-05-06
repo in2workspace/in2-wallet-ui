@@ -165,12 +165,18 @@ export class VcViewComponent implements OnInit {
       window.location.reload();
     });
   }
-  public handleKeydown(event: KeyboardEvent) {
-
+  public handleKeydown(event: KeyboardEvent, action = 'request') {
     if (event.key === 'Enter' || event.key === ' ') {
-      this.requestSignature();
+      if (action === 'qr') {
+        this.qrView();
+      } else {
+        this.requestSignature();
+      }
       event.preventDefault();
     }
   }
+
+
+
 
 }
