@@ -37,7 +37,7 @@ export class VcViewComponent implements OnInit {
   public isExpired = false;
   public isModalOpen = false;
   public isModalDeleteOpen = false;
-  public showChip = true;
+  public showChip = false;
   public credentialStatus = CredentialStatus;
   public handlerMessage = '';
   public alertButtons = [
