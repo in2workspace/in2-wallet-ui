@@ -33,7 +33,8 @@ export class WebsocketService {
       const data = JSON.parse(event.data);
 
 
-      let description = '';
+      let description = data.tx_code?.description || '';
+
       if (data.tx_code && data.tx_code.description) {
         description = data.tx_code.description;
       }
