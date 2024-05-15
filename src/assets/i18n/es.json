@@ -31,6 +31,8 @@
         "expiredCredential":"Credencial caducado",
         "expiredText":"Esta credencial está caducada y ya no puedes utilizarla.",
         "close":"Cerrar",
+        "confirmation":"Confirmación",
+        "confirmationMessage":"¿Quieres escoger esta credencial?",
         "addVC":"Añade la credencial",
         "identify": "Identifícate"
     },
@@ -126,6 +128,7 @@
     "confirmation":{
         "header":"¿Enviar Credencial?",
         "ok":"Ok",
-        "cancel":"Cancelar"
+        "cancel":"Cancelar",
+        "pin":"Introduce PIN"
     }
 }

@@ -32,6 +32,8 @@
         "expiredCredential":"Credencial caducada",
         "expiredText":"Aquesta credencial està caducada i ja no la pots fer servir.",
         "close":"Tancar",
+        "confirmation":"Confirmació",
+        "confirmationMessage":"Vols escollir aquesta credencial?",
         "addVC":"Afegeix la credencial",
         "identify": "Identifica't"
     },
@@ -127,6 +129,7 @@
     "confirmation":{
         "header":"Enviar credencial?",
         "ok":"Ok",
-        "cancel":"Cancelar"
+        "cancel":"Cancelar",
+        "pin":"Introdueix PIN"
     }
 }
