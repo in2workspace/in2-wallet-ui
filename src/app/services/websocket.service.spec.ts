@@ -6,6 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { of } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { TranslateModule } from '@ngx-translate/core';
 
 class MockOidcSecurityService {
   checkAuth() {
@@ -34,7 +35,7 @@ describe('WebsocketService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, TranslateModule.forRoot(),],
       providers: [
         WebsocketService,
         AuthenticationService,
@@ -76,7 +77,7 @@ describe('WebsocketService', () => {
     service.connect();
     tick();
     mockWebSocketInstance.onclose!(new CloseEvent('close'));
-    expect(console.log).toHaveBeenCalledWith('Conexión WebSocket cerrada');
+    expect(console.log).toHaveBeenCalledWith('WebSocket connection closed');
   }));
 
   it('should close WebSocket connection on closeConnection call', () => {
@@ -84,7 +85,6 @@ describe('WebsocketService', () => {
     service.closeConnection();
     expect(mockWebSocketInstance.close).toHaveBeenCalledTimes(1);
   });
-
 
   it('should send a message when WebSocket is open', () => {
     service.connect();
