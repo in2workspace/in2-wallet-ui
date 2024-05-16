@@ -32,10 +32,11 @@ class MockAlertController {
 describe('WebsocketService', () => {
   let service: WebsocketService;
   let mockWebSocketInstance: jasmine.SpyObj<WebSocket>;
+  let originalWebSocket: any;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, TranslateModule.forRoot(),],
+      imports: [HttpClientTestingModule, TranslateModule.forRoot()],
       providers: [
         WebsocketService,
         AuthenticationService,
@@ -46,18 +47,24 @@ describe('WebsocketService', () => {
 
     service = TestBed.inject(WebsocketService);
 
+    originalWebSocket = window.WebSocket;
     mockWebSocketInstance = jasmine.createSpyObj('WebSocket', ['send', 'close'], {
-      readyState: WebSocket.OPEN
+      readyState: WebSocket.OPEN,
     });
 
     spyOn(window, 'WebSocket').and.returnValue(mockWebSocketInstance);
     spyOn(service, 'sendMessage').and.callThrough();
   });
 
+  afterEach(() => {
+    window.WebSocket = originalWebSocket;
+  });
+
   it('should create and open a WebSocket connection', fakeAsync(() => {
     service.connect();
     tick();
     expect(window.WebSocket).toHaveBeenCalledWith(`${environment.websocket_url}${environment.websocket_uri}`);
+    // This should be 0 because onopen triggers the sendMessage in this implementation
     expect(service.sendMessage).toHaveBeenCalledTimes(0);
     flush();
   }));
@@ -65,7 +72,7 @@ describe('WebsocketService', () => {
   it('should handle incoming messages and present an alert', fakeAsync(() => {
     service.connect();
     tick();
-    const messageEvent = new MessageEvent('message', { data: JSON.stringify({ someData: 'Test message' }) });
+    const messageEvent = new MessageEvent('message', { data: JSON.stringify({ tx_code: { description: 'Test description' } }) });
     mockWebSocketInstance.onmessage!(messageEvent);
     tick();
     expect(service.sendMessage).toHaveBeenCalledTimes(0);
@@ -91,4 +98,38 @@ describe('WebsocketService', () => {
     service.sendMessage('Test Message');
     expect(mockWebSocketInstance.send).toHaveBeenCalledWith('Test Message');
   });
+
+  it('should not send a message when WebSocket is not open', () => {
+    spyOn(console, 'error');
+    const mockWebSocketClosedInstance = jasmine.createSpyObj('WebSocket', ['send', 'close'], {
+      readyState: WebSocket.CLOSED,
+    });
+
+    service['socket'] = mockWebSocketClosedInstance; // Set the mock instance directly
+
+    service.sendMessage('Test Message');
+    expect(mockWebSocketClosedInstance.send).not.toHaveBeenCalled();
+    expect(console.error).toHaveBeenCalledWith('WebSocket connection is not open.');
+  });
+
+  it('should present an alert when a message with tx_code description is received', fakeAsync(() => {
+    spyOn(service['alertController'], 'create').and.callThrough();
+    service.connect();
+    tick();
+    const messageEvent = new MessageEvent('message', { data: JSON.stringify({ tx_code: { description: 'Test description' } }) });
+    mockWebSocketInstance.onmessage!(messageEvent);
+    tick();
+    expect(service['alertController'].create).toHaveBeenCalled();
+    flush();
+  }));
+
+  it('should handle WebSocket onopen event', fakeAsync(() => {
+    service.connect();
+    tick();
+    const event = new Event('open');
+    mockWebSocketInstance.onopen!(event);
+    tick();
+    expect(mockWebSocketInstance.send).toHaveBeenCalledWith(JSON.stringify({ id: 'fake-token' }));
+    flush();
+  }));
 });
