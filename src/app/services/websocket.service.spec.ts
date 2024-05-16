@@ -64,7 +64,6 @@ describe('WebsocketService', () => {
     service.connect();
     tick();
     expect(window.WebSocket).toHaveBeenCalledWith(`${environment.websocket_url}${environment.websocket_uri}`);
-    // This should be 0 because onopen triggers the sendMessage in this implementation
     expect(service.sendMessage).toHaveBeenCalledTimes(0);
     flush();
   }));
@@ -105,7 +104,7 @@ describe('WebsocketService', () => {
       readyState: WebSocket.CLOSED,
     });
 
-    service['socket'] = mockWebSocketClosedInstance; // Set the mock instance directly
+    service['socket'] = mockWebSocketClosedInstance;
 
     service.sendMessage('Test Message');
     expect(mockWebSocketClosedInstance.send).not.toHaveBeenCalled();
