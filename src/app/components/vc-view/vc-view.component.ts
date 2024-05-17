@@ -53,14 +53,14 @@ export class VcViewComponent implements OnInit {
 
   public deleteButtons = [
     {
-      text: 'Cancel·la',
+      text: 'Cancel',
       role: 'cancel',
       handler: () => {
         this.isModalDeleteOpen = false;
       },
     },
     {
-      text: 'Sí, elimina-la',
+      text: 'Yes, delete it',
       role: 'confirm',
       handler: () => {
         this.isModalDeleteOpen = true;

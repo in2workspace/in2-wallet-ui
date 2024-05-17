@@ -33,6 +33,8 @@
         "expiredCredential":"Credential expired",
         "expiredText":"This credential has expired and you can no longer use it.",
         "close":"Close",
+        "confirmation":"Confirmation",
+        "confirmationMessage":"Do you want to choose this credential?",
         "addVC":"Add Credential",
         "identify": "Identify yourself"    },
     "dids":{
@@ -127,7 +129,8 @@
     "confirmation":{
         "header":"Send credential?",
         "ok":"Ok",
-        "cancel":"cancel"
+        "cancel":"cancel",
+        "pin":"Enter PIN"
     }
 
 }
