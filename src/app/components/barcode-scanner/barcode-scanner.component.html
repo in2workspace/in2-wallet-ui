@@ -2,9 +2,8 @@
 <zxing-scanner
     #scanner
     class="scanner"
-    [enable]="(enable$ | async) ?? false"
     [autostart]="true"
-    [device]="(selectedDevice$ | async) ?? undefined"
+    [device]="newSelectedCamera"
     [formats]="allowedFormats"
     (camerasFound)="onCamerasFound($event)"
     (scanSuccess)="onCodeResult($event)"

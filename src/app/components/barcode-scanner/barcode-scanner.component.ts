@@ -28,7 +28,7 @@ export class BarcodeScannerComponent implements OnInit {
     new EventEmitter();
   @Output() public qrCode: EventEmitter<string> = new EventEmitter();
   @ViewChild('scanner') public scanner!: ZXingScannerComponent;
-
+  public newSelectedCamera!: MediaDeviceInfo;
   public allowedFormats = [BarcodeFormat.QR_CODE];
 
   public devices$ = new BehaviorSubject<MediaDeviceInfo[]>([]);
@@ -64,6 +64,7 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
   public async onCamerasFound(devices: MediaDeviceInfo[]): Promise<void> {
+      this.newSelectedCamera = devices[1];
     this.availableDevices.emit(devices);
   }
 
