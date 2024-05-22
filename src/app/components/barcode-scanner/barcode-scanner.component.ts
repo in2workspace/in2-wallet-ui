@@ -64,7 +64,19 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
   public async onCamerasFound(devices: MediaDeviceInfo[]): Promise<void> {
-      this.newSelectedCamera = devices[1];
+    const selectedDevices: MediaDeviceInfo[] = [];
+    for (const device of devices) {
+      if (/back|rear|environment/gi.test(device.label)) {
+        selectedDevices.push(device);
+        break;
+      }
+    }
+    if (selectedDevices.length === 0) {
+      this.newSelectedCamera = devices[1] || devices[0];
+    } else {
+      this.newSelectedCamera = selectedDevices[0];
+    }
+
     this.availableDevices.emit(devices);
   }
 
