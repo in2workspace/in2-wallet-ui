@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>Wallet Driving Application</h1>
+<h1>Wallet-ui</h1>
 <span>by </span><a href="https://in2.es">in2.es</a>
 <p><p>
 
