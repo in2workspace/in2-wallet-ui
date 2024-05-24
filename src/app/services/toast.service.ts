@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { mergeMap, map, Observable } from 'rxjs';
-const TIME_IN_MS = 3000;
+const TIME_IN_MS = 5000;
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +35,10 @@ export class ToastServiceHandler {
     }
     else if (message.startsWith("Incorrect PIN")) {
       messageBody = "errors.incorrect-pin"
+    }else if (message.startsWith("Unsigned")) {
+      messageBody = "errors.unsigned"
+    }else if (message.startsWith("ErrorUnsigned")) {
+      messageBody = "errors.Errunsigned"
     }
     return this.translate.get(messageBody).pipe(
       mergeMap((translatedHeader) =>

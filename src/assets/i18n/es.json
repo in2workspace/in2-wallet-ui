@@ -31,6 +31,8 @@
         "expiredCredential":"Credencial caducado",
         "expiredText":"Esta credencial está caducada y ya no puedes utilizarla.",
         "close":"Cerrar",
+        "confirmation":"Confirmación",
+        "confirmationMessage":"¿Quieres escoger esta credencial?",
         "addVC":"Añade la credencial",
         "identify": "Identifícate"
     },
@@ -108,7 +110,8 @@
         "delete-header": "Estas seguro de eliminar la credencial?",
         "delete-message": "Si eliminas la credencial de la aplicacion y necesitas recuperarla tendrás que pedir una nueva.",
         "delete-confirm": "Sí, eliminala",
-        "delete-cancel": "Cancela"
+        "delete-cancel": "Cancela",
+        "unsigned": "Sin firmar"
     },
     "errors":{
         "default":"Error no reconocido",
@@ -118,11 +121,14 @@
         "invalid-issuerMetadata":"Los metadatos del Issuer son incorrectos",
         "cannot-get-VC":"No se pudo obtener la credencial del Issuer",
         "cannot-save-VC":"No se pudo guardar correctamente la credencial",
-        "incorrect-pin":"PIN incorrecto"
+        "incorrect-pin":"PIN incorrecto",
+        "unsigned": "La credencial firmada aún no esta disponible.",
+        "Errunsigned": "No se pudo obtener la credencial"
     },
     "confirmation":{
         "header":"¿Enviar Credencial?",
         "ok":"Ok",
-        "cancel":"Cancelar"
+        "cancel":"Cancelar",
+        "pin":"Introduce PIN"
     }
 }

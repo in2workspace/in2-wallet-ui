@@ -3,6 +3,7 @@ import { AuthenticationService } from './authentication.service';
 import { BehaviorSubject } from 'rxjs';
 import { AlertController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,8 @@ export class WebsocketService {
 
   public constructor(
     private authenticationService: AuthenticationService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    public translate: TranslateService,
   ) {}
 
   public connect(): void {
@@ -22,16 +24,26 @@ export class WebsocketService {
     );
 
     this.socket.onopen = () => {
-      console.log('Conexión WebSocket abierta');
+      console.log('WebSocket connection opened');
       this.sendMessage(
         JSON.stringify({ id: this.authenticationService.getToken() })
       );
     };
 
     this.socket.onmessage = async (event) => {
-      console.log('Mensaje recibido:', event.data);
+      console.log('Message received:', event.data);
+      const data = JSON.parse(event.data);
+
+
+      let description = data.tx_code?.description || '';
+
+      if (data.tx_code && data.tx_code.description) {
+        description = data.tx_code.description;
+      }
+
       const alert = await this.alertController.create({
-        header: 'Introducir PIN',
+        header: this.translate.instant('confirmation.pin'),
+        message: description,
         inputs: [
           {
             name: 'pin',
@@ -45,25 +57,23 @@ export class WebsocketService {
         ],
         buttons: [
           {
-            text: 'Cancelar',
+            text: 'Cancel',
             role: 'cancel',
           },
           {
-            text: 'Enviar',
-            handler: (data) => {
-              return data.pin;
+            text: 'Send',
+            handler: (alertData) => {
+              this.sendMessage(JSON.stringify({ pin: alertData.pin }));
             },
           },
         ],
       });
 
       await alert.present();
-      const result = await alert.onDidDismiss();
-      this.sendMessage(JSON.stringify({ pin: result.data?.values.pin || '' }));
     };
 
     this.socket.onclose = () => {
-      console.log('Conexión WebSocket cerrada');
+      console.log('WebSocket connection closed');
     };
   }
 
@@ -71,7 +81,7 @@ export class WebsocketService {
     if (this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(message);
     } else {
-      console.error('La conexión WebSocket no está abierta.');
+      console.error('WebSocket connection is not open.');
     }
   }
 

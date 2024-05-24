@@ -10,7 +10,7 @@ import { WebsocketService } from 'src/app/services/websocket.service';
 import { DataService } from 'src/app/services/data.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
+import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 
 describe('CredentialsPage', () => {
   let component: CredentialsPage;
@@ -152,7 +152,8 @@ describe('CredentialsPage', () => {
               "end_date_time": "2025-12-31T23:59:59Z"
             }
           }
-        }
+        },
+        status: CredentialStatus.ISSUED
       }
     ];
 
@@ -209,7 +210,8 @@ describe('CredentialsPage', () => {
             "end_date_time": "2025-04-02T09:23:22.637345122Z"
           }
         }
-      }
+      },
+      status: CredentialStatus.ISSUED
     };
 
     walletServiceSpy.deleteVC.and.returnValue(of('Success'));
