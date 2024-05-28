@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
-  server_url:window["env"]["server_url"] || 'http://localhost:8081',
-  iam_url: window["env"]["iam_url"] || 'http://localhost:9099',
-  websocket_url: window["env"]["websocket_url"] || 'ws://localhost:8081',
+  server_url:window["env"]["server_url"] || 'http://localhost:8082',
+  iam_url: window["env"]["iam_url"] || 'http://localhost:7002',
+  websocket_url: window["env"]["websocket_url"] || 'ws://localhost:8082',
   iam_params: {
     iam_uri: window["env"]["iam_uri"] || '/realms/wallet',
     client_id: window["env"]["client_id"] ||  'auth-client',
