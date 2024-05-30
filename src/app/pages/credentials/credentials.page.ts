@@ -7,13 +7,13 @@ import { BarcodeScannerComponent } from 'src/app/components/barcode-scanner/barc
 import { QRCodeModule } from 'angularx-qrcode';
 import { WalletService } from 'src/app/services/wallet.service';
 import { VcViewComponent } from '../../components/vc-view/vc-view.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { DataService } from 'src/app/services/data.service';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 
-const TIME_IN_MS = 10000;
+const TIME_IN_MS = 3000;
 
 @Component({
   selector: 'app-credentials',
@@ -57,7 +57,7 @@ export class CredentialsPage implements OnInit {
   private dataService = inject(DataService);
   private route = inject(ActivatedRoute);
 
-  public constructor(private alertController: AlertController) {
+  public constructor(private alertController: AlertController, public translate: TranslateService,) {
     this.credOfferEndpoint = window.location.origin + '/tabs/home';
     this.route.queryParams.subscribe((params) => {
       this.toggleScan = params['toggleScan'];
@@ -120,7 +120,7 @@ export class CredentialsPage implements OnInit {
     this.walletService
       .getAllVCs()
       .subscribe((credentialListResponse: VerifiableCredential[]) => {
-        this.credList = credentialListResponse.slice().reverse(); // Copiar el array y luego invertirlo
+        this.credList = credentialListResponse.slice().reverse();
       });
   }
 
@@ -180,20 +180,20 @@ export class CredentialsPage implements OnInit {
 
   public async credentialClick() {
     const alert = await this.alertController.create({
-      header: 'Confirmación',
-      message: '¿Quieres escoger esta credencial?',
+      header: this.translate.instant('credentials.confirmation'),
+      message: this.translate.instant('confirmationMessage.confirmation'),
       buttons: [
         {
-          text: 'Cancelar',
+          text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Usuario canceló');
+            console.log('User canceled');
           },
         },
         {
-          text: 'Aceptar',
+          text: 'Accept',
           handler: () => {
-            console.log('Usuario aceptó');
+            console.log('User accepted');
             setTimeout(() => {
               this.isAlertOpen = false;
               this.toggleScan = false;

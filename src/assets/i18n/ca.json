@@ -32,6 +32,8 @@
         "expiredCredential":"Credencial caducada",
         "expiredText":"Aquesta credencial està caducada i ja no la pots fer servir.",
         "close":"Tancar",
+        "confirmation":"Confirmació",
+        "confirmationMessage":"Vols escollir aquesta credencial?",
         "addVC":"Afegeix la credencial",
         "identify": "Identifica't"
     },
@@ -109,7 +111,8 @@
         "delete-header": "Estàs segur d'eliminar la credencial?",
         "delete-message": "Si elimines la credencial de l'aplicació i necessites recuperar-la hauràs de demanar-ne una de nova.",
         "delete-confirm": "Sí, elimina-la",
-        "delete-cancel": "Cancel·la"
+        "delete-cancel": "Cancel·la",
+        "unsigned": "Sense signatura"
     },
     "errors":{
         "default":"Error no reconegut",
@@ -119,11 +122,14 @@
         "invalid-issuerMetadata":"Les metadades del Issuer són incorrectes",
         "cannot-get-VC":"No s'ha pogut obtenir la credencial del Issuer",
         "cannot-save-VC":"No s'ha pogut guardar correctamente la credencial",
-        "incorrect-pin":"PIN incorrecte"
+        "incorrect-pin":"PIN incorrecte",
+        "unsigned": "La credencial signada encara no està disponible",
+        "Errunsigned": "No s'ha pogut obtenir la credencial"
     },
     "confirmation":{
         "header":"Enviar credencial?",
         "ok":"Ok",
-        "cancel":"Cancelar"
+        "cancel":"Cancelar",
+        "pin":"Introdueix PIN"
     }
 }

@@ -33,7 +33,23 @@ export class CameraSelectorPage {
   );
 
   public availableDevicesEmit(devices: MediaDeviceInfo[]) {
-    this.availableDevices = devices;
+    if (devices.length <= 1) {
+      this.availableDevices = devices;
+    } else {
+      //selects the devices's back camera by default
+      const selectedDevices: MediaDeviceInfo[] = [];
+      for (const device of devices) {
+        if (/back|rear|environment/gi.test(device.label)) {
+          selectedDevices.push(device);
+          break;
+        }
+      }
+      if (selectedDevices.length === 0) {
+        this.availableDevices = devices;
+      } else {
+        this.availableDevices = selectedDevices;
+      }
+    }
   }
 
   public onDeviceSelectChange(selected: string) {

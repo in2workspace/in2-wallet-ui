@@ -1,14 +1,19 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { VcViewComponent } from './vc-view.component';
 import { WalletService } from 'src/app/services/wallet.service';
-import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
-import { of } from 'rxjs';
+import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
+import { Observable, of, throwError } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule } from '@ngx-translate/core';
+import { HttpResponse } from '@angular/common/http';
+import { By } from '@angular/platform-browser';
 
 class WalletServiceMock {
   getVCinCBOR(credential: VerifiableCredential) {
     return of('mock_cbor_string');
+  }
+  requestSignature(credentialId: string): Observable<any> {
+    return of({ success: true });
   }
 }
 
@@ -73,6 +78,7 @@ describe('VcViewComponent', () => {
           },
         },
       },
+      status: CredentialStatus.ISSUED
     };
 
     fixture.detectChanges();
@@ -89,12 +95,11 @@ describe('VcViewComponent', () => {
 
     component.qrView();
 
-    expect(walletService.getVCinCBOR).toHaveBeenCalledWith(
-      component.credentialInput
-    );
+    expect(walletService.getVCinCBOR).toHaveBeenCalledWith(component.credentialInput);
     expect(component.cred_cbor).toEqual(mockCBOR);
-    expect(component.isAlertOpenNotFound).toBeTrue();
+    expect(component.isAlertOpenNotFound).toBeFalse();
   });
+
 
   it('checkExpirationVC should set isExpired to true if credential is expired', () => {
     component.credentialInput = {
@@ -205,4 +210,79 @@ describe('VcViewComponent', () => {
     expect(component.showChip).toBe(initialShowChip);
   });
 
+  it('qrView should set isAlertExpirationOpenNotFound when credential is expired', () => {
+    component.isExpired = true;
+    component.qrView();
+    expect(component.isAlertExpirationOpenNotFound).toBeTrue();
+  });
+  it('qrView should handle HTTP errors correctly', () => {
+    component.isExpired = false;
+    const mockError = new Error('Network issue');
+    spyOn(walletService, 'getVCinCBOR').and.returnValue(throwError(() => mockError));
+
+    component.qrView();
+
+    expect(component.isAlertOpenNotFound).toBeTrue();
+  })
+
+  it('requestSignature should force page reload on successful response with non-204 status', () => {
+    spyOn((component as any).walletService, 'requestSignature').and.returnValue(of(new HttpResponse({ status: 200 })));
+    spyOn(component, 'forcePageReload');
+
+    component.requestSignature();
+
+    expect(component.forcePageReload).toHaveBeenCalled();
+  });
+  it('should call requestSignature on Enter key', fakeAsync(() => {
+    spyOn(component, 'requestSignature');
+
+    const button = fixture.debugElement.query(By.css('.request-signature-button'));
+    const event = new KeyboardEvent('keydown', { key: 'Enter' });
+    button.nativeElement.dispatchEvent(event);
+    tick();
+
+    expect(component.requestSignature).toHaveBeenCalled();
+  }));
+
+  it('should call requestSignature on Space key', fakeAsync(() => {
+    spyOn(component, 'requestSignature');
+
+    const button = fixture.debugElement.query(By.css('.request-signature-button'));
+    const event = new KeyboardEvent('keydown', { key: ' ' });
+    button.nativeElement.dispatchEvent(event);
+    tick();
+
+    expect(component.requestSignature).toHaveBeenCalled();
+  }));
+  it('should call deleteVC on Enter key press on delete button', fakeAsync(() => {
+    spyOn(component, 'deleteVC');
+    const deleteButton = fixture.debugElement.query(By.css('.vc-view-button'));
+    const enterKeyEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+    deleteButton.nativeElement.dispatchEvent(enterKeyEvent);
+    tick();
+    expect(component.deleteVC).toHaveBeenCalled();
+  }));
+
+  it('should call deleteVC when keydown event with key "Enter" and action "delete"', fakeAsync(() => {
+    spyOn(component, 'deleteVC');
+    const event = new KeyboardEvent('keydown', { key: 'Enter' });
+    component.handleButtonKeydown(event, 'delete');
+    tick();
+    expect(component.deleteVC).toHaveBeenCalled();
+  }));
+  it('should call setOpen when keydown event with key " " and action "close"', fakeAsync(() => {
+    spyOn(component, 'setOpen');
+    const event = new KeyboardEvent('keydown', { key: ' ' });
+    component.handleButtonKeydown(event, 'close');
+    tick();
+    expect(component.setOpen).toHaveBeenCalledWith(false);
+  }));
+  it('should prevent default behavior for button keydown event', fakeAsync(() => {
+    const event = new KeyboardEvent('keydown', { key: 'Enter' });
+    spyOn(event, 'preventDefault');
+    component.handleButtonKeydown(event, 'delete');
+    tick();
+    expect(event.preventDefault).toHaveBeenCalled();
+  }));
 });
+

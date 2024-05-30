@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -108,4 +108,15 @@ export class WalletService {
       options
     );
   }
+  public requestSignature(credentialId: string): Observable<HttpResponse<string>> {
+    const options = {
+      observe: 'response' as const,
+    };
+
+    return this.http.get<string>(
+      `${environment.server_url + environment.server_uri.credentials_signed_by_id_uri}?credentialId=${credentialId}`,
+      options
+    );
+  }
+
 }

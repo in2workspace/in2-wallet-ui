@@ -33,6 +33,8 @@
         "expiredCredential":"Credential expired",
         "expiredText":"This credential has expired and you can no longer use it.",
         "close":"Close",
+        "confirmation":"Confirmation",
+        "confirmationMessage":"Do you want to choose this credential?",
         "addVC":"Add Credential",
         "identify": "Identify yourself"    },
     "dids":{
@@ -109,7 +111,8 @@
         "delete-header": "Are you sure to delete this credential?",
         "delete-message": "If you delete the credential from the app and need to recover it, you will need to request a new one.",
         "delete-confirm": "Yes, delete",
-        "delete-cancel": "Cancel"
+        "delete-cancel": "Cancel",
+        "unsigned": "Unsigned"
     },
     "errors":{
         "default":"Error not recognized",
@@ -119,12 +122,15 @@
         "invalid-issuerMetadata":"Issuer metadata is incorrect",
         "cannot-get-VC":"Issuer credential could not be obtained",
         "cannot-save-VC":"The credential could not be saved successfully",
-        "incorrect-pin": "Incorrect PIN"
+        "incorrect-pin": "Incorrect PIN",
+        "unsigned": "The signed credential is not yet available",
+        "Errunsigned": "Credential could not be obtained"
     },
     "confirmation":{
         "header":"Send credential?",
         "ok":"Ok",
-        "cancel":"cancel"
+        "cancel":"cancel",
+        "pin":"Enter PIN"
     }
 
 }
