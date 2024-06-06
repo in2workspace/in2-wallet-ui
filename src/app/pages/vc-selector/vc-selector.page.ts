@@ -40,6 +40,7 @@ export class VcSelectorPage implements OnInit {
   public _VCReply: VCReply = {
     selectedVcList: [],
     state: '',
+    nonce: '',
     redirectUri: '',
   };
 
@@ -65,6 +66,7 @@ export class VcSelectorPage implements OnInit {
       this.executionResponse = JSON.parse(params['executionResponse']);
       this._VCReply.redirectUri = this.executionResponse['redirectUri'];
       this._VCReply.state = this.executionResponse['state'];
+      this._VCReply.nonce = this.executionResponse['nonce'];
     });
   }
 
