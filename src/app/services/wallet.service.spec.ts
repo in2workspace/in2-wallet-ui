@@ -14,6 +14,7 @@ interface VCReply {
   selectedVcList: any[];
   state: string;
   redirectUri: string;
+  nonce: string;
 }
 
 describe('WalletService', () => {
@@ -137,6 +138,7 @@ describe('WalletService', () => {
       selectedVcList: [],
       state: 'test-state',
       redirectUri: 'test-redirect-uri',
+      nonce: 'test-nonce',
     };
     const mockResponse = 'VC executed successfully';
 
