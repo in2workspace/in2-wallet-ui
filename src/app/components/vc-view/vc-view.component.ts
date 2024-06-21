@@ -140,7 +140,7 @@ export class VcViewComponent implements OnInit {
   }
 
   public requestSignature(): void {
-    if (this.credentialInput && this.credentialInput.id) {
+    if (this.credentialInput?.id) {
       this.walletService.requestSignature(this.credentialInput.id).subscribe({
         next: (response: HttpResponse<string>) => {
           if (response.status === 204) {

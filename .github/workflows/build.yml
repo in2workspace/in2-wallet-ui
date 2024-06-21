@@ -63,5 +63,5 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           DOCKER_HUB_CLIENT_NAME: ${{ secrets.DOCKER_HUB_CLIENT_NAME }}
           COMPONENT_NAME: wallet-ui
-          VERSION: ${{ '1.2.0' }}
+          VERSION: ${{ '1.2.1' }}
           SUFFIX: -SNAPSHOT
