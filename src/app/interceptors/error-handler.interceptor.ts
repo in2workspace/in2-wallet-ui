@@ -21,8 +21,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         if (
-          error.error.message &&
-          error.error.message.startsWith('There is no credential available')
+          error.error.message?.startsWith('There is no credential available')
         ) {
           console.error('Handled silently:', error.message);
         } else {
