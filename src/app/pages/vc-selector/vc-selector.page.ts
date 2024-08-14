@@ -43,7 +43,7 @@ export class VcSelectorPage implements OnInit {
     nonce: '',
     redirectUri: '',
   };
-
+  isClickedAny=false;
   public closeButton = [
     {
       text: this.translate.instant('vc-selector.close'),
@@ -72,20 +72,26 @@ export class VcSelectorPage implements OnInit {
 
   public ngOnInit() {
     this.credList = this.executionResponse['selectableVcList'];
-    this.credList.forEach(() => {
-      this.isClick.push(false);
-    });
-  }
-
-  public isClicked(index: number) {
-    return this.isClick[index];
+    this.isClick = this.credList.map(() => false);
   }
 
   public selectCred(cred: VerifiableCredential, index: number) {
-    this.selCredList.push(cred);
-    this.isClick[index] = !this.isClick[index];
+    if (!this.isClick[index]){
+      if (!this.selCredList.flatMap(value => value.type ?? []).includes("VerifiableCredential")) {
+        this.selCredList.push(cred);
+        this.isClick[index] = true;
+      }
+    }
+    else {
+      const index2: number = this.selCredList.indexOf(cred);
+      if (index2 !== -1) {
+        this.selCredList.splice(index2, 1);
+      }        
+      this.isClick[index] = false;
+      }
+      this.isClickedAny=this.isClick.some((value) => value === true);
   }
-  public async sendCred(cred: VerifiableCredential) {
+  public async sendCred() {
     const alert = await this.alertController.create({
       header: this.translate.instant('confirmation.header'),
       buttons: [
@@ -105,7 +111,6 @@ export class VcSelectorPage implements OnInit {
     console.log(result);
 
     if (result.role === 'ok') {
-      this.selCredList.push(cred);
       this._VCReply.selectedVcList = this.selCredList;
       this.walletService.executeVC(this._VCReply).subscribe({
         next: () => {
