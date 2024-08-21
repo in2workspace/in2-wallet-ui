@@ -5,7 +5,6 @@
     right: 0;
 }
 ion-button:focus {
-    --background: #067856;
     --color: white;
   }
   ion-alert.custom-alert {   
@@ -31,4 +30,7 @@ ion-button:focus {
   .vc-selector-alert {
     border-radius: 2px;
     max-width: 60%;
+  }
+  .footer-md::before{
+    background-image:none !important;
   }

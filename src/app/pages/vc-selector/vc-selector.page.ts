@@ -108,8 +108,6 @@ export class VcSelectorPage implements OnInit {
 
     await alert.present();
     const result = await alert.onDidDismiss();
-    console.log(result);
-
     if (result.role === 'ok') {
       this._VCReply.selectedVcList = this.selCredList;
       this.walletService.executeVC(this._VCReply).subscribe({
@@ -118,9 +116,12 @@ export class VcSelectorPage implements OnInit {
         },
         error: (err) => {
           console.error(err);
+          this.selCredList = [];
+          this.isClick = this.credList.map(() => false);
         },
         complete: () => {
           this.selCredList = [];
+          this.isClick = this.credList.map(() => false);
         },
       });
     }
