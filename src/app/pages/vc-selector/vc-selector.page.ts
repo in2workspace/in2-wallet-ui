@@ -34,8 +34,7 @@ export class VcSelectorPage implements OnInit {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public executionResponse: any;
   public userName = '';
-  public isAlertOpen = false;
-  public alertButtons = ['OK'];
+  public sendCredentialAlert = false;
 
   public _VCReply: VCReply = {
     selectedVcList: [],
@@ -49,7 +48,7 @@ export class VcSelectorPage implements OnInit {
       text: this.translate.instant('vc-selector.close'),
       role: 'confirm',
       handler: () => {
-        this.isAlertOpen = false;
+        this.sendCredentialAlert = false;
         this.router.navigate(['/tabs/home']);
       },
     },
@@ -109,10 +108,11 @@ export class VcSelectorPage implements OnInit {
       this._VCReply.selectedVcList = this.selCredList;
       this.walletService.executeVC(this._VCReply).subscribe({
         next: () => {
-          this.isAlertOpen = true;
+          this.sendCredentialAlert = true;
         },
         error: (err) => {
           console.error(err);
+          this.selCredList = [];
         },
         complete: () => {
           this.selCredList = [];
@@ -122,6 +122,6 @@ export class VcSelectorPage implements OnInit {
   }
 
   public setOpen(isOpen: boolean) {
-    this.isAlertOpen = isOpen;
+    this.sendCredentialAlert = isOpen;
   }
 }
