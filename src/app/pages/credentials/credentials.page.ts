@@ -177,7 +177,16 @@ export class CredentialsPage implements OnInit {
   public untoggleScan() {
     this.toggleScan = false;
   }
-
+  public handleButtonKeydown(event: KeyboardEvent, action: string): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      if (action === 'scan') {
+        this.scan();
+      } else if (action === 'getCredential') {
+        this.credentialClick();
+      }
+      event.preventDefault();
+    }
+  }
   public async credentialClick() {
     const alert = await this.alertController.create({
       header: this.translate.instant('credentials.confirmation'),

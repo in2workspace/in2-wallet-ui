@@ -18,7 +18,6 @@ import {
 import { IonicStorageModule } from '@ionic/storage-angular';
 import {
   AuthModule,
-  LogLevel,
   AuthInterceptor,
   authInterceptor,
 } from 'angular-auth-oidc-client';

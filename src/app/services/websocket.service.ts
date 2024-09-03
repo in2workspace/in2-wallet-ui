@@ -37,7 +37,7 @@ export class WebsocketService {
 
       let description = data.tx_code?.description || '';
 
-      if (data.tx_code && data.tx_code.description) {
+      if (data.tx_code?.description) {
         description = data.tx_code.description;
       }
 

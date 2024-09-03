@@ -26,14 +26,20 @@ export class HomePage implements OnInit {
   public userName = '';
   public desactivar = true;
 
-  public constructor(private router: Router, private route: ActivatedRoute) {}
+  public constructor(private router: Router, private route: ActivatedRoute) { }
 
   public async startScan() {
     this.router.navigate(['/tabs/credentials/'], {
       queryParams: { toggleScan: true, from: 'home', show_qr: true },
     });
   }
+  public handleButtonKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ' ') {
 
+      this.startScan();
+      event.preventDefault();
+    }
+  }
   public ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       const credentialOfferUri = params['credential_offer_uri'];

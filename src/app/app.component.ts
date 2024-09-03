@@ -46,7 +46,13 @@ export class AppComponent implements OnInit {
       this.router.navigate(['/home'], {});
     });
   }
-
+  public handleKeydown(event: KeyboardEvent, action = 'request') {
+    if (event.key === 'Enter' || event.key === ' ') {
+        this.openPopover(event);
+      
+      event.preventDefault();
+    }
+  }
   public async openPopover(ev: Event) {
     const popover = await this.popoverController.create({
       component: LogoutPage,
