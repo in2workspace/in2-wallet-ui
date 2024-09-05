@@ -37,6 +37,7 @@ export class VcSelectorPage implements OnInit {
   public isAlertOpen = false;
   public errorAlertOpen = false;
   public alertButtons = ['OK'];
+  public sendCredentialAlert = false;
 
   public _VCReply: VCReply = {
     selectedVcList: [],
@@ -50,7 +51,7 @@ export class VcSelectorPage implements OnInit {
       text: this.translate.instant('vc-selector.close'),
       role: 'confirm',
       handler: () => {
-        this.isAlertOpen = false;
+        this.sendCredentialAlert = false;
         this.router.navigate(['/tabs/home']);
       },
     },
@@ -110,13 +111,14 @@ export class VcSelectorPage implements OnInit {
       this._VCReply.selectedVcList = this.selCredList;
       this.walletService.executeVC(this._VCReply).subscribe({
         next: () => {
-          this.isAlertOpen = true;
+          this.sendCredentialAlert = true;
         },
         error: async (err) => {
           console.error(err);
           await this.errorMessage();
           this.router.navigate(['/tabs/home']);
 
+          this.selCredList = [];
         },
         complete: () => {
           this.selCredList = [];
@@ -141,6 +143,6 @@ export class VcSelectorPage implements OnInit {
     await alert.onDidDismiss();
   }
   public setOpen(isOpen: boolean) {
-    this.isAlertOpen = isOpen;
+    this.sendCredentialAlert = isOpen;
   }
 }
