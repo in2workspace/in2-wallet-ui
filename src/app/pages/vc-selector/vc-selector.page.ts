@@ -35,6 +35,7 @@ export class VcSelectorPage implements OnInit {
   public executionResponse: any;
   public userName = '';
   public isAlertOpen = false;
+  public errorAlertOpen = false;
   public alertButtons = ['OK'];
 
   public _VCReply: VCReply = {
@@ -111,8 +112,11 @@ export class VcSelectorPage implements OnInit {
         next: () => {
           this.isAlertOpen = true;
         },
-        error: (err) => {
+        error: async (err) => {
           console.error(err);
+          await this.errorMessage();
+          this.router.navigate(['/tabs/home']);
+
         },
         complete: () => {
           this.selCredList = [];
@@ -120,7 +124,22 @@ export class VcSelectorPage implements OnInit {
       });
     }
   }
+  private async errorMessage(){
+    const alert = await this.alertController.create({
+      header: this.translate.instant('vc-selector.ko-message'),
+      message: '<img src="../assets/icon/Tick/close-circle-outline.svg" color="red"alt="g-maps" class="vs-selector-alert">',
+      buttons: [
+        {
+          text: this.translate.instant('confirmation.ok'),
+          role: 'ok',
+        },
+      ],
+      cssClass:"custom-close-button"
+    });
 
+    await alert.present();
+    await alert.onDidDismiss();
+  }
   public setOpen(isOpen: boolean) {
     this.isAlertOpen = isOpen;
   }
