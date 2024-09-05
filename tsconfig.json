@@ -21,6 +21,10 @@
     "lib": ["es2018", "dom"],
     "useDefineForClassFields": false
   },
+  "include": [
+    "src/**/*.ts",
+    "src/types/global.d.ts"
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
