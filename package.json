@@ -1,6 +1,6 @@
 {
   "name": "wallet-ui",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
   "scripts": {
@@ -40,6 +40,7 @@
     "ngx-indexed-db": "^19.0.0",
     "rxjs": "~7.8.1",
     "tslib": "^2.7.0",
+    "wallet-ui": "file:",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {

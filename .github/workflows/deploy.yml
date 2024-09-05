@@ -26,5 +26,5 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           DOCKER_HUB_CLIENT_NAME: ${{ secrets.DOCKER_HUB_CLIENT_NAME }}
-          VERSION: ${{ '1.2.1' }}
+          VERSION: ${{ '1.2.2' }}
           COMPONENT_NAME: wallet-ui
