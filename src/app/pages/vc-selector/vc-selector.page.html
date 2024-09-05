@@ -3,8 +3,8 @@
 <ion-content [fullscreen]="true" class="vc-selector-content">
   <ion-grid >
     <ion-row class="ion-justify-content-center"
-    *ngFor="let cred of credList; let i = index" >
-    <ion-card [ngStyle]="{'opacity': isClick[i] ? '0.5' : '1'}" (click)="selectCred(cred,i)" onkeypress="selectCred(cred,i)" class="vc-selector-card">
+    *ngFor="let cred of credList; let i = index">
+    <ion-card (click)="sendCred(cred)" class="vc-selector-card">
       <app-vc-view [credentialInput]="cred"></app-vc-view>
     </ion-card>
     </ion-row>
@@ -22,9 +22,6 @@
 
 </ion-content>
 <ion-footer [translucent]="false">
-  <ion-row class="ion-justify-content-center">
-    <ion-button disabled="{{!isClickedAny}}"  (click)="sendCred()" onkeypress="sendCred()">{{"vc-selector.send-cred"|translate}}</ion-button>
 
-  </ion-row>
 
 </ion-footer>
