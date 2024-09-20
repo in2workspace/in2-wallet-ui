@@ -39,7 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - User DID management
 
 ## [1.0.1] - unreleased
-
 ### Added
 - New oidc login connection config.
 - Support for GitHub Actions for CI/CD.
@@ -49,16 +48,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SonarCloud issues.
 
 ## [1.0.0] - 2023-11-21
-
 ### Added
 - User registration
 - User login
 - User logout
-- User QR Scaning
+- User QR Scanning
 - User DID management
 - User Verifiable Credentials management
-- User Prefered Language management
-- User Prefered Scaning Camera management
+- User Preferred Language management
+- User preferred Scanning Camera management
 
 [release]: 
 - [v1.0.0](https://github.com/in2workspace/wallet-driving-application/releases/tag/v1.0.0)
