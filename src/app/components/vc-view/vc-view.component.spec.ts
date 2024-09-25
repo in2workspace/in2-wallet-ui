@@ -3,7 +3,6 @@ import { VcViewComponent } from './vc-view.component';
 import { WalletService } from 'src/app/services/wallet.service';
 import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { Observable, of, throwError } from 'rxjs';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { HttpResponse } from '@angular/common/http';
 import { By } from '@angular/platform-browser';
@@ -25,7 +24,7 @@ describe('VcViewComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
+        
         TranslateModule.forRoot(),
         VcViewComponent,
       ],

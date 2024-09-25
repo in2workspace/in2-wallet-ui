@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
@@ -35,7 +35,13 @@ describe('HomePage', () => {
     route = TestBed.inject(ActivatedRoute);
     fixture.detectChanges();
   });
-
+  it('should call deleteVC when keydown event with key "Enter" and action "startScan"', fakeAsync(() => {
+    spyOn(component, 'startScan');
+    const event = new KeyboardEvent('keydown', { key: 'Enter' });
+    component.handleButtonKeydown(event);
+    tick();
+    expect(component.startScan).toHaveBeenCalled();
+  }));
   it('should create', () => {
     expect(component).toBeTruthy();
   });

@@ -11,14 +11,13 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {
   HTTP_INTERCEPTORS,
   HttpClient,
-  HttpClientModule,
   provideHttpClient,
   withInterceptors,
+  withInterceptorsFromDi,
 } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import {
   AuthModule,
-  LogLevel,
   AuthInterceptor,
   authInterceptor,
 } from 'angular-auth-oidc-client';
@@ -34,7 +33,7 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(
       IonicModule.forRoot({ innerHTMLTemplatesEnabled: true })
     ),
-    importProvidersFrom(HttpClientModule),
+    provideHttpClient(withInterceptorsFromDi()),
     //importProvidersFrom(HttpClientTestingModule),
     importProvidersFrom(
       TranslateModule.forRoot({

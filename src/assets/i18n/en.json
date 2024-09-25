@@ -129,7 +129,7 @@
     "confirmation":{
         "header":"Send credential?",
         "ok":"Ok",
-        "cancel":"cancel",
+        "cancel":"Cancel",
         "pin":"Enter PIN"
     }
 

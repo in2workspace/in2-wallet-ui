@@ -6,19 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased] - unreleased
 ### Fixed
-- UI/UX issues.
-- SonarCloud issues.
-- Error handling issues.
-- Translation issues.
+- Translations
+- Multiple Vcs send.
+### Added
+- Pop up error message on unsuccessful login.
+### Updated
+- Update an Angular and scanner version.
+
+## [1.1.0] - unreleased
+### Added
 - Improved OIDC compatibility.
 - Websocket connection.
 - Ebsi implementation.
 - CBOR presentation Credential support.
+### Fixed
+- UI/UX issues.
+- SonarCloud issues.
+- Error handling issues.
+- Translation issues.
 ### Updated
 - Verifiable Credential Interface.
-### Fixed
-- SonarCloud issues.
-- UX/UI issues.
 ### Deleted
 - Registration
 - User DID management
@@ -28,7 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New oidc login connection config.
 - Support for GitHub Actions for CI/CD.
 - Added SonarCloud for code quality.
-
 ### Fixed
 - SonarCloud issues.
 
@@ -42,6 +48,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - User Verifiable Credentials management
 - User Preferred Language management
 - User preferred Scanning Camera management
-
-[release]: 
-- [v1.0.0](https://github.com/in2workspace/wallet-driving-application/releases/tag/v1.0.0)

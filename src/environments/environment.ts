@@ -12,7 +12,7 @@ export const environment = {
   server_uri: {
     execute_content_uri: '/api/v1/execute-content',
     request_credential_uri: '/api/v1/request-credential',
-    verifiable_presentation_uri: '/api/v1/verifiable-presentation',
+    verifiable_presentation_uri: '/api/v1/vp',
     credentials_uri: '/api/v1/credentials',
     credentials_by_id_uri: '/api/v1/credentials?credentialId=',
     credentials_signed_by_id_uri: '/api/v1/request-signed-credential',
