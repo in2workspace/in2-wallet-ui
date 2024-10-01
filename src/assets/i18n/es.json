@@ -70,6 +70,11 @@
     "language-selector":{
         "title":"Selector de idioma"
     },
+    "logs-selector": {
+        "title": "Ver logs",
+        "send": "Enviar Logs",
+        "camera": "Logs de cámara"
+    },
     "login":{
         "title":"Login",
         "login":"Login",

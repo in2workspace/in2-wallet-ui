@@ -38,13 +38,11 @@ export const routes: Routes = [
       {
         path: 'language-selector',
         canActivate: [AutoLoginPartialRoutesGuard],
-
         loadComponent: () =>
           import('./pages/language-selector/language-selector.page').then(
             (m) => m.LanguageSelectorPage
           ),
       },
-
       {
         path: 'camera-selector',
         canActivate: [AutoLoginPartialRoutesGuard],
@@ -53,7 +51,22 @@ export const routes: Routes = [
             (m) => m.CameraSelectorPage
           ),
       },
-
+      {
+        path: 'logs',
+        loadComponent: () =>
+          import('./pages/logs/logs.page').then(
+            (m) => m.LogsPage
+          ),
+      },
+      //TODO include as logs children
+      {
+        path: 'logs/camera',
+        canActivate: [AutoLoginPartialRoutesGuard],
+        loadComponent: () =>
+          import('./pages/logs/camera-logs/camera-logs.page').then(
+            (m) => m.CameraLogsPage
+            ),
+      },
       {
         path: 'vc-selector',
         canActivate: [AutoLoginPartialRoutesGuard],

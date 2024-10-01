@@ -1,3 +1,4 @@
+import { CameraLogsService } from './../../services/camera-logs.service';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -52,7 +53,7 @@ export class BarcodeScannerComponent implements OnInit {
     );
 
   public scanSuccess$ = new BehaviorSubject<string>('');
-  public constructor(private cameraService: CameraService) {}
+  public constructor(private cameraService: CameraService, private cameraLogsService: CameraLogsService) {}
   public ngOnInit(): void {
     setTimeout(() => {
       this.cameraService.updateCamera();
@@ -80,7 +81,9 @@ export class BarcodeScannerComponent implements OnInit {
     this.availableDevices.emit(devices);
   }
 
-  public scanError(error: Error) {
+  public scanError(error: Error|undefined) {
     console.error(error);
+    this.cameraLogsService.addCameraLog(error);
   }
+
 }

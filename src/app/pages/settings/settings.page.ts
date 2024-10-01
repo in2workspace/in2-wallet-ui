@@ -5,6 +5,8 @@ import { IonicModule } from '@ionic/angular';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { DataService } from 'src/app/services/data.service';
+import { CameraService } from 'src/app/services/camera.service';
+import { CameraLogsService } from 'src/app/services/camera-logs.service';
 
 @Component({
   selector: 'app-settings',
@@ -26,7 +28,8 @@ export class SettingsPage {
 
   public constructor(
     private router: Router,
-    private dataService: DataService
+    private dataService: DataService,
+    private cameraLogsService: CameraLogsService
   ) {}
 
   public goHomeWithEBSI() {
@@ -42,5 +45,8 @@ export class SettingsPage {
   }
   public toggleAlert() {
     this.isAlertOpen = !this.isAlertOpen;
+  }
+  public sendCameraLogs(){
+    this.cameraLogsService.sendCameraLogs();
   }
 }

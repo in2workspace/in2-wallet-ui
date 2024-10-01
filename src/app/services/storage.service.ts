@@ -11,8 +11,6 @@ export class StorageService {
     this.init();
   }
 
-
-
   public async set(llave: string, value: unknown) {
     await this._storage?.set(llave, value);
   }
@@ -24,6 +22,8 @@ export class StorageService {
       const val = await this._storage?.get(i.toString());
       items.push(val ?? '');
     }
+    //!
+    console.log(items);
     return items;
   }
 

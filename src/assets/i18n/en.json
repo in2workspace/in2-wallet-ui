@@ -68,6 +68,11 @@
     "language-selector":{
         "title":"Select language"
     },
+    "logs-selector": {
+        "title": "View logs",
+        "send": "Send Logs",
+        "camera": "Camera logs"
+    },
     "ebsi": {
       "title": "EBSI"
     },
