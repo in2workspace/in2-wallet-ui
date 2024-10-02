@@ -13,5 +13,10 @@
     "settings":"Settings",
     "logout":"Logout"
     },
+    "logs-selector": {
+        "title": "Veure Logs",
+        "send": "Enviar Logs",
+        "camera": "Logs de càmera"
+    },
     "":""
 }

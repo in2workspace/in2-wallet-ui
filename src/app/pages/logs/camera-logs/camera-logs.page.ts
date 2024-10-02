@@ -22,10 +22,13 @@ export class CameraLogsPage implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-    const dummyError = new Error('DummyError added from View-camer-logs.page');
+  async ngOnInit() {
     //TODO remove addCamera (dummy)
-    this.cameraLogsService.addCameraLog(dummyError);
+    // const dummyError = new Error('DummyError added from View-camer-logs.page');
+    // await this.cameraLogsService.addCameraLog(dummyError, 'error');
+    // await this.cameraLogsService.addCameraLog(new Error('DummyError2 added from View-camer-logs.page'), 'error');
+    // await this.cameraLogsService.addCameraLog(new Error('DummyError3 added from View-camer-logs.page'), 'error');
+
     this.cameraLogsService.fetchCameraLogs();
   }
 

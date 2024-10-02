@@ -16,6 +16,7 @@ import {
   map,
   shareReplay,
 } from 'rxjs';
+import { CameraLogType } from 'src/app/interfaces/camera-log';
 import { CameraService } from 'src/app/services/camera.service';
 
 @Component({
@@ -81,9 +82,10 @@ export class BarcodeScannerComponent implements OnInit {
     this.availableDevices.emit(devices);
   }
 
-  public scanError(error: Error|undefined) {
-    console.error(error);
-    this.cameraLogsService.addCameraLog(error);
+  public scanError(error: Error|undefined, exceptionType: CameraLogType) {
+    console.error("Error when scanning from barcode-scanner: " + error );
+    console.error("Error type: " + exceptionType);
+    this.cameraLogsService.addCameraLog(error, exceptionType);
   }
 
 }

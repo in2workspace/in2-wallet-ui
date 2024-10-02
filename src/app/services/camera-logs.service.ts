@@ -1,21 +1,10 @@
 import { inject, Injectable, Signal, signal } from '@angular/core';
-import { CameraLog } from '../interfaces/camera-log';
+import { CameraLog, CameraLogType } from '../interfaces/camera-log';
 import { HttpClient } from '@angular/common/http';
 import { distinctUntilChanged, Observable, tap } from 'rxjs';
 import { StorageService } from './storage.service';
 
-export const dummyCameraLogs:CameraLog[] = [
-  {
-  id:'1',
-  message:'log 1',
-  date: new Date()
-  },
-  {
-  id:'2',
-  message:'log 2',
-  date: new Date()
-  },
-];
+export const LOGS_PREFIX = 'CAMERA_LOGS';
 
 @Injectable({
   providedIn: 'root'
@@ -35,34 +24,63 @@ export class CameraLogsService {
     this.cameraLogs.set(newLogs);
   }
 
-  public async addCameraLog(log: Error|undefined):Promise<void> {
-    // Setup Log object
-    let message='undefined error';
-    if(log?.message){
-      message=log.message;
-    }
-
-    //store Log object and update
-      if(this.cameraLogs$){ //TODO remove dummies
-        await this.storageService.set('CAMERA_LOGS', dummyCameraLogs[0]);
-        this.cameraLogs.set([...this.cameraLogs$()!, dummyCameraLogs[0]]);
-        await this.storageService.set('CAMERA_LOGS', dummyCameraLogs[1]);
-        this.cameraLogs.set([...this.cameraLogs$()!, dummyCameraLogs[1]]);
-
-        await this.storageService.set('CAMERA_LOGS', log);
+  public async addCameraLog(err: Error | undefined, exceptionType:CameraLogType): Promise<void> {
+    let message = err?.message ?? 'undefined error';
+    const log: CameraLog = {
+      id:  (Math.floor(Math.random() * 900) + 100).toString(),
+      type: exceptionType,
+      message,
+      stack:err?.stack ?? '',
+      date: new Date()
+    };
+    console.log("New log to add: ");
+    console.log(log);
+    let currentLogs: CameraLog[] = [];
+  
+    const storedLogs = await this.storageService.get(LOGS_PREFIX);
+    if (storedLogs) {
+      try {
+        currentLogs = JSON.parse(storedLogs);
+      } catch (e) {
+        console.error('Error parsing stored logs:', e);
       }
+    }
+    console.log("Parsed currentLogs from storage: ");
+    console.log(currentLogs);
+    if (log) {
+      currentLogs.push(log);
+    }
+  
+    await this.storageService.set('CAMERA_LOGS', JSON.stringify(currentLogs));
+    this.fetchCameraLogs(); //TODO potser simplement setCameraLog per evitar fer tot el fetch?
   }
 
-  public async fetchCameraLogs():Promise<void> {
-    const items = await this.storageService.getAll();
-    const cameraLogs = items;
+  public async fetchCameraLogs(): Promise<void> {
+    console.log("fetching logs...");
+    const storedLogs = await this.storageService.get(LOGS_PREFIX);
+    console.log("fetched logs: ");
+    console.log(storedLogs);
+    
+    let cameraLogs: CameraLog[] = [];
+    
+    if (storedLogs) {
+      try {
+        cameraLogs = JSON.parse(storedLogs);
+      } catch (e) {
+        console.error('Error parsing camera logs:', e);
+      }
+    }
+    console.log("parsed Camera logs: . This will be set as camerLogs state.");
+    console.log(cameraLogs);
+    this.cameraLogs.set(cameraLogs);
   }
-
-   //TODO
+  
+   //TODO com enviem a correu electrònic 
    public sendCameraLogs(): Observable<CameraLog[]|undefined>{
     console.log("sendCameraLogs function executed");
     alert("Send camera logs executed (pending implementation)");
     return this.http.post<CameraLog[]|undefined>('', {});
+    
   }
 
   constructor() {
