@@ -1,5 +1,7 @@
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { CameraLogsService } from './../../services/camera-logs.service';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   Component,
   Output,
@@ -13,6 +15,7 @@ import {
   BehaviorSubject,
   Observable,
   distinctUntilChanged,
+  filter,
   map,
   shareReplay,
 } from 'rxjs';
@@ -54,15 +57,32 @@ export class BarcodeScannerComponent implements OnInit {
     );
 
   public scanSuccess$ = new BehaviorSubject<string>('');
-  public constructor(private cameraService: CameraService, private cameraLogsService: CameraLogsService) {}
+  public constructor(
+    private cameraService: CameraService,
+    private cameraLogsService: CameraLogsService,
+    private route: ActivatedRoute,
+    private router: Router) {
+      //en canviar de ruta es desactiva càmera
+      this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntilDestroyed()
+      )
+      .subscribe((event: NavigationEnd) => {
+        console.log("scanner resets after code result");
+        this.scanner.reset();
+      });
+    }
   public ngOnInit(): void {
     setTimeout(() => {
       this.cameraService.updateCamera();
     }, 2000);
+    console.log("barcode-scanner component init");
   }
 
   public onCodeResult(resultString: string) {
     this.qrCode.emit(resultString);
+    console.log("qrCode updated: " + resultString);
   }
 
   public async onCamerasFound(devices: MediaDeviceInfo[]): Promise<void> {
@@ -87,5 +107,7 @@ export class BarcodeScannerComponent implements OnInit {
     console.error("Error type: " + exceptionType);
     this.cameraLogsService.addCameraLog(error, exceptionType);
   }
+
+  //TODO no funciona en canviar a ruta germana
 
 }

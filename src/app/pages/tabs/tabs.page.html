@@ -1,17 +1,17 @@
 <ion-tabs #appTabs>
 
   <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="home" [routerLink]="['/tabs/home']" routerDirection="root">
+    <ion-tab-button tab="home" [routerLink]="['./home']" routerDirection="root">
       <ion-icon aria-hidden="true" name="home"></ion-icon>
       <ion-label>{{"menu.home"|translate}}</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="credentials" [routerLink]="['/tabs/credentials']" routerDirection="root">
+    <ion-tab-button tab="credentials" [routerLink]="['./credentials']" routerDirection="root">
       <ion-icon aria-hidden="true" name="wallet"></ion-icon>
       <ion-label>{{"menu.credentials"|translate}}</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="settings" [routerLink]="['/tabs/settings']" routerDirection="root">
+    <ion-tab-button tab="settings" [routerLink]="['./settings']" routerDirection="root">
       <ion-icon aria-hidden="true" name="cog"></ion-icon>
       <ion-label>{{"menu.settings"|translate}}</ion-label>
     </ion-tab-button>
