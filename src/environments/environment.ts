@@ -20,6 +20,6 @@ export const environment = {
     ebsi_did_uri: '/api/v1/ebsi-did',
     cbor: '/api/v1/vp/cbor',
   },
-  websocket_uri: '/api/v1/pin'
-
+  websocket_uri: '/api/v1/pin',
+  LOGS_EMAIL: "domesupport@in2.es"
 };

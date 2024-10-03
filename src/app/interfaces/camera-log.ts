@@ -1,9 +1,12 @@
-export type CameraLogType = 'error' | 'failure';
+export type CameraLogType = 'scanError' | 'scanFailure' | 'noMediaError' | 'httpError' | 'fetchError' | 'undefinedError';
 
 export interface CameraLog{
-    id:string;
     type:CameraLogType,
-    stack:string,
     message:string;
-    date:Date;
+    date:string;
+}
+
+export interface LogsMailContent{
+    subject:string,
+    body:string
 }

@@ -12,6 +12,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { DataService } from 'src/app/services/data.service';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
+import { catchError } from 'rxjs';
+import { CameraLogsService } from 'src/app/services/camera-logs.service';
 
 const TIME_IN_MS = 3000;
 
@@ -57,7 +59,9 @@ export class CredentialsPage implements OnInit {
   private dataService = inject(DataService);
   private route = inject(ActivatedRoute);
 
-  public constructor(private alertController: AlertController, public translate: TranslateService,) {
+  public constructor(private alertController: AlertController,
+    public translate: TranslateService,
+    private cameraLogsService: CameraLogsService) {
     this.credOfferEndpoint = window.location.origin + '/tabs/home';
     this.route.queryParams.subscribe((params) => {
       this.toggleScan = params['toggleScan'];
@@ -133,7 +137,8 @@ export class CredentialsPage implements OnInit {
   public qrCodeEmit(qrCode: string) {
     this.toggleScan = false;
     this.websocket.connect();
-    this.walletService.executeContent(qrCode).subscribe({
+    this.walletService.executeContent(qrCode)
+    .subscribe({
       next: (executionResponse) => {
         if (qrCode.includes('credential_offer_uri')) {
           this.from = 'credential';
@@ -155,9 +160,12 @@ export class CredentialsPage implements OnInit {
         }
       },
 
-      error: (err) => {
+      error: (httpErrorResponse) => {
         this.toggleScan = true;
-        console.error(err);
+        const httpErr = httpErrorResponse.error;
+        const error = httpErr.title + ' . ' + httpErr.message + ' . ' + httpErr.path;
+        this.cameraLogsService.addCameraLog(new Error(error), 'httpError');
+        console.error(httpErrorResponse);
       },
     });
   }

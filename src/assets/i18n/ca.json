@@ -73,6 +73,9 @@
         "send": "Enviar Logs",
         "camera": "Logs de càmera"
     },
+    "send-logs": {
+        "mailto_permission_alert": "Assegureu-vos que teniu els permisos necessaris per enviar correus electrònics amb la vostra aplicació de correu predeterminada. Si el servei de correu no s'obre, probablement és a causa de restriccions de permisos."
+    },
     "ebsi": {
       "title": "EBSI"
     },

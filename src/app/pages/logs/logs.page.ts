@@ -16,8 +16,10 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class LogsPage  implements OnInit {
 
-  constructor() { }
+  constructor() {
+   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
 }

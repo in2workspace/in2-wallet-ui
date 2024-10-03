@@ -1,13 +1,8 @@
 <ion-content [fullscreen]="true" class="background-content">
   <ion-list class="settings-list">
-    @for(log of cameraLogs$(); track $index){
+    @for(log of cameraLogs; track $index){
       <ion-item>
         <ion-grid>
-          <ion-row>
-            <ion-col>
-              <ion-text>Log ID: {{log.id}}</ion-text>
-            </ion-col>
-          </ion-row>
           <ion-row>
             <ion-col>
               <ion-text>Log message: {{log.message}}</ion-text>
@@ -15,7 +10,7 @@
           </ion-row>
           <ion-row>
             <ion-col>
-              <ion-text>Log date: {{log.date | date: 'short'}}</ion-text>
+              <ion-text>Date: {{log.date | date: 'short'}}</ion-text>
             </ion-col>
           </ion-row>
         </ion-grid>

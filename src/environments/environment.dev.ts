@@ -21,5 +21,6 @@ export const environment = {
     cbor: window["env"]["cbor_uri"] || '/api/v2/vp/cbor'
 
   },
-  websocket_uri: window["env"]["websocket_uri"] || '/api/v2/pin'
+  websocket_uri: window["env"]["websocket_uri"] || '/api/v2/pin',
+  LOGS_EMAIL: "domesupport@in2.es"
 };

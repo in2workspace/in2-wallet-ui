@@ -9,11 +9,13 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { BarcodeFormat } from '@zxing/library';
+import { BarcodeFormat, Exception } from '@zxing/library';
 import { ZXingScannerModule, ZXingScannerComponent } from '@zxing/ngx-scanner';
 import {
   BehaviorSubject,
   Observable,
+  Subject,
+  debounceTime,
   distinctUntilChanged,
   filter,
   map,
@@ -21,6 +23,10 @@ import {
 } from 'rxjs';
 import { CameraLogType } from 'src/app/interfaces/camera-log';
 import { CameraService } from 'src/app/services/camera.service';
+
+// ! Since console.error is intercepted (to capture the error already caught by zxing), be careful to avoid recursion
+// ! (i.e., console.error should not be called within the execution flow of another console.error)
+
 
 @Component({
   selector: 'app-barcode-scanner',
@@ -55,34 +61,59 @@ export class BarcodeScannerComponent implements OnInit {
       distinctUntilChanged(),
       shareReplay(1)
     );
+    private scanFailureSubject = new Subject<Error>();
+    private scanFailureDebounceDelay = 3000;
+    private originalConsoleError: any;
 
   public scanSuccess$ = new BehaviorSubject<string>('');
   public constructor(
     private cameraService: CameraService,
     private cameraLogsService: CameraLogsService,
-    private route: ActivatedRoute,
     private router: Router) {
-      //en canviar de ruta es desactiva càmera
       this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
         takeUntilDestroyed()
       )
       .subscribe((event: NavigationEnd) => {
-        console.log("scanner resets after code result");
         this.scanner.reset();
       });
+
+      // Requires debounce since the error is emitted constantly
+      this.scanFailureSubject.pipe(
+        distinctUntilChanged((
+          a, b) => 
+            JSON.stringify(a) === JSON.stringify(b)),
+        debounceTime(this.scanFailureDebounceDelay)
+      ).subscribe(err=>{
+        this.saveErrorLog(err, 'scanFailure');
+      })
     }
   public ngOnInit(): void {
     setTimeout(() => {
       this.cameraService.updateCamera();
     }, 2000);
-    console.log("barcode-scanner component init");
+
+    //Redefine console.log to capture the errors that were previously captured by zxing-scanner
+     this.originalConsoleError = console.error;
+ 
+     console.error = (message?: any, ...optionalParams: any[]) => {
+      if(message==="@zxing/ngx-scanner"){
+        const logMessage = formatLogMessage(message, optionalParams);
+        const err = new Error(logMessage);
+        if(optionalParams[0]==="Can\'t get user media, this is not supported."){
+          alert("Error: " + optionalParams[0]);
+          this.saveErrorLog(err, 'noMediaError');
+        }
+        alert("Error: There was an error when trying to connect to the camera. It might be a permission error.");
+        this.saveErrorLog(err, 'undefinedError');
+      }
+      this.originalConsoleError(message, ...optionalParams);
+     };
   }
 
   public onCodeResult(resultString: string) {
     this.qrCode.emit(resultString);
-    console.log("qrCode updated: " + resultString);
   }
 
   public async onCamerasFound(devices: MediaDeviceInfo[]): Promise<void> {
@@ -102,12 +133,26 @@ export class BarcodeScannerComponent implements OnInit {
     this.availableDevices.emit(devices);
   }
 
-  public scanError(error: Error|undefined, exceptionType: CameraLogType) {
-    console.error("Error when scanning from barcode-scanner: " + error );
-    console.error("Error type: " + exceptionType);
+  public onScanError(error: Error){
+    this.saveErrorLog(error, 'scanError');
+  }
+
+  public onScanFailure(error: Exception|undefined){
+    const exception: Error = error ?? new Error('Undefined scan failure');
+    this.scanFailureSubject.next(exception);
+  }
+
+  public saveErrorLog(error: Error|undefined, exceptionType: CameraLogType) {
     this.cameraLogsService.addCameraLog(error, exceptionType);
   }
 
-  //TODO no funciona en canviar a ruta germana
+  public ngOnDestroy(): void {
+    console.error = this.originalConsoleError;
+  }
+}
 
+function formatLogMessage(message: any, optionalParams: any[]): string {
+  const optionalParam1 = optionalParams.length > 0 ? optionalParams[0] : '';
+  const optionalParam2 = optionalParams.length > 1 ? optionalParams[1] : '';
+  return `${String(message)}. ${String(optionalParam1)} ${String(optionalParam2)}`;
 }

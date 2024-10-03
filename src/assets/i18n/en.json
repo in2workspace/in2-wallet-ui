@@ -73,6 +73,7 @@
         "send": "Send Logs",
         "camera": "Camera logs"
     },
+    "mailto_permission_alert": "Please ensure that you have the necessary permissions to send emails using your default mail application. If the mail service does not open, it is likely due to permission restrictions.",
     "ebsi": {
       "title": "EBSI"
     },

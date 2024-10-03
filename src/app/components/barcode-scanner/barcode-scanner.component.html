@@ -7,6 +7,7 @@
     [formats]="allowedFormats"
     (camerasFound)="onCamerasFound($event)"
     (scanSuccess)="onCodeResult($event)"
-    (scanError)="scanError($event, 'error')" 
+    (scanError)="onScanError($event)" 
+    (scanFailure)="onScanFailure($event)"
     ></zxing-scanner>
     <!-- (scanFailure)="scanError($event, 'failure')" -->
