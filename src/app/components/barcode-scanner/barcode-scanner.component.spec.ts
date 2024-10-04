@@ -4,6 +4,8 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { CameraService } from 'src/app/services/camera.service';
 import { BehaviorSubject } from 'rxjs';
 import { BarcodeScannerComponent } from './barcode-scanner.component';
+import { CameraLogsService } from 'src/app/services/camera-logs.service';
+import { Storage } from '@ionic/storage-angular';
 
 class MockCameraService {
   updateCamera(): void {}
@@ -20,7 +22,10 @@ describe('BarcodeScannerComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [CommonModule, ZXingScannerModule],
-      providers: [{ provide: CameraService, useClass: MockCameraService }]
+      providers: [
+        { provide: CameraService, useClass: MockCameraService }, 
+        CameraLogsService, Storage
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(BarcodeScannerComponent);

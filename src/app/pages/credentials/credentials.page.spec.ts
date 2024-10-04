@@ -11,6 +11,7 @@ import { DataService } from 'src/app/services/data.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
+import { Storage } from '@ionic/storage-angular';
 
 describe('CredentialsPage', () => {
   let component: CredentialsPage;
@@ -41,6 +42,7 @@ describe('CredentialsPage', () => {
         HttpClientTestingModule
       ],
       providers: [
+        Storage,
         { provide: WalletService, useValue: walletServiceSpy },
         { provide: WebsocketService, useValue: websocketServiceSpy },
         { provide: DataService, useValue: dataServiceSpyObj },
