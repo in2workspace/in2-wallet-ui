@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-logs-page',
@@ -9,9 +8,8 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrls: ['./logs.page.scss'],
   standalone: true,
   imports:[
-    IonicModule,
-    RouterModule,
-    TranslateModule
+    RouterOutlet,
+    IonicModule
   ]
 })
 export class LogsPage  implements OnInit {

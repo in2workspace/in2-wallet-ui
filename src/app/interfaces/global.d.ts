@@ -19,6 +19,7 @@ interface Window {
       ebsi_did_uri?: string;
       cbor_uri?: string;
       websocket_uri?: string;
+      logs_enabled?: boolean
     };
   }
   

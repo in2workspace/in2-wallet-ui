@@ -1,10 +1,3 @@
-<ion-content [fullscreen]="true" class="background-content">
-  <b class="pages_titles">
-    {{"logs-selector.title"|translate}}
-  </b>
-  <ion-list class="logs-list">
-      <ion-item [routerLink]="['/tabs/logs/camera']">
-        <ion-icon color="grey" name="camera" class="logs-icon"></ion-icon><ion-text>{{"logs-selector.camera"|translate}}</ion-text>
-      </ion-item>
-  </ion-list>
+<ion-content>
+    <router-outlet/>
 </ion-content>
