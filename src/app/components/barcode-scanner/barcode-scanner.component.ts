@@ -68,17 +68,7 @@ export class BarcodeScannerComponent implements OnInit {
   public scanSuccess$ = new BehaviorSubject<string>('');
   public constructor(
     private cameraService: CameraService,
-    private cameraLogsService: CameraLogsService,
-    private router: Router) {
-      this.router.events
-      .pipe(
-        filter(event => event instanceof NavigationEnd),
-        takeUntilDestroyed()
-      )
-      .subscribe((event: NavigationEnd) => {
-        this.scanner.reset();
-      });
-
+    private cameraLogsService: CameraLogsService) {
       // Requires debounce since the error is emitted constantly
       this.scanFailureSubject.pipe(
         distinctUntilChanged((
