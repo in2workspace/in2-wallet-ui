@@ -4,6 +4,7 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { CameraService } from 'src/app/services/camera.service';
 import { BehaviorSubject } from 'rxjs';
 import { BarcodeScannerComponent } from './barcode-scanner.component';
+import { Router } from '@angular/router';
 
 class MockCameraService {
   updateCamera(): void {}
@@ -20,7 +21,9 @@ describe('BarcodeScannerComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [CommonModule, ZXingScannerModule],
-      providers: [{ provide: CameraService, useClass: MockCameraService }]
+      providers: [
+        Router,
+        { provide: CameraService, useClass: MockCameraService }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(BarcodeScannerComponent);

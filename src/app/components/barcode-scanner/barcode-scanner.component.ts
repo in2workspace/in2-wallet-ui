@@ -1,3 +1,4 @@
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -6,12 +7,14 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { BarcodeFormat } from '@zxing/library';
 import { ZXingScannerModule, ZXingScannerComponent } from '@zxing/ngx-scanner';
 import {
   BehaviorSubject,
   Observable,
   distinctUntilChanged,
+  filter,
   map,
   shareReplay,
 } from 'rxjs';
@@ -52,7 +55,16 @@ export class BarcodeScannerComponent implements OnInit {
     );
 
   public scanSuccess$ = new BehaviorSubject<string>('');
-  public constructor(private cameraService: CameraService) {}
+  public constructor(private cameraService: CameraService, private router: Router) {
+    this.router.events
+    .pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntilDestroyed()
+    )
+    .subscribe((event: NavigationEnd) => {
+      this.scanner.reset();
+    });
+  }
   public ngOnInit(): void {
     setTimeout(() => {
       this.cameraService.updateCamera();
