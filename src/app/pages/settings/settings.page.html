@@ -13,7 +13,7 @@
         <ion-item [routerLink]="['/tabs/logs']"> 
           <ion-icon color="grey" name="document-text-outline"  class="settings-icon"></ion-icon>{{"logs-selector.title"|translate}}
         </ion-item>
-        <ion-button (click)="sendCameraLogs()">{{"logs-selector.send"|translate}}</ion-button>
+        <ion-button (keydown.enter)="sendCameraLogs()" (keydown.space)="sendCameraLogs()" (click)="sendCameraLogs()">{{"logs-selector.send"|translate}}</ion-button>
       } 
   </ion-list>
 
