@@ -1,7 +1,5 @@
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { CameraLogsService } from './../../services/camera-logs.service';
 import { CommonModule } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   Component,
   Output,
@@ -17,7 +15,6 @@ import {
   Subject,
   debounceTime,
   distinctUntilChanged,
-  filter,
   map,
   shareReplay,
 } from 'rxjs';
@@ -61,14 +58,14 @@ export class BarcodeScannerComponent implements OnInit {
       distinctUntilChanged(),
       shareReplay(1)
     );
-    private scanFailureSubject = new Subject<Error>();
-    private scanFailureDebounceDelay = 3000;
+    private readonly scanFailureSubject = new Subject<Error>();
+    private readonly scanFailureDebounceDelay = 3000;
     private originalConsoleError: any;
 
   public scanSuccess$ = new BehaviorSubject<string>('');
   public constructor(
-    private cameraService: CameraService,
-    private cameraLogsService: CameraLogsService) {
+    private readonly cameraService: CameraService,
+    private readonly cameraLogsService: CameraLogsService) {
       // Requires debounce since the error is emitted constantly
       this.scanFailureSubject.pipe(
         distinctUntilChanged((
@@ -91,7 +88,7 @@ export class BarcodeScannerComponent implements OnInit {
       if(message==="@zxing/ngx-scanner"){
         const logMessage = formatLogMessage(message, optionalParams);
         const err = new Error(logMessage);
-        if(optionalParams[0]==="Can\'t get user media, this is not supported."){
+        if(optionalParams[0]==="Can't get user media, this is not supported."){
           alert("Error: " + optionalParams[0]);
           this.saveErrorLog(err, 'noMediaError');
         }

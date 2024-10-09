@@ -17,7 +17,4 @@ export class LogsPage  implements OnInit {
   constructor() {
    }
 
-  ngOnInit() {
-  }
-
 }

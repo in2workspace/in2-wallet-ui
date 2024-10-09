@@ -9,7 +9,7 @@ export const LOGS_PREFIX = 'CAMERA_LOGS';
   providedIn: 'root'
 })
 export class CameraLogsService {
-  private storageService = inject(StorageService);
+  private readonly storageService = inject(StorageService);
 
   private cameraLogs: CameraLog[]|undefined = undefined;
 
@@ -62,8 +62,9 @@ export class CameraLogsService {
   
     const maxChars = 1500;
     let emailBody = '';
-  
-    logs.reverse().some(log => {
+    
+    const reversedLogs = [...logs].reverse();
+    reversedLogs.some(log => {
       const logString = JSON.stringify(log);
       if ((emailBody.length + logString.length) > maxChars) {
         return true;

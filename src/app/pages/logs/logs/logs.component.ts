@@ -14,10 +14,8 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule
   ]
 })
-export class LogsComponent  implements OnInit {
+export class LogsComponent {
 
   constructor() { }
-
-  ngOnInit() {}
 
 }
