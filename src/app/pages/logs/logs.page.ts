@@ -12,7 +12,7 @@ import { IonicModule } from '@ionic/angular';
     IonicModule
   ]
 })
-export class LogsPage  implements OnInit {
+export class LogsPage {
 
   constructor() {
    }
