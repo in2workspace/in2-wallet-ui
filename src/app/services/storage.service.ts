@@ -22,8 +22,6 @@ export class StorageService {
       const val = await this._storage?.get(i.toString());
       items.push(val ?? '');
     }
-    //!
-    console.log(items);
     return items;
   }
 

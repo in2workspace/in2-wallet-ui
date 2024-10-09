@@ -16,10 +16,6 @@ export class CameraLogsPage implements OnInit {
 
   public cameraLogs:CameraLog[] = [];
 
-
-  constructor() { 
-  }
-
   async ngOnInit() {
     const logs = await this.cameraLogsService.getCameraLogs();
     this.cameraLogs = logs;

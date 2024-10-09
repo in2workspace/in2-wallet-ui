@@ -16,6 +16,4 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class LogsComponent {
 
-  constructor() { }
-
 }

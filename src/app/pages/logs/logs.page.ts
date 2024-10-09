@@ -14,7 +14,4 @@ import { IonicModule } from '@ionic/angular';
 })
 export class LogsPage {
 
-  constructor() {
-   }
-
 }
