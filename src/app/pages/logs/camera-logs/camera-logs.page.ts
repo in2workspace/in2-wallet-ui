@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
   imports:[ IonicModule, DatePipe]
 })
 export class CameraLogsPage implements OnInit {
-  private cameraLogsService = inject(CameraLogsService);
+  private readonly cameraLogsService = inject(CameraLogsService);
 
   public cameraLogs:CameraLog[] = [];
 
