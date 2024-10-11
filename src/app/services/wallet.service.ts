@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { VerifiableCredential } from '../interfaces/verifiable-credential';
 import { VCReply } from '../interfaces/verifiable-credential-reply';
+import { sameDeviceParams } from '../interfaces/same-device-params';
 
 const headers = new HttpHeaders({
   'Content-Type': 'application/json',
@@ -117,6 +118,11 @@ export class WalletService {
       `${environment.server_url + environment.server_uri.credentials_signed_by_id_uri}?credentialId=${credentialId}`,
       options
     );
+  }
+
+  //TODO passar /api/v1 a variable?
+  public sameDeviceLogin(authRequestParams: sameDeviceParams): Observable<VerifiableCredential[]>{
+    return this.http.post<VerifiableCredential[]>(`${environment.server_url}/api/v1/same-device-login`, authRequestParams)
   }
 
 }

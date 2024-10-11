@@ -27,6 +27,22 @@ if (environment.production) {
   enableProdMode();
 }
 
+//if there are client_id & request_uri query params, add them to callback url
+let redirectCallbackUrl = `${window.location.origin}/callback`;
+
+const { clientId, requestUri } = getQueryParams();
+const params = new URLSearchParams();
+if (clientId) {
+  params.append('client_id', clientId);
+}
+if (requestUri) {
+  params.append('request_uri', requestUri);
+}
+
+if (clientId && requestUri && params.toString()) {
+  redirectCallbackUrl += `?${params.toString()}`;
+}
+
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -49,7 +65,7 @@ bootstrapApplication(AppComponent, {
       config: {
         postLoginRoute: '/tabs/home',
         authority: environment.iam_url+environment.iam_params.iam_uri,
-        redirectUrl: `${window.location.origin}/callback`,
+        redirectUrl: redirectCallbackUrl,
         postLogoutRedirectUri: window.location.origin,
         clientId: environment.iam_params.client_id,
         scope: environment.iam_params.scope,
@@ -76,4 +92,11 @@ bootstrapApplication(AppComponent, {
 });
 export function httpTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http);
+}
+
+function getQueryParams() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const clientId = urlParams.get('client_id');
+  const requestUri = urlParams.get('request_uri');
+  return { clientId, requestUri };
 }

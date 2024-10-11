@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
@@ -12,6 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { DataService } from 'src/app/services/data.service';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 const TIME_IN_MS = 3000;
 
@@ -50,20 +51,27 @@ export class CredentialsPage implements OnInit {
   public ebsiFlag = false;
   public did = '';
   public isCredOffer = false;
+  public clientId = "";
+  public requestUri = "";
 
   private walletService = inject(WalletService);
   private router = inject(Router);
   private websocket = inject(WebsocketService);
   private dataService = inject(DataService);
   private route = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef);
 
-  public constructor(private alertController: AlertController, public translate: TranslateService,) {
+  public constructor(private alertController: AlertController,
+    public translate: TranslateService) {
     this.credOfferEndpoint = window.location.origin + '/tabs/home';
     this.route.queryParams.subscribe((params) => {
       this.toggleScan = params['toggleScan'];
       this.from = params['from'];
       this.show_qr = params['show_qr'];
       this.credentialOfferUri = params['credentialOfferUri'];
+      this.clientId = params['client_id']; //? maybe it could be just a blocked-scoped variable?
+      this.requestUri = params['request_uri']; //? maybe it could be just a blocked-scoped variable?
+
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.dataService.listenDid().subscribe((data: any) => {
@@ -76,10 +84,24 @@ export class CredentialsPage implements OnInit {
 
   public ngOnInit() {
     this.scaned_cred = false;
-    this.refresh();
+    if(this.clientId && this.requestUri){
+      this.walletService.sameDeviceLogin({ client_id: this.clientId, request_uri: this.requestUri })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (credentialListResponse: VerifiableCredential[]) => {
+        this.credList = credentialListResponse.slice().reverse();
+      },
+        error: (err: Error) => {
+          console.log(err);
+        }
+      });
+    }else{
+      this.refresh();
+    }
     if (this.credentialOfferUri !== '') {
       this.generateCred();
     }
+
   }
   public scan() {
     this.toggleScan = true;
