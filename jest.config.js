@@ -32,7 +32,7 @@ module.exports = {
         '/src/app/components/',
         '/src/app/interceptors',
         '/src/app/interfaces',
-        '/src/app/pages/',
-        '/src/app/services/(?!camera-logs)',
+        '/src/app/pages/(?!logs)',
+        '/src/app/services/',
       ]
   };

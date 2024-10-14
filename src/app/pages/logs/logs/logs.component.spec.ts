@@ -19,7 +19,7 @@ describe('LogsComponent', () => {
       providers:[{
         provide: ActivatedRoute,
         useValue: {
-          params: of({ id: '123' }), // Exemple d'un valor fictici
+          params: of({ id: '123' }), 
         },
       },]
     }).compileComponents();

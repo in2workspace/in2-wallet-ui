@@ -8,19 +8,37 @@ import { Storage } from '@ionic/storage-angular';
 describe('CameraLogsPage', () => {
   let component: CameraLogsPage;
   let fixture: ComponentFixture<CameraLogsPage>;
+  let cameraLogsService: CameraLogsService;
+
+  const mockCameraLogsService = {
+    getCameraLogs: jest.fn()
+  };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [CameraLogsPage, IonicModule, DatePipe],
-      providers:[CameraLogsService, Storage]
+      imports: [IonicModule, DatePipe],
+      providers: [
+        { provide: CameraLogsService, useValue: mockCameraLogsService },
+        Storage
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CameraLogsPage);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    cameraLogsService = TestBed.inject(CameraLogsService);
   }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should load camera logs on initialization', async () => {
+    const mockLogs = [{ id: 1, log: 'Camera log 1' }];
+    mockCameraLogsService.getCameraLogs.mockResolvedValue(mockLogs);
+
+    await component.ngOnInit();
+
+    expect(mockCameraLogsService.getCameraLogs).toHaveBeenCalled();
+    expect(component.cameraLogs).toEqual(mockLogs);
   });
 });
