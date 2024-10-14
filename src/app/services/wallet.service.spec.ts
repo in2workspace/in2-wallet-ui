@@ -34,7 +34,7 @@ describe('WalletService', () => {
     httpTestingController.verify();
   });
 
-  it('should fetch VC in CBOR format', () => {
+  it('should fetch VC in CBOR format', (done) => {
     const mockCredential: VerifiableCredential = {
       '@context': ['https://www.w3.org/ns/credentials/v1'],
       id: 'test-credential-id',
@@ -85,6 +85,7 @@ describe('WalletService', () => {
 
     service.getVCinCBOR(mockCredential).subscribe((response) => {
       expect(response).toEqual(mockResponse);
+      done();
     });
 
     const req = httpTestingController.expectOne(
@@ -94,7 +95,7 @@ describe('WalletService', () => {
     req.flush(mockResponse);
   });
 
-  it('should fetch VC in JWT format', () => {
+  it('should fetch VC in JWT format', (done) => {
     const mockCredentialId = 'test-credential-id';
     const mockResponse = 'mock-jwt-data';
 
@@ -102,6 +103,7 @@ describe('WalletService', () => {
       .getVCinJWT({ id: mockCredentialId } as VerifiableCredential)
       .subscribe((response) => {
         expect(response).toEqual(mockResponse);
+        done();
       });
 
     const req = httpTestingController.expectOne(
@@ -111,14 +113,15 @@ describe('WalletService', () => {
     req.flush(mockResponse);
   });
 
-  it('should request a new credential', () => {
+  it('should request a new credential', (done) => {
     const mockCredentialOfferUri = 'test-offer-uri';
     const expectedResponse = {
       message: 'Credential request successful',
-    } as any;
+    };
 
     service.requestCredential(mockCredentialOfferUri).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
+      done();
     });
 
     const req = httpTestingController.expectOne(
@@ -133,7 +136,7 @@ describe('WalletService', () => {
     req.flush(expectedResponse);
   });
 
-  it('should execute Verifiable Credential and return response', () => {
+  it('should execute Verifiable Credential and return response', (done) => {
     const mockVCReply: VCReply = {
       selectedVcList: [],
       state: 'test-state',
@@ -144,6 +147,7 @@ describe('WalletService', () => {
 
     service.executeVC(mockVCReply).subscribe((response) => {
       expect(response).toEqual(mockResponse);
+      done();
     });
 
     const req = httpTestingController.expectOne(
@@ -157,7 +161,7 @@ describe('WalletService', () => {
     req.flush(mockResponse);
   });
 
-  it('should fetch all Verifiable Credentials', () => {
+  it('should fetch all Verifiable Credentials', (done) => {
     const mockResponse: VerifiableCredential[] = [
       {
         '@context': ['https://www.w3.org/ns/credentials/v1'],
@@ -210,6 +214,7 @@ describe('WalletService', () => {
     service.getAllVCs().subscribe((credentials) => {
       expect(credentials.length).toBeGreaterThan(0);
       expect(credentials).toEqual(mockResponse);
+      done();
     });
 
     const req = httpTestingController.expectOne(
@@ -219,7 +224,7 @@ describe('WalletService', () => {
     req.flush(mockResponse);
   });
 
-  it('should fetch a single Verifiable Credential by id', () => {
+  it('should fetch a single Verifiable Credential by id', (done) => {
     const data = 'test-id';
     const mockResponse: VerifiableCredential = {
       '@context': ['https://www.w3.org/ns/credentials/v1'],
@@ -270,6 +275,7 @@ describe('WalletService', () => {
 
     service.getOne(data).subscribe((credential) => {
       expect(credential).toEqual(mockResponse);
+      done();
     });
 
     const req = httpTestingController.expectOne(
@@ -279,12 +285,13 @@ describe('WalletService', () => {
     req.flush(mockResponse);
   });
 
-  it('should delete a Verifiable Credential by id', () => {
+  it('should delete a Verifiable Credential by id', (done) => {
     const VC = 'test-vc-id';
     const mockResponse = 'VC deleted successfully';
 
     service.deleteVC(VC).subscribe((response) => {
       expect(response).toEqual(mockResponse);
+      done();
     });
 
     const req = httpTestingController.expectOne(
@@ -298,12 +305,13 @@ describe('WalletService', () => {
     req.flush(mockResponse);
   });
 
-  it('should request a signature for a given credential ID', () => {
+  it('should request a signature for a given credential ID', (done) => {
     const credentialId = 'test-credential-id';
     const expectedResponse = 'Signed Credential';
 
     service.requestSignature(credentialId).subscribe((response) => {
       expect(response.body).toEqual(expectedResponse);
+      done();
     });
 
     const req = httpTestingController.expectOne(

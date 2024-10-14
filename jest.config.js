@@ -28,10 +28,10 @@ module.exports = {
     testPathIgnorePatterns: [
         '/node_modules/', 
         '/dist/',
-        // '/src/app/components/',
+        '/src/app/components/',
         '/src/app/interceptors',
         '/src/app/interfaces',
         '/src/app/pages',
-        '/src/app/services',
+        '/src/app/services/',
       ]
   };

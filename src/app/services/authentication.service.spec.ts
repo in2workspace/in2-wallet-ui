@@ -5,12 +5,16 @@ import { of } from 'rxjs';
 
 describe('AuthenticationService', () => {
   let service: AuthenticationService;
-  let oidcSecurityService: jasmine.SpyObj<OidcSecurityService>;
+  let oidcSecurityService: jest.Mocked<any>;
 
   beforeEach(() => {
-    oidcSecurityService = jasmine.createSpyObj('OidcSecurityService', ['checkAuth', 'authorizeWithPopUp', 'logoff']);
+    oidcSecurityService = {
+      checkAuth: jest.fn(),
+      authorizeWithPopUp: jest.fn(),
+      logoff: jest.fn()
+    };
 
-    oidcSecurityService.checkAuth.and.returnValue(of({
+    oidcSecurityService.checkAuth.mockReturnValue(of({
       isAuthenticated: true,
       userData: { name: 'John Doe' },
       accessToken: 'dummy-token',
@@ -32,11 +36,18 @@ describe('AuthenticationService', () => {
   });
 
   it('checkAuth should complete without errors', (done) => {
-    oidcSecurityService.checkAuth.and.returnValue(of({ isAuthenticated: true, userData: {}, accessToken: '', idToken: '' }));
+    oidcSecurityService.checkAuth.mockReturnValue(of({
+      isAuthenticated: true,
+      userData: {},
+      accessToken: '',
+      idToken: ''
+    }));
 
     service.checkAuth().subscribe({
       next: () => {},
-      error: () => fail('checkAuth should not have failed'),
+      error: () => {
+        fail('checkAuth should not have failed');
+      },
       complete: () => done()
     });
   });
@@ -46,4 +57,3 @@ describe('AuthenticationService', () => {
     expect(oidcSecurityService.logoff).toHaveBeenCalled();
   });
 });
-
