@@ -22,12 +22,14 @@ module.exports = {
       "!<rootDir>/test/",
       "!src/app/**/*.module.ts",
     ],
-
+    transformIgnorePatterns: [
+      '/node_modules/(?!@stencil|stencil)/'
+    ],
     testPathIgnorePatterns: [
-        '/node_modules/',
+        '/node_modules/', 
         '/dist/',
-        '/src/app/components/',
-        // '/src/app/interceptors',
+        // '/src/app/components/',
+        '/src/app/interceptors',
         '/src/app/interfaces',
         '/src/app/pages',
         '/src/app/services',
