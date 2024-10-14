@@ -39,14 +39,14 @@ describe('BarcodeScannerComponent', () => {
 
   it('should emit qrCode when onCodeResult is called', () => {
     const testString = 'test QR code';
-    spyOn(component.qrCode, 'emit');
+    jest.spyOn(component.qrCode, 'emit');
     component.onCodeResult(testString);
     expect(component.qrCode.emit).toHaveBeenCalledWith(testString);
   });
 
   it('should emit availableDevices when onCamerasFound is called', () => {
     const testDevices = [{ deviceId: '1', kind: 'videoinput', label: 'Camera 1', groupId: 'group1', toJSON: () => {} }];
-    spyOn(component.availableDevices, 'emit');
+    jest.spyOn(component.availableDevices, 'emit');
     component.onCamerasFound(testDevices as MediaDeviceInfo[]);
     expect(component.availableDevices.emit).toHaveBeenCalledWith(testDevices as MediaDeviceInfo[]);
   });
