@@ -12,6 +12,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { Storage } from '@ionic/storage-angular';
+import { CallbackPage } from '../callback/callback.page';
 
 describe('CredentialsPage', () => {
   let component: CredentialsPage;
@@ -47,7 +48,7 @@ describe('CredentialsPage', () => {
       imports: [
         IonicModule.forRoot(),
         TranslateModule.forRoot(),
-        RouterTestingModule,
+        RouterTestingModule.withRoutes([{path:'tabs/vc-selector', component:CallbackPage}]),
         HttpClientTestingModule
       ],
       providers: [
@@ -83,16 +84,22 @@ describe('CredentialsPage', () => {
   });
 
   it('should copy "did-text" to clipboard when copyToClipboard is called with "did-text"', async () => {
-    jest.spyOn(navigator.clipboard, 'writeText');
 
+    Object.assign(navigator, {
+      clipboard: {
+        writeText: jest.fn(),
+      },
+    });
+  
     const didText = 'DID: exampleDid';
     const expectedClipboardContent = 'exampleDid';
     document.body.innerHTML = `<div id="did-text">${didText}</div>`;
-
+  
     await component.copyToClipboard('did-text');
-
+  
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expectedClipboardContent);
   });
+  
 
   it('should handle error gracefully if clipboard API fails', async () => {
     jest.spyOn(navigator.clipboard, 'writeText').mockRejectedValue('Test error');
