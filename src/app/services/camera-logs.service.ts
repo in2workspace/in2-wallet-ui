@@ -82,12 +82,9 @@ export class CameraLogsService {
     window.open(mailtoLink, '_blank');
   }
 
-  constructor() {
-  }
-
 }
 
-function timestampUntilMinutes(){
+export function timestampUntilMinutes(){
   const timeStamp = new Date();
   return timeStamp.getFullYear() + "-" +
     String(timeStamp.getMonth() + 1).padStart(2, '0') + "-" +

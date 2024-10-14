@@ -29,10 +29,10 @@ module.exports = {
         '/node_modules/', 
         '/dist/',
         'src/app/guards',
-        '/src/app/components/(?!barcode)',
+        '/src/app/components/',
         '/src/app/interceptors',
         '/src/app/interfaces',
-        '/src/app/pages',
-        '/src/app/services/',
+        '/src/app/pages/',
+        '/src/app/services/(?!camera-logs)',
       ]
   };

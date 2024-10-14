@@ -16,23 +16,32 @@ import { Storage } from '@ionic/storage-angular';
 describe('CredentialsPage', () => {
   let component: CredentialsPage;
   let fixture: ComponentFixture<CredentialsPage>;
-  let walletServiceSpy: jasmine.SpyObj<WalletService>;
-  let websocketServiceSpy: jasmine.SpyObj<WebsocketService>;
+  let walletServiceSpy: jest.Mocked<WalletService>;
+  let websocketServiceSpy: jest.Mocked<WebsocketService>;
   let httpTestingController: HttpTestingController;
   let router: Router;
 
   const TIME_IN_MS = 10000;
 
   beforeEach(waitForAsync(() => {
-    walletServiceSpy = jasmine.createSpyObj('WalletService', ['getAllVCs', 'requestCredential', 'deleteVC', 'executeContent']);
-    websocketServiceSpy = jasmine.createSpyObj('WebsocketService', ['connect']);
-    const dataServiceSpyObj = jasmine.createSpyObj('DataService', ['listenDid']);
-    const authServiceSpyObj = jasmine.createSpyObj('AuthenticationService', ['getName']);
-    walletServiceSpy.requestCredential.and.returnValue(of({} as any));
+    walletServiceSpy = {
+      getAllVCs: jest.fn(),
+      requestCredential: jest.fn().mockReturnValue(of({} as any)),
+      deleteVC: jest.fn(),
+      executeContent: jest.fn().mockReturnValue(of({} as any))
+    } as unknown as jest.Mocked<WalletService>;
 
-    dataServiceSpyObj.listenDid.and.returnValue(of('someDidValue'));
-    walletServiceSpy.executeContent.and.returnValue(of({} as any));
-    walletServiceSpy.requestCredential.and.returnValue(of({} as any));
+    websocketServiceSpy = {
+      connect: jest.fn()
+    } as unknown as jest.Mocked<WebsocketService>;
+
+    const dataServiceSpyObj = {
+      listenDid: jest.fn().mockReturnValue(of('someDidValue'))
+    } as unknown as jest.Mocked<DataService>;
+
+    const authServiceSpyObj = {
+      getName: jest.fn()
+    } as unknown as jest.Mocked<AuthenticationService>;
 
     TestBed.configureTestingModule({
       imports: [
@@ -62,20 +71,19 @@ describe('CredentialsPage', () => {
     router = TestBed.inject(Router);
   }));
 
-
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
   it('should enable scan mode when scan is called', () => {
     component.scan();
-    expect(component.toggleScan).toBeTrue();
-    expect(component.show_qr).toBeTrue();
-    expect(component.ebsiFlag).toBeFalse();
+    expect(component.toggleScan).toBe(true);
+    expect(component.show_qr).toBe(true);
+    expect(component.ebsiFlag).toBe(false);
   });
 
   it('should copy "did-text" to clipboard when copyToClipboard is called with "did-text"', async () => {
-    spyOn(navigator.clipboard, 'writeText');
+    jest.spyOn(navigator.clipboard, 'writeText');
 
     const didText = 'DID: exampleDid';
     const expectedClipboardContent = 'exampleDid';
@@ -87,8 +95,8 @@ describe('CredentialsPage', () => {
   });
 
   it('should handle error gracefully if clipboard API fails', async () => {
-    spyOn(navigator.clipboard, 'writeText').and.rejectWith('Test error');
-    spyOn(console, 'error');
+    jest.spyOn(navigator.clipboard, 'writeText').mockRejectedValue('Test error');
+    jest.spyOn(console, 'error').mockImplementation(() => {});
 
     const didTextContent = 'DID: exampleDid';
     document.body.innerHTML = `<div id="did-text">${didTextContent}</div>`;
@@ -100,8 +108,6 @@ describe('CredentialsPage', () => {
 
   it('should generate credential when generateCred is called', () => {
     const mockCredentialOfferUri = 'mockCredentialOfferUri';
-
-    walletServiceSpy.requestCredential.and.returnValue(of());
 
     component.credentialOfferUri = mockCredentialOfferUri;
     component.generateCred();
@@ -115,9 +121,7 @@ describe('CredentialsPage', () => {
         "@context": ["https://www.w3.org/ns/credentials/v2"],
         "id": "1",
         "type": ["VerifiableCredential", "SomeType"],
-        "issuer": {
-          "id": "issuerId1"
-        },
+        "issuer": { "id": "issuerId1" },
         "issuanceDate": "2021-01-01T00:00:00Z",
         "validFrom": "2021-01-01T00:00:00Z",
         "expirationDate": "2025-12-31T23:59:59Z",
@@ -159,7 +163,7 @@ describe('CredentialsPage', () => {
       }
     ];
 
-    walletServiceSpy.getAllVCs.and.returnValue(of(mockCredList));
+    walletServiceSpy.getAllVCs.mockReturnValue(of(mockCredList));
 
     component.refresh();
     tick();
@@ -167,15 +171,12 @@ describe('CredentialsPage', () => {
     expect(component.credList).toEqual(mockCredList.reverse());
   }));
 
-
   it('vcDelete should call deleteVC on the wallet service with the correct ID and refresh the list', () => {
     const testCredential: VerifiableCredential = {
       "@context": ["https://www.w3.org/ns/credentials/v2"],
       "id": "testCredentialId",
       "type": ["VerifiableCredential", "SomeType"],
-      "issuer": {
-        "id": "issuerId1"
-      },
+      "issuer": { "id": "issuerId1" },
       "issuanceDate": "2024-04-02T09:23:22.637345122Z",
       "validFrom": "2024-04-02T09:23:22.637345122Z",
       "expirationDate": "2025-04-02T09:23:22.637345122Z",
@@ -216,23 +217,22 @@ describe('CredentialsPage', () => {
       status: CredentialStatus.ISSUED
     };
 
-    walletServiceSpy.deleteVC.and.returnValue(of('Success'));
-    spyOn(component, 'refresh');
+    walletServiceSpy.deleteVC.mockReturnValue(of('Success'));
+    jest.spyOn(component, 'refresh');
     component.vcDelete(testCredential);
     expect(walletServiceSpy.deleteVC).toHaveBeenCalledWith(testCredential.id);
     expect(component.refresh).toHaveBeenCalled();
   });
 
-
   it('ngOnInit should initialize component properties and call refresh', () => {
-    spyOn(component, 'refresh');
+    jest.spyOn(component, 'refresh');
     component.ngOnInit();
-    expect(component.scaned_cred).toBeFalse();
+    expect(component.scaned_cred).toBe(false);
     expect(component.refresh).toHaveBeenCalled();
   });
 
   it('qrCodeEmit should process QR code and potentially change state or call services', fakeAsync(() => {
-    spyOn(router, 'navigate');
+    jest.spyOn(router, 'navigate');
     const testQrCode = "someTestQrCode";
     component.qrCodeEmit(testQrCode);
     tick();
@@ -241,48 +241,30 @@ describe('CredentialsPage', () => {
   }));
 
   it('should handle alert Cancel correctly', fakeAsync(() => {
-    let alertController = TestBed.inject(AlertController);
-    spyOn(alertController, 'create').and.returnValue(Promise.resolve({
+    const alertController = TestBed.inject(AlertController);
+    jest.spyOn(alertController, 'create').mockResolvedValue({
       present: () => Promise.resolve(),
       buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          handler: () => {}
-        },
-        {
-          text: 'Aceptar',
-          handler: () => {}
-        }
+        { text: 'Cancelar', role: 'cancel', handler: () => {} },
+        { text: 'Aceptar', handler: () => {} }
       ]
-    } as any));
+    } as any);
 
     component.credentialClick();
     tick();
   }));
 
   it('should handle alert Accept correctly', fakeAsync(() => {
-    let alertController = TestBed.inject(AlertController);
-    spyOn(alertController, 'create').and.returnValue(Promise.resolve({
+    const alertController = TestBed.inject(AlertController);
+    jest.spyOn(alertController, 'create').mockResolvedValue({
       present: () => Promise.resolve(),
       buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          handler: () => {}
-        },
-        {
-          text: 'Aceptar',
-          handler: () => {
-          }
-        }
+        { text: 'Cancelar', role: 'cancel', handler: () => {} },
+        { text: 'Aceptar', handler: () => {} }
       ]
-    } as any));
+    } as any);
 
     component.credentialClick();
     tick();
   }));
-
-
-
 });
