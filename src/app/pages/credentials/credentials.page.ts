@@ -89,7 +89,11 @@ export class CredentialsPage implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (credentialListResponse: VerifiableCredential[]) => {
-        this.credList = credentialListResponse.slice().reverse();
+          this.router.navigate(['/tabs/vc-selector/'], {
+            queryParams: {
+              credentialListResponse: JSON.stringify(credentialListResponse),
+            },
+          });
       },
         error: (err: Error) => {
           console.log(err);
