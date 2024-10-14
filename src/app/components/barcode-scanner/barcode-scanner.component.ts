@@ -88,14 +88,17 @@ export class BarcodeScannerComponent implements OnInit {
       if(message==="@zxing/ngx-scanner"){
         const logMessage = formatLogMessage(message, optionalParams);
         const err = new Error(logMessage);
+
         if(optionalParams[0]==="Can't get user media, this is not supported."){
           alert("Error: " + optionalParams[0]);
           this.saveErrorLog(err, 'noMediaError');
+        }else{
+          alert("Error: There was an error when trying to connect to the camera. It might be a permission error.");
+          this.saveErrorLog(err, 'undefinedError');
         }
-        alert("Error: There was an error when trying to connect to the camera. It might be a permission error.");
-        this.saveErrorLog(err, 'undefinedError');
+      }else{
+        this.originalConsoleError(message, ...optionalParams);
       }
-      this.originalConsoleError(message, ...optionalParams);
      };
   }
 
@@ -138,7 +141,7 @@ export class BarcodeScannerComponent implements OnInit {
   }
 }
 
-function formatLogMessage(message: any, optionalParams: any[]): string {
+export function formatLogMessage(message: any, optionalParams: any[]): string {
   const optionalParam1 = optionalParams.length > 0 ? optionalParams[0] : '';
   const optionalParam2 = optionalParams.length > 1 ? optionalParams[1] : '';
   return `${String(message)}. ${String(optionalParam1)} ${String(optionalParam2)}`;

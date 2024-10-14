@@ -28,7 +28,8 @@ module.exports = {
     testPathIgnorePatterns: [
         '/node_modules/', 
         '/dist/',
-        '/src/app/components/',
+        'src/app/guards',
+        '/src/app/components/(?!barcode)',
         '/src/app/interceptors',
         '/src/app/interfaces',
         '/src/app/pages',
