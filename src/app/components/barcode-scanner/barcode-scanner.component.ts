@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   Component,
   Output,
@@ -12,16 +13,18 @@ import {
   BehaviorSubject,
   Observable,
   distinctUntilChanged,
+  filter,
   map,
   shareReplay,
 } from 'rxjs';
 import { CameraService } from 'src/app/services/camera.service';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-barcode-scanner',
   templateUrl: './barcode-scanner.component.html',
   standalone: true,
-  imports: [CommonModule, ZXingScannerModule],
+  imports: [CommonModule, ZXingScannerModule, RouterModule],
 })
 export class BarcodeScannerComponent implements OnInit {
   @Output() public availableDevices: EventEmitter<MediaDeviceInfo[]> =
@@ -52,7 +55,16 @@ export class BarcodeScannerComponent implements OnInit {
     );
 
   public scanSuccess$ = new BehaviorSubject<string>('');
-  public constructor(private cameraService: CameraService) {}
+  public constructor(private cameraService: CameraService, private router: Router) {
+    this.router.events
+    .pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntilDestroyed()
+    )
+    .subscribe((event: NavigationEnd) => {
+      this.scanner.reset();
+    });
+  }
   public ngOnInit(): void {
     setTimeout(() => {
       this.cameraService.updateCamera();
