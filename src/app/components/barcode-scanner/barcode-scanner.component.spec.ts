@@ -122,6 +122,13 @@ describe('BarcodeScannerComponent', () => {
     expect(selectedDevice.deviceId).toBe('');
   }));
 
+  it('should save error log in saveErrorLog', () => {
+    const testError = new Error('Test error');
+    const testExceptionType: CameraLogType = 'undefinedError';
+    component.saveErrorLog(testError, testExceptionType);
+    expect(mockCameraLogsService.addCameraLog).toHaveBeenCalledWith(testError, testExceptionType);
+  });
+
   it('should save error log when onScanError is called', () => {
     const testError = new Error('Test scan error');
     jest.spyOn(component, 'saveErrorLog');
@@ -143,13 +150,6 @@ describe('BarcodeScannerComponent', () => {
     tick(3000);
     expect(saveErrorSpy).toHaveBeenCalledWith(expect.any(Error), 'scanFailure');
   }));
-
-  it('should save error log in saveErrorLog', () => {
-    const testError = new Error('Test error');
-    const testExceptionType: CameraLogType = 'undefinedError';
-    component.saveErrorLog(testError, testExceptionType);
-    expect(mockCameraLogsService.addCameraLog).toHaveBeenCalledWith(testError, testExceptionType);
-  });
 
   it('should restore original console.error when ngOnDestroy is called', () => {
     (component as any).originalConsoleError = console.error;
