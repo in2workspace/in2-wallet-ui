@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Translations
 - Multiple Vcs send.
+- Camera is deactivated when leaving scanner page.
 ### Added
 - Pop up error message on unsuccessful login.
 ### Updated
