@@ -69,7 +69,7 @@ export class BarcodeScannerComponent implements OnInit {
   public constructor(
     private readonly cameraService: CameraService,
     private readonly cameraLogsService: CameraLogsService, private router: Router) {
-      // Requires debounce since the error is emitted constantly
+      // Requires debounce since this type of error is emitted constantly
       this.scanFailureSubject.pipe(
         distinctUntilChanged((
           a, b) => 

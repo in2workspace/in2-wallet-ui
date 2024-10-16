@@ -16,5 +16,8 @@
         "send": "Enviar Logs",
         "camera": "Logs de càmera"
     },
+    "camera-logs-selector": {
+        "title": "Logs de cámera"
+    },
     "":""
 }

@@ -171,31 +171,31 @@ describe('BarcodeScannerComponent', () => {
   }));
 });
 
-// describe('formatLogMessage', () => {
-//   it('should format message with no optional params', () => {
-//     const message = 'Test message';
-//     const result = formatLogMessage(message, []);
-//     expect(result).toBe('Test message.  ');
-//   });
+describe('formatLogMessage', () => {
+  it('should format message with no optional params', () => {
+    const message = 'Test message';
+    const result = formatLogMessage(message, []);
+    expect(result).toBe('Test message.  ');
+  });
 
-//   it('should format message with one optional param', () => {
-//     const message = 'Test message';
-//     const optionalParams = ['Param1'];
-//     const result = formatLogMessage(message, optionalParams);
-//     expect(result).toBe('Test message. Param1 ');
-//   });
+  it('should format message with one optional param', () => {
+    const message = 'Test message';
+    const optionalParams = ['Param1'];
+    const result = formatLogMessage(message, optionalParams);
+    expect(result).toBe('Test message. Param1 ');
+  });
 
-//   it('should format message with two optional params', () => {
-//     const message = 'Test message';
-//     const optionalParams = ['Param1', 'Param2'];
-//     const result = formatLogMessage(message, optionalParams);
-//     expect(result).toBe('Test message. Param1 Param2');
-//   });
+  it('should format message with two optional params', () => {
+    const message = 'Test message';
+    const optionalParams = ['Param1', 'Param2'];
+    const result = formatLogMessage(message, optionalParams);
+    expect(result).toBe('Test message. Param1 Param2');
+  });
 
-//   it('should handle non-string message and params by converting them to strings', () => {
-//     const message = 12345;
-//     const optionalParams = [true, { key: 'value' }];
-//     const result = formatLogMessage(message, optionalParams);
-//     expect(result).toBe('12345. true [object Object]');
-//   });
-// });
+  it('should handle non-string message and params by converting them to strings', () => {
+    const message = 12345;
+    const optionalParams = [true, { key: 'value' }];
+    const result = formatLogMessage(message, optionalParams);
+    expect(result).toBe('12345. true [object Object]');
+  });
+});

@@ -4,6 +4,7 @@ import { InfiniteScrollCustomEvent, IonicModule } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { Storage } from '@ionic/storage-angular';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('CameraLogsPage', () => {
   let component: CameraLogsPage;
@@ -16,7 +17,7 @@ describe('CameraLogsPage', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [IonicModule, DatePipe],
+      imports: [IonicModule, DatePipe, TranslateModule.forRoot()],
       providers: [
         { provide: CameraLogsService, useValue: mockCameraLogsService },
         Storage

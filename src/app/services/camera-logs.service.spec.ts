@@ -90,6 +90,26 @@ describe('CameraLogsService', () => {
         expect.any(String) 
       );
     });
+
+    it('should not exceed 50 logs when adding a new log', async () => {
+      const mockLogs: CameraLog[] = Array.from({ length: 50 }, (_, i) => ({
+        type: 'scanError',
+        message: `Test log ${i + 1}`,
+        date: '2024-01-01 12:00'
+      }));
+      storageServiceMock.get.mockResolvedValueOnce(JSON.stringify(mockLogs));
+      storageServiceMock.set.mockResolvedValueOnce(null);
+  
+      await service.addCameraLog(new Error('New error'), 'scanError');
+
+      const lastCallArgs = storageServiceMock.set.mock.calls[0][1];
+      const logs = JSON.parse(lastCallArgs);
+  
+      expect(logs.length).toBe(50);
+  
+      expect(logs[0].message).toBe('Test log 2');
+      expect(logs[logs.length - 1].message).toBe('New error');
+    });
   });
 
   describe('sendCameraLogs', () => {

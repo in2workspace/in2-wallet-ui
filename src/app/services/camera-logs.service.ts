@@ -45,6 +45,11 @@ export class CameraLogsService {
   
     const storedLogs = await this.getCameraLogs();
     const updatedLogs = [...storedLogs, log];
+
+    if(storedLogs.length >= 50){
+      updatedLogs.splice(0, updatedLogs.length - 50);
+    }
+
   
     await this.storageService.set(LOGS_PREFIX, JSON.stringify(updatedLogs));
     this.setCameraLogs(updatedLogs);

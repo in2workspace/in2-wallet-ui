@@ -3,13 +3,14 @@ import { CameraLogsService } from '../../../services/camera-logs.service';
 import { Component, inject, OnInit } from '@angular/core';
 import { IonicModule, InfiniteScrollCustomEvent  } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-view-logs',
   templateUrl: './camera-logs.page.html',
   styleUrls: ['./camera-logs.page.scss'],
   standalone: true,
-  imports:[ IonicModule, DatePipe]
+  imports:[ IonicModule, DatePipe, TranslateModule]
 })
 export class CameraLogsPage implements OnInit {
   private readonly cameraLogsService = inject(CameraLogsService);

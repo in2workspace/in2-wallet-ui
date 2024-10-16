@@ -1,5 +1,8 @@
 <ion-content [fullscreen]="true" class="background-content">
-  <ion-list class="settings-list">
+  <b class="pages_titles">
+    {{"camera-logs-selector.title"|translate}}
+  </b>
+  <ion-list class="logs-list">
     @for(log of displayedLogs; track $index){
       <ion-item>
         <ion-grid>
