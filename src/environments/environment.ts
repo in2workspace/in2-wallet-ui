@@ -22,5 +22,5 @@ export const environment = {
   },
   websocket_uri: '/api/v1/pin',
   LOGS_EMAIL: "domesupport@in2.es",
-  logs_enabled: true
+  logs_enabled: false
 };

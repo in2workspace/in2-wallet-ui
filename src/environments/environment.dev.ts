@@ -23,5 +23,5 @@ export const environment = {
   },
   websocket_uri: window["env"]["websocket_uri"] || '/api/v2/pin',
   LOGS_EMAIL: "domesupport@in2.es",
-  logs_enabled: window["env"]["logs_enabled"] || true
+  logs_enabled: window["env"]["logs_enabled"] || false
 };
