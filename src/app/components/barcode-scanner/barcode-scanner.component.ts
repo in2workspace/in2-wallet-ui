@@ -1,5 +1,6 @@
 import { CameraLogsService } from './../../services/camera-logs.service';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   Component,
   Output,
@@ -15,11 +16,13 @@ import {
   Subject,
   debounceTime,
   distinctUntilChanged,
+  filter,
   map,
   shareReplay,
 } from 'rxjs';
 import { CameraLogType } from 'src/app/interfaces/camera-log';
 import { CameraService } from 'src/app/services/camera.service';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 
 // ! Since console.error is intercepted (to capture the error already caught by zxing), be careful to avoid recursion
 // ! (i.e., console.error should not be called within the execution flow of another console.error)
@@ -29,7 +32,7 @@ import { CameraService } from 'src/app/services/camera.service';
   selector: 'app-barcode-scanner',
   templateUrl: './barcode-scanner.component.html',
   standalone: true,
-  imports: [CommonModule, ZXingScannerModule],
+  imports: [CommonModule, ZXingScannerModule, RouterModule],
 })
 export class BarcodeScannerComponent implements OnInit {
   @Output() public availableDevices: EventEmitter<MediaDeviceInfo[]> =
@@ -65,7 +68,7 @@ export class BarcodeScannerComponent implements OnInit {
   public scanSuccess$ = new BehaviorSubject<string>('');
   public constructor(
     private readonly cameraService: CameraService,
-    private readonly cameraLogsService: CameraLogsService) {
+    private readonly cameraLogsService: CameraLogsService, private router: Router) {
       // Requires debounce since the error is emitted constantly
       this.scanFailureSubject.pipe(
         distinctUntilChanged((
@@ -74,7 +77,16 @@ export class BarcodeScannerComponent implements OnInit {
         debounceTime(this.scanFailureDebounceDelay)
       ).subscribe(err=>{
         this.saveErrorLog(err, 'scanFailure');
-      })
+      });
+
+      this.router.events
+    .pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntilDestroyed()
+    )
+    .subscribe((event: NavigationEnd) => {
+      this.scanner.reset();
+    });
     }
   public ngOnInit(): void {
     setTimeout(() => {

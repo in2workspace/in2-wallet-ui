@@ -2,16 +2,21 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { CommonModule } from '@angular/common';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { CameraService } from 'src/app/services/camera.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { BarcodeScannerComponent, formatLogMessage } from './barcode-scanner.component';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { Storage } from '@ionic/storage-angular';
 import { Exception } from '@zxing/library';
 import { CameraLogType } from 'src/app/interfaces/camera-log';
+import { NavigationEnd, Router } from '@angular/router';
 
 class MockCameraService {
   updateCamera(): void {}
   navCamera$ = new BehaviorSubject<any>({ deviceId: '' });
+}
+
+class MockRouter {
+  public events = new Subject<any>();
 }
 
 describe('BarcodeScannerComponent', () => {
@@ -19,18 +24,22 @@ describe('BarcodeScannerComponent', () => {
   let fixture: ComponentFixture<BarcodeScannerComponent>;
   let mockCameraService: MockCameraService;
   let mockCameraLogsService: CameraLogsService;
+  let mockRouter: MockRouter;
 
   beforeEach(async () => {
     mockCameraService = new MockCameraService();
     mockCameraLogsService = {
       addCameraLog: jest.fn()
     } as any;
+    mockRouter = new MockRouter();
 
     await TestBed.configureTestingModule({
       imports: [CommonModule, ZXingScannerModule],
       providers: [
         { provide: CameraService, useClass: MockCameraService }, 
-        { provide: CameraLogsService, useValue:mockCameraLogsService }, Storage
+        { provide: CameraLogsService, useValue:mockCameraLogsService },
+        { provide: Router, useValue: mockRouter },
+        Storage
       ]
     }).compileComponents();
 
@@ -74,9 +83,6 @@ describe('BarcodeScannerComponent', () => {
     originalConsoleSpy.mockRestore();
   });
   
-  
-  
-
   it('should emit qrCode when onCodeResult is called', () => {
     const testString = 'test QR code';
     jest.spyOn(component.qrCode, 'emit');
@@ -156,6 +162,13 @@ describe('BarcodeScannerComponent', () => {
     component.ngOnDestroy();
     expect(console.error).toBe(console.error);
   });
+
+  it('should reset scanner on NavigationEnd', fakeAsync(() => {
+    jest.spyOn(component.scanner, 'reset'); 
+    mockRouter.events.next(new NavigationEnd(1, 'http://localhost/', 'http://localhost/'));
+    tick();
+    expect(component.scanner.reset).toHaveBeenCalled();
+  }));
 });
 
 // describe('formatLogMessage', () => {
