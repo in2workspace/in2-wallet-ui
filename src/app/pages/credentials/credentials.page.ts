@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
@@ -8,10 +8,12 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { WalletService } from 'src/app/services/wallet.service';
 import { VcViewComponent } from '../../components/vc-view/vc-view.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { DataService } from 'src/app/services/data.service';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 
 const TIME_IN_MS = 3000;
 
@@ -57,7 +59,9 @@ export class CredentialsPage implements OnInit {
   private dataService = inject(DataService);
   private route = inject(ActivatedRoute);
 
-  public constructor(private alertController: AlertController, public translate: TranslateService,) {
+  public constructor(private alertController: AlertController, public translate: TranslateService, 
+    private cdr: ChangeDetectorRef
+  ) {
     this.credOfferEndpoint = window.location.origin + '/tabs/home';
     this.route.queryParams.subscribe((params) => {
       this.toggleScan = params['toggleScan'];
@@ -72,6 +76,19 @@ export class CredentialsPage implements OnInit {
         this.did = data;
       }
     });
+
+    this.router.events
+    .pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntilDestroyed()
+    )
+    .subscribe((event: NavigationEnd) => {
+      if (this.route.snapshot.routeConfig?.path==='credentials' && !event.urlAfterRedirects.startsWith('/tabs/credentials')) {
+        this.untoggleScan();
+        this.cdr.detectChanges();
+      }
+    });
+
   }
 
   public ngOnInit() {

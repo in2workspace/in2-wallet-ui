@@ -29,9 +29,19 @@ export class HomePage implements OnInit {
   public constructor(private router: Router, private route: ActivatedRoute) { }
 
   public async startScan() {
-    this.router.navigate(['/tabs/credentials/'], {
-      queryParams: { toggleScan: true, from: 'home', show_qr: true },
-    });
+    try{
+      console.log('abans await')
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      stream.getTracks().forEach(track => track.stop());
+     console.log('despres await')
+      this.router.navigate(['/tabs/credentials/'], {
+        queryParams: { toggleScan: true, from: 'home', show_qr: true },
+      });
+      return undefined;
+    }catch(err){
+      alert('Error: ' + err);
+    }
+    console.log('fi startScan')
   }
   public handleButtonKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter' || event.key === ' ') {

@@ -62,7 +62,9 @@ export class BarcodeScannerComponent implements OnInit {
       takeUntilDestroyed()
     )
     .subscribe((event: NavigationEnd) => {
-      this.scanner.reset();
+      if (!event.urlAfterRedirects.startsWith('/tabs/credentials')) {
+        this.scanner.reset();
+      }
     });
   }
   public ngOnInit(): void {

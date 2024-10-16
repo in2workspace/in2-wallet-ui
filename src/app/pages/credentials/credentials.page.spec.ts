@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, flush, tick, waitForAsync } from '@angular/core/testing';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { of, Subject } from 'rxjs';
 import { CredentialsPage } from './credentials.page';
 import { WalletService } from 'src/app/services/wallet.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
@@ -12,13 +12,19 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 
+class MockRouter {
+  public events = new Subject<any>();
+  public navigate = (route:string|string[], opt?:{})=>'';
+}
+
+
 describe('CredentialsPage', () => {
   let component: CredentialsPage;
   let fixture: ComponentFixture<CredentialsPage>;
   let walletServiceSpy: jasmine.SpyObj<WalletService>;
   let websocketServiceSpy: jasmine.SpyObj<WebsocketService>;
   let httpTestingController: HttpTestingController;
-  let router: Router;
+  let mockRouter: MockRouter;
 
   const TIME_IN_MS = 10000;
 
@@ -28,6 +34,7 @@ describe('CredentialsPage', () => {
     const dataServiceSpyObj = jasmine.createSpyObj('DataService', ['listenDid']);
     const authServiceSpyObj = jasmine.createSpyObj('AuthenticationService', ['getName']);
     walletServiceSpy.requestCredential.and.returnValue(of({} as any));
+    mockRouter = new MockRouter();
 
     dataServiceSpyObj.listenDid.and.returnValue(of('someDidValue'));
     walletServiceSpy.executeContent.and.returnValue(of({} as any));
@@ -41,6 +48,7 @@ describe('CredentialsPage', () => {
         HttpClientTestingModule
       ],
       providers: [
+        { provide: Router, useValue: mockRouter},
         { provide: WalletService, useValue: walletServiceSpy },
         { provide: WebsocketService, useValue: websocketServiceSpy },
         { provide: DataService, useValue: dataServiceSpyObj },
@@ -49,6 +57,11 @@ describe('CredentialsPage', () => {
           provide: ActivatedRoute,
           useValue: {
             queryParams: of({ credentialOfferUri: 'mockCredentialOfferUri' }),
+            snapshot: {
+              routeConfig: {
+                path: 'credentials'
+              }
+            }
           },
         },
       ],
@@ -57,7 +70,6 @@ describe('CredentialsPage', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(CredentialsPage);
     component = fixture.componentInstance;
-    router = TestBed.inject(Router);
   }));
 
 
@@ -230,12 +242,12 @@ describe('CredentialsPage', () => {
   });
 
   it('qrCodeEmit should process QR code and potentially change state or call services', fakeAsync(() => {
-    spyOn(router, 'navigate');
+    spyOn(mockRouter, 'navigate');
     const testQrCode = "someTestQrCode";
     component.qrCodeEmit(testQrCode);
     tick();
 
-    expect(router.navigate).toHaveBeenCalledWith(['/tabs/vc-selector/'], { queryParams: { executionResponse: JSON.stringify({}) } });
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/tabs/vc-selector/'], { queryParams: { executionResponse: JSON.stringify({}) } });
   }));
 
   it('should handle alert Cancel correctly', fakeAsync(() => {
@@ -282,5 +294,38 @@ describe('CredentialsPage', () => {
   }));
 
 
+  // it('should untoggle scan and call detectChanges when navigation is outside /tabs/credentials', fakeAsync(() => {
+  //   const mockNavigationEndEvent = new NavigationEnd(42, '/tabs/credentials', '/new-url/tabs/other-section');
+  //   walletServiceSpy.getAllVCs.and.returnValue(of([])); //si no dona error
+
+  //   const untoggleScanSpy = spyOn(component, 'untoggleScan');
+  //   const detectChangesSpy = spyOn(component['cdr'], 'detectChanges');
+   
+  //   mockRouter.events.next(mockNavigationEndEvent);
+ 
+  //   fixture.detectChanges();
+  //   // tick();
+  //   flush();
+ 
+  //   expect(untoggleScanSpy).toHaveBeenCalled();
+  //   expect(detectChangesSpy).toHaveBeenCalled();
+  // }));
+
+
+  // it('should not untoggle scan if the destination starts with /tabs/credentials', fakeAsync(() => {
+  //   const mockNavigationEndEvent = new NavigationEnd(42, '/tabs/credentials', '/tabs/credentials/some-subroute');
+  //   walletServiceSpy.getAllVCs.and.returnValue(of([])); //si no dona error
+  //   const untoggleScanSpy = spyOn(component, 'untoggleScan');
+  //   const detectChangesSpy = spyOn(component['cdr'], 'detectChanges');
+   
+  //   spyOn(mockRouter.events, 'pipe').and.returnValue(of(mockNavigationEndEvent));
+ 
+  //   fixture.detectChanges();
+  //   // tick();
+  //   flush();
+ 
+  //   expect(untoggleScanSpy).not.toHaveBeenCalled();
+  //   expect(detectChangesSpy).not.toHaveBeenCalled();
+  // }));
 
 });
