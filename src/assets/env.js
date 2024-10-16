@@ -19,6 +19,6 @@
   window["env"]["users_uri"] = '/api/v2/users';
   window["env"]["ebsi_did_uri"] = '/api/v2/ebsi-did';
   window["env"]["cbor_uri"] = '/api/v2/vp/cbor';
-  window["env"]["logs_enabled"] = "false"
+  window["env"]["logs_enabled"] = "true"
 
 })(this);

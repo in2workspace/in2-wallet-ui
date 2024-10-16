@@ -1,6 +1,6 @@
 <ion-content [fullscreen]="true" class="background-content">
   <ion-list class="settings-list">
-    @for(log of cameraLogs; track $index){
+    @for(log of displayedLogs; track $index){
       <ion-item>
         <ion-grid>
           <ion-row>
@@ -19,7 +19,19 @@
     }@empty {
       <div>No camera logs to show.</div>
     }
+    @if(cameraLogs.length === displayedLogs.length && cameraLogs.length>0){
+      <ng-container>
+        <div>No more camera logs to load.</div>
+      </ng-container>
+      <ion-item-divider></ion-item-divider>
+    } 
   </ion-list>
+
+  <!-- Infinite Scroll -->
+  <ion-infinite-scroll [threshold]="scrollThreshold" (ionInfinite)="loadLogs($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more logs...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
 
      
