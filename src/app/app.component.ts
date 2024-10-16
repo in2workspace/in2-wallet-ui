@@ -21,6 +21,7 @@ import { Observable } from 'rxjs';
     TranslateModule,
   ],
 })
+
 export class AppComponent implements OnInit {
   public userName: Observable<string> | undefined;
   private authenticationService = inject(AuthenticationService);
@@ -38,21 +39,25 @@ export class AppComponent implements OnInit {
       else this.storageService.set('language', 'en');
     });
   }
+
   public ngOnInit(): void {
     this.userName = this.authenticationService.getName();
   }
+
   public logout() {
     this.authenticationService.logout().subscribe(() => {
       this.router.navigate(['/home'], {});
     });
   }
+
   public handleKeydown(event: KeyboardEvent, action = 'request') {
     if (event.key === 'Enter' || event.key === ' ') {
         this.openPopover(event);
-      
+
       event.preventDefault();
     }
   }
+
   public async openPopover(ev: Event) {
     const popover = await this.popoverController.create({
       component: LogoutPage,
@@ -63,4 +68,5 @@ export class AppComponent implements OnInit {
 
     await popover.present();
   }
+
 }

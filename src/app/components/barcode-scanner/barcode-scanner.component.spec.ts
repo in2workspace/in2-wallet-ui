@@ -2,25 +2,32 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { CommonModule } from '@angular/common';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { CameraService } from 'src/app/services/camera.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { BarcodeScannerComponent } from './barcode-scanner.component';
+import { NavigationEnd, Router } from '@angular/router';
 
 class MockCameraService {
   updateCamera(): void {}
   navCamera$ = new BehaviorSubject<any>({ deviceId: '' });
 }
 
+class MockRouter {
+  public events = new Subject<any>();
+}
+
 describe('BarcodeScannerComponent', () => {
   let component: BarcodeScannerComponent;
   let fixture: ComponentFixture<BarcodeScannerComponent>;
   let mockCameraService: MockCameraService;
+  let mockRouter: MockRouter;
 
   beforeEach(async () => {
     mockCameraService = new MockCameraService();
+    mockRouter = new MockRouter();
 
     await TestBed.configureTestingModule({
       imports: [CommonModule, ZXingScannerModule],
-      providers: [{ provide: CameraService, useClass: MockCameraService }]
+      providers: [{ provide: Router, useValue: mockRouter }, { provide: CameraService, useClass: MockCameraService }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(BarcodeScannerComponent);
@@ -75,5 +82,14 @@ describe('BarcodeScannerComponent', () => {
     tick();
 
     expect(selectedDevice.deviceId).toBe('');
+  }));
+
+  it('should reset scanner on NavigationEnd', fakeAsync(() => {
+    spyOn(component.scanner, 'reset'); 
+
+    mockRouter.events.next(new NavigationEnd(1, 'http://localhost/', 'http://localhost/'));
+    tick();
+
+    expect(component.scanner.reset).toHaveBeenCalled();
   }));
 });

@@ -27,9 +27,9 @@ Pull requests are the best way to propose changes to the codebase. We actively w
 
 As we want your work to be as open and accessible as others in the project.
 
-## Report bugs using GitHub's [Issues](https://github.com/in2workspace/in2-issuer-ui/in2-wallet-api/issues)
+## Report bugs using GitHub's [Issues](https://github.com/in2workspace/in2-wallet-ui/issues)
 
-We use GitHub issues to track public bugs. Report a bug by [opening a new issue](https://github.com/in2workspace/in2-issuer-ui/issues/new); it's that easy!
+We use GitHub issues to track public bugs. Report a bug by [opening a new issue](https://github.com/in2workspace/in2-wallet-ui/issues/new); it's that easy!
 
 ## Write Bug Reports With Detail, Background, and Sample Code
 
