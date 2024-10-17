@@ -72,11 +72,11 @@
     },
     "logs-selector": {
         "title": "Ver logs",
-        "send": "Enviar Logs",
+        "send": "Enviar logs",
         "camera": "Logs de cámara"
     },
     "camera-logs-selector": {
-        "title": "Logs de cámera"
+        "title": "Logs de cámara"
     },
     "login":{
         "title":"Login",

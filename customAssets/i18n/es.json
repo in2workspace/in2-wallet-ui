@@ -12,12 +12,12 @@
     "settings":"Ajustes",
     "logout":"Logout"},
     "logs-selector": {
-        "title": "Veure Logs",
-        "send": "Enviar Logs",
-        "camera": "Logs de càmera"
+        "title": "Ver logs",
+        "send": "Enviar logs",
+        "camera": "Logs de cámara"
     },
     "camera-logs-selector": {
-        "title": "Logs de cámera"
+        "title": "Logs de cámara"
     },
     "":""
 }

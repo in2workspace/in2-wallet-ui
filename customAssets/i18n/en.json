@@ -14,9 +14,9 @@
     "logout":"Logout"
     },
     "logs-selector": {
-        "title": "Veure Logs",
-        "send": "Enviar Logs",
-        "camera": "Logs de càmera"
+        "title": "View logs",
+        "send": "Send logs",
+        "camera": "Camera logs"
     },
     "camera-logs-selector": {
         "title": "Camera logs"

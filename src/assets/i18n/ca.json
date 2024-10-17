@@ -69,8 +69,8 @@
         "title":"Selector d'idioma"
     },
     "logs-selector": {
-        "title": "Veure Logs",
-        "send": "Enviar Logs",
+        "title": "Veure logs",
+        "send": "Enviar logs",
         "camera": "Logs de càmera"
     },
     "camera-logs-selector": {
