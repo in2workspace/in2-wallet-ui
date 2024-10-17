@@ -71,7 +71,7 @@ bootstrapApplication(AppComponent, {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
       multi: true,
-    },
+    }
   ],
 });
 export function httpTranslateLoader(http: HttpClient) {

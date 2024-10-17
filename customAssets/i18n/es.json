@@ -11,5 +11,13 @@
     "faqs":"FAQs",
     "settings":"Ajustes",
     "logout":"Logout"},
+    "logs-selector": {
+        "title": "Ver logs",
+        "send": "Enviar logs",
+        "camera": "Logs de cámara"
+    },
+    "camera-logs-selector": {
+        "title": "Logs de cámara"
+    },
     "":""
 }
