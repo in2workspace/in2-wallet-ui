@@ -17,7 +17,7 @@ export class CameraLogsPage implements OnInit {
 
   public cameraLogs: CameraLog[] = [];
   public displayedLogs: CameraLog[] = [];
-  private logsBatchSize = 10;
+  private readonly logsBatchSize = 10;
   public scrollThreshold = '20%';
   private currentIndex = 0;
 

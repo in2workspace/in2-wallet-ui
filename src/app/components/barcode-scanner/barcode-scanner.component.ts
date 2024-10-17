@@ -68,7 +68,7 @@ export class BarcodeScannerComponent implements OnInit {
   public scanSuccess$ = new BehaviorSubject<string>('');
   public constructor(
     private readonly cameraService: CameraService,
-    private readonly cameraLogsService: CameraLogsService, private router: Router) {
+    private readonly cameraLogsService: CameraLogsService, private readonly router: Router) {
       // Requires debounce since this type of error is emitted constantly
       this.scanFailureSubject.pipe(
         distinctUntilChanged((
@@ -110,11 +110,12 @@ export class BarcodeScannerComponent implements OnInit {
           alert("Error: There was an error when trying to connect to the camera. It might be a permission error.");
           this.saveErrorLog(err, 'undefinedError');
         }
-      }else {
-        if (this.originalConsoleError) {
-          this.originalConsoleError(message, ...optionalParams);
-        }
       }
+
+      if (this.originalConsoleError) {
+        this.originalConsoleError(message, ...optionalParams);
+      }
+      
      };
   }
 
