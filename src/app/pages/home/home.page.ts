@@ -35,7 +35,6 @@ export class HomePage implements OnInit {
       this.router.navigate(['/tabs/credentials/'], {
         queryParams: { toggleScan: true, from: 'home', show_qr: true },
       });
-      return undefined;
     }catch(err){
       alert('Error: ' + err);
     }
