@@ -294,38 +294,31 @@ describe('CredentialsPage', () => {
   }));
 
 
-  // it('should untoggle scan and call detectChanges when navigation is outside /tabs/credentials', fakeAsync(() => {
-  //   const mockNavigationEndEvent = new NavigationEnd(42, '/tabs/credentials', '/new-url/tabs/other-section');
-  //   walletServiceSpy.getAllVCs.and.returnValue(of([])); //si no dona error
+  it('should untoggle scan and call detectChanges when navigation is outside /tabs/credentials', fakeAsync(() => {
+    const mockNavigationEndEvent = new NavigationEnd(42, '/tabs/credentials', '/new-url/tabs/other-section');
+    walletServiceSpy.getAllVCs.and.returnValue(of([]));
 
-  //   const untoggleScanSpy = spyOn(component, 'untoggleScan');
-  //   const detectChangesSpy = spyOn(component['cdr'], 'detectChanges');
+    const untoggleScanSpy = spyOn(component, 'untoggleScan');
+    const detectChangesSpy = spyOn(component['cdr'], 'detectChanges');
    
-  //   mockRouter.events.next(mockNavigationEndEvent);
+    mockRouter.events.next(mockNavigationEndEvent);
  
-  //   fixture.detectChanges();
-  //   // tick();
-  //   flush();
- 
-  //   expect(untoggleScanSpy).toHaveBeenCalled();
-  //   expect(detectChangesSpy).toHaveBeenCalled();
-  // }));
+    expect(untoggleScanSpy).toHaveBeenCalled();
+    expect(detectChangesSpy).toHaveBeenCalled();
+  }));
 
 
-  // it('should not untoggle scan if the destination starts with /tabs/credentials', fakeAsync(() => {
-  //   const mockNavigationEndEvent = new NavigationEnd(42, '/tabs/credentials', '/tabs/credentials/some-subroute');
-  //   walletServiceSpy.getAllVCs.and.returnValue(of([])); //si no dona error
-  //   const untoggleScanSpy = spyOn(component, 'untoggleScan');
-  //   const detectChangesSpy = spyOn(component['cdr'], 'detectChanges');
+  it('should not untoggle scan if the destination starts with /tabs/credentials', fakeAsync(() => {
+    const mockNavigationEndEvent = new NavigationEnd(42, '/tabs/credentials', '/tabs/credentials/some-subroute');
+    walletServiceSpy.getAllVCs.and.returnValue(of([])); //si no dona error
+    const untoggleScanSpy = spyOn(component, 'untoggleScan');
+    const detectChangesSpy = spyOn(component['cdr'], 'detectChanges');
    
-  //   spyOn(mockRouter.events, 'pipe').and.returnValue(of(mockNavigationEndEvent));
+    spyOn(mockRouter.events, 'pipe').and.returnValue(of(mockNavigationEndEvent));
  
-  //   fixture.detectChanges();
-  //   // tick();
-  //   flush();
  
-  //   expect(untoggleScanSpy).not.toHaveBeenCalled();
-  //   expect(detectChangesSpy).not.toHaveBeenCalled();
-  // }));
+    expect(untoggleScanSpy).not.toHaveBeenCalled();
+    expect(detectChangesSpy).not.toHaveBeenCalled();
+  }));
 
 });
