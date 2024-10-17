@@ -110,6 +110,7 @@ export class BarcodeScannerComponent implements OnInit {
           alert("Error: There was an error when trying to connect to the camera. It might be a permission error.");
           this.saveErrorLog(err, 'undefinedError');
         }
+        return;
       }
 
       if (this.originalConsoleError) {
