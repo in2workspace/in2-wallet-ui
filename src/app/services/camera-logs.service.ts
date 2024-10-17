@@ -83,7 +83,7 @@ export class CameraLogsService {
       body: emailBody.trim(),
     };
   
-    const mailtoLink = `mailto:${environment.LOGS_EMAIL}?subject=${encodeURIComponent(msg.subject)}&body=${encodeURIComponent(msg.body)}`;
+    const mailtoLink = `mailto:${environment.logs_email}?subject=${encodeURIComponent(msg.subject)}&body=${encodeURIComponent(msg.body)}`;
     window.open(mailtoLink, '_blank');
   }
 

@@ -21,6 +21,6 @@ export const environment = {
     cbor: '/api/v1/vp/cbor',
   },
   websocket_uri: '/api/v1/pin',
-  LOGS_EMAIL: "domesupport@in2.es",
-  logs_enabled: false
+  logs_enabled: false,
+  logs_email: "domesupport@in2.es"
 };

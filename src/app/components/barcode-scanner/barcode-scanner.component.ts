@@ -63,7 +63,7 @@ export class BarcodeScannerComponent implements OnInit {
     );
     private readonly scanFailureSubject = new Subject<Error>();
     private readonly scanFailureDebounceDelay = 3000;
-    private originalConsoleError: any;
+    private originalConsoleError: undefined|((...data: any[]) => void);
 
   public scanSuccess$ = new BehaviorSubject<string>('');
   public constructor(
@@ -72,8 +72,8 @@ export class BarcodeScannerComponent implements OnInit {
       // Requires debounce since this type of error is emitted constantly
       this.scanFailureSubject.pipe(
         distinctUntilChanged((
-          a, b) => 
-            JSON.stringify(a) === JSON.stringify(b)),
+          previous, current) => 
+            JSON.stringify(previous) === JSON.stringify(current)),
         debounceTime(this.scanFailureDebounceDelay)
       ).subscribe(err=>{
         this.saveErrorLog(err, 'scanFailure');
@@ -96,7 +96,7 @@ export class BarcodeScannerComponent implements OnInit {
     //Redefine console.log to capture the errors that were previously captured by zxing-scanner
      this.originalConsoleError = console.error;
  
-     console.error = (message?: any, ...optionalParams: any[]) => {
+     console.error = (message?: string, ...optionalParams: string[]) => {
       if(message==="@zxing/ngx-scanner"){
         const logMessage = formatLogMessage(message, optionalParams);
         const err = new Error(logMessage);
@@ -108,8 +108,10 @@ export class BarcodeScannerComponent implements OnInit {
           alert("Error: There was an error when trying to connect to the camera. It might be a permission error.");
           this.saveErrorLog(err, 'undefinedError');
         }
-      }else{
-        this.originalConsoleError(message, ...optionalParams);
+      }else {
+        if (this.originalConsoleError) {
+          this.originalConsoleError(message, ...optionalParams);
+        }
       }
      };
   }
@@ -149,7 +151,9 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
   public ngOnDestroy(): void {
-    console.error = this.originalConsoleError;
+    if(this.originalConsoleError){
+      console.error = this.originalConsoleError;
+    }
   }
 }
 

@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 
 jest.mock('src/environments/environment', () => ({
   environment: {
-    LOGS_EMAIL: 'test@example.com' 
+    logs_email: 'test@example.com' 
   }
 }));
 
@@ -136,7 +136,7 @@ describe('CameraLogsService', () => {
   
       const expectedBody = `${encodeURIComponent(JSON.stringify(mockLogs[0]))}%0A${encodeURIComponent(JSON.stringify(mockLogs[1]))}`;
   
-      const expectedMailto = `mailto:${environment.LOGS_EMAIL}?subject=Camera%20Logs&body=${expectedBody}`;
+      const expectedMailto = `mailto:${environment.logs_email}?subject=Camera%20Logs&body=${expectedBody}`;
   
       expect(openSpy).toHaveBeenCalledWith(expectedMailto, '_blank');
     });

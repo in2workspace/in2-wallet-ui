@@ -101,63 +101,6 @@ describe('CredentialsPage', () => {
   });
 
 
-  // TODO
-  // it('should copy "did-text" to clipboard when copyToClipboard is called with "did-text"', fakeAsync(() => {
-
-
-  //   const writeClipboardSpy = jest.spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
-  //   const didText = 'DID: exampleDid';
-  //   const expectedClipboardContent = 'exampleDid';
-  //   document.body.innerHTML = `<div id="did-text">${didText}</div>`;
- 
-  //   component.copyToClipboard('did-text');
-  //   tick();
-  //   expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expectedClipboardContent);
-  // }));
- 
-  // it('should handle error if clipboard API fails', fakeAsync( () => {
-  //   const originalWriteText = navigator.clipboard?.writeText;
-  //   Object.assign(navigator, {
-  //     clipboard: {
-  //       writeText: jest.fn(),
-  //     },
-  //   });
-  //   // Mock the clipboard API to fail
-  //   jest.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new Error);
-  //   jest.spyOn(console, 'error').mockImplementation(() => {});
- 
-  //   // Set up the component state for `did-text` to render
-  //   component.ebsiFlag = true;  // This will conditionally render did-text
-  //   component.did = 'exampleDid';  // This simulates a DID value
- 
-  //   // Trigger Angular to update the DOM
-  //   tick(1000);
-  //   fixture.detectChanges();
- 
-  //   // Get the rendered element from Angular's DOM
-  //   const didTextElement = document.getElementById('did-text');
- 
-  //   // Make sure the element exists and has text
-  //   expect(didTextElement).not.toBeNull();
-  //   expect(didTextElement?.innerHTML?.trim()).toContain('exampleDid');
- 
-  //   // Call the method being tested
-  //   component.copyToClipboard('did-text');
-  //   tick();
- 
-  //   // Check that the error was logged as expected
-  //   expect(console.error).toHaveBeenCalledWith('Error al copiar texto al portapapeles:', 'Test error');
-
-
-  //   Object.assign(navigator, {
-  //     clipboard: {
-  //       writeText: originalWriteText,
-  //     },
-  //   });
-  // }));
- 
-
-
   it('should generate credential when generateCred is called', () => {
     const mockCredentialOfferUri = 'mockCredentialOfferUri';
 
