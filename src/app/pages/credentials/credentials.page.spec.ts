@@ -45,7 +45,7 @@ describe('CredentialsPage', () => {
     } as unknown as jest.Mocked<WalletService>;
 
     websocketServiceSpy = {
-      connect: jest.fn()
+      connect: jest.fn(),
       closeConnection: jest.fn()
     } as unknown as jest.Mocked<WebsocketService>;
 
