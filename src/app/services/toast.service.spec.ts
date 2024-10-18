@@ -4,6 +4,7 @@ import { ToastController } from '@ionic/angular';
 import { TranslateService, TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateFakeLoader } from '@ngx-translate/core';
 import { fakeAsync, tick } from '@angular/core/testing';
+import { of } from 'rxjs';
 const TIME_IN_MS = 3000;
 
 jest.useFakeTimers();
@@ -17,16 +18,16 @@ describe('ToastServiceHandler', () => {
 
   beforeEach(() => {
     translateService = {
-      get: jest.fn()
-    };
-
-    toastCtrl = {
-      create: jest.fn()
+      get: jest.fn().mockImplementation((str:string)=>of(str))
     };
 
     alert = {
-      present: jest.fn(),
-      dismiss: jest.fn()
+      present: jest.fn().mockResolvedValue({val:''}),
+      dismiss: jest.fn().mockResolvedValue({})
+    };
+
+    toastCtrl = {
+      create: jest.fn().mockReturnValue(alert),
     };
 
     TestBed.configureTestingModule({
@@ -36,44 +37,214 @@ describe('ToastServiceHandler', () => {
         }),
       ],
       providers: [
-        { provide: TranslateService, use:translateService },
-        { provide: ToastController, use: toastCtrl },
+        { provide: TranslateService, useValue:translateService },
+        { provide: ToastController, useValue: toastCtrl },
         ToastServiceHandler
       ],
     });
     service = TestBed.inject(ToastServiceHandler);
-    toastCtrl.create.mockResolvedValue(Promise.resolve({}));
     translateSpy = jest.spyOn(translateService, 'get');
   });
+
+//TODO need to check that alert.present and alert.dismiss are called. The problem is that
+//TODO the method is called but toHaveBeenCalled returns erro, either because the reference
+//TODO is lost or due to asynchronic
+
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  //TODO 
-  // it('should display a toast for an error message 1', fakeAsync(() => {
-  //   const errorMessage = "The received QR content cannot be processed";
-  //   service.showErrorAlert(errorMessage).subscribe(() => {});
-  
-  //   tick(TIME_IN_MS);
-  
-  //   expect(translateSpy).toHaveBeenCalled();
-  //   expect(translateSpy).toHaveBeenCalledWith('errors.invalid-qr');
-  // }));
-  //TODO ALTERNATIVA
-  // it('should display a toast for an error message 1', (done) => {
-  //   const errorMessage = "The received QR content cannot be processed";
-  //   service.showErrorAlert(errorMessage).subscribe(() => {
-  //     jest.advanceTimersByTime(TIME_IN_MS);
-  //     expect(translateSpy).toHaveBeenCalled();
-  //     expect(translateSpy).toHaveBeenCalledWith('errors.invalid-qr');
-  //     done();
-  //   });
-  // }, 10000);
-  
-  
-  
+  it('should format message correctly and translate it', fakeAsync(() => {
+    service.showErrorAlert('Any undefined test message');
+    tick();
+    expect(translateSpy).toHaveBeenCalledWith('errors.default');
 
+    service.showErrorAlert("The received QR content cannot be processed");
+    tick();
+    expect(translateSpy).toHaveBeenCalledWith('errors.invalid-qr');
+
+    service.showErrorAlert("Error while fetching credentialOffer from the issuer");
+    tick();
+    expect(translateSpy).toHaveBeenCalledWith("errors.expired-credentialOffer");
+    
+    service.showErrorAlert("Error while deserializing CredentialOffer");
+    tick();
+    expect(translateSpy).toHaveBeenCalledWith("errors.invalid-credentialOffer");
+    
+    service.showErrorAlert("Error while processing Credential Issuer Metadata from the Issuer");
+    tick();
+    expect(translateSpy).toHaveBeenCalledWith("errors.invalid-issuerMetadata");
+    
+    service.showErrorAlert("Error while fetching  Credential from Issuer");
+    tick();
+    expect(translateSpy).toHaveBeenCalledWith("errors.cannot-get-VC");
+
+    service.showErrorAlert("Error processing Verifiable Credential");
+    tick();
+    expect(translateSpy).toHaveBeenCalledWith("errors.cannot-save-VC");
+
+    service.showErrorAlert("Incorrect PIN");
+    tick();
+    expect(translateSpy).toHaveBeenCalledWith("errors.incorrect-pin");
+
+    service.showErrorAlert("Unsigned");
+    tick();
+    expect(translateSpy).toHaveBeenCalledWith("errors.unsigned");
+    
+    service.showErrorAlert("ErrorUnsigned");
+    tick();
+    expect(translateSpy).toHaveBeenCalledWith("errors.Errunsigned");
+  }));
+
+  //TODO 
+ 
+  it('should create alert for an error message 1', fakeAsync(() => {
+    const errorMessage = "The received QR content cannot be processed";
+    service.showErrorAlert(errorMessage).subscribe(()=>{});
+  
+    tick();
+  
+    expect(translateSpy).toHaveBeenCalledWith('errors.invalid-qr');
+    expect(toastCtrl.create).toHaveBeenCalled();
+    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+      {
+        [errorMessage]:'errors.invalid-qr'
+      }
+    ));
+    // expect(alert.present).toHaveBeenCalled();
+  }));
+ 
+  it('should create alert for an error message 2', fakeAsync(() => {
+    const errorMessage = "Error while fetching credentialOffer from the issuer";
+    service.showErrorAlert(errorMessage).subscribe(()=>{});
+  
+    tick();
+  
+    expect(translateSpy).toHaveBeenCalledWith('errors.expired-credentialOffer');
+    expect(toastCtrl.create).toHaveBeenCalled();
+    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+      {
+        [errorMessage]:"errors.expired-credentialOffer"
+      }
+    ));
+    // expect(alert.present).toHaveBeenCalled();
+  }));
+
+  it('should create alert for an error message 3', fakeAsync(() => {
+    const errorMessage = "Error while deserializing CredentialOffer";
+    service.showErrorAlert(errorMessage).subscribe(()=>{});
+  
+    tick();
+  
+    expect(translateSpy).toHaveBeenCalledWith('errors.invalid-credentialOffer');
+    expect(toastCtrl.create).toHaveBeenCalled();
+    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+      {
+        [errorMessage]:"errors.invalid-credentialOffer"
+      }
+    ));
+    // expect(alert.present).toHaveBeenCalled();
+  }));
+
+  it('should create alert for an error message 4', fakeAsync(() => {
+    const errorMessage = "Error while processing Credential Issuer Metadata from the Issuer";
+    service.showErrorAlert(errorMessage).subscribe(()=>{});
+    
+    tick();
+    
+    expect(translateSpy).toHaveBeenCalledWith('errors.invalid-issuerMetadata');
+    expect(toastCtrl.create).toHaveBeenCalled();
+    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+      {
+        [errorMessage]: "errors.invalid-issuerMetadata"
+      }
+    ));
+    // expect(alert.present).toHaveBeenCalled();
+  }));
+  
+  it('should create alert for an error message 5', fakeAsync(() => {
+    const errorMessage = "Error while fetching  Credential from Issuer";
+    service.showErrorAlert(errorMessage).subscribe(()=>{});
+    
+    tick();
+    
+    expect(translateSpy).toHaveBeenCalledWith('errors.cannot-get-VC');
+    expect(toastCtrl.create).toHaveBeenCalled();
+    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+      {
+        [errorMessage]: "errors.cannot-get-VC"
+      }
+    ));
+    // expect(alert.present).toHaveBeenCalled();
+  }));
+  
+  it('should create alert for an error message 6', fakeAsync(() => {
+    const errorMessage = "Error processing Verifiable Credential";
+    service.showErrorAlert(errorMessage).subscribe(()=>{});
+    
+    tick();
+    
+    expect(translateSpy).toHaveBeenCalledWith('errors.cannot-save-VC');
+    expect(toastCtrl.create).toHaveBeenCalled();
+    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+      {
+        [errorMessage]: "errors.cannot-save-VC"
+      }
+    ));
+    // expect(alert.present).toHaveBeenCalled();
+  }));
+  
+  it('should create alert for an error message 7', fakeAsync(() => {
+    const errorMessage = "Incorrect PIN";
+    service.showErrorAlert(errorMessage).subscribe(()=>{});
+    
+    tick();
+    
+    expect(translateSpy).toHaveBeenCalledWith('errors.incorrect-pin');
+    expect(toastCtrl.create).toHaveBeenCalled();
+    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+      {
+        [errorMessage]: "errors.incorrect-pin"
+      }
+    ));
+    // expect(alert.present).toHaveBeenCalled();
+  }));
+  
+  it('should create alert for an error message 8', fakeAsync(() => {
+    const errorMessage = "Unsigned";
+    service.showErrorAlert(errorMessage).subscribe(()=>{});
+    
+    tick();
+    
+    expect(translateSpy).toHaveBeenCalledWith('errors.unsigned');
+    expect(toastCtrl.create).toHaveBeenCalled();
+    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+      {
+        [errorMessage]: "errors.unsigned"
+      }
+    ));
+    // expect(alert.present).toHaveBeenCalled();
+  }));
+  
+  it('should create alert for an error message 9', fakeAsync(() => {
+    const errorMessage = "ErrorUnsigned";
+    service.showErrorAlert(errorMessage).subscribe(()=>{});
+    
+    tick();
+    
+    expect(translateSpy).toHaveBeenCalledWith('errors.Errunsigned');
+    expect(toastCtrl.create).toHaveBeenCalled();
+    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+      {
+        [errorMessage]: "errors.Errunsigned"
+      }
+    ));
+    // expect(alert.present).toHaveBeenCalled();
+  }));
+  
+  
+  
   // it('should display a toast for an error message 2', async () => {
   //   const createSpy = jest.spyOn(toastCtrl, 'create').mockResolvedValue({ present: jest.fn() } as any);
 
