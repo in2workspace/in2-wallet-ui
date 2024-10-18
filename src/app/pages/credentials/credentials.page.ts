@@ -12,7 +12,6 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { DataService } from 'src/app/services/data.service';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
-import { catchError } from 'rxjs';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
@@ -64,8 +63,8 @@ export class CredentialsPage implements OnInit {
   public constructor(
     private alertController: AlertController,
     public translate: TranslateService,
-    private cameraLogsService: CameraLogsService, 
-    private cdr: ChangeDetectorRef) 
+    private cameraLogsService: CameraLogsService,
+    private cdr: ChangeDetectorRef)
     {
     this.credOfferEndpoint = window.location.origin + '/tabs/home';
     this.route.queryParams.subscribe((params) => {
@@ -99,7 +98,7 @@ export class CredentialsPage implements OnInit {
   public ngOnInit() {
     this.scaned_cred = false;
     this.refresh();
-    if (this.credentialOfferUri !== '') {
+    if (this.credentialOfferUri !== undefined) {
       this.generateCred();
     }
   }
@@ -176,9 +175,11 @@ export class CredentialsPage implements OnInit {
             },
           });
         }
+        this.websocket.closeConnection();
       },
 
       error: (httpErrorResponse) => {
+        this.websocket.closeConnection();
         this.toggleScan = true;
         const httpErr = httpErrorResponse.error;
         const error = httpErr.title + ' . ' + httpErr.message + ' . ' + httpErr.path;
@@ -193,12 +194,15 @@ export class CredentialsPage implements OnInit {
     this.walletService.requestCredential(this.credentialOfferUri).subscribe({
       next: () => {
         this.refresh();
+        this.websocket.closeConnection();
       },
       error: (err) => {
         console.error(err);
+        this.websocket.closeConnection();
       },
     });
   }
+
 
   public untoggleScan() {
     this.toggleScan = false;
