@@ -54,7 +54,7 @@ describe('CameraService', () => {
     flush();
   }));
 
-  it('should update camera if exists', fakeAsync(async () => {
+  it('should update camera if exists', fakeAsync(() => {
     const mockCamera: MediaDeviceInfo = {
       deviceId: 'existingCameraId',
       groupId: 'existingGroupId',
@@ -62,17 +62,21 @@ describe('CameraService', () => {
       label: 'Existing Camera',
       toJSON() { return {}; }
     };
-
-    await mockStorageService.set('camara', mockCamera);
+  
+    jest.spyOn(mockStorageService, 'get').mockReturnValue(Promise.resolve(mockCamera));
+  
+    cameraService.updateCamera();
     tick();
-
+  
     cameraService.navCamera$.subscribe((camera) => {
-      expect(camera.deviceId).toEqual('');
-      expect(camera.label).toEqual('');
+      expect(camera.deviceId).toEqual('existingCameraId');
+      expect(camera.label).toEqual('Existing Camera');
     });
-
+  
     flush();
+  
   }));
+  
 
   it('should set camera to null on noCamera', fakeAsync(() => {
     cameraService.noCamera();
