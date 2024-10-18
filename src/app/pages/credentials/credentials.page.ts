@@ -154,52 +154,59 @@ export class CredentialsPage implements OnInit {
   public qrCodeEmit(qrCode: string) {
     this.toggleScan = false;
     this.websocket.connect();
-    this.walletService.executeContent(qrCode)
-    .subscribe({
-      next: (executionResponse) => {
-        if (qrCode.includes('credential_offer_uri')) {
-          this.from = 'credential';
-          this.isAlertOpen = true;
-          this.scaned_cred = true;
-          setTimeout(() => {
-            this.isAlertOpen = false;
-            this.scaned_cred = false;
-          }, TIME_IN_MS);
-          this.refresh();
-        } else {
-          this.show_qr = false;
-          this.from = '';
-          this.router.navigate(['/tabs/vc-selector/'], {
-            queryParams: {
-              executionResponse: JSON.stringify(executionResponse),
-            },
-          });
-        }
-        this.websocket.closeConnection();
-      },
 
-      error: (httpErrorResponse) => {
-        this.websocket.closeConnection();
-        this.toggleScan = true;
-        const httpErr = httpErrorResponse.error;
-        const error = httpErr.title + ' . ' + httpErr.message + ' . ' + httpErr.path;
-        this.cameraLogsService.addCameraLog(new Error(error), 'httpError');
-        console.error(httpErrorResponse);
-      },
+    // Esperar un segundo antes de continuar
+    this.delay(1000).then(() => {
+      this.walletService.executeContent(qrCode)
+        .subscribe({
+          next: (executionResponse) => {
+            if (qrCode.includes('credential_offer_uri')) {
+              this.from = 'credential';
+              this.isAlertOpen = true;
+              this.scaned_cred = true;
+              setTimeout(() => {
+                this.isAlertOpen = false;
+                this.scaned_cred = false;
+              }, TIME_IN_MS);
+              this.refresh();
+            } else {
+              this.show_qr = false;
+              this.from = '';
+              this.router.navigate(['/tabs/vc-selector/'], {
+                queryParams: {
+                  executionResponse: JSON.stringify(executionResponse),
+                },
+              });
+            }
+            this.websocket.closeConnection();
+          },
+          error: (httpErrorResponse) => {
+            this.websocket.closeConnection();
+            this.toggleScan = true;
+            const httpErr = httpErrorResponse.error;
+            const error = httpErr.title + ' . ' + httpErr.message + ' . ' + httpErr.path;
+            this.cameraLogsService.addCameraLog(new Error(error), 'httpError');
+            console.error(httpErrorResponse);
+          },
+        });
     });
   }
 
   public generateCred() {
     this.websocket.connect();
-    this.walletService.requestCredential(this.credentialOfferUri).subscribe({
-      next: () => {
-        this.refresh();
-        this.websocket.closeConnection();
-      },
-      error: (err) => {
-        console.error(err);
-        this.websocket.closeConnection();
-      },
+
+    // Esperar un segundo antes de continuar
+    this.delay(1000).then(() => {
+      this.walletService.requestCredential(this.credentialOfferUri).subscribe({
+        next: () => {
+          this.refresh();
+          this.websocket.closeConnection();
+        },
+        error: (err) => {
+          console.error(err);
+          this.websocket.closeConnection();
+        },
+      });
     });
   }
 
@@ -248,5 +255,10 @@ export class CredentialsPage implements OnInit {
     });
 
     await alert.present();
+
   }
+  private delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 }
