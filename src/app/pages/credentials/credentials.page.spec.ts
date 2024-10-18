@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, flush, tick, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -12,7 +12,6 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { Storage } from '@ionic/storage-angular';
-import { CallbackPage } from '../callback/callback.page';
 
 class MockRouter {
   public events = new Subject<any>();
@@ -37,7 +36,7 @@ describe('CredentialsPage', () => {
   const TIME_IN_MS = 10000;
 
   beforeEach(waitForAsync(() => {
-   
+
     walletServiceSpy = {
       getAllVCs: jest.fn().mockReturnValue(of([])),
       requestCredential: jest.fn().mockReturnValue(of({} as any)),
@@ -46,7 +45,8 @@ describe('CredentialsPage', () => {
     } as unknown as jest.Mocked<WalletService>;
 
     websocketServiceSpy = {
-      connect: jest.fn()
+      connect: jest.fn(),
+      closeConnection: jest.fn()
     } as unknown as jest.Mocked<WebsocketService>;
 
     const dataServiceSpyObj = {
@@ -127,14 +127,18 @@ describe('CredentialsPage', () => {
   //   expect(console.error).toHaveBeenCalledWith('Error al copiar texto al portapapeles:', 'Test error');
   // });
 
-  it('should generate credential when generateCred is called', () => {
+  it('should generate credential after websocket connection', fakeAsync(() => {
     const mockCredentialOfferUri = 'mockCredentialOfferUri';
 
     component.credentialOfferUri = mockCredentialOfferUri;
     component.generateCred();
 
+    // Avanzar el tiempo para simular el retraso en la conexión del WebSocket
+    tick(1000);
+
     expect(walletServiceSpy.requestCredential).toHaveBeenCalledWith(mockCredentialOfferUri);
-  });
+    expect(websocketServiceSpy.connect).toHaveBeenCalled();
+  }));
 
   it('should update the credential list when refresh is called', fakeAsync(() => {
     const mockCredList: VerifiableCredential[] = [
@@ -258,14 +262,22 @@ describe('CredentialsPage', () => {
     expect(component.refresh).toHaveBeenCalled();
   });
 
-  it('qrCodeEmit should process QR code and potentially change state or call services', fakeAsync(() => {
+  it('qrCodeEmit should process QR code after websocket connection', fakeAsync(() => {
     jest.spyOn(mockRouter, 'navigate');
     const testQrCode = "someTestQrCode";
-    component.qrCodeEmit(testQrCode);
-    tick();
 
+    // Simulamos la conexión del WebSocket.
+    component.qrCodeEmit(testQrCode);
+
+    // Avanzar el tiempo para simular el retraso.
+    tick(1000);
+
+    // Ahora comprobamos que el contenido se ejecutó después de la conexión.
+    expect(walletServiceSpy.executeContent).toHaveBeenCalledWith(testQrCode);
+    expect(websocketServiceSpy.connect).toHaveBeenCalled();
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/tabs/vc-selector/'], { queryParams: { executionResponse: JSON.stringify({}) } });
   }));
+
 
   it('should handle alert Cancel correctly', fakeAsync(() => {
     const alertController = TestBed.inject(AlertController);
@@ -302,9 +314,9 @@ describe('CredentialsPage', () => {
 
     const untoggleScanSpy = jest.spyOn(component, 'untoggleScan');
     const detectChangesSpy = jest.spyOn(component['cdr'], 'detectChanges');
-   
+
     mockRouter.events.next(mockNavigationEndEvent);
- 
+
     expect(untoggleScanSpy).toHaveBeenCalled();
     expect(detectChangesSpy).toHaveBeenCalled();
   }));
@@ -314,12 +326,37 @@ describe('CredentialsPage', () => {
     walletServiceSpy.getAllVCs.mockReturnValue(of([]));
     const untoggleScanSpy = jest.spyOn(component, 'untoggleScan');
     const detectChangesSpy = jest.spyOn(component['cdr'], 'detectChanges');
-   
+
     jest.spyOn(mockRouter.events, 'pipe').mockReturnValue(of(mockNavigationEndEvent));
- 
+
     expect(untoggleScanSpy).not.toHaveBeenCalled();
     expect(detectChangesSpy).not.toHaveBeenCalled();
   }));
+
+  it('should close websocket connection after credential request', fakeAsync(() => {
+    component.credentialOfferUri = 'mockCredentialOfferUri';
+    component.generateCred();
+
+    // Simulamos el retraso para que se complete la conexión y solicitud
+    tick(1000);
+
+    expect(walletServiceSpy.requestCredential).toHaveBeenCalled();
+    expect(websocketServiceSpy.closeConnection).toHaveBeenCalled();
+  }));
+
+  it('should close websocket connection if an error occurs', fakeAsync(() => {
+    jest.spyOn(walletServiceSpy, 'requestCredential').mockReturnValueOnce(throwError(() => new Error('Test error')));
+
+    component.credentialOfferUri = 'mockCredentialOfferUri';
+    component.generateCred();
+
+    // Simulamos el retraso para que se complete la conexión y solicitud
+    tick(1000);
+
+    expect(walletServiceSpy.requestCredential).toHaveBeenCalled();
+    expect(websocketServiceSpy.closeConnection).toHaveBeenCalled();
+  }));
+
 
   it('should log error to cameraLogsService when executeContent fails', fakeAsync(() => {
     const mockErrorResponse = {
@@ -330,14 +367,14 @@ describe('CredentialsPage', () => {
       }
     };
     const errorMessage = `${mockErrorResponse.error.title} . ${mockErrorResponse.error.message} . ${mockErrorResponse.error.path}`;
- 
+
     jest.spyOn(walletServiceSpy, 'executeContent').mockReturnValueOnce(throwError(() => mockErrorResponse));
- 
+
     const addCameraLogSpy = jest.spyOn((component as any).cameraLogsService, 'addCameraLog');
- 
+
     component.qrCodeEmit('someQrCode');
-    tick();
- 
+    tick(1000);
+
     expect(component.toggleScan).toBe(true);
     expect(addCameraLogSpy).toHaveBeenCalledWith(new Error(errorMessage), 'httpError');
   }));
