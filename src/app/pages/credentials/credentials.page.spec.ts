@@ -127,14 +127,18 @@ describe('CredentialsPage', () => {
   //   expect(console.error).toHaveBeenCalledWith('Error al copiar texto al portapapeles:', 'Test error');
   // });
 
-  it('should generate credential when generateCred is called', () => {
+  it('should generate credential after websocket connection', fakeAsync(() => {
     const mockCredentialOfferUri = 'mockCredentialOfferUri';
 
     component.credentialOfferUri = mockCredentialOfferUri;
     component.generateCred();
 
+    // Avanzar el tiempo para simular el retraso en la conexión del WebSocket
+    tick(1000);
+
     expect(walletServiceSpy.requestCredential).toHaveBeenCalledWith(mockCredentialOfferUri);
-  });
+    expect(websocketServiceSpy.connect).toHaveBeenCalled();
+  }));
 
   it('should update the credential list when refresh is called', fakeAsync(() => {
     const mockCredList: VerifiableCredential[] = [
@@ -258,14 +262,22 @@ describe('CredentialsPage', () => {
     expect(component.refresh).toHaveBeenCalled();
   });
 
-  it('qrCodeEmit should process QR code and potentially change state or call services', fakeAsync(() => {
+  it('qrCodeEmit should process QR code after websocket connection', fakeAsync(() => {
     jest.spyOn(mockRouter, 'navigate');
     const testQrCode = "someTestQrCode";
-    component.qrCodeEmit(testQrCode);
-    tick();
 
+    // Simulamos la conexión del WebSocket.
+    component.qrCodeEmit(testQrCode);
+
+    // Avanzar el tiempo para simular el retraso.
+    tick(1000);
+
+    // Ahora comprobamos que el contenido se ejecutó después de la conexión.
+    expect(walletServiceSpy.executeContent).toHaveBeenCalledWith(testQrCode);
+    expect(websocketServiceSpy.connect).toHaveBeenCalled();
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/tabs/vc-selector/'], { queryParams: { executionResponse: JSON.stringify({}) } });
   }));
+
 
   it('should handle alert Cancel correctly', fakeAsync(() => {
     const alertController = TestBed.inject(AlertController);
@@ -321,6 +333,31 @@ describe('CredentialsPage', () => {
     expect(detectChangesSpy).not.toHaveBeenCalled();
   }));
 
+  it('should close websocket connection after credential request', fakeAsync(() => {
+    component.credentialOfferUri = 'mockCredentialOfferUri';
+    component.generateCred();
+
+    // Simulamos el retraso para que se complete la conexión y solicitud
+    tick(1000);
+
+    expect(walletServiceSpy.requestCredential).toHaveBeenCalled();
+    expect(websocketServiceSpy.closeConnection).toHaveBeenCalled();
+  }));
+
+  it('should close websocket connection if an error occurs', fakeAsync(() => {
+    jest.spyOn(walletServiceSpy, 'requestCredential').mockReturnValueOnce(throwError(() => new Error('Test error')));
+
+    component.credentialOfferUri = 'mockCredentialOfferUri';
+    component.generateCred();
+
+    // Simulamos el retraso para que se complete la conexión y solicitud
+    tick(1000);
+
+    expect(walletServiceSpy.requestCredential).toHaveBeenCalled();
+    expect(websocketServiceSpy.closeConnection).toHaveBeenCalled();
+  }));
+
+
   it('should log error to cameraLogsService when executeContent fails', fakeAsync(() => {
     const mockErrorResponse = {
       error: {
@@ -336,7 +373,7 @@ describe('CredentialsPage', () => {
     const addCameraLogSpy = jest.spyOn((component as any).cameraLogsService, 'addCameraLog');
 
     component.qrCodeEmit('someQrCode');
-    tick();
+    tick(1000);
 
     expect(component.toggleScan).toBe(true);
     expect(addCameraLogSpy).toHaveBeenCalledWith(new Error(errorMessage), 'httpError');
