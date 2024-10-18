@@ -98,6 +98,7 @@ export class CredentialsPage implements OnInit {
   public ngOnInit() {
     this.scaned_cred = false;
     this.refresh();
+    // TODO: Find a better way to handle this
     if (this.credentialOfferUri !== undefined) {
       this.generateCred();
     }
@@ -108,6 +109,7 @@ export class CredentialsPage implements OnInit {
     this.ebsiFlag = false;
   }
 
+  // TODO: This should be moved to the settings page because this is something recreated to ebsi and this option is enabled in the settings page
   public async copyToClipboard(textToCopy: string) {
     let text = '';
 
@@ -155,11 +157,12 @@ export class CredentialsPage implements OnInit {
     this.toggleScan = false;
     this.websocket.connect();
 
-    // Esperar un segundo antes de continuar
+    // TODO: Instead of using a delay, we should wait for the websocket connection to be established
     this.delay(1000).then(() => {
       this.walletService.executeContent(qrCode)
         .subscribe({
           next: (executionResponse) => {
+            // TODO: Instead of analyzing the qrCode, we should check the response and decide what object we need to show depending on the response
             if (qrCode.includes('credential_offer_uri')) {
               this.from = 'credential';
               this.isAlertOpen = true;
