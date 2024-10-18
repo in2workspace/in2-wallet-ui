@@ -31,3 +31,8 @@
   font-family: 'Blinker-Regular';
   src: url('./assets/fonts/Blinker-Regular.ttf') format('truetype');
 }
+
+
+ion-item-divider:last-of-type{
+  display:none;
+}

@@ -19,5 +19,6 @@
   window["env"]["users_uri"] = "${WALLET_API_USERS_PATH}";
   window["env"]["ebsi_did_uri"] = "${WALLET_API_EBSI_PATH}";
   window["env"]["cbor_uri"] = "${WALLET_API_CBOR_PATH}";
-
+  window["env"]["logs_enabled"] = "${LOGS_ENABLED}";
+  window["env"]["logs_email"] = "${LOGS_EMAIL}";
 })(this);
