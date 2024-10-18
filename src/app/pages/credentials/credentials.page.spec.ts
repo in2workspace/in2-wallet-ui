@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, flush, tick, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -12,7 +12,6 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { Storage } from '@ionic/storage-angular';
-import { CallbackPage } from '../callback/callback.page';
 
 class MockRouter {
   public events = new Subject<any>();
@@ -37,7 +36,7 @@ describe('CredentialsPage', () => {
   const TIME_IN_MS = 10000;
 
   beforeEach(waitForAsync(() => {
-   
+
     walletServiceSpy = {
       getAllVCs: jest.fn().mockReturnValue(of([])),
       requestCredential: jest.fn().mockReturnValue(of({} as any)),
@@ -46,7 +45,8 @@ describe('CredentialsPage', () => {
     } as unknown as jest.Mocked<WalletService>;
 
     websocketServiceSpy = {
-      connect: jest.fn()
+      connect: jest.fn(),
+      closeConnection: jest.fn()
     } as unknown as jest.Mocked<WebsocketService>;
 
     const dataServiceSpyObj = {
@@ -302,9 +302,9 @@ describe('CredentialsPage', () => {
 
     const untoggleScanSpy = jest.spyOn(component, 'untoggleScan');
     const detectChangesSpy = jest.spyOn(component['cdr'], 'detectChanges');
-   
+
     mockRouter.events.next(mockNavigationEndEvent);
- 
+
     expect(untoggleScanSpy).toHaveBeenCalled();
     expect(detectChangesSpy).toHaveBeenCalled();
   }));
@@ -314,9 +314,9 @@ describe('CredentialsPage', () => {
     walletServiceSpy.getAllVCs.mockReturnValue(of([]));
     const untoggleScanSpy = jest.spyOn(component, 'untoggleScan');
     const detectChangesSpy = jest.spyOn(component['cdr'], 'detectChanges');
-   
+
     jest.spyOn(mockRouter.events, 'pipe').mockReturnValue(of(mockNavigationEndEvent));
- 
+
     expect(untoggleScanSpy).not.toHaveBeenCalled();
     expect(detectChangesSpy).not.toHaveBeenCalled();
   }));
@@ -330,14 +330,14 @@ describe('CredentialsPage', () => {
       }
     };
     const errorMessage = `${mockErrorResponse.error.title} . ${mockErrorResponse.error.message} . ${mockErrorResponse.error.path}`;
- 
+
     jest.spyOn(walletServiceSpy, 'executeContent').mockReturnValueOnce(throwError(() => mockErrorResponse));
- 
+
     const addCameraLogSpy = jest.spyOn((component as any).cameraLogsService, 'addCameraLog');
- 
+
     component.qrCodeEmit('someQrCode');
     tick();
- 
+
     expect(component.toggleScan).toBe(true);
     expect(addCameraLogSpy).toHaveBeenCalledWith(new Error(errorMessage), 'httpError');
   }));
