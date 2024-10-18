@@ -31,16 +31,19 @@ class MockAlertController {
 
 describe('WebsocketService', () => {
   let service: WebsocketService;
-  let mockWebSocketInstance: jest.Mocked<WebSocket>;
+  let mockAlertController: MockAlertController;
+  let mockWebSocketInstance: jest.Mocked<any>;
   let originalWebSocket: any;
 
   beforeEach(() => {
+    mockAlertController = new MockAlertController();
+
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, TranslateModule.forRoot()],
       providers: [
         WebsocketService,
         AuthenticationService,
-        { provide: AlertController, useClass: MockAlertController },
+        { provide: AlertController, useValue: mockAlertController },
         { provide: OidcSecurityService, useClass: MockOidcSecurityService },
       ],
     });
@@ -49,16 +52,20 @@ describe('WebsocketService', () => {
 
     originalWebSocket = window.WebSocket;
     mockWebSocketInstance = {
-      send: jest.fn(),
+      send: jest.fn().mockImplementation((str:string) =>str),
       close: jest.fn(),
       readyState: WebSocket.OPEN,
       onmessage: null,
       onclose: null,
       onopen: null,
-    } as jest.Mocked<WebSocket>;
-
-    jest.spyOn(window, 'WebSocket').mockImplementation(() => mockWebSocketInstance);
-    jest.spyOn(service, 'sendMessage').mockImplementation(() => {});
+    };
+    
+    jest.spyOn(service, 'sendMessage');
+    jest.spyOn(window, 'WebSocket').mockImplementation((url: string | URL, protocols?: string | string[] | undefined) => mockWebSocketInstance);
+    (window as any).WebSocket.OPEN = 1;
+    (window as any).WebSocket.CLOSED = 3;
+    (window as any).WebSocket.CONNECTING = 0;
+    (window as any).WebSocket.CLOSING = 2;
   });
 
   afterEach(() => {
@@ -97,11 +104,16 @@ describe('WebsocketService', () => {
     expect(mockWebSocketInstance.close).toHaveBeenCalledTimes(1);
   });
 
-  it('should send a message when WebSocket is open', () => {
+  it('should send a message when WebSocket is open', fakeAsync(() => {
+    console.log('comença el meu it')
     service.connect();
+    console.warn('SOCKET: ');
+    console.warn((service as any).socket);
+
+    tick();
     service.sendMessage('Test Message');
-    expect(mockWebSocketInstance.send).toHaveBeenCalledWith('Test Message');
-  });
+    expect((service as any).socket.send).toHaveBeenCalledWith('Test Message');
+  }));
 
   it('should not send a message when WebSocket is not open', () => {
     jest.spyOn(console, 'error');
@@ -109,9 +121,9 @@ describe('WebsocketService', () => {
       send: jest.fn(),
       close: jest.fn(),
       readyState: WebSocket.CLOSED,
-    } as jest.Mocked<WebSocket>;
+    };
 
-    service['socket'] = mockWebSocketClosedInstance;
+    service['socket'] = mockWebSocketClosedInstance as any;
 
     service.sendMessage('Test Message');
     expect(mockWebSocketClosedInstance.send).not.toHaveBeenCalled();
@@ -119,7 +131,7 @@ describe('WebsocketService', () => {
   });
 
   it('should present an alert when a message with tx_code description is received', fakeAsync(() => {
-    jest.spyOn(service['alertController'], 'create').mockImplementation(() => {
+    jest.spyOn(mockAlertController, 'create').mockImplementation(() => {
       return Promise.resolve({
         present: jest.fn(),
         onDidDismiss: jest.fn().mockResolvedValue({ data: { values: { pin: '1234' } } }),

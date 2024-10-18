@@ -10,6 +10,8 @@ class MockRouter {
   public navigate = (route:string|string[], opt?:{})=>'';
 }
 
+let originalMediaDevices: any;
+
 describe('HomePage', () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
@@ -39,20 +41,28 @@ describe('HomePage', () => {
     component = fixture.componentInstance;
     route = TestBed.inject(ActivatedRoute);
     fixture.detectChanges();
+
+    originalMediaDevices = navigator.mediaDevices;
   });
+
+  afterEach(() => {
+    (navigator as any).mediaDevices = originalMediaDevices;
+  });
+
   it('should call deleteVC when keydown event with key "Enter" and action "startScan"', fakeAsync(() => {
-    spyOn(component, 'startScan');
+    jest.spyOn(component, 'startScan');
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
     component.handleButtonKeydown(event);
     tick();
     expect(component.startScan).toHaveBeenCalled();
   }));
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
   it('should navigate based on queryParams on init', async () => {
-    const navigateSpy = spyOn(mockRouter, 'navigate');
+    const navigateSpy = jest.spyOn(mockRouter, 'navigate');
 
     (route.queryParams as BehaviorSubject<any>).next({ credential_offer_uri: 'newUri' });
 
@@ -63,15 +73,16 @@ describe('HomePage', () => {
   });
 
   it('startScan should navigate with specific queryParams', async () => {
+    (navigator as any).mediaDevices = {
+      getUserMedia: jest.fn()
+    }
     const audioStream:any = { getTracks: ()=>[] }; 
     let promise = Promise.resolve(audioStream);
-    spyOn(navigator.mediaDevices, 'getUserMedia').and.returnValue(promise);
+    jest.spyOn(navigator.mediaDevices, 'getUserMedia').mockReturnValue(promise);
 
-    const navigateSpy = spyOn(mockRouter, 'navigate');
+    const navigateSpy = jest.spyOn(mockRouter, 'navigate');
     await component.startScan();
     expect(navigateSpy).toHaveBeenCalledWith(['/tabs/credentials/'], { queryParams: { toggleScan: true, from: 'home', show_qr: true } });
   });
   
-  
-
 });
