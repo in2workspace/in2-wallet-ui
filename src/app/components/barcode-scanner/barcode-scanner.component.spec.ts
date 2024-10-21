@@ -2,13 +2,13 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { CommonModule } from '@angular/common';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { CameraService } from 'src/app/services/camera.service';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { BarcodeScannerComponent, formatLogMessage } from './barcode-scanner.component';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { Storage } from '@ionic/storage-angular';
 import { Exception } from '@zxing/library';
 import { CameraLogType } from 'src/app/interfaces/camera-log';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 class MockCameraService {
   updateCamera(): void {}
@@ -25,6 +25,7 @@ describe('BarcodeScannerComponent', () => {
   let mockCameraService: MockCameraService;
   let mockCameraLogsService: CameraLogsService;
   let mockRouter: MockRouter;
+  let mockActivatedRoute: {};
 
   beforeEach(async () => {
     mockCameraService = new MockCameraService();
@@ -32,6 +33,11 @@ describe('BarcodeScannerComponent', () => {
       addCameraLog: jest.fn()
     } as any;
     mockRouter = new MockRouter();
+    mockActivatedRoute = {
+      snapshot: {
+        url: [{path:'camera-selector'}]
+      }
+    };
 
     await TestBed.configureTestingModule({
       imports: [CommonModule, ZXingScannerModule],
@@ -39,6 +45,10 @@ describe('BarcodeScannerComponent', () => {
         { provide: CameraService, useClass: MockCameraService }, 
         { provide: CameraLogsService, useValue:mockCameraLogsService },
         { provide: Router, useValue: mockRouter },
+        {
+          provide: ActivatedRoute,
+          useValue:mockActivatedRoute,
+        },
         Storage
       ]
     }).compileComponents();
@@ -164,12 +174,27 @@ describe('BarcodeScannerComponent', () => {
     expect(console.error).toBe(console.error);
   });
 
-  it('should reset scanner on NavigationEnd', fakeAsync(() => {
+  it('should reset scanner on NavigationEnd if origin route is "camera-selector"', fakeAsync(() => {
     jest.spyOn(component.scanner, 'reset'); 
     mockRouter.events.next(new NavigationEnd(1, 'http://localhost/', 'http://localhost/'));
     tick();
     expect(component.scanner.reset).toHaveBeenCalled();
   }));
+  it('should reset scanner on NavigationEnd if origin route is "credentials"', fakeAsync(() => {
+    (mockActivatedRoute as any).snapshot.url = [{path:'credentials'}];
+    jest.spyOn(component.scanner, 'reset'); 
+    mockRouter.events.next(new NavigationEnd(1, 'http://localhost/', 'http://localhost/'));
+    tick();
+    expect(component.scanner.reset).toHaveBeenCalled();
+  }));
+
+  it('should not reset scanner on NavigationEnd if origin route is not "camera-selector" nor "credentials"', fakeAsync(() => {
+    (mockActivatedRoute as any).snapshot.url = [{path:'other'}];
+    jest.spyOn(component.scanner, 'reset'); 
+    mockRouter.events.next(new NavigationEnd(1, 'http://localhost/', 'http://localhost/'));
+    tick();
+    expect(component.scanner.reset).not.toHaveBeenCalled();
+}));
 });
 
 describe('formatLogMessage', () => {

@@ -18,7 +18,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     CommonModule,
     FormsModule,
     TranslateModule,
-    BarcodeScannerComponent,
+    BarcodeScannerComponent
   ],
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
