@@ -16,31 +16,32 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: "./coverage/app",
   coverageReporters: ["lcov", "text-summary", "cobertura", "html"],
-  collectCoverageFrom: [
-    "src/app/components/barcode-scanner/**/*.ts",         
-    "src/app/guards/**/*.ts",                  
-    "src/app/pages/credentials/**/*.ts",       
-    "src/app/pages/settings/**/*.ts",          
-    "src/app/pages/logs/**/*.ts",               
-    "src/app/services/camera-logs.service.ts"
-  ],
-  coveragePathIgnorePatterns: [
-    '<rootDir>/node_modules/', 
-    '<rootDir>/dist/',
-    '<rootDir>/src/app/components/(?!barcode-scanner)',
-    '<rootDir>/src/app/interceptors',
-    '<rootDir>/src/app/interfaces',
-    '<rootDir>/src/app/pages/(?!settings|logs|credentials)',
-    '<rootDir>/src/app/services/(?!camera-logs)'
-  ],
+  // collectCoverageFrom: [
+  //   "src/app/components/barcode-scanner/**/*.ts",         
+  //   "src/app/guards/**/*.ts",                  
+  //   "src/app/pages/credentials/**/*.ts",       
+  //   "src/app/pages/settings/**/*.ts",          
+  //   "src/app/pages/logs/**/*.ts",               
+  //   "src/app/services/camera-logs.service.ts"
+  // ],
+  // coveragePathIgnorePatterns: [
+  //   '<rootDir>/node_modules/', 
+  //   '<rootDir>/dist/',
+  //   '<rootDir>/src/app/components/(?!barcode-scanner)',
+  //   '<rootDir>/src/app/interceptors',
+  //   '<rootDir>/src/app/interfaces',
+  //   '<rootDir>/src/app/pages/(?!settings|logs|credentials)',
+  //   '<rootDir>/src/app/services/(?!camera-logs)'
+  // ],
   transformIgnorePatterns: ['/node_modules/(?!@stencil|stencil)/'],
   testPathIgnorePatterns: [
     '/node_modules/', 
     '/dist/',
-    '/src/app/components/(?!barcode-scanner)',
+    'src/app/guards',
+    '/src/app/components/',
     '/src/app/interceptors',
     '/src/app/interfaces',
-    '/src/app/pages/(?!settings|logs|credentials)',
-    '/src/app/services/(?!camera-logs)'
+    '/src/app/pages/',
+    '/src/app/services/(?!camera.service)'
   ]
 };

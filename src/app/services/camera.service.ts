@@ -7,6 +7,7 @@ import { StorageService } from './storage.service';
 })
 export class CameraService {
   public mediaDeviceInfoNull: MediaDeviceInfo|undefined = undefined;
+  //TODO camera?
   public camara = new BehaviorSubject<MediaDeviceInfo|undefined>(
     this.mediaDeviceInfoNull
   );
