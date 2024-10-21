@@ -1,11 +1,13 @@
-import { Component, Input, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { BarcodeScannerComponent } from '../../components/barcode-scanner/barcode-scanner.component';
 import { CameraService } from 'src/app/services/camera.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { distinctUntilChanged, map, shareReplay } from 'rxjs';
+import { distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs';
+import { NavigationEnd, Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-camera-selector',
   templateUrl: './camera-selector.page.html',
@@ -23,14 +25,43 @@ import { distinctUntilChanged, map, shareReplay } from 'rxjs';
 export class CameraSelectorPage {
   @Input() public availableDevices: MediaDeviceInfo[] = [];
   public cameraService = inject(CameraService);
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
-  public selectedDevice = this.cameraService.navCamera$.pipe(
+  public showBarcode = true;
+  private componentIsInitialized = false;
+
+  public selectedDevice$ = this.cameraService.navCamera$.pipe(
     map((device) => {
-      return device.deviceId;
+      return device?.deviceId ?? 'Default';
     }),
     distinctUntilChanged(),
     shareReplay(1)
   );
+
+  constructor(){
+    this.router.events
+    .pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntilDestroyed()
+    )
+    .subscribe((event: NavigationEnd) => {
+      if (this.componentIsInitialized &&
+        event.urlAfterRedirects.startsWith('/tabs/camera-selector')) {
+       this.resetBarcode();
+      }else{
+        this.componentIsInitialized = true;
+      }
+    });
+  }
+
+  public resetBarcode(){
+    console.log('reset barcode from selector')
+    this.showBarcode = false;
+    this.cdr.detectChanges();
+    this.showBarcode = true;
+  }
+  
 
   public availableDevicesEmit(devices: MediaDeviceInfo[]) {
     if (devices.length <= 1) {

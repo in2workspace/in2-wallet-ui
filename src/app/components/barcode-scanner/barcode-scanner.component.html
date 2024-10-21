@@ -1,12 +1,12 @@
-
-<zxing-scanner
-    #scanner
-    class="scanner"
-    [autostart]="true"
-    [device]="(selectedDevice$|async) ?? undefined"
-    [formats]="allowedFormats"
-    (camerasFound)="onCamerasFound($event)"
-    (scanSuccess)="onCodeResult($event)"
-    (scanError)="onScanError($event)" 
-    (scanFailure)="onScanFailure($event)"
+    <zxing-scanner
+        #scanner
+        class="scanner"
+        [autostart]="true"
+        [device]="(selectedDevice$|async) ?? undefined"
+        [formats]="allowedFormats"
+        (autostarted)="onAutostarted()"
+        (camerasFound)="onCamerasFound($event)"
+        (scanSuccess)="onCodeResult($event)"
+        (scanError)="onScanError($event)" 
+        (scanFailure)="onScanFailure($event)"
     ></zxing-scanner>
