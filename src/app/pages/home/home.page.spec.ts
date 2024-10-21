@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
@@ -6,13 +6,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HomePage } from './home.page';
 import { BehaviorSubject } from 'rxjs';
 
+class MockRouter {
+  public navigate = (route:string|string[], opt?:{})=>'';
+}
+
 describe('HomePage', () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
-  let router: Router;
   let route: ActivatedRoute;
+  let mockRouter: MockRouter;
 
   beforeEach(async () => {
+    mockRouter = new MockRouter();
+
     await TestBed.configureTestingModule({
       imports: [
         IonicModule.forRoot(),
@@ -25,23 +31,28 @@ describe('HomePage', () => {
           useValue: {
             queryParams: new BehaviorSubject({ credential_offer_uri: 'someUri' })
           }
-        }
+        }, {provide:Router, useValue:mockRouter}
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(HomePage);
     component = fixture.componentInstance;
-    router = TestBed.inject(Router);
     route = TestBed.inject(ActivatedRoute);
     fixture.detectChanges();
   });
-
+  it('should call deleteVC when keydown event with key "Enter" and action "startScan"', fakeAsync(() => {
+    spyOn(component, 'startScan');
+    const event = new KeyboardEvent('keydown', { key: 'Enter' });
+    component.handleButtonKeydown(event);
+    tick();
+    expect(component.startScan).toHaveBeenCalled();
+  }));
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
   it('should navigate based on queryParams on init', async () => {
-    const navigateSpy = spyOn(router, 'navigate');
+    const navigateSpy = spyOn(mockRouter, 'navigate');
 
     (route.queryParams as BehaviorSubject<any>).next({ credential_offer_uri: 'newUri' });
 
@@ -51,10 +62,16 @@ describe('HomePage', () => {
     expect(navigateSpy).toHaveBeenCalledWith(['/tabs/credentials'], { queryParams: { credentialOfferUri: 'newUri' } });
   });
 
+  it('startScan should navigate with specific queryParams', async () => {
+    const audioStream:any = { getTracks: ()=>[] }; 
+    let promise = Promise.resolve(audioStream);
+    spyOn(navigator.mediaDevices, 'getUserMedia').and.returnValue(promise);
 
-  it('startScan should navigate with specific queryParams', () => {
-    const navigateSpy = spyOn(router, 'navigate');
-    component.startScan();
+    const navigateSpy = spyOn(mockRouter, 'navigate');
+    await component.startScan();
     expect(navigateSpy).toHaveBeenCalledWith(['/tabs/credentials/'], { queryParams: { toggleScan: true, from: 'home', show_qr: true } });
   });
+  
+  
+
 });

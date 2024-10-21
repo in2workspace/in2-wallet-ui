@@ -31,7 +31,7 @@ class MockAlertController {
 
 describe('WebsocketService', () => {
   let service: WebsocketService;
-  let mockWebSocketInstance: jasmine.SpyObj<WebSocket>;
+  let mockWebSocketInstance: jest.Mocked<WebSocket>;
   let originalWebSocket: any;
 
   beforeEach(() => {
@@ -48,12 +48,17 @@ describe('WebsocketService', () => {
     service = TestBed.inject(WebsocketService);
 
     originalWebSocket = window.WebSocket;
-    mockWebSocketInstance = jasmine.createSpyObj('WebSocket', ['send', 'close'], {
+    mockWebSocketInstance = {
+      send: jest.fn(),
+      close: jest.fn(),
       readyState: WebSocket.OPEN,
-    });
+      onmessage: null,
+      onclose: null,
+      onopen: null,
+    } as jest.Mocked<WebSocket>;
 
-    spyOn(window, 'WebSocket').and.returnValue(mockWebSocketInstance);
-    spyOn(service, 'sendMessage').and.callThrough();
+    jest.spyOn(window, 'WebSocket').mockImplementation(() => mockWebSocketInstance);
+    jest.spyOn(service, 'sendMessage').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -64,7 +69,7 @@ describe('WebsocketService', () => {
     service.connect();
     tick();
     expect(window.WebSocket).toHaveBeenCalledWith(`${environment.websocket_url}${environment.websocket_uri}`);
-    expect(service.sendMessage).toHaveBeenCalledTimes(0);
+    expect(service.sendMessage).not.toHaveBeenCalled();
     flush();
   }));
 
@@ -74,12 +79,12 @@ describe('WebsocketService', () => {
     const messageEvent = new MessageEvent('message', { data: JSON.stringify({ tx_code: { description: 'Test description' } }) });
     mockWebSocketInstance.onmessage!(messageEvent);
     tick();
-    expect(service.sendMessage).toHaveBeenCalledTimes(0);
+    expect(service.sendMessage).not.toHaveBeenCalled();
     flush();
   }));
 
   it('should log message on WebSocket close', fakeAsync(() => {
-    spyOn(console, 'log');
+    jest.spyOn(console, 'log');
     service.connect();
     tick();
     mockWebSocketInstance.onclose!(new CloseEvent('close'));
@@ -99,10 +104,12 @@ describe('WebsocketService', () => {
   });
 
   it('should not send a message when WebSocket is not open', () => {
-    spyOn(console, 'error');
-    const mockWebSocketClosedInstance = jasmine.createSpyObj('WebSocket', ['send', 'close'], {
+    jest.spyOn(console, 'error');
+    const mockWebSocketClosedInstance = {
+      send: jest.fn(),
+      close: jest.fn(),
       readyState: WebSocket.CLOSED,
-    });
+    } as jest.Mocked<WebSocket>;
 
     service['socket'] = mockWebSocketClosedInstance;
 
@@ -112,7 +119,12 @@ describe('WebsocketService', () => {
   });
 
   it('should present an alert when a message with tx_code description is received', fakeAsync(() => {
-    spyOn(service['alertController'], 'create').and.callThrough();
+    jest.spyOn(service['alertController'], 'create').mockImplementation(() => {
+      return Promise.resolve({
+        present: jest.fn(),
+        onDidDismiss: jest.fn().mockResolvedValue({ data: { values: { pin: '1234' } } }),
+      });
+    });
     service.connect();
     tick();
     const messageEvent = new MessageEvent('message', { data: JSON.stringify({ tx_code: { description: 'Test description' } }) });

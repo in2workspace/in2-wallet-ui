@@ -11,8 +11,6 @@ export class StorageService {
     this.init();
   }
 
-
-
   public async set(llave: string, value: unknown) {
     await this._storage?.set(llave, value);
   }

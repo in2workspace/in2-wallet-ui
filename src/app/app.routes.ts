@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AutoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
+import { logsEnabledGuard } from './guards/logs-enabled.guard';
 
 export const routes: Routes = [
   {
@@ -38,13 +39,11 @@ export const routes: Routes = [
       {
         path: 'language-selector',
         canActivate: [AutoLoginPartialRoutesGuard],
-
         loadComponent: () =>
           import('./pages/language-selector/language-selector.page').then(
             (m) => m.LanguageSelectorPage
           ),
       },
-
       {
         path: 'camera-selector',
         canActivate: [AutoLoginPartialRoutesGuard],
@@ -53,7 +52,29 @@ export const routes: Routes = [
             (m) => m.CameraSelectorPage
           ),
       },
-
+      {
+        path: 'logs',
+        canActivate:[AutoLoginPartialRoutesGuard, logsEnabledGuard],
+        loadComponent: () =>
+          import('./pages/logs/logs.page').then(
+            (m) => m.LogsPage
+          ),
+          children:[
+            {
+              path:'',
+              loadComponent: () =>
+                import('./pages/logs/logs/logs.component').then(
+                  (m) => m.LogsComponent
+                )
+            },
+            {
+            path: 'camera',
+            loadComponent: () =>
+              import('./pages/logs/camera-logs/camera-logs.page').then(
+                (m) => m.CameraLogsPage
+                )
+          }]
+      },
       {
         path: 'vc-selector',
         canActivate: [AutoLoginPartialRoutesGuard],
