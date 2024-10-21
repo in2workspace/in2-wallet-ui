@@ -35,21 +35,12 @@ export class CameraSelectorPage {
   public availableDevicesEmit(devices: MediaDeviceInfo[]) {
     if (devices.length <= 1) {
       this.availableDevices = devices;
-    } else {
-      //selects the devices's back camera by default
-      const selectedDevices: MediaDeviceInfo[] = [];
-      for (const device of devices) {
-        if (/back|rear|environment/gi.test(device.label)) {
-          selectedDevices.push(device);
-          break;
-        }
-      }
-      if (selectedDevices.length === 0) {
-        this.availableDevices = devices;
-      } else {
-        this.availableDevices = selectedDevices;
-      }
+      return;
     }
+    
+    //prioritize rear cameras
+    const selectedDevices = devices.filter(device => /back|rear|environment/gi.test(device.label));
+    this.availableDevices = selectedDevices.length > 0 ? selectedDevices : devices;
   }
 
   public onDeviceSelectChange(selected: string) {

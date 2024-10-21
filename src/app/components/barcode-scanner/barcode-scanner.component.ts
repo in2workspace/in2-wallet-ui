@@ -39,25 +39,12 @@ export class BarcodeScannerComponent implements OnInit {
     new EventEmitter();
   @Output() public qrCode: EventEmitter<string> = new EventEmitter();
   @ViewChild('scanner') public scanner!: ZXingScannerComponent;
-  public newSelectedCamera!: MediaDeviceInfo;
   public allowedFormats = [BarcodeFormat.QR_CODE];
 
   public devices$ = new BehaviorSubject<MediaDeviceInfo[]>([]);
 
-  public toggleCamera$ = new BehaviorSubject<boolean>(false);
-  public enable$ = this.toggleCamera$.pipe(
-    map((value) => {
-      return value;
-    }),
-    distinctUntilChanged(),
-    shareReplay(1)
-  );
   public selectedDevice$: Observable<MediaDeviceInfo> =
     this.cameraService.navCamera$.pipe(
-      map((device) => {
-        this.toggleCamera$.next(device.deviceId != '');
-        return device;
-      }),
       distinctUntilChanged(),
       shareReplay(1)
     );
@@ -125,20 +112,7 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
   public async onCamerasFound(devices: MediaDeviceInfo[]): Promise<void> {
-    const selectedDevices: MediaDeviceInfo[] = [];
-    for (const device of devices) {
-      if (/back|rear|environment/gi.test(device.label)) {
-        selectedDevices.push(device);
-        break;
-      }
-    }
-    if (selectedDevices.length === 0) {
-      this.newSelectedCamera = devices[1] || devices[0];
-    } else {
-      this.newSelectedCamera = selectedDevices[0];
-    }
-
-    this.availableDevices.emit(devices);
+     this.availableDevices.emit(devices);
   }
 
   public onScanError(error: Error){
