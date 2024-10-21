@@ -2,6 +2,14 @@ import { TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
 import { CameraService } from './camera.service';
 import { StorageService } from './storage.service';
 
+const mockCamera = {
+  deviceId: 'existingCameraId',
+  groupId: 'existingGroupId',
+  kind: 'videoinput',
+  label: 'Existing Camera',
+  toJSON() { return {}; }
+}
+
 class MockStorageService {
   private storage = new Map<string, any>();
 
@@ -47,46 +55,98 @@ describe('CameraService', () => {
     tick();
 
     cameraService.navCamera$.subscribe((camera) => {
-      expect(camera.deviceId).toEqual('newCameraId');
-      expect(camera.kind).toEqual('videoinput');
+      expect(camera?.deviceId).toEqual('newCameraId');
+      expect(camera?.kind).toEqual('videoinput');
     });
 
     flush();
   }));
 
-  it('should update camera if exists', fakeAsync(() => {
-    const mockCamera: MediaDeviceInfo = {
-      deviceId: 'existingCameraId',
-      groupId: 'existingGroupId',
+  it('should update camera if exists and is valid', async () => {
+    const mockEnumerateDevices = jest.fn(async () => {
+      return new Promise<{}[]>(resolve => {
+          resolve([mockCamera])
+      })
+    })
+    Object.defineProperty(globalThis.navigator, 'mediaDevices', {
+      value: {
+          enumerateDevices: mockEnumerateDevices,
+      },
+      configurable: true
+    });
+    jest.spyOn(mockStorageService, 'get').mockReturnValue(Promise.resolve(mockCamera));
+
+    await cameraService.updateCamera();
+
+    cameraService.navCamera$.subscribe((camera) => {
+      expect(camera?.deviceId).toEqual('existingCameraId');
+      expect(camera?.label).toEqual('Existing Camera');
+    });
+
+  });
+
+  it('should set camera to null if not available', async () => {
+    const mockUnavailableCamera: MediaDeviceInfo = {
+      deviceId: 'unavailableCameraId',
+      groupId: 'unavailableGroupId',
       kind: 'videoinput',
-      label: 'Existing Camera',
+      label: 'Unavailable Camera',
       toJSON() { return {}; }
     };
-  
+
+    const mockEnumerateDevices = jest.fn(async () => {
+      return new Promise<{}[]>(resolve => {
+          resolve([mockUnavailableCamera])
+      })
+    })
+
+    Object.defineProperty(globalThis.navigator, 'mediaDevices', {
+      value: {
+          enumerateDevices: mockEnumerateDevices,
+      },
+      configurable: true
+    });
+
     jest.spyOn(mockStorageService, 'get').mockReturnValue(Promise.resolve(mockCamera));
-  
-    cameraService.updateCamera();
-    tick();
-  
-    cameraService.navCamera$.subscribe((camera) => {
-      expect(camera.deviceId).toEqual('existingCameraId');
-      expect(camera.label).toEqual('Existing Camera');
-    });
-  
-    flush();
-  
-  }));
-  
+    const noCameraSpy = jest.spyOn(cameraService, 'noCamera');
 
-  it('should set camera to null on noCamera', fakeAsync(() => {
-    cameraService.noCamera();
-    tick();
+    await cameraService.updateCamera();
+  
+    expect(noCameraSpy).toHaveBeenCalled();
+  });
 
-    cameraService.navCamera$.subscribe((camera) => {
-      expect(camera.deviceId).toEqual('');
-      expect(camera.kind).toEqual('audiooutput');
+
+  it('isCameraAvailable should return true if camera is available', async () => {
+    const mockEnumerateDevices = jest.fn(async () => {
+      return new Promise<{}[]>(resolve => {
+          resolve([mockCamera])
+      })
+    })
+    Object.defineProperty(globalThis.navigator, 'mediaDevices', {
+      value: {
+          enumerateDevices: mockEnumerateDevices,
+      },
+      configurable: true
     });
 
-    flush();
-  }));
+    const result = await cameraService.isCameraAvailable(mockCamera as MediaDeviceInfo);
+    expect(result).toBe(true);
+  });
+
+  it('isCameraAvailable should return false if camera is not available', async () => {
+    const mockEnumerateDevices = jest.fn(async () => {
+      return new Promise<{}[]>(resolve => {
+          resolve([])
+      })
+    })
+    Object.defineProperty(globalThis.navigator, 'mediaDevices', {
+      value: {
+          enumerateDevices: mockEnumerateDevices,
+      },
+      configurable: true
+    });
+
+    const result = await cameraService.isCameraAvailable(mockCamera as MediaDeviceInfo);
+    expect(result).toBe(false);
+  });
 });
