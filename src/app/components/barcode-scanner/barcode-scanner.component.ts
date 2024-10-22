@@ -107,7 +107,6 @@ export class BarcodeScannerComponent implements OnInit {
      };
   }
 
-    //TODO would be cleaner with manual start scan, but so far we haven't been able to do so
   public  onAutostarted(){
       this.selectedDevice$ =
       this.cameraService.navCamera$;

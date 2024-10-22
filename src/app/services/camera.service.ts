@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, shareReplay, tap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, shareReplay } from 'rxjs';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -24,7 +24,6 @@ export class CameraService {
     this.storageService.set('camera', camera);
   }
 
-  //TODO when stored camera is not valid, should components know (camera-selector.page selector for ex.)?
   public async updateCamera() {
     const result = await this.storageService.get('camera');
     console.log('Camera from storage:');
