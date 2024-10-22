@@ -3,13 +3,15 @@
     <b class="pages_titles">{{"camera-selector.settings" | translate}}</b>
     <p class="camera-selector-title">{{"camera-selector.title" | translate}}</p>
     <ion-row class="ion-justify-content-start" class="camera-row">
-      <ion-select [ngModel]="selectedDevice$ | async" (ionChange)="onDeviceSelectChange($any($event).target?.value)" interface="popover" class="camera-select">
-        <ion-select-option value="">No Device</ion-select-option>
-        <ion-select-option *ngIf="(selectedDevice$ | async) === 'Default'" value="Default">Default Device</ion-select-option>
-        <ion-select-option *ngFor="let camera of availableDevices" [value]="camera.deviceId">
-          {{ camera.label}}
-        </ion-select-option>
-      </ion-select>
+      <ng-container *ngIf="selectedDevice$ | async as selectedDevice">
+        <ion-select [ngModel]="selectedDevice" (ionChange)="onDeviceSelectChange($any($event).target?.value)" interface="popover" class="camera-select">
+          <ion-select-option value="">No Device</ion-select-option>
+          <ion-select-option *ngIf="selectedDevice === 'Default'" value="Default">Default Device</ion-select-option>
+          <ion-select-option *ngFor="let camera of availableDevices" [value]="camera.deviceId">
+            {{ camera.label}}
+          </ion-select-option>
+        </ion-select>
+    </ng-container>
     </ion-row>
 
     @if(showBarcode){

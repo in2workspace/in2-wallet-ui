@@ -29,7 +29,8 @@ export class CameraService {
   //TODO when stored camera is not valid, should components know (camera-selector.page selector for ex.)?
   public async updateCamera() {
     const result = await this.storageService.get('camara');
-    console.log('Camera from storage:' + result);
+    console.log('Camera from storage:');
+    console.log(result);
 
     if (result != null && this.isValidMediaDeviceInfo(result)) {
       const isAvailable = await this.isCameraAvailable(result);
@@ -41,7 +42,7 @@ export class CameraService {
         this.noCamera();
       }
     } else {
-      console.error('Stored camera is not valid or null');
+      console.warn('Stored camera is not valid or null');
       this.noCamera();
     }
   }

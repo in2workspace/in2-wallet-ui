@@ -85,19 +85,38 @@ describe('CameraService', () => {
     flush();
   }));
 
+  it('should set camera to null if not valid and warn', async () => {
+    jest.spyOn(mockStorageService, 'get').mockReturnValue(Promise.resolve({}));
+    jest.spyOn(cameraService, 'isValidMediaDeviceInfo' as any).mockReturnValue(false);
+    // jest.spyOn(cameraService, 'is' as any).mockImplementation(()=>Promise.resolve(false));
+    const noCameraSpy = jest.spyOn(cameraService, 'noCamera');
+    const consoleSpy = jest.spyOn(console, 'warn');
+
+    await cameraService.updateCamera();
+  
+    expect(noCameraSpy).toHaveBeenCalled();
+    expect(consoleSpy).toHaveBeenCalled();
+  });
+
+  it('should set camera to null if not available and warn', async () => {
+    jest.spyOn(mockStorageService, 'get').mockReturnValue(Promise.resolve({}));
+    jest.spyOn(cameraService, 'isValidMediaDeviceInfo' as any).mockReturnValue(true);
+    jest.spyOn(cameraService, 'isCameraAvailable').mockImplementation(()=>Promise.resolve(false));
+    const noCameraSpy = jest.spyOn(cameraService, 'noCamera');
+    const consoleSpy = jest.spyOn(console, 'warn');
+
+    await cameraService.updateCamera();
+  
+    expect(noCameraSpy).toHaveBeenCalled();
+    expect(consoleSpy).toHaveBeenCalled();
+    
+  });
+
   it('should update camera if exists and is valid', async () => {
-    const mockEnumerateDevices = jest.fn(async () => {
-      return new Promise<{}[]>(resolve => {
-          resolve([mockCamera])
-      })
-    })
-    Object.defineProperty(globalThis.navigator, 'mediaDevices', {
-      value: {
-          enumerateDevices: mockEnumerateDevices,
-      },
-      configurable: true
-    });
     jest.spyOn(mockStorageService, 'get').mockReturnValue(Promise.resolve(mockCamera));
+    jest.spyOn(cameraService, 'isValidMediaDeviceInfo' as any).mockImplementation(()=>Promise.resolve(true));
+    jest.spyOn(cameraService, 'isCameraAvailable').mockImplementation(()=>Promise.resolve(true));
+    const noCameraSpy = jest.spyOn(cameraService, 'noCamera');
 
     await cameraService.updateCamera();
 
@@ -105,37 +124,6 @@ describe('CameraService', () => {
       expect(camera?.deviceId).toEqual('existingCameraId');
       expect(camera?.label).toEqual('Existing Camera');
     });
-
-  });
-
-  it('should set camera to null if not available', async () => {
-    const mockUnavailableCamera: MediaDeviceInfo = {
-      deviceId: 'unavailableCameraId',
-      groupId: 'unavailableGroupId',
-      kind: 'videoinput',
-      label: 'Unavailable Camera',
-      toJSON() { return {}; }
-    };
-
-    const mockEnumerateDevices = jest.fn(async () => {
-      return new Promise<{}[]>(resolve => {
-          resolve([mockUnavailableCamera])
-      })
-    })
-
-    Object.defineProperty(globalThis.navigator, 'mediaDevices', {
-      value: {
-          enumerateDevices: mockEnumerateDevices,
-      },
-      configurable: true
-    });
-
-    jest.spyOn(mockStorageService, 'get').mockReturnValue(Promise.resolve(mockCamera));
-    const noCameraSpy = jest.spyOn(cameraService, 'noCamera');
-
-    await cameraService.updateCamera();
-  
-    expect(noCameraSpy).toHaveBeenCalled();
   });
 
 
