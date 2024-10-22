@@ -1,14 +1,12 @@
 import { CameraLogsService } from './../../services/camera-logs.service';
 import { CommonModule } from '@angular/common';
-import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   Component,
   Output,
   EventEmitter,
   OnInit,
-  ViewChild,
-  Signal,
-  ChangeDetectorRef,
+  ViewChild
 } from '@angular/core';
 import { BarcodeFormat, Exception } from '@zxing/library';
 import { ZXingScannerModule, ZXingScannerComponent } from '@zxing/ngx-scanner';
@@ -16,15 +14,10 @@ import {
   BehaviorSubject,
   Observable,
   Subject,
-  debounce,
   debounceTime,
-  delay,
   distinctUntilChanged,
   filter,
-  map,
   of,
-  shareReplay,
-  tap,
 } from 'rxjs';
 import { CameraLogType } from 'src/app/interfaces/camera-log';
 import { CameraService } from 'src/app/services/camera.service';

@@ -7,12 +7,10 @@ import { StorageService } from './storage.service';
 })
 export class CameraService {
   public mediaDeviceInfoNull: MediaDeviceInfo|undefined = undefined;
-  //TODO camera?
-  public camara = new BehaviorSubject<MediaDeviceInfo|undefined>(
+  public camera = new BehaviorSubject<MediaDeviceInfo|undefined>(
     this.mediaDeviceInfoNull
   );
-  //TODO remove tap
-  public navCamera$ = this.camara.asObservable().pipe(
+  public navCamera$ = this.camera.asObservable().pipe(
     distinctUntilChanged(),
     shareReplay(1),
     );
@@ -21,14 +19,14 @@ export class CameraService {
     this.updateCamera();
   }
 
-  public changeCamera(camara: MediaDeviceInfo) {
-    this.camara.next(camara);
-    this.storageService.set('camara', camara);
+  public changeCamera(camera: MediaDeviceInfo) {
+    this.camera.next(camera);
+    this.storageService.set('camera', camera);
   }
 
   //TODO when stored camera is not valid, should components know (camera-selector.page selector for ex.)?
   public async updateCamera() {
-    const result = await this.storageService.get('camara');
+    const result = await this.storageService.get('camera');
     console.log('Camera from storage:');
     console.log(result);
 
@@ -36,7 +34,7 @@ export class CameraService {
       const isAvailable = await this.isCameraAvailable(result);
       
       if (isAvailable) {
-        this.camara.next(result);
+        this.camera.next(result);
       } else {
         console.warn('Stored camera not available');
         this.noCamera();
@@ -48,8 +46,8 @@ export class CameraService {
   }
 
   public async noCamera() {
-    await this.storageService.remove('camara');
-    this.camara.next(this.mediaDeviceInfoNull);
+    await this.storageService.remove('camera');
+    this.camera.next(this.mediaDeviceInfoNull);
   }
 
   public async isCameraAvailable(camera: MediaDeviceInfo): Promise<boolean> {

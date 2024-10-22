@@ -59,7 +59,7 @@ describe('CameraService', () => {
     cameraService.noCamera();
     tick();
     expect(camSpy).toHaveBeenCalled();
-    cameraService.camara.subscribe(cam=>{
+    cameraService.camera.subscribe(cam=>{
       expect(cam).toBe(undefined);
     })
     flush();
