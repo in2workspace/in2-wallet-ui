@@ -5,8 +5,8 @@
     <ion-row class="ion-justify-content-start" class="camera-row">
       <ng-container *ngIf="selectedDevice$ | async as selectedDevice">
         <ion-select [ngModel]="selectedDevice" (ionChange)="onDeviceSelectChange($any($event).target?.value)" interface="popover" class="camera-select">
-          <ion-select-option value="">No Device</ion-select-option>
-          <ion-select-option *ngIf="selectedDevice === 'Default'" value="Default">Default Device</ion-select-option>
+          <ion-select-option value="" *ngIf="availableDevices.length<1">{{"camera-selector.no-device" | translate}}</ion-select-option>
+          <ion-select-option *ngIf="selectedDevice === 'Default'" value="Default">{{"camera-selector.default-device" | translate}}</ion-select-option>
           <ion-select-option *ngFor="let camera of availableDevices" [value]="camera.deviceId">
             {{ camera.label}}
           </ion-select-option>
