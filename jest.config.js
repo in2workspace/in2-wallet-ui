@@ -27,7 +27,9 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules/', 
     '<rootDir>/dist/',
-    '<rootDir>/src/**/*.html',
+    // '<rootDir>/src/**/*.html',
+    // '<rootDir>/src/**/*.css',
+    // '<rootDir>/src/**/*.scss',
     '<rootDir>/src/app/components/(?!barcode-scanner)',
     '<rootDir>/src/app/interceptors',
     '<rootDir>/src/app/interfaces',
