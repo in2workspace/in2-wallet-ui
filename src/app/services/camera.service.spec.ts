@@ -74,6 +74,8 @@ describe('CameraService', () => {
       toJSON() { return {}; }
     };
 
+    const storageSpy = jest.spyOn(mockStorageService, 'set');
+
     cameraService.changeCamera(mockCamera);
     tick();
 
@@ -83,17 +85,20 @@ describe('CameraService', () => {
     });
 
     flush();
+    expect(storageSpy).toHaveBeenCalled();
   }));
 
   it('should set camera to null if not valid and warn', async () => {
-    jest.spyOn(mockStorageService, 'get').mockReturnValue(Promise.resolve({}));
-    jest.spyOn(cameraService, 'isValidMediaDeviceInfo' as any).mockReturnValue(false);
-    // jest.spyOn(cameraService, 'is' as any).mockImplementation(()=>Promise.resolve(false));
+    const storageSpy = jest.spyOn(mockStorageService, 'get').mockReturnValue(Promise.resolve({}));
+    const isValidSpy = jest.spyOn(cameraService, 'isValidMediaDeviceInfo' as any).mockReturnValue(false);
+ 
     const noCameraSpy = jest.spyOn(cameraService, 'noCamera');
     const consoleSpy = jest.spyOn(console, 'warn');
 
     await cameraService.updateCamera();
   
+    expect(storageSpy).toHaveBeenCalled();
+    expect(isValidSpy).toHaveBeenCalled();
     expect(noCameraSpy).toHaveBeenCalled();
     expect(consoleSpy).toHaveBeenCalled();
   });
@@ -101,14 +106,18 @@ describe('CameraService', () => {
   it('should set camera to null if not available and warn', async () => {
     jest.spyOn(mockStorageService, 'get').mockReturnValue(Promise.resolve({}));
     jest.spyOn(cameraService, 'isValidMediaDeviceInfo' as any).mockReturnValue(true);
-    jest.spyOn(cameraService, 'isCameraAvailable').mockImplementation(()=>Promise.resolve(false));
+    const isAvailableSpy = jest.spyOn(cameraService, 'isCameraAvailable').mockImplementation(()=>Promise.resolve(false));
     const noCameraSpy = jest.spyOn(cameraService, 'noCamera');
-    const consoleSpy = jest.spyOn(console, 'warn');
+    const consoleWarnSpy = jest.spyOn(console, 'warn');
+    const consoleLogSpy = jest.spyOn(console, 'log');
 
     await cameraService.updateCamera();
   
+
+    expect(isAvailableSpy).toHaveBeenCalled();
     expect(noCameraSpy).toHaveBeenCalled();
-    expect(consoleSpy).toHaveBeenCalled();
+    expect(consoleWarnSpy).toHaveBeenCalled();
+    expect(consoleLogSpy).toHaveBeenCalled();
     
   });
 
