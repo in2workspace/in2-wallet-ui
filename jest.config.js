@@ -37,10 +37,10 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/', 
     '/dist/',
-    '/src/app/components/',
+    '/src/app/components/(?!barcode-scanner)',
     '/src/app/interceptors',
     '/src/app/interfaces',
-    '/src/app/pages/',
-    '/src/app/services/(?!camera.service)'
+    '/src/app/pages/(?!settings|logs|credentials|camera-selector)',
+    '/src/app/services/(?!camera.service|camera-logs)'
   ]
 };
