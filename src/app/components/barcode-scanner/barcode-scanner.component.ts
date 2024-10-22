@@ -107,10 +107,9 @@ export class BarcodeScannerComponent implements OnInit {
      };
   }
 
-  public  onAutostarted(){
-      this.selectedDevice$ =
-      this.cameraService.navCamera$;
-    }
+  public onAutostarted(){
+    this.selectedDevice$ = this.cameraService.navCamera$;
+  }
 
   public onCodeResult(resultString: string) {
     this.qrCode.emit(resultString);
