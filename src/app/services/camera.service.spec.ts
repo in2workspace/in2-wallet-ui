@@ -31,16 +31,39 @@ describe('CameraService', () => {
   let mockStorageService: MockStorageService;
 
   beforeEach(() => {
+    mockStorageService = new MockStorageService();
+
     TestBed.configureTestingModule({
       providers: [
         CameraService,
-        { provide: StorageService, useClass: MockStorageService },
+        { provide: StorageService, useValue: mockStorageService },
       ],
     });
 
     cameraService = TestBed.inject(CameraService);
     mockStorageService = TestBed.inject(StorageService) as unknown as MockStorageService;
   });
+
+  it('should create', () => {
+    expect(cameraService).toBeTruthy();
+  });
+
+  it('should update camera on initialization', async () => {
+    const updateSpy = jest.spyOn(cameraService, 'updateCamera');
+    cameraService.updateCamera();
+    expect(updateSpy).toHaveBeenCalled();
+  });
+
+  it('noCamera should remove camera from storage and update camera with mediaDeviceInfoNull', fakeAsync(()=>{
+    const camSpy = jest.spyOn(mockStorageService, 'remove').mockImplementation(camera=>Promise.resolve());
+    cameraService.noCamera();
+    tick();
+    expect(camSpy).toHaveBeenCalled();
+    cameraService.camara.subscribe(cam=>{
+      expect(cam).toBe(undefined);
+    })
+    flush();
+  }));
 
   it('should change camera', fakeAsync(() => {
     const mockCamera: MediaDeviceInfo = {
@@ -149,4 +172,21 @@ describe('CameraService', () => {
     const result = await cameraService.isCameraAvailable(mockCamera as MediaDeviceInfo);
     expect(result).toBe(false);
   });
+
+  it('should validate correctly media device info', ()=>{
+    
+    const validation = (cameraService as any).isValidMediaDeviceInfo(mockCamera);
+    expect(validation).toBe(true);
+
+    const invalidDevice = {
+      deviceId: 1,
+      groupId: 'existingGroupId',
+      kind: 'videoinput',
+      label: 'Existing Camera',
+      toJSON() { return {}; }
+    };
+    const noValidation = (cameraService as any).isValidMediaDeviceInfo(invalidDevice);
+    expect(noValidation).toBe(false);
+  });
+
 });

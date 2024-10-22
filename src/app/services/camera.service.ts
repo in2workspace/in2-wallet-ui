@@ -46,8 +46,8 @@ export class CameraService {
     }
   }
 
-  public noCamera() {
-    this.storageService.remove('camara');
+  public async noCamera() {
+    await this.storageService.remove('camara');
     this.camara.next(this.mediaDeviceInfoNull);
   }
 
