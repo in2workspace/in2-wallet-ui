@@ -22,7 +22,10 @@ module.exports = {
     "src/app/pages/credentials/**/*.ts",       
     "src/app/pages/settings/**/*.ts",          
     "src/app/pages/logs/**/*.ts",               
-    "src/app/services/camera-logs.service.ts"
+    "src/app/pages/camera-selector/**/*.ts",               
+    "src/app/pages/camera-logs/**/*.ts",               
+    "src/app/services/camera-logs.ts",
+    "src/app/services/camera.service.ts",
   ],
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules/', 
@@ -33,8 +36,8 @@ module.exports = {
     '<rootDir>/src/app/components/(?!barcode-scanner)',
     '<rootDir>/src/app/interceptors',
     '<rootDir>/src/app/interfaces',
-    '<rootDir>/src/app/pages/(?!settings|logs|credentials|camera-selector)',
-    '<rootDir>/src/app/services/(?!camera-logs)'
+    '<rootDir>/src/app/pages/(?!settings|logs|credentials|camera-selector|camera-logs)',
+    '<rootDir>/src/app/services/(?!camera.service|camera-logs)'
   ],
   transformIgnorePatterns: ['/node_modules/(?!@stencil|stencil)/'],
   testPathIgnorePatterns: [
@@ -43,7 +46,7 @@ module.exports = {
     '/src/app/components/(?!barcode-scanner)',
     '/src/app/interceptors',
     '/src/app/interfaces',
-    '/src/app/pages/(?!settings|logs|credentials|camera-selector)',
-    '/src/app/services/(?!camera.service)'
+    '/src/app/pages/(?!settings|logs|credentials|camera-selector|camera-logs)',
+    '/src/app/services/(?!camera.service|camera-logs)'
   ]
 };
