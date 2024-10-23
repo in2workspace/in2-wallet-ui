@@ -19,5 +19,4 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class TabsPage {
-  public constructor(private route: ActivatedRoute) {}
 }
