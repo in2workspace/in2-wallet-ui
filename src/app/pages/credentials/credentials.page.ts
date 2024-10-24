@@ -12,7 +12,6 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { DataService } from 'src/app/services/data.service';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
-import { catchError } from 'rxjs';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
@@ -64,8 +63,8 @@ export class CredentialsPage implements OnInit {
   public constructor(
     private alertController: AlertController,
     public translate: TranslateService,
-    private cameraLogsService: CameraLogsService, 
-    private cdr: ChangeDetectorRef) 
+    private cameraLogsService: CameraLogsService,
+    private cdr: ChangeDetectorRef)
     {
     this.credOfferEndpoint = window.location.origin + '/tabs/home';
     this.route.queryParams.subscribe((params) => {
@@ -99,7 +98,8 @@ export class CredentialsPage implements OnInit {
   public ngOnInit() {
     this.scaned_cred = false;
     this.refresh();
-    if (this.credentialOfferUri !== '') {
+    // TODO: Find a better way to handle this
+    if (this.credentialOfferUri !== undefined) {
       this.generateCred();
     }
   }
@@ -109,6 +109,7 @@ export class CredentialsPage implements OnInit {
     this.ebsiFlag = false;
   }
 
+  // TODO: This should be moved to the settings page because this is something recreated to ebsi and this option is enabled in the settings page
   public async copyToClipboard(textToCopy: string) {
     let text = '';
 
@@ -155,50 +156,63 @@ export class CredentialsPage implements OnInit {
   public qrCodeEmit(qrCode: string) {
     this.toggleScan = false;
     this.websocket.connect();
-    this.walletService.executeContent(qrCode)
-    .subscribe({
-      next: (executionResponse) => {
-        if (qrCode.includes('credential_offer_uri')) {
-          this.from = 'credential';
-          this.isAlertOpen = true;
-          this.scaned_cred = true;
-          setTimeout(() => {
-            this.isAlertOpen = false;
-            this.scaned_cred = false;
-          }, TIME_IN_MS);
-          this.refresh();
-        } else {
-          this.show_qr = false;
-          this.from = '';
-          this.router.navigate(['/tabs/vc-selector/'], {
-            queryParams: {
-              executionResponse: JSON.stringify(executionResponse),
-            },
-          });
-        }
-      },
 
-      error: (httpErrorResponse) => {
-        this.toggleScan = true;
-        const httpErr = httpErrorResponse.error;
-        const error = httpErr.title + ' . ' + httpErr.message + ' . ' + httpErr.path;
-        this.cameraLogsService.addCameraLog(new Error(error), 'httpError');
-        console.error(httpErrorResponse);
-      },
+    // TODO: Instead of using a delay, we should wait for the websocket connection to be established
+    this.delay(1000).then(() => {
+      this.walletService.executeContent(qrCode)
+        .subscribe({
+          next: (executionResponse) => {
+            // TODO: Instead of analyzing the qrCode, we should check the response and decide what object we need to show depending on the response
+            if (qrCode.includes('credential_offer_uri')) {
+              this.from = 'credential';
+              this.isAlertOpen = true;
+              this.scaned_cred = true;
+              setTimeout(() => {
+                this.isAlertOpen = false;
+                this.scaned_cred = false;
+              }, TIME_IN_MS);
+              this.refresh();
+            } else {
+              this.show_qr = false;
+              this.from = '';
+              this.router.navigate(['/tabs/vc-selector/'], {
+                queryParams: {
+                  executionResponse: JSON.stringify(executionResponse),
+                },
+              });
+            }
+            this.websocket.closeConnection();
+          },
+          error: (httpErrorResponse) => {
+            this.websocket.closeConnection();
+            this.toggleScan = true;
+            const httpErr = httpErrorResponse.error;
+            const error = httpErr.title + ' . ' + httpErr.message + ' . ' + httpErr.path;
+            this.cameraLogsService.addCameraLog(new Error(error), 'httpError');
+            console.error(httpErrorResponse);
+          },
+        });
     });
   }
 
   public generateCred() {
     this.websocket.connect();
-    this.walletService.requestCredential(this.credentialOfferUri).subscribe({
-      next: () => {
-        this.refresh();
-      },
-      error: (err) => {
-        console.error(err);
-      },
+
+    // Esperar un segundo antes de continuar
+    this.delay(1000).then(() => {
+      this.walletService.requestCredential(this.credentialOfferUri).subscribe({
+        next: () => {
+          this.refresh();
+          this.websocket.closeConnection();
+        },
+        error: (err) => {
+          console.error(err);
+          this.websocket.closeConnection();
+        },
+      });
     });
   }
+
 
   public untoggleScan() {
     this.toggleScan = false;
@@ -244,5 +258,10 @@ export class CredentialsPage implements OnInit {
     });
 
     await alert.present();
+
   }
+  private delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 }
