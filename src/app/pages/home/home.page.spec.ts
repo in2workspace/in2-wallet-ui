@@ -33,7 +33,8 @@ describe('HomePage', () => {
           useValue: {
             queryParams: new BehaviorSubject({ credential_offer_uri: 'someUri' })
           }
-        }, {provide:Router, useValue:mockRouter}
+        }, 
+        {provide:Router, useValue:mockRouter}
       ]
     }).compileComponents();
 

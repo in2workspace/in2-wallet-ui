@@ -112,7 +112,6 @@ export class CredentialsPage implements OnInit {
   // TODO: This should be moved to the settings page because this is something recreated to ebsi and this option is enabled in the settings page
   public async copyToClipboard(textToCopy: string) {
     let text = '';
-    console.log('before if');
 
     if (textToCopy === 'did-text') {
       const didTextElement = document.getElementById('did-text');
@@ -135,12 +134,10 @@ export class CredentialsPage implements OnInit {
       return;
     }
 
-    console.log('after if');
-
     try {
       await navigator.clipboard.writeText(text);
     } catch (error) {
-      console.error('Error al copiar texto al portapapeles:', error);
+      console.error('Error when trying to copy the text to clipboard:', error);
     }
   }
 

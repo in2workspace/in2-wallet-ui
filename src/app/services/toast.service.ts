@@ -51,13 +51,8 @@ export class ToastServiceHandler {
 
               buttons: ['OK'],
             });
-            //TODO remove logs after test dev
-            console.log(this.toastController.create);
-            console.log('alert: ');
-            console.log(alert);
-            const testVal = await alert.present();
-            console.log('alert.present was called')
-            console.log(testVal);
+            await alert.present();
+
             setTimeout(() => {
               alert.dismiss();
             }, TIME_IN_MS);

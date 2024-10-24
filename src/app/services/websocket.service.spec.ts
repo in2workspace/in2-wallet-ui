@@ -105,10 +105,7 @@ describe('WebsocketService', () => {
   });
 
   it('should send a message when WebSocket is open', fakeAsync(() => {
-    console.log('comença el meu it')
     service.connect();
-    console.warn('SOCKET: ');
-    console.warn((service as any).socket);
 
     tick();
     service.sendMessage('Test Message');

@@ -221,7 +221,6 @@ describe('CredentialsPage', () => {
 
     await component.copyToClipboard(textToCopy);
 
-    console.log(clipboardSpy.mock.calls);
     expect(clipboardSpy).not.toHaveBeenCalled();
     expect(consoleErrSpy).toHaveBeenCalledWith('Element with id "did-text" not found.');
   });
@@ -234,7 +233,6 @@ describe('CredentialsPage', () => {
 
     await component.copyToClipboard(textToCopy);
 
-    console.log(clipboardSpy.mock.calls);
     expect(clipboardSpy).toHaveBeenCalledWith('inner text');
   });
 

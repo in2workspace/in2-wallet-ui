@@ -1,12 +1,13 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { IonicModule, NavController, PopoverController } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AuthenticationService } from './services/authentication.service';
 import { StorageService } from './services/storage.service';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { LogoutPage } from './pages/logout/logout.page';
+import { EventEmitter } from '@angular/core';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -17,9 +18,9 @@ describe('AppComponent', () => {
   let mockStorageService: any;
   let mockActivatedRoute: any;
   let navCtrl: NavController;
+  let fixture: any;
 
-  beforeEach(
-    waitForAsync(() => {
+  beforeEach(async () => {
       mockAuthenticationService = {
         getName: jest.fn(() => of('John Doe')),
         logout: jest.fn(() => of(null))
@@ -31,14 +32,22 @@ describe('AppComponent', () => {
 
       mockPopoverController = {
         create: jest.fn().mockResolvedValue({
-          present: jest.fn().mockImplementation(()=>Promise.resolve())
-        })
+            present: jest.fn().mockImplementation(() => Promise.resolve({})),
+            dismiss: jest.fn().mockImplementation(()=>Promise.resolve(true)),
+        }),
       };
-
+      
       mockTranslateService = {
+        currentLang: 'de',
         addLangs: jest.fn(),
         setDefaultLang: jest.fn(),
-        get: jest.fn()
+        get: jest.fn().mockImplementation((key: string): Observable<string> => {
+          return of(key);
+        }),
+        onLangChange: new EventEmitter<LangChangeEvent>(),
+        use: jest.fn(),
+        onTranslationChange: new EventEmitter(),
+        onDefaultLangChange: new EventEmitter()
       };
 
       mockStorageService = {
@@ -56,8 +65,9 @@ describe('AppComponent', () => {
 
       const navCtrlMock = { navigateForward: jest.fn() };
 
-      TestBed.configureTestingModule({
-        imports:[IonicModule.forRoot()],
+      await TestBed.configureTestingModule({
+        declarations:[TranslatePipe],
+        imports:[IonicModule.forRoot(), TranslateModule.forRoot()],
         providers: [
           { provide: ActivatedRoute, useValue: mockActivatedRoute },
           { provide: AuthenticationService, useValue: mockAuthenticationService },
@@ -67,11 +77,14 @@ describe('AppComponent', () => {
           { provide: StorageService, useValue: mockStorageService },
           { provide: NavController, useValue: navCtrlMock },
         ]
-      }).compileComponents();
+      })
+      .overrideProvider(PopoverController, { useValue: mockPopoverController })
+      .compileComponents();
 
-      const fixture = TestBed.createComponent(AppComponent);
+      fixture = TestBed.createComponent(AppComponent);
       component = fixture.componentInstance;
-    })
+      fixture.detectChanges();
+    }
   );
 
   afterEach(() => {
@@ -109,22 +122,25 @@ describe('AppComponent', () => {
     expect(component.openPopover).toHaveBeenCalled();
   });
 
-  //TODO problema semblant al de toast service
-  it('should create a popover on openPopover call and present it', async () => {
+  it('should create a popover on openPopover call and present it', async () => {   
     const popoverSpy = jest.spyOn(mockPopoverController, 'create');
-    const mockEvent = new Event('click');
-    await component.openPopover(mockEvent);
+    const mockPopoverData = {
+      component: LogoutPage,
+      event: new Event('click'),
+      translucent: true,
+      cssClass: 'custom-popover',
+    } as any;
 
-    expect(popoverSpy).toHaveBeenCalled();
-    
-    // .toHaveBeenCalledWith(
-    //   expect.objectContaining({
-    //     component: LogoutPage,
-    //     event: mockEvent,
-    //     translucent: true,
-    //     cssClass: 'custom-popover',
-    //   })
-    // );
+    await component.openPopover(mockPopoverData);
+
+    expect(popoverSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        component: LogoutPage,
+        event: expect.anything(),
+        translucent: true,
+        cssClass: 'custom-popover',
+      })
+    );
 
     const popover = await popoverSpy.mock.results[0].value;
     expect(popover.present).toHaveBeenCalled();
