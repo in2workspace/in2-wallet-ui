@@ -59,12 +59,15 @@ export class AppComponent implements OnInit {
   }
 
   public async openPopover(ev: Event) {
+    console.log('before await');
     const popover = await this.popoverController.create({
       component: LogoutPage,
       event: ev,
       translucent: true,
       cssClass: 'custom-popover',
     });
+
+    console.log('after await?')
 
     await popover.present();
   }

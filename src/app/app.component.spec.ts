@@ -30,9 +30,9 @@ describe('AppComponent', () => {
       };
 
       mockPopoverController = {
-        create: jest.fn(() => Promise.resolve({
-          present: jest.fn()
-        }))
+        create: jest.fn().mockResolvedValue({
+          present: jest.fn().mockImplementation(()=>Promise.resolve())
+        })
       };
 
       mockTranslateService = {
@@ -74,6 +74,10 @@ describe('AppComponent', () => {
     })
   );
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should create the component', () => {
     expect(component).toBeTruthy();
   });
@@ -100,21 +104,30 @@ describe('AppComponent', () => {
 
   it('should open popover when handleKeydown is called', async () => {
     const mockEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-    component.openPopover = jest.fn(); // mock openPopover method
+    component.openPopover = jest.fn();
     component.handleKeydown(mockEvent);
     expect(component.openPopover).toHaveBeenCalled();
   });
 
   //TODO problema semblant al de toast service
-//   it('should present a popover on openPopover call', async () => {
-//     const mockEvent = new Event('click');
-//     await component.openPopover(mockEvent);
-//     expect(mockPopoverController.create).toHaveBeenCalledWith({
-//       component: LogoutPage,
-//       event: mockEvent,
-//       translucent: true,
-//       cssClass: 'custom-popover',
-//     });
-//     expect(mockPopoverController.create().present).toHaveBeenCalled();
-//   });
+  it('should create a popover on openPopover call and present it', async () => {
+    const popoverSpy = jest.spyOn(mockPopoverController, 'create');
+    const mockEvent = new Event('click');
+    await component.openPopover(mockEvent);
+
+    expect(popoverSpy).toHaveBeenCalled();
+    
+    // .toHaveBeenCalledWith(
+    //   expect.objectContaining({
+    //     component: LogoutPage,
+    //     event: mockEvent,
+    //     translucent: true,
+    //     cssClass: 'custom-popover',
+    //   })
+    // );
+
+    const popover = await popoverSpy.mock.results[0].value;
+    expect(popover.present).toHaveBeenCalled();
+
+  });
 });

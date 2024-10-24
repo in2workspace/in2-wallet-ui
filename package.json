@@ -8,7 +8,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "jest --silent",
+    "test": "jest",
     "test:coverage": "jest --coverage",
     "test:ci": "jest -ci",
     "lint": "ng lint",

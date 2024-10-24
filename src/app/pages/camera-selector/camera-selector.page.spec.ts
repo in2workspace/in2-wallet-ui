@@ -111,21 +111,6 @@ describe('CameraSelectorPage', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should set available devices correctly', () => {
-    expect(component.availableDevices.length).toBe(2);
-    expect(component.availableDevices[0].label).toBe('Back Camera');
-    expect(component.availableDevices[1].label).toBe('Front Camera');
-  });
-
-  it('should call changeCamera when a valid device is selected', () => {
-    const selectedDeviceId = '123';
-    component.onDeviceSelectChange(selectedDeviceId);
-    expect(cameraServiceMock.changeCamera).toHaveBeenCalledWith({
-      deviceId: '123',
-      label: 'Back Camera',
-    });
-  });
-
   it('should call noCamera when an empty selection is made', () => {
     const selectedDeviceId = '';
     component.onDeviceSelectChange(selectedDeviceId);

@@ -35,12 +35,12 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/', 
     '/dist/',
-    // 'app/app.component',
+    // 'app/(?!app.component)',
     // '/src/app/components/',
     // 'src/app/guards',
     // '/src/app/interceptors',
     // '/src/app/interfaces',
-    // '/src/app/pages/',
+    // '/src/app/pages/(?!credentials)',
     // '/src/app/services/'
   ]
 };
