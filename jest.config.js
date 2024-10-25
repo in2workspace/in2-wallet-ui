@@ -1,8 +1,11 @@
+
 module.exports = {
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ["<rootDir>/src/setup-jest.ts"],
   globalSetup: 'jest-preset-angular/global-setup',
+  // rootDir: "./",
   moduleNameMapper: {
+    "^.+\\.(svg)$": "<rootDir>/src/__mocks__/svgMock.js",
     "@app/(.*)": "<rootDir>/src/app/$1",
     "@assets/(.*)": "<rootDir>/src/assets/$1",
     "@core/(.*)": "<rootDir>/src/app/core/$1",
@@ -11,7 +14,8 @@ module.exports = {
     "@services/(.*)": "<rootDir>/src/app/core/services/$1",
     "@helpers/(.*)": "<rootDir>/src/app/helpers/$1",
     "@shared/(.*)": "<rootDir>/src/app/shared/$1",
-    '^src/(.*)$': '<rootDir>/src/$1'
+    '^src/(.*)$': '<rootDir>/src/$1',
+    '^src/environments/(.*)$': '<rootDir>/src/environments/$1'
   },
   collectCoverage: true,
   coverageDirectory: "./coverage/app",
@@ -40,7 +44,7 @@ module.exports = {
     // 'src/app/guards',
     // '/src/app/interceptors',
     // '/src/app/interfaces',
-    // '/src/app/pages/',
+    // '/src/app/pages/(?!credentials)',
     // '/src/app/services/'
   ]
 };

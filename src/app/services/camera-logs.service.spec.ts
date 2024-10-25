@@ -3,13 +3,13 @@ import { CameraLogsService, LOGS_PREFIX, timestampUntilMinutes } from './camera-
 import { StorageService } from './storage.service';
 import { of, throwError } from 'rxjs';
 import { CameraLog } from '../interfaces/camera-log';
-import { environment } from 'src/environments/environment';
+import { environment } from './../../environments/environment';
 
-jest.mock('src/environments/environment', () => ({
-  environment: {
-    logs_email: 'test@example.com' 
-  }
-}));
+// jest.mock('./../../environments/environment', () => ({
+//   environment: {
+//     logs_email: 'test@example.com' 
+//   }
+// }));
 
 describe('CameraLogsService', () => {
   let service: CameraLogsService;

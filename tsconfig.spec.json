@@ -3,10 +3,10 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
-    "module": "CommonJs", //?
-    "types": ["jest"]
+    "module": "CommonJs",
+    "types": ["jest"],
   },
-  //? "esModuleInterop": true,
-  //? "emitDecoratorMetadata": true,
+  "esModuleInterop": true,
+  "emitDecoratorMetadata": true,
   "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

@@ -1,4 +1,4 @@
-import { environment } from 'src/environments/environment';
+import { environment } from './../../environments/environment';
 import { inject, Injectable } from '@angular/core';
 import { CameraLog, CameraLogType, LogsMailContent } from '../interfaces/camera-log';
 import { StorageService } from './storage.service';

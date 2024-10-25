@@ -56,7 +56,6 @@ export class CameraSelectorPage {
   }
 
   public resetBarcode(){
-    console.log('reset barcode from selector')
     this.showBarcode = false;
     this.cdr.detectChanges();
     this.showBarcode = true;

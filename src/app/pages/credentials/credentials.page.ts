@@ -115,8 +115,7 @@ export class CredentialsPage implements OnInit {
 
     if (textToCopy === 'did-text') {
       const didTextElement = document.getElementById('did-text');
-      console.log('didTextElement: ')
-      console.log(didTextElement)
+
       if (didTextElement) {
         text = didTextElement.innerText.trim();
         const prefix = 'DID: ';
@@ -156,6 +155,7 @@ export class CredentialsPage implements OnInit {
   }
 
   public qrCodeEmit(qrCode: string) {
+    console.log('qr code emit')
     this.toggleScan = false;
     this.websocket.connect();
 
