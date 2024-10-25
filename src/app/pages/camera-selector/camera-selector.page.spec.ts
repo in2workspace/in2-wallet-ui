@@ -7,6 +7,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject, of } from 'rxjs';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
+import { FormsModule } from '@angular/forms';
 
 describe('CameraSelectorPage', () => {
   let component: CameraSelectorPage;
@@ -52,6 +53,7 @@ describe('CameraSelectorPage', () => {
         CameraSelectorPage,
         IonicModule,
         TranslateModule.forRoot(),
+        FormsModule
       ],
       providers: [
         { provide: CameraService, useValue: cameraServiceMock },
@@ -107,5 +109,11 @@ describe('CameraSelectorPage', () => {
     const spy = jest.spyOn(component, 'resetBarcode');
     routerMock.events.next(new NavigationEnd(1, '/tabs/camera-selector', '/tabs/camera-selector'));
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('should call noCamera when an empty selection is made', () => {
+    const selectedDeviceId = '';
+    component.onDeviceSelectChange(selectedDeviceId);
+    expect(cameraServiceMock.noCamera).toHaveBeenCalled();
   });
 });

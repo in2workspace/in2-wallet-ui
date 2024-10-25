@@ -20,7 +20,7 @@ export class LogoutPage {
     private router: Router
   ) {}
   public logout() {
-    this.authenticationService.logout().subscribe(() => {
+    this.authenticationService.logout().subscribe(() => { //Todo unsubscribe
       this.router.navigate(['/home'], {});
     });
     this.popOverController.dismiss();

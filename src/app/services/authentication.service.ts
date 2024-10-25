@@ -12,7 +12,7 @@ export class AuthenticationService {
   private userData: any;
 
   public constructor(public oidcSecurityService: OidcSecurityService) {
-    this.checkAuth().subscribe();
+    this.checkAuth().subscribe(); //Todo unsubscribe
   }
   public checkAuth() {
     return this.oidcSecurityService.checkAuth().pipe(

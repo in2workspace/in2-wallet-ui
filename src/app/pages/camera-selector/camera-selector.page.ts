@@ -45,7 +45,7 @@ export class CameraSelectorPage {
       filter(event => event instanceof NavigationEnd),
       takeUntilDestroyed()
     )
-    .subscribe((event: NavigationEnd) => {
+    .subscribe((event: NavigationEnd) => { //TODO unsubscribe
       if (this.componentIsInitialized &&
         event.urlAfterRedirects.startsWith('/tabs/camera-selector')) {
        this.resetBarcode();
@@ -56,7 +56,6 @@ export class CameraSelectorPage {
   }
 
   public resetBarcode(){
-    console.log('reset barcode from selector')
     this.showBarcode = false;
     this.cdr.detectChanges();
     this.showBarcode = true;

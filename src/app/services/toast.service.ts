@@ -51,7 +51,6 @@ export class ToastServiceHandler {
 
               buttons: ['OK'],
             });
-
             await alert.present();
 
             setTimeout(() => {

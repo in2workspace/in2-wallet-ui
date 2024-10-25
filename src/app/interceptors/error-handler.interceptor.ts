@@ -34,7 +34,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           }
           this.toastServiceHandler
             .showErrorAlert(error.error.message)
-            .subscribe();
+            .subscribe(); //TODO unsubscribe?
           console.error('Error occurred:', error);
         }
         return throwError(() => error);

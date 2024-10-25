@@ -17,6 +17,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 
 const TIME_IN_MS = 3000;
+//TODO unsubscribe
 
 @Component({
   selector: 'app-credentials',
@@ -115,6 +116,7 @@ export class CredentialsPage implements OnInit {
 
     if (textToCopy === 'did-text') {
       const didTextElement = document.getElementById('did-text');
+
       if (didTextElement) {
         text = didTextElement.innerText.trim();
         const prefix = 'DID: ';
@@ -135,7 +137,7 @@ export class CredentialsPage implements OnInit {
     try {
       await navigator.clipboard.writeText(text);
     } catch (error) {
-      console.error('Error al copiar texto al portapapeles:', error);
+      console.error('Error when trying to copy the text to clipboard:', error);
     }
   }
 
@@ -154,6 +156,7 @@ export class CredentialsPage implements OnInit {
   }
 
   public qrCodeEmit(qrCode: string) {
+    console.log('qr code emit')
     this.toggleScan = false;
     this.websocket.connect();
 

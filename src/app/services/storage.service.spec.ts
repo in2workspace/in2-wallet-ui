@@ -19,6 +19,8 @@ describe('StorageService', () => {
 
     ionicStorageServiceSpy = {
       create: () => ionicStorageSpy,
+      get: jest.fn(),
+      remove: jest.fn()
     };
 
     TestBed.configureTestingModule({
@@ -52,11 +54,11 @@ describe('StorageService', () => {
   it('should get a value from storage', async () => {
     const key = 'testKey';
     const value = 'testValue';
-    ionicStorageSpy.get.mockResolvedValue(Promise.resolve(value));
+    ionicStorageServiceSpy.get.mockResolvedValue(Promise.resolve(value));
 
     const result = await service.get(key);
     expect(result).toEqual(value);
-    expect(ionicStorageSpy.get).toHaveBeenCalledWith(key);
+    expect(ionicStorageServiceSpy.get).toHaveBeenCalledWith(key);
   });
 
   it('should get all values from storage', async () => {
@@ -75,9 +77,9 @@ describe('StorageService', () => {
 
   it('should remove a value from storage', async () => {
     const key = 'testKey';
-    ionicStorageSpy.remove.mockResolvedValue(Promise.resolve());
+    ionicStorageServiceSpy.remove.mockResolvedValue(Promise.resolve());
 
     await service.remove(key);
-    expect(ionicStorageSpy.remove).toHaveBeenCalledWith(key);
+    expect(ionicStorageServiceSpy.remove).toHaveBeenCalledWith(key);
   });
 });

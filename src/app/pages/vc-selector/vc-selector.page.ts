@@ -114,7 +114,6 @@ export class VcSelectorPage implements OnInit {
           this.sendCredentialAlert = true;
         },
         error: async (err) => {
-          console.error(err);
           await this.errorMessage();
           this.router.navigate(['/tabs/home']);
 

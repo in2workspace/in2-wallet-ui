@@ -22,6 +22,8 @@ export class WebsocketService {
     this.socket = new WebSocket(
       environment.websocket_url + environment.websocket_uri
     );
+    console.log('Socket from connect: ')
+    console.log(this.socket);
 
     this.socket.onopen = () => {
       console.log('WebSocket connection opened');
@@ -78,9 +80,13 @@ export class WebsocketService {
   }
 
   public sendMessage(message: string): void {
+    console.log('Sending message: ' + message)
+    console.warn(this.socket.readyState)
     if (this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(message);
     } else {
+      console.log('After readyState check:', this.socket.readyState);
+      console.log('After WebSocket.OPEN check: ' + WebSocket.OPEN);
       console.error('WebSocket connection is not open.');
     }
   }

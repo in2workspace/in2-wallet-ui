@@ -8,6 +8,7 @@ import { DataService } from 'src/app/services/data.service';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { environment } from 'src/environments/environment';
 
+ //Todo unsubscribe
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',

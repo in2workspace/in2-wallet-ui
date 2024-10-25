@@ -1,3 +1,4 @@
+
 module.exports = {
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ["<rootDir>/src/setup-jest.ts"],
@@ -11,42 +12,37 @@ module.exports = {
     "@services/(.*)": "<rootDir>/src/app/core/services/$1",
     "@helpers/(.*)": "<rootDir>/src/app/helpers/$1",
     "@shared/(.*)": "<rootDir>/src/app/shared/$1",
-    '^src/(.*)$': '<rootDir>/src/$1'
+    '^src/(.*)$': '<rootDir>/src/$1',
+    '^src/environments/(.*)$': '<rootDir>/src/environments/$1'
   },
   collectCoverage: true,
   coverageDirectory: "./coverage/app",
   coverageReporters: ["lcov", "text-summary", "cobertura", "html"],
   collectCoverageFrom: [
-    "src/app/components/barcode-scanner/**/*.ts",         
-    "src/app/guards/**/*.ts",                  
-    "src/app/pages/credentials/**/*.ts",       
-    "src/app/pages/settings/**/*.ts",          
-    "src/app/pages/logs/**/*.ts",               
-    "src/app/pages/camera-selector/**/*.ts",               
-    "src/app/pages/camera-logs/**/*.ts",               
-    "src/app/services/camera-logs.ts",
-    "src/app/services/camera.service.ts",
+    "src/app/**/*.ts",
+    "!<rootDir>/node_modules/",
+    "!<rootDir>/test/",
+    "!src/app/**/*.module.ts",
   ],
   coveragePathIgnorePatterns: [
-    '<rootDir>/node_modules/', 
-    '<rootDir>/dist/',
-    // '<rootDir>/src/**/*.html',
-    // '<rootDir>/src/**/*.css',
-    // '<rootDir>/src/**/*.scss',
-    '<rootDir>/src/app/components/(?!barcode-scanner)',
-    '<rootDir>/src/app/interceptors',
-    '<rootDir>/src/app/interfaces',
-    '<rootDir>/src/app/pages/(?!settings|logs|credentials|camera-selector|camera-logs)',
-    '<rootDir>/src/app/services/(?!camera.service|camera-logs)'
+  //   '<rootDir>/node_modules/', 
+  //   '<rootDir>/dist/',
+  //   '<rootDir>/src/app/components/(?!barcode-scanner)',
+  //   '<rootDir>/src/app/interceptors',
+  //   '<rootDir>/src/app/interfaces',
+  //   '<rootDir>/src/app/pages/(?!settings|logs|credentials)',
+  //   '<rootDir>/src/app/services/(?!camera-logs)'
   ],
   transformIgnorePatterns: ['/node_modules/(?!@stencil|stencil)/'],
   testPathIgnorePatterns: [
     '/node_modules/', 
     '/dist/',
-    '/src/app/components/(?!barcode-scanner)',
-    '/src/app/interceptors',
-    '/src/app/interfaces',
-    '/src/app/pages/(?!settings|logs|credentials|camera-selector|camera-logs)',
-    '/src/app/services/(?!camera.service|camera-logs)'
+    // 'app/app.component',
+    // '/src/app/components/',
+    // 'src/app/guards',
+    // '/src/app/interceptors',
+    // '/src/app/interfaces',
+    // '/src/app/pages/',
+    // '/src/app/services/'
   ]
 };
