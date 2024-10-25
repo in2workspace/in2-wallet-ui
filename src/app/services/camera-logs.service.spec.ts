@@ -5,12 +5,6 @@ import { of, throwError } from 'rxjs';
 import { CameraLog } from '../interfaces/camera-log';
 import { environment } from './../../environments/environment';
 
-// jest.mock('./../../environments/environment', () => ({
-//   environment: {
-//     logs_email: 'test@example.com' 
-//   }
-// }));
-
 describe('CameraLogsService', () => {
   let service: CameraLogsService;
   let storageServiceMock: any;
