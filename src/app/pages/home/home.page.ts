@@ -47,7 +47,7 @@ export class HomePage implements OnInit {
     }
   }
   public ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
+    this.route.queryParams.subscribe((params) => { //Todo unsubscribe
       const credentialOfferUri = params['credential_offer_uri'];
       if (credentialOfferUri) {
         this.router.navigate(['/tabs/credentials'], {

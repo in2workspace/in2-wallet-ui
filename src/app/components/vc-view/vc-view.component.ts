@@ -19,6 +19,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
 import { Router } from '@angular/router';
 
+//TODO unsubscribe
 @Component({
   selector: 'app-vc-view',
   templateUrl: './vc-view.component.html',

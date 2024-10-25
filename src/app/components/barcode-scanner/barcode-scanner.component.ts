@@ -26,7 +26,7 @@ import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/ro
 // ! Since console.error is intercepted (to capture the error already caught by zxing), be careful to avoid recursion
 // ! (i.e., console.error should not be called within the execution flow of another console.error)
 
-
+//TODO unsubscribe
 @Component({
   selector: 'app-barcode-scanner',
   templateUrl: './barcode-scanner.component.html',

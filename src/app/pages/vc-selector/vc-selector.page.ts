@@ -115,7 +115,7 @@ export class VcSelectorPage implements OnInit {
         },
         error: async (err) => {
           await this.errorMessage();
-          await this.router.navigate(['/tabs/home']);
+          this.router.navigate(['/tabs/home']);
 
           this.selCredList = [];
         },

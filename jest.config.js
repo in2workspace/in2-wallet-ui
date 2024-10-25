@@ -3,9 +3,7 @@ module.exports = {
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ["<rootDir>/src/setup-jest.ts"],
   globalSetup: 'jest-preset-angular/global-setup',
-  // rootDir: "./",
   moduleNameMapper: {
-    "^.+\\.(svg)$": "<rootDir>/src/__mocks__/svgMock.js",
     "@app/(.*)": "<rootDir>/src/app/$1",
     "@assets/(.*)": "<rootDir>/src/assets/$1",
     "@core/(.*)": "<rootDir>/src/app/core/$1",
@@ -26,7 +24,7 @@ module.exports = {
     "!<rootDir>/test/",
     "!src/app/**/*.module.ts",
   ],
-  // coveragePathIgnorePatterns: [
+  coveragePathIgnorePatterns: [
   //   '<rootDir>/node_modules/', 
   //   '<rootDir>/dist/',
   //   '<rootDir>/src/app/components/(?!barcode-scanner)',
@@ -34,7 +32,7 @@ module.exports = {
   //   '<rootDir>/src/app/interfaces',
   //   '<rootDir>/src/app/pages/(?!settings|logs|credentials)',
   //   '<rootDir>/src/app/services/(?!camera-logs)'
-  // ],
+  ],
   transformIgnorePatterns: ['/node_modules/(?!@stencil|stencil)/'],
   testPathIgnorePatterns: [
     '/node_modules/', 
@@ -44,7 +42,7 @@ module.exports = {
     // 'src/app/guards',
     // '/src/app/interceptors',
     // '/src/app/interfaces',
-    // '/src/app/pages/(?!credentials)',
+    // '/src/app/pages/',
     // '/src/app/services/'
   ]
 };

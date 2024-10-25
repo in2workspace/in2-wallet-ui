@@ -43,7 +43,7 @@ describe('AuthenticationService', () => {
       idToken: ''
     }));
 
-    service.checkAuth().subscribe({
+    service.checkAuth().subscribe({ //Todo unsubscribe
       next: () => {},
       error: () => {
         fail('checkAuth should not have failed');
