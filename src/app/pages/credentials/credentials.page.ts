@@ -15,6 +15,7 @@ import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
+import { HttpErrorInterceptor } from 'src/app/interceptors/error-handler.interceptor';
 
 const TIME_IN_MS = 3000;
 
@@ -186,9 +187,15 @@ export class CredentialsPage implements OnInit {
           error: (httpErrorResponse) => {
             this.websocket.closeConnection();
             this.toggleScan = true;
-            const httpErr = httpErrorResponse.error;
-            const error = httpErr.title + ' . ' + httpErr.message + ' . ' + httpErr.path;
+            
+            const httpErr = httpErrorResponse?.error;
+            const message = httpErr?.message || httpErrorResponse?.message || 'No error message';
+            const title = httpErr?.title || httpErrorResponse?.title || '(No title)';
+            const path = httpErr?.path || httpErrorResponse?.path || '(No path)';
+
+            const error = title + ' . ' + message + ' . ' + path;
             this.cameraLogsService.addCameraLog(new Error(error), 'httpError');
+
             console.error(httpErrorResponse);
           },
         });
