@@ -28,7 +28,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         ) {
           console.error('Handled silently:', errMessage);
         } 
-        else if (request.url.endsWith(environment.server_uri.execute_content_uri && error.error?.message)
+        else if (request.url.endsWith(environment.server_uri.execute_content_uri) !&& error.error?.message
         ) {
           errMessage = 'There was a problem processing the QR. It might be invalid or already have been used';
         } else {
