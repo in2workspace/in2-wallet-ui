@@ -3,6 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { ToastServiceHandler } from '../services/toast.service';
 import { HttpErrorInterceptor } from './error-handler.interceptor';
+import { environment } from 'src/environments/environment';
 
 class MockToastServiceHandler {
   showErrorAlert(message: string) {
@@ -112,5 +113,19 @@ describe('HttpErrorInterceptor with HttpClient', () => {
 
     const req = httpMock.expectOne('/testError');
     req.flush({message: errorMessage}, { status: 500, statusText: 'Internal Server Error' });
+  });
+
+  it('it should print the correct message if a request to process the QR is made', ()=>{
+    const errorMessage = 'There was a problem processing the QR. It might be invalid or already have been used';
+    const spy = jest.spyOn(mockToastServiceHandler, 'showErrorAlert');
+
+    httpClient.get('/' + environment.server_uri.execute_content_uri).subscribe({
+      error: (error) => {
+        expect(spy).toHaveBeenCalledWith('errorMessage');
+      }
+    });
+
+    const req = httpMock.expectOne('/' + environment.server_uri.execute_content_uri);
+    req.flush({message: 'Random error message'}, { status: 500, statusText: 'AnyText' });
   });
 });

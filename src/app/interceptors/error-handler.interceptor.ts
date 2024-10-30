@@ -9,6 +9,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ToastServiceHandler } from '../services/toast.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
@@ -20,11 +21,16 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        const errMessage = error.error?.message || error.message || 'Unknown Http error';
+        let errMessage = error.error?.message || error.message || 'Unknown Http error';
+
         if (
           errMessage?.startsWith('There is no credential available')
         ) {
           console.error('Handled silently:', errMessage);
+        } 
+        else if (request.url.endsWith(environment.server_uri.execute_content_uri && error.error?.message)
+        ) {
+          errMessage = 'There was a problem processing the QR. It might be invalid or already have been used';
         } else {
           if (error.status === 404) {
             console.error('Resource not found:', errMessage);

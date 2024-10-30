@@ -125,6 +125,7 @@
     },
     "errors":{
         "default":"Error not recognized",
+        "failed-qr-process": "There was a problem processing the QR. It might be invalid or already have been used",
         "invalid-qr":"The QR presented is invalid",
         "expired-credentialOffer":"The credential offer is expired or already used",
         "invalid-credentialOffer":"Credential offer is invalid",

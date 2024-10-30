@@ -41,6 +41,6 @@ module.exports = {
     '/src/app/interceptors',
     '/src/app/interfaces',
     '/src/app/pages/(?!settings|logs|credentials)',
-    '/src/app/services/(?!camera-logs)'
+    '/src/app/services/(?!camera-logs|toast)'
   ]
 };
