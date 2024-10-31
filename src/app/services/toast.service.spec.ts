@@ -58,6 +58,10 @@ describe('ToastServiceHandler', () => {
     tick();
     expect(translateSpy).toHaveBeenCalledWith('errors.invalid-qr');
 
+    service.showErrorAlert("The credentials list is empty");
+    tick();
+    expect(translateSpy).toHaveBeenCalledWith('errors.no-credentials-available');
+
     service.showErrorAlert('There was a problem processing the QR. It might be invalid or already have been used');
     tick()
     expect(translateSpy).toHaveBeenCalledWith("errors.failed-qr-process");

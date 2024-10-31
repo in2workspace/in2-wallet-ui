@@ -22,7 +22,8 @@ module.exports = {
     "src/app/pages/credentials/**/*.ts",       
     "src/app/pages/settings/**/*.ts",          
     "src/app/pages/logs/**/*.ts",               
-    "src/app/services/camera-logs.service.ts"
+    "src/app/services/camera-logs.service.ts",
+    "src/app/services/toast.ts"
   ],
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules/', 
@@ -31,7 +32,7 @@ module.exports = {
     '<rootDir>/src/app/interceptors',
     '<rootDir>/src/app/interfaces',
     '<rootDir>/src/app/pages/(?!settings|logs|credentials)',
-    '<rootDir>/src/app/services/(?!camera-logs)'
+    '<rootDir>/src/app/services/(?!camera-logs|toast)'
   ],
   transformIgnorePatterns: ['/node_modules/(?!@stencil|stencil)/'],
   testPathIgnorePatterns: [
