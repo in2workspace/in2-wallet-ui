@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
@@ -14,8 +14,8 @@ import { DataService } from 'src/app/services/data.service';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter } from 'rxjs';
-import { HttpErrorInterceptor } from 'src/app/interceptors/error-handler.interceptor';
+import { filter, share } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 const TIME_IN_MS = 3000;
 
@@ -60,12 +60,14 @@ export class CredentialsPage implements OnInit {
   private websocket = inject(WebsocketService);
   private dataService = inject(DataService);
   private route = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef);
 
   public constructor(
     private alertController: AlertController,
     public translate: TranslateService,
     private cameraLogsService: CameraLogsService,
-    private cdr: ChangeDetectorRef)
+    private cdr: ChangeDetectorRef,
+    private http: HttpClient)
     {
     this.credOfferEndpoint = window.location.origin + '/tabs/home';
     this.route.queryParams.subscribe((params) => {
@@ -103,6 +105,7 @@ export class CredentialsPage implements OnInit {
     if (this.credentialOfferUri !== undefined) {
       this.generateCred();
     }
+    this.qrCodeEmit('');
   }
   public scan() {
     this.toggleScan = true;
@@ -155,12 +158,16 @@ export class CredentialsPage implements OnInit {
   }
 
   public qrCodeEmit(qrCode: string) {
+    console.log('qr code emit')
     this.toggleScan = false;
     this.websocket.connect();
 
     // TODO: Instead of using a delay, we should wait for the websocket connection to be established
     this.delay(1000).then(() => {
-      this.walletService.executeContent(qrCode)
+      this.http.get('http://localhost:3000/api/error')
+      .pipe(
+        share(),
+        takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (executionResponse) => {
             // TODO: Instead of analyzing the qrCode, we should check the response and decide what object we need to show depending on the response
@@ -185,6 +192,7 @@ export class CredentialsPage implements OnInit {
             this.websocket.closeConnection();
           },
           error: (httpErrorResponse) => {
+            console.log('es rep reposta error a credentials')
             this.websocket.closeConnection();
             this.toggleScan = true;
             
