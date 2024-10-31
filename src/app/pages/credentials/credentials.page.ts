@@ -14,10 +14,7 @@ import { DataService } from 'src/app/services/data.service';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {filter, share, of, throwError} from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import {catchError} from "rxjs/operators";
-import {HttpErrorResponse} from "@angular/common/http";
+import { filter } from 'rxjs';
 
 const TIME_IN_MS = 3000;
 
@@ -68,8 +65,7 @@ export class CredentialsPage implements OnInit {
     private alertController: AlertController,
     public translate: TranslateService,
     private cameraLogsService: CameraLogsService,
-    private cdr: ChangeDetectorRef,
-    private http: HttpClient)
+    private cdr: ChangeDetectorRef)
     {
     this.credOfferEndpoint = window.location.origin + '/tabs/home';
     this.route.queryParams.subscribe((params) => {
@@ -107,7 +103,6 @@ export class CredentialsPage implements OnInit {
     if (this.credentialOfferUri !== undefined) {
       this.generateCred();
     }
-    this.qrCodeEmit('');
   }
   public scan() {
     this.toggleScan = true;
@@ -148,18 +143,6 @@ export class CredentialsPage implements OnInit {
   public refresh() {
     this.walletService
       .getAllVCs()
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === 404) {
-            console.log('Error 404: Resource not found.');
-            // Retornamos un observable vacío para que no ocurra nada más
-            return of([]);
-          } else {
-            // Si es cualquier otro error, lo lanzamos nuevamente para ser manejado por el suscriptor o seguir un flujo de errores estándar.
-            return throwError(() => error);
-          }
-        })
-      )
       .subscribe((credentialListResponse: VerifiableCredential[]) => {
         this.credList = credentialListResponse.slice().reverse();
       });
@@ -180,7 +163,6 @@ export class CredentialsPage implements OnInit {
     this.delay(1000).then(() => {
       this.walletService.executeContent(qrCode)
       .pipe(
-        share(),
         takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (executionResponse) => {

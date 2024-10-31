@@ -125,6 +125,7 @@
         "default":"Error no reconocido",
         "failed-qr-process": "Ha habido un error al procesar QR. Puede que sea inválido o que ya haya sido usado antes",
         "invalid-qr":"El QR presentado es inválido",
+        "errors.no-credentials-available": "No hay ninguna credencial disponible para el login",
         "expired-credentialOffer":"La oferta de credencial está expirada o ya utilizada",
         "invalid-credentialOffer":"La oferta de credencial no es válida",
         "invalid-issuerMetadata":"Los metadatos del Issuer son incorrectos",

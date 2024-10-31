@@ -13,10 +13,14 @@ export class ToastServiceHandler {
     private translate: TranslateService
   ) {}
 
+  //todo use title instead of message
  public showErrorAlert(message: string): Observable<unknown> {
     let messageBody = "errors.default"
     if (message.startsWith("The received QR content cannot be processed")) {
       messageBody = "errors.invalid-qr";
+    }
+    if (message.startsWith("The credentials list is empty")) {
+      messageBody = "errors.no-credentials-available";
     }
     else if(message.startsWith('There was a problem processing the QR. It might be invalid or already have been used')){
       messageBody = "errors.failed-qr-process";

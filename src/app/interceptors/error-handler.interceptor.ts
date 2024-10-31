@@ -19,19 +19,23 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
+    //todo refactor this handler (conditional structure)
     return next.handle(request).pipe(
       catchError((errorResp: HttpErrorResponse) => {
         let errMessage = errorResp.error?.message || errorResp.message || 'Unknown Http error';
-
-        if (
-          errMessage?.startsWith('There is no credential available')
+       
+        if ( //todo review this handler
+          errMessage?.startsWith('There is no credential available') || 
+          request.url.endsWith(environment.server_uri.credentials_uri)
         ) {
           console.error('Handled silently:', errMessage);
-        } 
+        }
         else {
-          if (request.url.endsWith('api/error') && (errMessage !== 'The received QR content cannot be processed')
-          ) {
+          if (request.url.endsWith(environment.server_uri.execute_content_uri))
+          {
+            if(errMessage !== 'The received QR content cannot be processed'){
               errMessage = 'There was a problem processing the QR. It might be invalid or already have been used';
+            }
           }
           if (errorResp.status === 404) {
             console.error('Resource not found:', errMessage);
