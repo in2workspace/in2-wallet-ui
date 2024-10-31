@@ -14,8 +14,10 @@ import { DataService } from 'src/app/services/data.service';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter, share } from 'rxjs';
+import {filter, share, of, throwError} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import {catchError} from "rxjs/operators";
+import {HttpErrorResponse} from "@angular/common/http";
 
 const TIME_IN_MS = 3000;
 
@@ -146,6 +148,18 @@ export class CredentialsPage implements OnInit {
   public refresh() {
     this.walletService
       .getAllVCs()
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            console.log('Error 404: Resource not found.');
+            // Retornamos un observable vacío para que no ocurra nada más
+            return of([]);
+          } else {
+            // Si es cualquier otro error, lo lanzamos nuevamente para ser manejado por el suscriptor o seguir un flujo de errores estándar.
+            return throwError(() => error);
+          }
+        })
+      )
       .subscribe((credentialListResponse: VerifiableCredential[]) => {
         this.credList = credentialListResponse.slice().reverse();
       });
@@ -164,7 +178,7 @@ export class CredentialsPage implements OnInit {
 
     // TODO: Instead of using a delay, we should wait for the websocket connection to be established
     this.delay(1000).then(() => {
-      this.http.get('http://localhost:3000/api/error')
+      this.walletService.executeContent(qrCode)
       .pipe(
         share(),
         takeUntilDestroyed(this.destroyRef))
@@ -195,7 +209,7 @@ export class CredentialsPage implements OnInit {
             console.log('es rep reposta error a credentials')
             this.websocket.closeConnection();
             this.toggleScan = true;
-            
+
             const httpErr = httpErrorResponse?.error;
             const message = httpErr?.message || httpErrorResponse?.message || 'No error message';
             const title = httpErr?.title || httpErrorResponse?.title || '(No title)';
