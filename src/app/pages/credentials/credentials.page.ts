@@ -18,6 +18,8 @@ import { filter } from 'rxjs';
 
 const TIME_IN_MS = 3000;
 
+//TODO don't show creds while scanning, separate scan in another component
+
 @Component({
   selector: 'app-credentials',
   templateUrl: './credentials.page.html',
@@ -161,6 +163,7 @@ export class CredentialsPage implements OnInit {
 
     // TODO: Instead of using a delay, we should wait for the websocket connection to be established
     this.delay(1000).then(() => {
+      //todo don't accept qrs that are not to login or get VC
       this.walletService.executeContent(qrCode)
       .pipe(
         takeUntilDestroyed(this.destroyRef))
@@ -177,6 +180,7 @@ export class CredentialsPage implements OnInit {
               }, TIME_IN_MS);
               this.refresh();
             } else {
+              // login from verifier
               this.show_qr = false;
               this.from = '';
               this.router.navigate(['/tabs/vc-selector/'], {
@@ -188,7 +192,6 @@ export class CredentialsPage implements OnInit {
             this.websocket.closeConnection();
           },
           error: (httpErrorResponse) => {
-            console.log('es rep reposta error a credentials')
             this.websocket.closeConnection();
             this.toggleScan = true;
 
