@@ -1,8 +1,6 @@
 
 {
     "menu":{
-
-    "home":"Home",
     "credentials":"Credentials",
     "dids":"Dids",
     "camera-selector":"Camera Selector",
@@ -33,28 +31,16 @@
         "expiredCredential":"Credential expired",
         "expiredText":"This credential has expired and you can no longer use it.",
         "close":"Close",
+        "scan": "Scan",
         "confirmation":"Confirmation",
         "confirmationMessage":"Do you want to choose this credential?",
         "addVC":"Add Credential",
-        "identify": "Identify yourself"    },
-    "dids":{
-        "title":"Dids"
-    },
-    "faqs":{
-        "title":"Faqs"
-    },
-    "home":{
-        "title":"Home",
-        "hello":"Welcome to IN2Wallet",
-        "scan":"Scan QR",
+        "identify": "Identify yourself",
         "add-credential": "Add a credential",
-        "access":"Access",
         "get-cred":"Get Credential",
-        "ok-header": "Congratulations",
         "ok-msg": "Credential added",
         "unsucces": "Unsuccesfull",
         "already-saved": "VC already saved",
-        "no-credential": "No stored valid credential",
         "ebsi-popup": {
           "info": "In order to fulfill the prerequisites of EBSI credential issue, copy this DID and Credential Offer Endpoint.",
           "did": "DID: ",
@@ -63,7 +49,13 @@
           "next": "Next"
         },
         "error-ebsi": "The did could not be returned.",
-        "copy": "Copy to clipboard"
+        "copy": "Copy to clipboard"    
+    },
+    "dids":{
+        "title":"Dids"
+    },
+    "faqs":{
+        "title":"Faqs"
     },
     "language-selector":{
         "title":"Select language"

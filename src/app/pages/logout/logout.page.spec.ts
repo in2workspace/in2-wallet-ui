@@ -36,11 +36,11 @@ describe('LogoutPage', () => {
     component = TestBed.inject(LogoutPage);
   });
 
-  it('should call logout and navigate to /home', () => {
+  it('should call logout and navigate to credentials', () => {
     component.logout();
 
     expect(authenticationServiceMock.logout).toHaveBeenCalled(); 
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/home'], {});
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/tabs/credentials'], {});
     expect(popoverControllerMock.dismiss).toHaveBeenCalled(); 
   });
 });

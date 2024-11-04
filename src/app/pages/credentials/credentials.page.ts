@@ -67,7 +67,7 @@ export class CredentialsPage implements OnInit {
     private cameraLogsService: CameraLogsService,
     private cdr: ChangeDetectorRef)
     {
-    this.credOfferEndpoint = window.location.origin + '/tabs/home';
+    this.credOfferEndpoint = window.location.origin + '/tabs/credentials';
     this.route.queryParams.subscribe((params) => {
       this.toggleScan = params['toggleScan'];
       this.from = params['from'];

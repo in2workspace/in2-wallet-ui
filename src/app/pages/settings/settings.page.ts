@@ -36,7 +36,7 @@ export class SettingsPage {
   ) {
   }
 
-  public goHomeWithEBSI() {
+  public goToCredentialsWithEBSI() {
     this.dataService.getDid().subscribe({
       next: () => {
         this.router.navigate(['/tabs/credentials']);

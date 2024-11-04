@@ -21,7 +21,7 @@ export class LogoutPage {
   ) {}
   public logout() {
     this.authenticationService.logout().subscribe(() => { //Todo unsubscribe
-      this.router.navigate(['/home'], {});
+      this.router.navigate(['/tabs/credentials'], {});
     });
     this.popOverController.dismiss();
   }

@@ -47,7 +47,7 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(IonicStorageModule.forRoot()),
     importProvidersFrom( AuthModule.forRoot({
       config: {
-        postLoginRoute: '/tabs/home',
+        postLoginRoute: '/tabs/credentials',
         authority: environment.iam_url+environment.iam_params.iam_uri,
         redirectUrl: `${window.location.origin}/callback`,
         postLogoutRedirectUri: window.location.origin,

@@ -158,7 +158,7 @@ describe('VcSelectorPage', () => {
     expect(executeSpy).toHaveBeenCalled();
 
     setTimeout(() => {
-      expect(routerSpy).toHaveBeenCalledWith(['/tabs/home']);
+      expect(routerSpy).toHaveBeenCalledWith(['/tabs/credentials']);
       expect(component.selCredList.length).toBe(0);
       expect(component.sendCredentialAlert).toBe(false);
     }, 0);

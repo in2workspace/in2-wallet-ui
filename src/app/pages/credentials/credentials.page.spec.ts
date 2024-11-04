@@ -121,7 +121,7 @@ describe('CredentialsPage', () => {
   });
 
   it('should initialize credOfferEndpoint', ()=>{
-    expect(component.credOfferEndpoint).toBe(window.location.origin + '/tabs/home');
+    expect(component.credOfferEndpoint).toBe(window.location.origin + '/tabs/credentials');
   });
 
   it('should take query params to initialize properties', ()=>{

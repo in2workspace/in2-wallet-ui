@@ -1,8 +1,6 @@
 
 {
     "menu":{
-
-    "home":"Home",
     "credentials":"Credentials",
     "dids":"Dids",
     "camera-selector":"Camera Selector",

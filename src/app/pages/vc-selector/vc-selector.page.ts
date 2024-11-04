@@ -52,7 +52,7 @@ export class VcSelectorPage implements OnInit {
       role: 'confirm',
       handler: () => {
         this.sendCredentialAlert = false;
-        this.router.navigate(['/tabs/home']);
+        this.router.navigate(['/tabs/credentials']);
       },
     },
   ];
@@ -115,7 +115,7 @@ export class VcSelectorPage implements OnInit {
         },
         error: async (err) => {
           await this.errorMessage();
-          this.router.navigate(['/tabs/home']);
+          this.router.navigate(['/tabs/credentials']);
 
           this.selCredList = [];
         },

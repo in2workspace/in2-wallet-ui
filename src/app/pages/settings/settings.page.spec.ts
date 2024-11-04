@@ -91,20 +91,20 @@ describe('SettingsPage', () => {
   });
 
 
-  it('should navigate to credentials on success in goHomeWithEBSI', () => {
+  it('should navigate to credentials on success in goToCredentialsWithEBSI', () => {
     (dataService.getDid as jest.Mock).mockReturnValue(of({}));
    
-    component.goHomeWithEBSI();
+    component.goToCredentialsWithEBSI();
    
     expect(dataService.getDid).toHaveBeenCalled();
     expect(router.navigate).toHaveBeenCalledWith(['/tabs/credentials']);
   });
 
 
-  it('should open alert on error in goHomeWithEBSI', () => {
+  it('should open alert on error in goToCredentialsWithEBSI', () => {
     (dataService.getDid as jest.Mock).mockReturnValue(throwError('Error'));
    
-    component.goHomeWithEBSI();
+    component.goToCredentialsWithEBSI();
    
     expect(component.isAlertOpen).toBe(true);
     expect(console.error).toHaveBeenCalledWith('Error');

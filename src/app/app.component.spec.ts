@@ -109,10 +109,10 @@ describe('AppComponent', () => {
     });
   });
 
-  it('should call logout and navigate to home', () => {
+  it('should call logout and navigate to credentials', () => {
     component.logout();
     expect(mockAuthenticationService.logout).toHaveBeenCalled();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/home'], {});
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/tabs/credentials'], {});
   });
 
   it('should open popover when handleKeydown is called', async () => {

@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
   public logout() {
     //TODO unsubscribe
     this.authenticationService.logout().subscribe(() => {
-      this.router.navigate(['/home'], {});
+      this.router.navigate(['/tabs/credentials'], {});
     });
   }
 

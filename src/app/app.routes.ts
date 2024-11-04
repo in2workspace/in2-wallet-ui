@@ -5,7 +5,7 @@ import { logsEnabledGuard } from './guards/logs-enabled.guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/tabs/home',
+    redirectTo: '/tabs/credentials',
     pathMatch: 'full',
   },
   {
@@ -13,13 +13,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/tabs/tabs.page').then((m) => m.TabsPage),
     children: [
-      {
-        path: 'home',
-        canActivate: [AutoLoginPartialRoutesGuard],
-        data: { credentialOfferUri: 'credentialOfferUri' },
-        loadComponent: () =>
-          import('./pages/home/home.page').then((m) => m.HomePage),
-      },
       {
         path: 'credentials',
         canActivate: [AutoLoginPartialRoutesGuard],
@@ -85,7 +78,7 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/home',
+        redirectTo: '/tabs/credentials',
         pathMatch: 'full',
       },
     ],

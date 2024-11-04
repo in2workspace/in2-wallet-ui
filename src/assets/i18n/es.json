@@ -1,7 +1,6 @@
 
 {
     "menu":{
-        "home":"Inicio",
         "credentials":"Credenciales",
         "dids":"Dids",
         "camera-selector":"Selector de Camara",
@@ -32,29 +31,16 @@
         "expiredCredential":"Credencial caducado",
         "expiredText":"Esta credencial está caducada y ya no puedes utilizarla.",
         "close":"Cerrar",
+        "scan":"Escanea",
         "confirmation":"Confirmación",
         "confirmationMessage":"¿Quieres escoger esta credencial?",
         "addVC":"Añade la credencial",
-        "identify": "Identifícate"
-    },
-    "dids":{
-        "title":"Dids"
-    },
-    "faqs":{
-        "title":"Faqs"
-    },
-    "home":{
-        "title":"Home",
-        "hello":"Bienvenido a IN2Wallet",
-        "scan":"Escanea el QR",
+        "identify": "Identifícate",
         "add-credential": "Añadir una credencial",
-        "access":"Accede a un espacio",
         "get-cred":"Obtener Credencial",
-        "ok-header": "Enhorabuena",
         "ok-msg": "Credencial agregada",
         "unsucces": "Sin éxito",
         "already-saved": "VC ya guardado",
-        "no-credential": "No hay credencial válida almacenada",
         "ebsi-popup": {
           "info": "Copia este DID y este Credential Offer Endpoint para completar los prerrequisitos de la emisión de la credencial EBSI.",
           "did": "DID: ",
@@ -64,6 +50,12 @@
         },
         "error-ebsi": "No se ha podido retornar el did.",
         "copy": "Copiar al portapapeles"
+    },
+    "dids":{
+        "title":"Dids"
+    },
+    "faqs":{
+        "title":"Faqs"
     },
     "ebsi": {
       "title": "EBSI"

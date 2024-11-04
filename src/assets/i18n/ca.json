@@ -1,7 +1,6 @@
 
 {
     "menu":{
-    "home":"Home",
     "credentials":"Credencials",
     "dids":"Dids",
     "camera-selector":"Selector de Camara",
@@ -33,29 +32,16 @@
         "expiredCredential":"Credencial caducada",
         "expiredText":"Aquesta credencial està caducada i ja no la pots fer servir.",
         "close":"Tancar",
+        "scan": "Escaneja",
         "confirmation":"Confirmació",
         "confirmationMessage":"Vols escollir aquesta credencial?",
         "addVC":"Afegeix la credencial",
-        "identify": "Identifica't"
-    },
-    "dids":{
-        "title":"Dids"
-    },
-    "faqs":{
-        "title":"Faqs"
-    },
-    "home":{
-        "title":"Home",
-        "hello":"Benvingut a IN2Wallet",
-        "scan":"Escaneja el QR",
+        "identify": "Identifica't",
         "add-credential": "Afegir una credencial",
-        "access":"Accedeix a un espai",
         "get-cred":"Obtenir Credencial",
-        "ok-header": "Enhorabona",
         "ok-msg": "S'ha afegit la credencial",
         "unsucces": "Sense èxit",
         "already-saved": "VC ja guardat",
-        "no-credential": "No hi ha credencial vàlida emmagatzemada",
         "ebsi-popup": {
           "info": "Copia aquest DID i aquest Credential Offer Endpoint per completar els prerequisits de l'emissió de la credencial EBSI.",
           "did": "DID: ",
@@ -65,6 +51,12 @@
         },
         "error-ebsi": "No s'ha pogut retornar el did.",
         "copy": "Copiar al porta-retalls"
+    },
+    "dids":{
+        "title":"Dids"
+    },
+    "faqs":{
+        "title":"Faqs"
     },
     "language-selector":{
         "title":"Selector d'idioma"
