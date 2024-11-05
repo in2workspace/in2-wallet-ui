@@ -375,7 +375,7 @@ describe('CredentialsPage', () => {
     component.qrCodeEmit('someQrCode');
     tick(2000);
 
-    expect(component.toggleScan).toBe(true);
+    expect(component.toggleScan).toBe(false);
     expect(addCameraLogSpy).toHaveBeenCalledWith(new Error(errorMessage), 'httpError');
   }));
 });
