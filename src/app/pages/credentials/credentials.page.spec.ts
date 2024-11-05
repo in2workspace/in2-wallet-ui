@@ -373,7 +373,7 @@ describe('CredentialsPage', () => {
     const addCameraLogSpy = jest.spyOn((component as any).cameraLogsService, 'addCameraLog');
 
     component.qrCodeEmit('someQrCode');
-    tick(1000);
+    tick(2000);
 
     expect(component.toggleScan).toBe(true);
     expect(addCameraLogSpy).toHaveBeenCalledWith(new Error(errorMessage), 'httpError');
