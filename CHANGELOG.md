@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [unreleased] - ()
 ### Added
 - Pop up error message on unsuccessful login.
-### Updated
+### Changed
 - Update an Angular and scanner version.
+- Scan icon in credentials page.
 ### Fixed
 - Translations
 - Multiple Vcs send.
@@ -24,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Error handling for 202 and 204 status codes.
 - Default camera selection issues.
 - Text corrections for better translations.
-### Updated
+### Changed
 - Refined page refresh and redirection logic.
 - Enhanced button behavior and UI components.
 
@@ -43,7 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Error handling issues.
 - Translation issues.
 - SonarCloud issues.
-### Updated
+### Changed
 - Verifiable Credential Interface.
 ### Deleted
 - Registration
