@@ -149,6 +149,7 @@ export class CredentialsPage implements OnInit {
       });
   }
 
+  //todo don't show last VC after delete
   public vcDelete(cred: VerifiableCredential) {
     this.walletService.deleteVC(cred.id).subscribe(() => {
       this.refresh();

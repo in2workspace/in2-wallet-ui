@@ -17,9 +17,30 @@ export const routes: Routes = [
         path: 'credentials',
         canActivate: [AutoLoginPartialRoutesGuard],
         loadComponent: () =>
-          import('./pages/credentials/credentials.page').then(
-            (m) => m.CredentialsPage
+          import('./pages/credentials-frame/credentials-frame.component').then(
+            (m) => m.CredentialsFrameComponent
           ),
+          children: [
+            {
+              path: '',
+              redirectTo: 'list',
+              pathMatch: 'full',
+            },
+            { 
+              path: 'list', 
+              loadComponent: () =>
+                import('./pages/credentials/credentials.page').then(
+                  (m) => m.CredentialsPage
+                )
+            },
+            {
+              path: 'scan',
+              loadComponent: () =>
+                import('./pages/scan/scan.component').then(
+                  (m) => m.ScanComponent
+                ),
+            }
+          ]
       },
       {
         path: 'settings',

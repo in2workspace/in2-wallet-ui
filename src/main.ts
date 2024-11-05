@@ -27,6 +27,8 @@ if (environment.production) {
   enableProdMode();
 }
 
+//TODO create cache issues repository
+
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
