@@ -194,7 +194,6 @@ export class CredentialsPage implements OnInit {
           },
           error: (httpErrorResponse) => {
             this.websocket.closeConnection();
-            this.toggleScan = true;
 
             const httpErr = httpErrorResponse?.error;
             const message = httpErr?.message || httpErrorResponse?.message || 'No error message';
