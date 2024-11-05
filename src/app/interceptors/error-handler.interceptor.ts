@@ -25,7 +25,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         let errMessage = errorResp.error?.message || errorResp.message || 'Unknown Http error';
        
         if ( //todo review this handler
-          errMessage?.startsWith('There is no credential available') || 
+          errMessage?.startsWith('There is no credential available') && 
           request.url.endsWith(environment.server_uri.credentials_uri)
         ) {
           console.error('Handled silently:', errMessage);

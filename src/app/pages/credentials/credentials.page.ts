@@ -63,6 +63,7 @@ export class CredentialsPage implements OnInit {
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
 
+
   public constructor(
     private alertController: AlertController,
     public translate: TranslateService,
@@ -204,6 +205,10 @@ export class CredentialsPage implements OnInit {
             this.cameraLogsService.addCameraLog(new Error(error), 'httpError');
 
             console.error(httpErrorResponse);
+            setTimeout(()=>{
+              this.router.navigate(['/tabs/home'])
+            }, 1000);
+            
           },
         });
     });
