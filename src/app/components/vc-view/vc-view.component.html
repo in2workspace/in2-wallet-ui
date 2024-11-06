@@ -121,7 +121,7 @@
           style="width: auto; height: 40px; cursor: pointer"
         />
 
-        <span
+        <!-- <span
           *ngIf="
             isExpired && credentialInput.status !== credentialStatus.ISSUED
           "
@@ -135,11 +135,12 @@
           "
         >
           {{ "credentials.expiration" | translate }}
-        </span>
+        </span> -->
 
+        <!-- todo FIXME add '&& !isExpired', removed only temporarily -->
         <span
           *ngIf="
-            credentialInput.status === credentialStatus.ISSUED && !isExpired
+            credentialInput.status === credentialStatus.ISSUED
           "
           style="
             color: red;
@@ -180,6 +181,7 @@
         </span>
 
         <ion-row style="justify-content: end">
+          <!-- todo FIXME temporarily isCredentialIssuedAndNotExpired only checks if VC is issued -->
           <ion-button
             *ngIf="isCredentialIssuedAndNotExpired()"
             (click)="requestSignature()"
