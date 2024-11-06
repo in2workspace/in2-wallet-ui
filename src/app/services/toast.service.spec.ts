@@ -58,7 +58,7 @@ describe('ToastServiceHandler', () => {
     tick();
     expect(translateSpy).toHaveBeenCalledWith('errors.invalid-qr');
 
-    service.showErrorAlert("There's no credential available to login");
+    service.showErrorAlert("There are no credentials available to login");
     tick();
     expect(translateSpy).toHaveBeenCalledWith('errors.no-credentials-available');
 

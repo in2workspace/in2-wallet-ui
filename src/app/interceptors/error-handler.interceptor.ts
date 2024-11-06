@@ -33,10 +33,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         else {
           if (request.url.endsWith(environment.server_uri.execute_content_uri))
           {
-            if(
-              !errMessage.startsWith('The received QR content cannot be processed') && 
-              !errMessage.startsWith('There is no credential available')
-            ){
+            if(errMessage.startsWith('The credentials list is empty')){
+              errMessage = "There are no credentials available to login";
+            } 
+            else if(!errMessage.startsWith('The received QR content cannot be processed'))
+            {
               errMessage = 'There was a problem processing the QR. It might be invalid or already have been used';
             }
           }

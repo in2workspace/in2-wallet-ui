@@ -19,7 +19,7 @@ export class ToastServiceHandler {
     if (message.startsWith("The received QR content cannot be processed")) {
       messageBody = "errors.invalid-qr";
     }
-    if (message.startsWith("There's no credential available to login")) {
+    if (message.startsWith("There are no credentials available to login")) {
       messageBody = "errors.no-credentials-available";
     }
     else if(message.startsWith('There was a problem processing the QR. It might be invalid or already have been used')){
