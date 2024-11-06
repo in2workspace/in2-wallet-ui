@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v1.3.2] - ()
 ### Fixed
 - Error popup is shown when the user has no credentials.
+- Expiration messages of credentials view are hidden
 
 ## [v1.3.1] - ()
 ### Fixed
