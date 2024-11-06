@@ -30,7 +30,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         ) {
           console.error('Handled silently:', errMessage);
         }
-        else {
+        else if(request.url.endsWith(environment.server_uri.verifiable_presentation_uri))
+        {
+          console.error('Handled silently:', errMessage);
+        } else {
           if (request.url.endsWith(environment.server_uri.execute_content_uri))
           {
             if(errMessage.startsWith('The credentials list is empty')){
