@@ -2,7 +2,7 @@
 
   <ion-tab-bar slot="bottom">
 
-    <ion-tab-button tab="credentials" [routerLink]="['./credentials']" routerDirection="root">
+    <ion-tab-button tab="credentials" routerDirection="root" (click)="redirectTo('/tabs/credentials')">
       <ion-icon aria-hidden="true" name="wallet"></ion-icon>
       <ion-label>{{"menu.credentials"|translate}}</ion-label>
     </ion-tab-button>

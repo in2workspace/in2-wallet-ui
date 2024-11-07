@@ -146,13 +146,13 @@ describe('CredentialsPage', () => {
     });
   });
 
-  it('ngOnInit should initialize component properties and call refresh', () => {
+  it('ngOnInit should initialize component properties and fetch credentials', () => {
     walletServiceSpy.getAllVCs.mockReturnValue(of([]));
     jest.spyOn(component, 'generateCred');
-    jest.spyOn(component, 'refresh');
+    jest.spyOn(component, 'fetchCredentials');
     component.ngOnInit();
     expect(component.scaned_cred).toBe(false);
-    expect(component.refresh).toHaveBeenCalled();
+    expect(component.fetchCredentials).toHaveBeenCalled();
     expect(component.generateCred).toHaveBeenCalled();
   });
 
@@ -253,7 +253,7 @@ describe('CredentialsPage', () => {
     }, 1000);
   });
 
-  it('should update the credential list when refresh is called',  async () => {
+  it('should update the credential list when fetchCredentials is called',  async () => {
     const mockCredList: VerifiableCredential[] = [
       {
         "@context": ["https://www.w3.org/ns/credentials/v2"],
@@ -305,13 +305,13 @@ describe('CredentialsPage', () => {
 
     walletServiceSpy.getAllVCs.mockReturnValue(of(mockCredList));
 
-    component.refresh();
+    component.fetchCredentials();
 
     expect(component.credList).toEqual(mockCredList.reverse());
   });
 
 
-  it('vcDelete should call deleteVC on the wallet service with the correct ID and refresh the list', () => {
+  it('vcDelete should call deleteVC on the wallet service with the correct ID and fetchCredentials the list', () => {
     const testCredential: VerifiableCredential = {
       "@context": ["https://www.w3.org/ns/credentials/v2"],
       "id": "testCredentialId",
@@ -360,10 +360,10 @@ describe('CredentialsPage', () => {
     };
 
     walletServiceSpy.deleteVC.mockReturnValue(of('Success'));
-    jest.spyOn(component, 'refresh');
+    jest.spyOn(component, 'fetchCredentials');
     component.vcDelete(testCredential);
     expect(walletServiceSpy.deleteVC).toHaveBeenCalledWith(testCredential.id);
-    expect(component.refresh).toHaveBeenCalled();
+    expect(component.fetchCredentials).toHaveBeenCalled();
   });
 
   it('qrCodeEmit should process QR code after websocket connection', () => {

@@ -49,7 +49,7 @@ export class CredentialsPage implements OnInit {
   public credOfferEndpoint = '';
   public from = '';
   public scaned_cred = false;
-  public show_qr = false;
+  public show_qr = false; //remove, it doesn't have any effect by now (overshadowed by untoggleScan)
   public credentialOfferUri = '';
   public ebsiFlag = false;
   public did = '';
@@ -89,25 +89,43 @@ export class CredentialsPage implements OnInit {
     )
     .subscribe((event: NavigationEnd) => {
       if (this.route.snapshot.routeConfig?.path==='credentials' && !event.urlAfterRedirects.startsWith('/tabs/credentials')) {
+        //when leaving page, untoggle scan to deactivate camera
         this.untoggleScan();
         this.cdr.detectChanges();
+      }else if(
+        //when navigating to current page, untoggle scan (show list)
+        this.route.snapshot.routeConfig?.path==='credentials' &&
+        event.urlAfterRedirects.startsWith('/tabs/credentials') && this.toggleScan){
+        this.untoggleScan();
       }
     });
 
   }
 
   public ngOnInit() {
+    console.log('CREDENTIALS ON INIT')
     this.scaned_cred = false;
-    this.refresh();
+    this.fetchCredentials();
     // TODO: Find a better way to handle this
     if (this.credentialOfferUri !== undefined) {
       this.generateCred();
     }
   }
+
+  ionViewWillEnter(){
+    this.untoggleScan();
+    console.log('ionViewWillEnter ');
+  }
+
   public scan() {
     this.toggleScan = true;
     this.show_qr = true;
     this.ebsiFlag = false;
+  }
+
+  // ? Reconsider. Maybe rename
+  public untoggleScan() {
+    this.toggleScan = false;
   }
 
   // TODO: This should be moved to the settings page because this is something recreated to ebsi and this option is enabled in the settings page
@@ -141,7 +159,8 @@ export class CredentialsPage implements OnInit {
     }
   }
 
-  public refresh() {
+  //todo better naming
+  public fetchCredentials() {
     this.walletService
       .getAllVCs()
       .subscribe((credentialListResponse: VerifiableCredential[]) => {
@@ -150,9 +169,10 @@ export class CredentialsPage implements OnInit {
   }
 
   //todo don't show last VC after delete
+  //todo is it really necessary to re-fetch VCs?
   public vcDelete(cred: VerifiableCredential) {
     this.walletService.deleteVC(cred.id).subscribe(() => {
-      this.refresh();
+      this.fetchCredentials();
     });
   }
 
@@ -175,8 +195,9 @@ export class CredentialsPage implements OnInit {
                 this.isAlertOpen = false;
                 this.scaned_cred = false;
               }, TIME_IN_MS);
-              this.refresh();
-            } else {
+              this.fetchCredentials();
+
+            } else { //login verifier
               this.show_qr = false;
               this.from = '';
               this.router.navigate(['/tabs/vc-selector/'], {
@@ -206,21 +227,21 @@ export class CredentialsPage implements OnInit {
     this.delay(1000).then(() => {
       this.walletService.requestCredential(this.credentialOfferUri).subscribe({
         next: () => {
-          this.refresh();
+          //todo is it really necessary to re-fetch VCs?
+          this.fetchCredentials();
           this.websocket.closeConnection();
+          //todo feedback for success?
         },
         error: (err) => {
           console.error(err);
           this.websocket.closeConnection();
         },
       });
+      //todo add some logic to reset from, credentialOfferUri
     });
   }
 
 
-  public untoggleScan() {
-    this.toggleScan = false;
-  }
   public handleButtonKeydown(event: KeyboardEvent, action: string): void {
     if (event.key === 'Enter' || event.key === ' ') {
       if (action === 'scan') {
@@ -231,6 +252,8 @@ export class CredentialsPage implements OnInit {
       event.preventDefault();
     }
   }
+
+  //TODO consider removing: after scanning cred, a success popup is already shown + there is not a translation for this at i18n files
   public async credentialClick() {
     const alert = await this.alertController.create({
       header: this.translate.instant('credentials.confirmation'),
@@ -240,6 +263,7 @@ export class CredentialsPage implements OnInit {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
+            // ? is this handler necessary?
             console.log('User canceled');
           },
         },

@@ -22,8 +22,8 @@ export const routes: Routes = [
           ),
           children: [
             {
-              path: '',
-              redirectTo: 'list',
+              path:'',
+              redirectTo: '/tabs/credentials/list',
               pathMatch: 'full',
             },
             { 
@@ -31,10 +31,10 @@ export const routes: Routes = [
               loadComponent: () =>
                 import('./pages/credentials/credentials.page').then(
                   (m) => m.CredentialsPage
-                )
+                ),
             },
             {
-              path: 'scan',
+              path: 'scanner',
               loadComponent: () =>
                 import('./pages/scan/scan.component').then(
                   (m) => m.ScanComponent
