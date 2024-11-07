@@ -1,35 +1,7 @@
-<!-- <ion-content [fullscreen]="true" *ngIf="toggleScan && !isAlertOpen">  -->
-  <!-- SCANNER -->
-  <!-- <ion-grid>
-    @if(from!=='credential'){
-    <ion-text style="font-weight: bold;">{{"credentials.add-credential"|translate}}</ion-text>
-    <ion-text style="font-weight: bold;">{{"credentials.scan"|translate}}</ion-text>
-    } 
-    <ion-row class="ion-justify-content-center"> -->
-      <!--todo reconsider the show_qr condition; it can only be false while toggleScan is true-->
-      <!-- <app-barcode-scanner (qrCode)="qrCodeEmit($event)"></app-barcode-scanner>
-    </ion-row> -->
-      <!-- todo currently is never shown, since scaned_cred is true only after qrCodeEmit, which hides scanner immediately -->
-      <!-- todo with the pending refactor scan will be shown; but still, this only shows a popup which info already displayed in another popup -->
-    <!-- <ion-row *ngIf="scaned_cred" class="ion-justify-content-center">  
-      <ion-button (click)="credentialClick()"  (keydown)="handleButtonKeydown($event, 'getCredential')">
-        {{"credentials.get-cred"}}
-      </ion-button>
-    </ion-row> -->
-  <!-- </ion-grid> -->
-
-  <!-- NEW CREDENTIAL SUCESS POPUP (INFO ONLY)-->
- <!-- @if(scaned_cred){
-  <ion-content [fullscreen]="true">
-    <ion-grid style="text-align: center;">
-      <p style="text-align: left !important; font-size: 16px; font-weight: bold; padding-left:10px">{{ 'credentials.ok-msg' | translate }}</p>
-      <img src="../assets/icon/Tick/checkmark-verd.png" alt="g-maps" style="border-radius: 2px; width: 200px; height: 200px;">
-      <ion-row class="ion-justify-content-center">
-        <!-- ? can credential be removed at this point? is this what we want? -->
-         <!-- todo credList[0] is already the new credential? -->
-        <app-vc-view [credentialInput]="credList[0]"></app-vc-view>
-      </ion-row>
-    </ion-grid>
-  </ion-content>
- }
-</ion-content> -->
+<ion-content [fullscreen]="true"> 
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <app-barcode-scanner (qrCode)="qrCodeEmit($event)"></app-barcode-scanner>
+    </ion-row>
+  </ion-grid>
+</ion-content>

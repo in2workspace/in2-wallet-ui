@@ -23,16 +23,16 @@ export class TabsPage {
 
   constructor(private navCtrl: NavController, private router: Router) {}
 
-  // async navigateToTab(tab: string) {
-  //   if (tab === 'credentials') {
-  //     await this.navCtrl.navigateRoot('/callback');
+  async navigateToTab(tab: string) {
+    if (tab === 'credentials') {
+      await this.navCtrl.navigateRoot('/callback');
 
-  //     this.navCtrl.navigateRoot('/tabs/credentials');
+      this.navCtrl.navigateRoot('/tabs/credentials');
 
-  //   } else if (tab === 'settings') {
-  //     this.navCtrl.navigateRoot('/tabs/settings');
-  //   }
-  // }
+    } else if (tab === 'settings') {
+      this.navCtrl.navigateRoot('/tabs/settings');
+    }
+  }
 
   redirectTo(uri: string) {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
