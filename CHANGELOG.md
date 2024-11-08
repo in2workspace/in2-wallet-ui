@@ -4,9 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.3.3]
+### Fixed
+- The Error popup is shown when the user has no credentials.
+
 ## [v1.3.2] - ()
 ### Fixed
-- Error popup is shown when the user has no credentials.
+- The Error popup is shown when the user has no credentials.
 - Expiration messages of credentials view are hidden
 
 ## [v1.3.1] - ()
