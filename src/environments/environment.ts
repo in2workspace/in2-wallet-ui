@@ -12,7 +12,7 @@ export const environment = {
   server_uri: {
     execute_content_uri: '/api/v1/execute-content',
     request_credential_uri: '/api/v1/request-credential',
-    verifiable_presentation_uri: '/api/v1/verifiable-presentation',
+    verifiable_presentation_uri: '/api/v1/vp',
     credentials_uri: '/api/v1/credentials',
     credentials_by_id_uri: '/api/v1/credentials?credentialId=',
     credentials_signed_by_id_uri: '/api/v1/request-signed-credential',
@@ -20,6 +20,7 @@ export const environment = {
     ebsi_did_uri: '/api/v1/ebsi-did',
     cbor: '/api/v1/vp/cbor',
   },
-  websocket_uri: '/api/v1/pin'
-
+  websocket_uri: '/api/v1/pin',
+  logs_enabled: false,
+  logs_email: "domesupport@in2.es"
 };

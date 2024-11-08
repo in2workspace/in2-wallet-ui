@@ -13,32 +13,39 @@ export class ToastServiceHandler {
     private translate: TranslateService
   ) {}
 
+  //todo use title instead of message
  public showErrorAlert(message: string): Observable<unknown> {
     let messageBody = "errors.default"
     if (message.startsWith("The received QR content cannot be processed")) {
-      messageBody = "errors.invalid-qr"
+      messageBody = "errors.invalid-qr";
+    }
+    if (message.startsWith("There are no credentials available to login")) {
+      messageBody = "errors.no-credentials-available";
+    }
+    else if(message.startsWith('There was a problem processing the QR. It might be invalid or already have been used')){
+      messageBody = "errors.failed-qr-process";
     }
     else if (message.startsWith("Error while fetching credentialOffer from the issuer")) {
-      messageBody = "errors.expired-credentialOffer"
+      messageBody = "errors.expired-credentialOffer";
     }
     else if (message.startsWith("Error while deserializing CredentialOffer")) {
-      messageBody = "errors.invalid-credentialOffer"
+      messageBody = "errors.invalid-credentialOffer";
     }
     else if (message.startsWith("Error while processing Credential Issuer Metadata from the Issuer")) {
-      messageBody = "errors.invalid-issuerMetadata"
+      messageBody = "errors.invalid-issuerMetadata";
     }
     else if (message.startsWith("Error while fetching  Credential from Issuer")) {
-      messageBody = "errors.cannot-get-VC"
+      messageBody = "errors.cannot-get-VC";
     }
     else if (message.startsWith("Error processing Verifiable Credential")) {
-      messageBody = "errors.cannot-save-VC"
+      messageBody = "errors.cannot-save-VC";
     }
     else if (message.startsWith("Incorrect PIN")) {
-      messageBody = "errors.incorrect-pin"
+      messageBody = "errors.incorrect-pin";
     }else if (message.startsWith("Unsigned")) {
-      messageBody = "errors.unsigned"
+      messageBody = "errors.unsigned";
     }else if (message.startsWith("ErrorUnsigned")) {
-      messageBody = "errors.Errunsigned"
+      messageBody = "errors.Errunsigned";
     }
     return this.translate.get(messageBody).pipe(
       mergeMap((translatedHeader) =>

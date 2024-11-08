@@ -68,6 +68,15 @@
     "language-selector":{
         "title":"Select language"
     },
+    "logs-selector": {
+        "title": "View logs",
+        "send": "Send logs",
+        "camera": "Camera logs"
+    },
+    "camera-logs-selector": {
+        "title": "Camera logs"
+    },
+    "mailto_permission_alert": "Please ensure that you have the necessary permissions to send emails using your default mail application. If the mail service does not open, it is likely due to permission restrictions.",
     "ebsi": {
       "title": "EBSI"
     },
@@ -116,7 +125,9 @@
     },
     "errors":{
         "default":"Error not recognized",
+        "failed-qr-process": "There was a problem processing the QR. It might be invalid or already have been used",
         "invalid-qr":"The QR presented is invalid",
+        "no-credentials-available": "There are no credentials available to login",
         "expired-credentialOffer":"The credential offer is expired or already used",
         "invalid-credentialOffer":"Credential offer is invalid",
         "invalid-issuerMetadata":"Issuer metadata is incorrect",
@@ -129,7 +140,7 @@
     "confirmation":{
         "header":"Send credential?",
         "ok":"Ok",
-        "cancel":"cancel",
+        "cancel":"Cancel",
         "pin":"Enter PIN"
     }
 

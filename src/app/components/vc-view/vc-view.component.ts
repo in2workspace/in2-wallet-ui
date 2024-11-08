@@ -97,7 +97,8 @@ export class VcViewComponent implements OnInit {
         },
       });
     } else {
-      this.isAlertExpirationOpenNotFound = true;
+      // todo FIXME removed temporarily
+      // this.isAlertExpirationOpenNotFound = true;
     }
   }
 
@@ -135,7 +136,9 @@ export class VcViewComponent implements OnInit {
 
   public isCredentialIssuedAndNotExpired(): boolean {
     return (
-      this.credentialInput.status === CredentialStatus.ISSUED && !this.isExpired
+      this.credentialInput.status === CredentialStatus.ISSUED 
+      // todo FIXME add && !isExpired, removed only temporarily
+      // && !this.isExpired
     );
   }
 

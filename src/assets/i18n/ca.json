@@ -68,6 +68,17 @@
     "language-selector":{
         "title":"Selector d'idioma"
     },
+    "logs-selector": {
+        "title": "Veure logs",
+        "send": "Enviar logs",
+        "camera": "Logs de càmera"
+    },
+    "camera-logs-selector": {
+        "title": "Logs de càmera"
+    },
+    "send-logs": {
+        "mailto_permission_alert": "Assegureu-vos que teniu els permisos necessaris per enviar correus electrònics amb la vostra aplicació de correu predeterminada. Si el servei de correu no s'obre, probablement és a causa de restriccions de permisos."
+    },
     "ebsi": {
       "title": "EBSI"
     },
@@ -116,7 +127,9 @@
     },
     "errors":{
         "default":"Error no reconegut",
+        "failed-qr-process": "Hi ha hagut un problema en processar el QR. Pot ser que sigui invàlid o que ja hagi estat utilitzat abans",
         "invalid-qr":"El QR presentat és invàlid",
+        "no-credentials-available": "No hi ha cap credencial disponible per al login",
         "expired-credentialOffer":"La oferta de credencial està expirada o ja utilitzada",
         "invalid-credentialOffer":"La oferta de credencial no és vàlida",
         "invalid-issuerMetadata":"Les metadades del Issuer són incorrectes",

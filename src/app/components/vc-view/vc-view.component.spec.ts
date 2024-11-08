@@ -3,10 +3,11 @@ import { VcViewComponent } from './vc-view.component';
 import { WalletService } from 'src/app/services/wallet.service';
 import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { Observable, of, throwError } from 'rxjs';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { HttpResponse } from '@angular/common/http';
 import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
+import { CallbackPage } from 'src/app/pages/callback/callback.page';
 
 class WalletServiceMock {
   getVCinCBOR(credential: VerifiableCredential) {
@@ -25,7 +26,7 @@ describe('VcViewComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
+        RouterTestingModule.withRoutes([{path:'tabs/credentials', component:CallbackPage}]),
         TranslateModule.forRoot(),
         VcViewComponent,
       ],
@@ -91,13 +92,13 @@ describe('VcViewComponent', () => {
   it('qrView should handle credential correctly if not expired', () => {
     component.isExpired = false;
     const mockCBOR = 'mock_cbor_string';
-    spyOn(walletService, 'getVCinCBOR').and.returnValue(of(mockCBOR));
+    jest.spyOn(walletService, 'getVCinCBOR').mockReturnValue(of(mockCBOR));
 
     component.qrView();
 
     expect(walletService.getVCinCBOR).toHaveBeenCalledWith(component.credentialInput);
     expect(component.cred_cbor).toEqual(mockCBOR);
-    expect(component.isAlertOpenNotFound).toBeFalse();
+    expect(component.isAlertOpenNotFound).toBeFalsy();
   });
 
 
@@ -109,7 +110,7 @@ describe('VcViewComponent', () => {
 
     component.checkExpirationVC();
 
-    expect(component.isExpired).toBeTrue();
+    expect(component.isExpired).toBeTruthy();
   });
 
   it('checkExpirationVC should set isExpired to false if credential is not expired', () => {
@@ -120,71 +121,71 @@ describe('VcViewComponent', () => {
 
     component.checkExpirationVC();
 
-    expect(component.isExpired).toBeFalse();
+    expect(component.isExpired).toBeFalsy();
   });
 
   it('setOpen should correctly set isModalOpen', () => {
     component.setOpen(true);
-    expect(component.isModalOpen).toBeTrue();
+    expect(component.isModalOpen).toBeTruthy();
 
     component.setOpen(false);
-    expect(component.isModalOpen).toBeFalse();
+    expect(component.isModalOpen).toBeFalsy();
   });
 
   it('setOpenNotFound should correctly set isAlertOpenNotFound', () => {
     component.setOpenNotFound(true);
-    expect(component.isAlertOpenNotFound).toBeTrue();
+    expect(component.isAlertOpenNotFound).toBeTruthy();
 
     component.setOpenNotFound(false);
-    expect(component.isAlertOpenNotFound).toBeFalse();
+    expect(component.isAlertOpenNotFound).toBeFalsy();
   });
 
   it('setOpenDeleteNotFound should correctly set isAlertOpenDeleteNotFound', () => {
     component.setOpenDeleteNotFound(true);
-    expect(component.isAlertOpenDeleteNotFound).toBeTrue();
+    expect(component.isAlertOpenDeleteNotFound).toBeTruthy();
 
     component.setOpenDeleteNotFound(false);
-    expect(component.isAlertOpenDeleteNotFound).toBeFalse();
+    expect(component.isAlertOpenDeleteNotFound).toBeFalsy();
   });
 
   it('setOpenExpirationNotFound should correctly set isAlertExpirationOpenNotFound', () => {
     component.setOpenExpirationNotFound(true);
-    expect(component.isAlertExpirationOpenNotFound).toBeTrue();
+    expect(component.isAlertExpirationOpenNotFound).toBeTruthy();
 
     component.setOpenExpirationNotFound(false);
-    expect(component.isAlertExpirationOpenNotFound).toBeFalse();
+    expect(component.isAlertExpirationOpenNotFound).toBeFalsy();
   });
 
   it('deleteVC should set isModalDeleteOpen to true', () => {
     component.deleteVC();
-    expect(component.isModalDeleteOpen).toBeTrue();
+    expect(component.isModalDeleteOpen).toBeTruthy();
   });
 
   it('setOpen should correctly set isModalOpen based on the input', () => {
     component.setOpen(true);
-    expect(component.isModalOpen).toBeTrue();
+    expect(component.isModalOpen).toBeTruthy();
 
     component.setOpen(false);
-    expect(component.isModalOpen).toBeFalse();
+    expect(component.isModalOpen).toBeFalsy();
   });
 
   it('clicking on delete button in deleteButtons should change isModalDeleteOpen accordingly', () => {
-    spyOn(component.vcEmit, 'emit');
+    jest.spyOn(component.vcEmit, 'emit');
 
     component.deleteButtons[0].handler();
-    expect(component.isModalDeleteOpen).toBeFalse();
+    expect(component.isModalDeleteOpen).toBeFalsy();
 
     component.isModalDeleteOpen = false;
 
     component.deleteButtons[1].handler();
-    expect(component.isModalDeleteOpen).toBeTrue();
+    expect(component.isModalDeleteOpen).toBeTruthy();
     expect(component.vcEmit.emit).toHaveBeenCalledWith(
       component.credentialInput
     );
   });
 
   it('clicking on OK button in alertButtons should set handlerMessage and isModalOpen correctly', () => {
-    spyOn(component, 'setOpen');
+    jest.spyOn(component, 'setOpen');
 
     component.setOpen(true);
 
@@ -194,13 +195,13 @@ describe('VcViewComponent', () => {
   it('should set showChip to true if "cwt_vc" is in available_formats', () => {
     component.credentialInput.available_formats = ['cwt_vc'];
     component.checkAvailableFormats();
-    expect(component.showChip).toBeTrue();
+    expect(component.showChip).toBeTruthy();
   });
 
   it('should set showChip to false if "cwt_vc" is not in available_formats', () => {
     component.credentialInput.available_formats = ['other_format'];
     component.checkAvailableFormats();
-    expect(component.showChip).toBeFalse();
+    expect(component.showChip).toBeFalsy();
   });
 
   it('should not set showChip if available_formats is undefined', () => {
@@ -213,28 +214,28 @@ describe('VcViewComponent', () => {
   it('qrView should set isAlertExpirationOpenNotFound when credential is expired', () => {
     component.isExpired = true;
     component.qrView();
-    expect(component.isAlertExpirationOpenNotFound).toBeTrue();
+    expect(component.isAlertExpirationOpenNotFound).toBeTruthy();
   });
   it('qrView should handle HTTP errors correctly', () => {
     component.isExpired = false;
     const mockError = new Error('Network issue');
-    spyOn(walletService, 'getVCinCBOR').and.returnValue(throwError(() => mockError));
+    jest.spyOn(walletService, 'getVCinCBOR').mockReturnValue(throwError(() => mockError));
 
     component.qrView();
 
-    expect(component.isAlertOpenNotFound).toBeTrue();
+    expect(component.isAlertOpenNotFound).toBeTruthy();
   })
 
   it('requestSignature should force page reload on successful response with non-204 status', () => {
-    spyOn((component as any).walletService, 'requestSignature').and.returnValue(of(new HttpResponse({ status: 200 })));
-    spyOn(component, 'forcePageReload');
+    jest.spyOn((component as any).walletService, 'requestSignature').mockReturnValue(of(new HttpResponse({ status: 200 })));
+    jest.spyOn(component, 'forcePageReload');
 
     component.requestSignature();
 
     expect(component.forcePageReload).toHaveBeenCalled();
   });
   it('should call requestSignature on Enter key', fakeAsync(() => {
-    spyOn(component, 'requestSignature');
+    jest.spyOn(component, 'requestSignature');
 
     const button = fixture.debugElement.query(By.css('.request-signature-button'));
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
@@ -245,7 +246,7 @@ describe('VcViewComponent', () => {
   }));
 
   it('should call requestSignature on Space key', fakeAsync(() => {
-    spyOn(component, 'requestSignature');
+    jest.spyOn(component, 'requestSignature');
 
     const button = fixture.debugElement.query(By.css('.request-signature-button'));
     const event = new KeyboardEvent('keydown', { key: ' ' });
@@ -254,8 +255,9 @@ describe('VcViewComponent', () => {
 
     expect(component.requestSignature).toHaveBeenCalled();
   }));
+
   it('should call deleteVC on Enter key press on delete button', fakeAsync(() => {
-    spyOn(component, 'deleteVC');
+    jest.spyOn(component, 'deleteVC');
     const deleteButton = fixture.debugElement.query(By.css('.vc-view-button'));
     const enterKeyEvent = new KeyboardEvent('keydown', { key: 'Enter' });
     deleteButton.nativeElement.dispatchEvent(enterKeyEvent);
@@ -264,14 +266,14 @@ describe('VcViewComponent', () => {
   }));
 
   it('should call deleteVC when keydown event with key "Enter" and action "delete"', fakeAsync(() => {
-    spyOn(component, 'deleteVC');
+    jest.spyOn(component, 'deleteVC');
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
     component.handleButtonKeydown(event, 'delete');
     tick();
     expect(component.deleteVC).toHaveBeenCalled();
   }));
   it('should call setOpen when keydown event with key " " and action "close"', fakeAsync(() => {
-    spyOn(component, 'setOpen');
+    jest.spyOn(component, 'setOpen');
     const event = new KeyboardEvent('keydown', { key: ' ' });
     component.handleButtonKeydown(event, 'close');
     tick();
@@ -279,7 +281,7 @@ describe('VcViewComponent', () => {
   }));
   it('should prevent default behavior for button keydown event', fakeAsync(() => {
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
-    spyOn(event, 'preventDefault');
+    jest.spyOn(event, 'preventDefault');
     component.handleButtonKeydown(event, 'delete');
     tick();
     expect(event.preventDefault).toHaveBeenCalled();

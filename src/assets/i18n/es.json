@@ -70,6 +70,14 @@
     "language-selector":{
         "title":"Selector de idioma"
     },
+    "logs-selector": {
+        "title": "Ver logs",
+        "send": "Enviar logs",
+        "camera": "Logs de cámara"
+    },
+    "camera-logs-selector": {
+        "title": "Logs de cámara"
+    },
     "login":{
         "title":"Login",
         "login":"Login",
@@ -115,7 +123,9 @@
     },
     "errors":{
         "default":"Error no reconocido",
+        "failed-qr-process": "Ha habido un error al procesar QR. Puede que sea inválido o que ya haya sido usado antes",
         "invalid-qr":"El QR presentado es inválido",
+        "no-credentials-available": "No hay ninguna credencial disponible para el login",
         "expired-credentialOffer":"La oferta de credencial está expirada o ya utilizada",
         "invalid-credentialOffer":"La oferta de credencial no es válida",
         "invalid-issuerMetadata":"Los metadatos del Issuer son incorrectos",
