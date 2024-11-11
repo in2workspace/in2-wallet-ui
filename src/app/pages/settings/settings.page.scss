@@ -1,11 +1,36 @@
-.settings-list {
-    margin: 20px;
-    --ion-item-background: white;
+.settings-box {
+    white-space: pre-line;
+    color: grey;
+    width: 70%;
+    margin: 60px 15%;
+    border-radius: 5px;
+    background-color: #f2f4f8;
+    position: relative;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    flex-grow: 1;
+    display: flex;
+    text-align: center;
+    justify-content:center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .settings-list {
+    width: 97%;
+    --ion-item-background: #f2f4f8;
     --ion-item-color: grey;
+    --ion-item-border-width: 0px;
 }
 
 .settings-icon {
     margin-right: 1rem;
+}
+
+ion-item {
+    --border-width: 0px;
+    --inner-border-width: 0px;
+    --border-color: transparent;
+    border: none;
+    box-shadow: none;
 }
 
 ion-button{
