@@ -28,7 +28,7 @@
     "credentials":{
         "title":"Credentials",
         "add":"Add",
-        "nocred":"No credential loaded",
+        "nocred":"You have no saved credentials.\nAdd one to start using the Wallet.",
         "expiration":"Expired",
         "expiredCredential":"Credential expired",
         "expiredText":"This credential has expired and you can no longer use it.",
