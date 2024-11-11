@@ -1,8 +1,6 @@
 <ion-content [fullscreen]="true" class="background-content">
-  <b class="pages_titles">
-    {{"settings.title"|translate}}
-  </b>
-  <ion-list class="settings-list">
+  <div class="settings-box">
+    <ion-list class="settings-list">
       <ion-item [routerLink]="['/tabs/camera-selector']">
         <ion-icon color="grey" name="camera" class="settings-icon"></ion-icon><ion-text>{{"camera-selector.title"|translate}}</ion-text>
       </ion-item>
@@ -15,8 +13,8 @@
         </ion-item>
         <ion-button (keydown.enter)="sendCameraLogs()" (keydown.space)="sendCameraLogs()" (click)="sendCameraLogs()">{{"logs-selector.send"|translate}}</ion-button>
       } 
-  </ion-list>
-
+    </ion-list>
+  </div>
 
   <ion-alert [isOpen]="isAlertOpen" class="custom-alert" (didDismiss)="toggleAlert()" [header]="'home.unsucces' | translate" [message]="'home.error-ebsi' | translate"></ion-alert>
 

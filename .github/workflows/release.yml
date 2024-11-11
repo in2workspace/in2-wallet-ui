@@ -14,7 +14,7 @@ permissions:
 jobs:
   release-snapshot:
     if: github.event_name == 'pull_request'
-    name: release-snapshot
+    name: Release Snapshot
     runs-on: ubuntu-latest
     environment: local
     steps:
@@ -24,6 +24,19 @@ jobs:
       - name: Get Project Version
         id: get_version
         run: echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+
+      - name: Check for existing release tag (only on PR)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ env.VERSION }}
+        run: |
+          TAG_EXISTS=$(curl -H "Authorization: token $GITHUB_TOKEN" -s https://api.github.com/repos/${{ github.repository }}/releases | jq -r ".[] | select(.tag_name == \"v$VERSION\") | .tag_name")
+          if [ "$TAG_EXISTS" == "v$VERSION" ]; then
+            echo "Release tag v$VERSION already exists. Rejecting PR."
+            exit 1
+          else
+            echo "No existing release with tag v$VERSION found. Proceeding with build."
+          fi
 
       - name: Build and Push docker image
         run: |
@@ -41,7 +54,7 @@ jobs:
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    name: release
+    name: Release
     runs-on: ubuntu-latest
     environment: local
     steps:
@@ -51,6 +64,19 @@ jobs:
       - name: Get Project Version
         id: get_version
         run: echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+
+      - name: Check for existing release tag (only on PR)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ env.VERSION }}
+        run: |
+          TAG_EXISTS=$(curl -H "Authorization: token $GITHUB_TOKEN" -s https://api.github.com/repos/${{ github.repository }}/releases | jq -r ".[] | select(.tag_name == \"v$VERSION\") | .tag_name")
+          if [ "$TAG_EXISTS" == "v$VERSION" ]; then
+            echo "Release tag v$VERSION already exists. Rejecting PR."
+            exit 1
+          else
+            echo "No existing release with tag v$VERSION found. Proceeding with build."
+          fi
 
       - name: Build and Push docker image
         run: |
@@ -74,4 +100,4 @@ jobs:
           release_name: "v${{ env.VERSION }}"
           body: "Release of version v${{ env.VERSION }}"
           draft: false
-          prerelease: true
+          prerelease: false
