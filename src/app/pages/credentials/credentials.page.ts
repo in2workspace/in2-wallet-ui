@@ -146,8 +146,19 @@ export class CredentialsPage implements OnInit {
   public refresh() {
     this.walletService
       .getAllVCs()
-      .subscribe((credentialListResponse: VerifiableCredential[]) => {
-        this.credList = credentialListResponse.slice().reverse();
+      .subscribe({
+        next: (credentialListResponse: VerifiableCredential[]) => {
+          this.credList = [...credentialListResponse.slice().reverse()];
+          this.cdr.detectChanges(); // Ensure Angular updates the view
+        },
+        error: (error) => {
+          if (error.status === 404) {
+            this.credList = []; // Set the list to empty if no credentials are found
+            this.cdr.detectChanges(); // Ensure view updates with empty list
+          } else {
+            console.error("Error fetching credentials:", error);
+          }
+        }
       });
   }
 
