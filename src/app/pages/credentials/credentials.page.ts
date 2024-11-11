@@ -63,7 +63,6 @@ export class CredentialsPage implements OnInit {
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
 
-
   public constructor(
     private alertController: AlertController,
     public translate: TranslateService,
@@ -151,6 +150,7 @@ export class CredentialsPage implements OnInit {
           this.credList = [...credentialListResponse.slice().reverse()];
           this.cdr.detectChanges(); // Ensure Angular updates the view
         },
+        // TODO: migrate to unified errorHandler interceptor
         error: (error) => {
           if (error.status === 404) {
             this.credList = []; // Set the list to empty if no credentials are found
