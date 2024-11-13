@@ -13,6 +13,50 @@ ion-alert.custom-alert {
     --backdrop-opacity: 0.7;
   }
 
+::ng-deep ion-alert.custom-alert-error .alert-wrapper {
+  background-color: #fdf0f0 !important;
+  color: white !important;
+  border-radius: 8px;
+}
+
+::ng-deep ion-alert.custom-alert-error .alert-message {
+  color: #7b2531 !important;
+}
+
+::ng-deep ion-alert.custom-alert-error .alert-button.sc-ion-alert-md {
+  color: #7b2531 !important;
+}
+
+::ng-deep ion-alert.custom-alert-error .alert-message ion-icon {
+  font-size: 38px;
+  color: #7b2531;
+}
+
+::ng-deep ion-alert.custom-alert-ok .alert-wrapper {
+  background-color: #e7f8e4 !important;
+  color: white !important;
+  border-radius: 8px;
+}
+
+::ng-deep ion-alert.custom-alert-ok .alert-message {
+  color: #215112 !important;
+}
+
+::ng-deep ion-alert.custom-alert-ok .alert-message ion-icon {
+  font-size: 38px;
+  color: #215112;
+}
+
+::ng-deep ion-alert .alert-message div {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+::ng-deep ion-alert .alert-message span {
+  line-height: 1.2;
+}
+
 .custom-close-button {
   color: #000000;
 }
