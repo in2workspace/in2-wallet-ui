@@ -61,6 +61,13 @@ export class VcSelectorPage implements OnInit {
     });
   }
 
+  showAlert() {
+    this.okMessage();
+  }
+  showErrorAlert() {
+    this.errorMessage();
+  }
+
   public ngOnInit() {
     this.credList = this.executionResponse['selectableVcList'];
     this.credList.forEach(() => {
@@ -127,6 +134,7 @@ export class VcSelectorPage implements OnInit {
         {
           text: this.translate.instant('vc-selector.close'),
           role: 'ok',
+          cssClass: 'centered-button',
         },
       ],
       cssClass:'custom-alert-error'

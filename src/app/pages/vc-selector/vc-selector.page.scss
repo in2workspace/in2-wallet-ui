@@ -53,6 +53,11 @@ ion-alert.custom-alert {
   gap: 20px;
 }
 
+/* Center the button for error alert */
+::ng-deep ion-alert.custom-alert-error .alert-button-group {
+  justify-content: center !important;
+}
+
 ::ng-deep ion-alert .alert-message span {
   line-height: 1.2;
 }
