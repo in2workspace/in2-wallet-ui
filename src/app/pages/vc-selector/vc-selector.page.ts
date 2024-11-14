@@ -61,13 +61,6 @@ export class VcSelectorPage implements OnInit {
     });
   }
 
-  showAlert() {
-    this.okMessage();
-  }
-  showErrorAlert() {
-    this.errorMessage();
-  }
-
   public ngOnInit() {
     this.credList = this.executionResponse['selectableVcList'];
     this.credList.forEach(() => {
@@ -83,6 +76,7 @@ export class VcSelectorPage implements OnInit {
     this.selCredList.push(cred);
     this.isClick[index] = !this.isClick[index];
   }
+
   public async sendCred(cred: VerifiableCredential) {
     const alert = await this.alertController.create({
       header: this.translate.instant('confirmation.header'),
@@ -122,6 +116,7 @@ export class VcSelectorPage implements OnInit {
       });
     }
   }
+
   private async errorMessage(){
     const alert = await this.alertController.create({
       message: `
@@ -162,4 +157,5 @@ export class VcSelectorPage implements OnInit {
       this.router.navigate(['/tabs/home']);
     }, 2000);
   }
+  
 }

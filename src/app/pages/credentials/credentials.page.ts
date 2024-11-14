@@ -184,8 +184,7 @@ export class CredentialsPage implements OnInit {
             // TODO: Instead of analyzing the qrCode, we should check the response and decide what object we need to show depending on the response
             if (qrCode.includes('credential_offer_uri')) {
               this.from = 'credential';
-              this.isAlertOpen = true;
-              this.scaned_cred = true;
+              this.okMessage();
               setTimeout(() => {
                 this.isAlertOpen = false;
                 this.scaned_cred = false;
@@ -291,6 +290,25 @@ export class CredentialsPage implements OnInit {
   }
   private delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  private async okMessage() {
+    const alert = await this.alertController.create({
+      message: `
+        <div style="display: flex; align-items: center; gap: 50px;">
+          <ion-icon name="checkmark-circle-outline" ></ion-icon>
+          <span>${this.translate.instant('home.ok-msg')}</span>
+        </div>
+      `,
+      cssClass: 'custom-alert-ok',
+    });
+  
+    await alert.present();
+  
+    setTimeout(async () => {
+      await alert.dismiss();
+      this.refresh();
+    }, 2000);
   }
 
 }
