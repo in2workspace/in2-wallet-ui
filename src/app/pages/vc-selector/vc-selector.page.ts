@@ -76,8 +76,9 @@ export class VcSelectorPage implements OnInit {
     this.selCredList.push(cred);
     this.isClick[index] = !this.isClick[index];
   }
-
+  
   public async sendCred(cred: VerifiableCredential) {
+    
     const alert = await this.alertController.create({
       header: this.translate.instant('confirmation.header'),
       buttons: [
@@ -116,7 +117,7 @@ export class VcSelectorPage implements OnInit {
       });
     }
   }
-
+  
   private async errorMessage(){
     const alert = await this.alertController.create({
       message: `
@@ -157,5 +158,5 @@ export class VcSelectorPage implements OnInit {
       this.router.navigate(['/tabs/home']);
     }, 2000);
   }
-  
+
 }
