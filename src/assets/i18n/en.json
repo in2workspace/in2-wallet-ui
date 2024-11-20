@@ -106,10 +106,14 @@
         "title":"Vc Selector",
         "select-cred":"Select Credential",
         "send-cred":"Send Credential",
-        "ok-header": "Log in successfully",
+        "ok-header": "Credential sent successfully",
         "ok-message":"Log in completed",
         "ko-header":"Error",
         "ko-message":"Failed to Login",
+        "unauthorized-message":"The credential provided is invalid",
+        "client-error-message":"Error sending the credential",
+        "server-error-message":"We couldn't process your request. Please try again later.",
+        "generic-error-message": "Unknown error",
         "close": "Close"
     },
     "vc-view":{

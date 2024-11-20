@@ -106,9 +106,8 @@ export class VcSelectorPage implements OnInit {
         },
         error: async (err) => {
           console.error(err);
-          await this.errorMessage();
+          await this.errorMessage(err.status);
           this.router.navigate(['/tabs/home']);
-
           this.selCredList = [];
         },
         complete: () => {
@@ -118,12 +117,28 @@ export class VcSelectorPage implements OnInit {
     }
   }
   
-  private async errorMessage(){
+  private async errorMessage(statusCode: number) {
+    let messageText = '';
+  
+    if (statusCode >= 500) {
+      // Handle server errors (50x)
+      messageText = 'vc-selector.server-error-message';
+    } else if (statusCode === 401) {
+      // Handle unauthorized errors (401)
+      messageText = 'vc-selector.unauthorized-message';
+    } else if (statusCode >= 400) {
+      // Handle client errors (40x)
+      messageText = 'vc-selector.client-error-message';
+    } else {
+      // Handle other types of errors
+      messageText = 'vc-selector.generic-error-message';
+    }
+  
     const alert = await this.alertController.create({
       message: `
         <div style="display: flex; align-items: center; gap: 50px;">
           <ion-icon name="alert-circle-outline"></ion-icon>
-          <span>${this.translate.instant('vc-selector.ko-message')}</span>
+          <span>${this.translate.instant(messageText)}</span>
         </div>
       `,
       buttons: [
@@ -133,9 +148,9 @@ export class VcSelectorPage implements OnInit {
           cssClass: 'centered-button',
         },
       ],
-      cssClass:'custom-alert-error'
+      cssClass: 'custom-alert-error',
     });
-
+  
     await alert.present();
     await alert.onDidDismiss();
   }
