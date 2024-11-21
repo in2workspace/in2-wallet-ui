@@ -1,7 +1,7 @@
 #################
 # Build the app #
 #################
-FROM node:alpine AS build
+FROM node:22.11.0 AS build-stage
 
 WORKDIR /app
 COPY package.json package-lock.json ./
