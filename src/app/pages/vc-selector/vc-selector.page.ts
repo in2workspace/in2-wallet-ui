@@ -128,7 +128,7 @@ export class VcSelectorPage implements OnInit {
       messageText = 'vc-selector.unauthorized-message';
     } else if (statusCode >= 400) {
       // Handle client errors (40x)
-      messageText = 'vc-selector.client-error-message';
+      messageText = 'vc-selector.bad-request-message';
     } else {
       // Handle other types of errors
       messageText = 'vc-selector.generic-error-message';
