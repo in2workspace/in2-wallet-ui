@@ -112,7 +112,7 @@
         "ko-message":"Failed to Login",
         "unauthorized-message":"The credential provided is invalid",
         "bad-request-error-message":"Error sending the credential",
-        "server-error-message":"We couldn't process your request. Please try again later.",
+        "server-error-message":"We couldn't process your request.\nPlease try again later.",
         "generic-error-message": "Unknown error",
         "close": "Close"
     },
