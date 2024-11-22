@@ -1,3 +1,4 @@
+
 .custom-button-content {
   display: flex;
   flex-direction: column;
@@ -117,7 +118,8 @@ ion-button {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+// Warning error resources https://lea.verou.me/blog/2024/css-conditionals-now/
+// error alert
 ::ng-deep ion-alert.custom-alert-error .alert-wrapper {
   background-color: #fdf0f0 !important;
   color: white !important;
