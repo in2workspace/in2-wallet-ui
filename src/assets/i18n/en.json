@@ -129,7 +129,7 @@
     },
     "errors":{
         "default":"Error not recognized",
-        "failed-qr-process": "There was a problem processing the QR. It might be invalid or already have been used",
+        "failed-qr-process": "We couldn't process the QR code. It might be invalid or already used.",
         "invalid-qr":"The QR presented is invalid",
         "no-credentials-available": "There are no credentials available to login",
         "expired-credentialOffer":"The credential offer is expired or already used",

@@ -117,3 +117,26 @@ ion-button {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+::ng-deep ion-alert.custom-alert-error .alert-wrapper {
+  background-color: #fdf0f0 !important;
+  color: white !important;
+  border-radius: 8px;
+}
+
+::ng-deep ion-alert.custom-alert-error .alert-message {
+  color: #7b2531 !important;
+}
+
+::ng-deep ion-alert.custom-alert-error .alert-button.sc-ion-alert-md {
+  color: #7b2531 !important;
+}
+
+::ng-deep ion-alert.custom-alert-error .alert-message ion-icon {
+  font-size: 38px;
+  color: #7b2531;
+}
+
+::ng-deep ion-alert.custom-alert-error .alert-button-group {
+  justify-content: center !important;
+}
