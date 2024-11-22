@@ -1,6 +1,5 @@
 import { flush, TestBed } from '@angular/core/testing';
 import { ToastServiceHandler } from './toast.service';
-import { ToastController } from '@ionic/angular';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { TranslateService, TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateFakeLoader } from '@ngx-translate/core';
@@ -112,7 +111,6 @@ describe('ToastServiceHandler', () => {
     expect(toastCtrlSpy).toHaveBeenCalled();
     expect(toastCtrlSpy).toHaveBeenCalledWith(expect.objectContaining(
       {
-        // [errorMessage]:'errors.invalid-qr'
         message: expect.stringContaining("errors.invalid-qr"),
       }
     ));
@@ -135,7 +133,6 @@ describe('ToastServiceHandler', () => {
     expect(alertCtrl.create).toHaveBeenCalled();
     expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        // [errorMessage]:"errors.expired-credentialOffer"
         message: expect.stringContaining("errors.expired-credentialOffer"),
       }
     ));
@@ -157,7 +154,6 @@ describe('ToastServiceHandler', () => {
     expect(alertCtrl.create).toHaveBeenCalled();
     expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        // [errorMessage]:"errors.invalid-credentialOffer"
         message: expect.stringContaining("errors.invalid-credentialOffer"),
       }
     ));
@@ -180,7 +176,6 @@ describe('ToastServiceHandler', () => {
     expect(alertCtrl.create).toHaveBeenCalled();
     expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        // [errorMessage]: "errors.invalid-issuerMetadata"
         message: expect.stringContaining("errors.invalid-issuerMetadata"),
       }
     ));
@@ -203,7 +198,6 @@ describe('ToastServiceHandler', () => {
     expect(alertCtrl.create).toHaveBeenCalled();
     expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        // [errorMessage]: "errors.cannot-get-VC"
         message: expect.stringContaining("errors.cannot-get-VC"),
       }
     ));
@@ -226,7 +220,6 @@ describe('ToastServiceHandler', () => {
     expect(alertCtrl.create).toHaveBeenCalled();
     expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        // [errorMessage]: "errors.cannot-save-VC"
         message: expect.stringContaining("errors.cannot-save-VC"),
       }
     ));
@@ -248,7 +241,6 @@ describe('ToastServiceHandler', () => {
     expect(alertCtrl.create).toHaveBeenCalled();
     expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        // [errorMessage]: "errors.incorrect-pin"
         message: expect.stringContaining("errors.incorrect-pin"),
       }
     ));
@@ -271,7 +263,6 @@ describe('ToastServiceHandler', () => {
     expect(alertCtrl.create).toHaveBeenCalled();
     expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        // [errorMessage]: "errors.unsigned"
         message: expect.stringContaining("errors.unsigned"),
       }
     ));
@@ -294,7 +285,6 @@ describe('ToastServiceHandler', () => {
     expect(alertCtrl.create).toHaveBeenCalled();
     expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        // [errorMessage]: "errors.Errunsigned"
         message: expect.stringContaining("errors.Errunsigned"),
       }
     ));
