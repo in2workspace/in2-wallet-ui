@@ -27,6 +27,9 @@
 @import "theme/globalDefault.scss";
 @import "theme/variables.scss";
 
+/* Custom Alert **/
+@import "theme/customAlert.scss";
+
 @font-face {
   font-family: 'Blinker-Regular';
   src: url('./assets/fonts/Blinker-Regular.ttf') format('truetype');
