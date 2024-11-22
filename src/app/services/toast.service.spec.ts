@@ -1,6 +1,6 @@
 import { flush, TestBed } from '@angular/core/testing';
 import { ToastServiceHandler } from './toast.service';
-import { ToastController } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 import { TranslateService, TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateFakeLoader } from '@ngx-translate/core';
 import { fakeAsync, tick } from '@angular/core/testing';
@@ -11,22 +11,24 @@ jest.useFakeTimers();
 
 describe('ToastServiceHandler', () => {
   let service: ToastServiceHandler;
-  let translateService: {get:jest.Mock};
+  let translateService: {get:jest.Mock, instant:jest.Mock};
   let translateSpy: jest.SpyInstance;
-  let toastCtrl: {create:jest.Mock};
+  let alertCtrl: {create:jest.Mock};
   let alert: {present:jest.Mock, dismiss:jest.Mock}
 
   beforeEach(() => {
     translateService = {
-      get: jest.fn().mockImplementation((str:string)=>of(str))
+      get: jest.fn().mockImplementation((str:string)=>of(str)),
+      instant: jest.fn().mockImplementation((str: string) => str), // Add this mo
     };
 
-    toastCtrl = {
+    alertCtrl = {
       create: jest.fn().mockResolvedValue({
-        present: jest.fn().mockImplementation(()=>Promise.resolve()),
-        dismiss: jest.fn().mockImplementation(()=>Promise.resolve(true)),
+        present: jest.fn().mockResolvedValue(undefined),
+        dismiss: jest.fn().mockResolvedValue(undefined),
+        onDidDismiss: jest.fn().mockResolvedValue(undefined),
       }),
-    } as any;
+    };
 
     TestBed.configureTestingModule({
       imports: [
@@ -36,7 +38,7 @@ describe('ToastServiceHandler', () => {
       ],
       providers: [
         { provide: TranslateService, useValue:translateService },
-        { provide: ToastController, useValue: toastCtrl },
+        { provide: AlertController, useValue: alertCtrl },
         ToastServiceHandler
       ],
     });
@@ -100,7 +102,7 @@ describe('ToastServiceHandler', () => {
   }));
  
   it('should create alert for an error message 1', async () => {
-    const toastCtrlSpy = jest.spyOn(toastCtrl, 'create');
+    const toastCtrlSpy = jest.spyOn(alertCtrl, 'create');
     const errorMessage = "The received QR content cannot be processed";
 
     service.showErrorAlert(errorMessage).subscribe(()=>{});
@@ -109,7 +111,7 @@ describe('ToastServiceHandler', () => {
     expect(toastCtrlSpy).toHaveBeenCalled();
     expect(toastCtrlSpy).toHaveBeenCalledWith(expect.objectContaining(
       {
-        [errorMessage]:'errors.invalid-qr'
+        message: expect.stringContaining("errors.invalid-qr"),
       }
     ));
     const toast = await toastCtrlSpy.mock.results[0].value;
@@ -123,15 +125,15 @@ describe('ToastServiceHandler', () => {
  
   it('should create alert for an error message 2', async () => {
     const errorMessage = "Error while fetching credentialOffer from the issuer";
-    const toastCtrlSpy = jest.spyOn(toastCtrl, 'create');
+    const toastCtrlSpy = jest.spyOn(alertCtrl, 'create');
 
     service.showErrorAlert(errorMessage).subscribe(()=>{});
   
     expect(translateSpy).toHaveBeenCalledWith('errors.expired-credentialOffer');
-    expect(toastCtrl.create).toHaveBeenCalled();
-    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+    expect(alertCtrl.create).toHaveBeenCalled();
+    expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        [errorMessage]:"errors.expired-credentialOffer"
+        message: expect.stringContaining("errors.expired-credentialOffer"),
       }
     ));
     const toast = await toastCtrlSpy.mock.results[0].value;
@@ -144,15 +146,15 @@ describe('ToastServiceHandler', () => {
 
   it('should create alert for an error message 3', async () => {
     const errorMessage = "Error while deserializing CredentialOffer";
-    const toastCtrlSpy = jest.spyOn(toastCtrl, 'create');
+    const toastCtrlSpy = jest.spyOn(alertCtrl, 'create');
 
     service.showErrorAlert(errorMessage).subscribe(()=>{});
   
     expect(translateSpy).toHaveBeenCalledWith('errors.invalid-credentialOffer');
-    expect(toastCtrl.create).toHaveBeenCalled();
-    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+    expect(alertCtrl.create).toHaveBeenCalled();
+    expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        [errorMessage]:"errors.invalid-credentialOffer"
+        message: expect.stringContaining("errors.invalid-credentialOffer"),
       }
     ));
 
@@ -166,15 +168,15 @@ describe('ToastServiceHandler', () => {
 
   it('should create alert for an error message 4', async () => {
     const errorMessage = "Error while processing Credential Issuer Metadata from the Issuer";
-    const toastCtrlSpy = jest.spyOn(toastCtrl, 'create');
+    const toastCtrlSpy = jest.spyOn(alertCtrl, 'create');
 
     service.showErrorAlert(errorMessage).subscribe(()=>{});
     
     expect(translateSpy).toHaveBeenCalledWith('errors.invalid-issuerMetadata');
-    expect(toastCtrl.create).toHaveBeenCalled();
-    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+    expect(alertCtrl.create).toHaveBeenCalled();
+    expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        [errorMessage]: "errors.invalid-issuerMetadata"
+        message: expect.stringContaining("errors.invalid-issuerMetadata"),
       }
     ));
     
@@ -188,15 +190,15 @@ describe('ToastServiceHandler', () => {
   
   it('should create alert for an error message 5', async () => {
     const errorMessage = "Error while fetching  Credential from Issuer";
-    const toastCtrlSpy = jest.spyOn(toastCtrl, 'create');
+    const toastCtrlSpy = jest.spyOn(alertCtrl, 'create');
 
     service.showErrorAlert(errorMessage).subscribe(()=>{});
     
     expect(translateSpy).toHaveBeenCalledWith('errors.cannot-get-VC');
-    expect(toastCtrl.create).toHaveBeenCalled();
-    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+    expect(alertCtrl.create).toHaveBeenCalled();
+    expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        [errorMessage]: "errors.cannot-get-VC"
+        message: expect.stringContaining("errors.cannot-get-VC"),
       }
     ));
     
@@ -210,15 +212,15 @@ describe('ToastServiceHandler', () => {
   
   it('should create alert for an error message 6', async () => {
     const errorMessage = "Error processing Verifiable Credential";
-    const toastCtrlSpy = jest.spyOn(toastCtrl, 'create');
+    const toastCtrlSpy = jest.spyOn(alertCtrl, 'create');
 
     service.showErrorAlert(errorMessage).subscribe(()=>{});
     
     expect(translateSpy).toHaveBeenCalledWith('errors.cannot-save-VC');
-    expect(toastCtrl.create).toHaveBeenCalled();
-    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+    expect(alertCtrl.create).toHaveBeenCalled();
+    expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        [errorMessage]: "errors.cannot-save-VC"
+        message: expect.stringContaining("errors.cannot-save-VC"),
       }
     ));
     const toast = await toastCtrlSpy.mock.results[0].value;
@@ -231,15 +233,15 @@ describe('ToastServiceHandler', () => {
   
   it('should create alert for an error message 7', async () => {
     const errorMessage = "Incorrect PIN";
-    const toastCtrlSpy = jest.spyOn(toastCtrl, 'create');
+    const toastCtrlSpy = jest.spyOn(alertCtrl, 'create');
 
     service.showErrorAlert(errorMessage).subscribe(()=>{});
     
     expect(translateSpy).toHaveBeenCalledWith('errors.incorrect-pin');
-    expect(toastCtrl.create).toHaveBeenCalled();
-    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+    expect(alertCtrl.create).toHaveBeenCalled();
+    expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        [errorMessage]: "errors.incorrect-pin"
+        message: expect.stringContaining("errors.incorrect-pin"),
       }
     ));
    
@@ -253,15 +255,15 @@ describe('ToastServiceHandler', () => {
   
   it('should create alert for an error message 8', async () => {
     const errorMessage = "Unsigned";
-    const toastCtrlSpy = jest.spyOn(toastCtrl, 'create');
+    const toastCtrlSpy = jest.spyOn(alertCtrl, 'create');
 
     service.showErrorAlert(errorMessage).subscribe(()=>{});
     
     expect(translateSpy).toHaveBeenCalledWith('errors.unsigned');
-    expect(toastCtrl.create).toHaveBeenCalled();
-    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+    expect(alertCtrl.create).toHaveBeenCalled();
+    expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        [errorMessage]: "errors.unsigned"
+        message: expect.stringContaining("errors.unsigned"),
       }
     ));
     
@@ -275,15 +277,15 @@ describe('ToastServiceHandler', () => {
   
   it('should create alert for an error message 9', async () => {
     const errorMessage = "ErrorUnsigned";
-    const toastCtrlSpy = jest.spyOn(toastCtrl, 'create');
+    const toastCtrlSpy = jest.spyOn(alertCtrl, 'create');
 
     service.showErrorAlert(errorMessage).subscribe(()=>{});
     
     expect(translateSpy).toHaveBeenCalledWith('errors.Errunsigned');
-    expect(toastCtrl.create).toHaveBeenCalled();
-    expect(toastCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
+    expect(alertCtrl.create).toHaveBeenCalled();
+    expect(alertCtrl.create).toHaveBeenCalledWith(expect.objectContaining(
       {
-        [errorMessage]: "errors.Errunsigned"
+        message: expect.stringContaining("errors.Errunsigned"),
       }
     ));
     

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { mergeMap, map, Observable } from 'rxjs';
-const TIME_IN_MS = 5000;
+import { AlertController, IonicModule } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,8 @@ const TIME_IN_MS = 5000;
 export class ToastServiceHandler {
   public constructor(
     private toastController: ToastController,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private alertController: AlertController
   ) {}
 
   //todo use title instead of message
@@ -47,26 +48,29 @@ export class ToastServiceHandler {
     }else if (message.startsWith("ErrorUnsigned")) {
       messageBody = "errors.Errunsigned";
     }
+
     return this.translate.get(messageBody).pipe(
-      mergeMap((translatedHeader) =>
-        this.translate.get(messageBody).pipe(
-          map(async (translatedMessage) => {
-            const alert = await this.toastController.create({
-              header: translatedHeader,
-              [message]: translatedMessage,
-              cssClass: 'toast-custom',
+      map(async (translatedMessage) => {
+        const alert = await this.alertController.create({
+          message: `
+            <div style="display: flex; align-items: center; gap: 50px;">
+              <ion-icon name="alert-circle-outline"></ion-icon>
+              <span>${translatedMessage}</span>
+            </div>
+          `,
+          buttons: [
+            {
+              text: this.translate.instant('vc-selector.close'),
+              role: 'ok',
+              cssClass: 'centered-button',
+            },
+          ],
+          cssClass: 'custom-alert-error',
+        });
 
-              buttons: ['OK'],
-            });
-
-            await alert.present();
-
-            setTimeout(() => {
-              alert.dismiss();
-            }, TIME_IN_MS);
-          })
-        )
-      )
+        await alert.present();
+        await alert.onDidDismiss();
+      })
     );
   }
 }

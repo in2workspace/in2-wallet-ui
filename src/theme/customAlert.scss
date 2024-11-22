@@ -1,0 +1,50 @@
+// Resources: https://lea.verou.me/blog/2024/css-conditionals-now/
+
+ion-alert.custom-alert-error .alert-wrapper {
+    background-color: var(--custom-alert-error-bg) !important;
+    color: white !important;
+    border-radius: 8px;
+  }
+  
+  ion-alert.custom-alert-error .alert-message {
+    color: var(--custom-alert-error-text) !important;
+  }
+  
+  ion-alert.custom-alert-error .alert-button.sc-ion-alert-md {
+    color: var(--custom-alert-error-text) !important;
+  }
+  
+  ion-alert.custom-alert-error .alert-message ion-icon {
+    font-size: 38px;
+    color: var(--custom-alert-error-text);
+  }
+  
+  ion-alert.custom-alert-ok .alert-wrapper {
+    background-color: var(--custom-alert-ok-bg) !important;
+    color: white !important;
+    border-radius: 8px;
+  }
+  
+  ion-alert.custom-alert-ok .alert-message {
+    color: var(--custom-alert-ok-text) !important;
+  }
+  
+  ion-alert.custom-alert-ok .alert-message ion-icon {
+    font-size: 38px;
+    color: var(--custom-alert-ok-text);
+  }
+  
+  ion-alert .alert-message div {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  /* Center the button for error alert */
+  ion-alert.custom-alert-error .alert-button-group {
+    justify-content: center !important;
+  }
+  
+  ion-alert .alert-message span {
+    line-height: 1.2;
+  }

@@ -46,17 +46,6 @@ export class VcSelectorPage implements OnInit {
     redirectUri: '',
   };
 
-  public closeButton = [
-    {
-      text: this.translate.instant('vc-selector.close'),
-      role: 'confirm',
-      handler: () => {
-        this.sendCredentialAlert = false;
-        this.router.navigate(['/tabs/home']);
-      },
-    },
-  ];
-
   public constructor(
     private router: Router,
     private walletService: WalletService,
@@ -87,7 +76,9 @@ export class VcSelectorPage implements OnInit {
     this.selCredList.push(cred);
     this.isClick[index] = !this.isClick[index];
   }
+  
   public async sendCred(cred: VerifiableCredential) {
+    
     const alert = await this.alertController.create({
       header: this.translate.instant('confirmation.header'),
       buttons: [
@@ -111,13 +102,12 @@ export class VcSelectorPage implements OnInit {
       this._VCReply.selectedVcList = this.selCredList;
       this.walletService.executeVC(this._VCReply).subscribe({
         next: () => {
-          this.sendCredentialAlert = true;
+          this.okMessage();
         },
         error: async (err) => {
           console.error(err);
-          await this.errorMessage();
+          await this.errorMessage(err.status);
           this.router.navigate(['/tabs/home']);
-
           this.selCredList = [];
         },
         complete: () => {
@@ -126,23 +116,62 @@ export class VcSelectorPage implements OnInit {
       });
     }
   }
-  private async errorMessage(){
+  
+  private async errorMessage(statusCode: number) {
+    let messageText = '';
+  
+    if (statusCode >= 500) {
+      // Handle server errors (50x)
+      messageText = 'vc-selector.server-error-message';
+    } else if (statusCode === 401) {
+      // Handle unauthorized errors (401)
+      messageText = 'vc-selector.unauthorized-message';
+    } else if (statusCode >= 400) {
+      // Handle client errors (40x)
+      messageText = 'vc-selector.bad-request-error-message';
+    } else {
+      // Handle other types of errors
+      messageText = 'vc-selector.generic-error-message';
+    }
+  
     const alert = await this.alertController.create({
-      header: this.translate.instant('vc-selector.ko-message'),
-      message: '<img src="../assets/icon/Tick/close-circle-outline.svg" color="red"alt="g-maps" class="vs-selector-alert">',
+      message: `
+        <div style="display: flex; align-items: center; gap: 50px;">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span>${this.translate.instant(messageText)}</span>
+        </div>
+      `,
       buttons: [
         {
-          text: this.translate.instant('confirmation.ok'),
+          text: this.translate.instant('vc-selector.close'),
           role: 'ok',
+          cssClass: 'centered-button',
         },
       ],
-      cssClass:"custom-close-button"
+      cssClass: 'custom-alert-error',
     });
-
+  
     await alert.present();
     await alert.onDidDismiss();
   }
-  public setOpen(isOpen: boolean) {
-    this.sendCredentialAlert = isOpen;
+
+  private async okMessage() {
+    const alert = await this.alertController.create({
+      message: `
+        <div style="display: flex; align-items: center; gap: 50px;">
+          <ion-icon name="checkmark-circle-outline" ></ion-icon>
+          <span>${this.translate.instant('vc-selector.ok-header')}</span>
+        </div>
+      `,
+      cssClass: 'custom-alert-ok',
+    });
+  
+    await alert.present();
+  
+    setTimeout(async () => {
+      await alert.dismiss();
+      this.router.navigate(['/tabs/home']);
+    }, 2000);
   }
+
 }

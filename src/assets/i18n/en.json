@@ -106,10 +106,14 @@
         "title":"Vc Selector",
         "select-cred":"Select Credential",
         "send-cred":"Send Credential",
-        "ok-header": "Log in successfully",
+        "ok-header": "Credential sent successfully",
         "ok-message":"Log in completed",
         "ko-header":"Error",
         "ko-message":"Failed to Login",
+        "unauthorized-message":"The credential provided is invalid",
+        "bad-request-error-message":"Error sending the credential",
+        "server-error-message":"We couldn't process your request.<br>Please try again later.",
+        "generic-error-message": "Unknown error",
         "close": "Close"
     },
     "vc-view":{
@@ -125,7 +129,7 @@
     },
     "errors":{
         "default":"Error not recognized",
-        "failed-qr-process": "There was a problem processing the QR. It might be invalid or already have been used",
+        "failed-qr-process": "We couldn't process the QR code.<br>It might be invalid or already used.",
         "invalid-qr":"The QR presented is invalid",
         "no-credentials-available": "There are no credentials available to login",
         "expired-credentialOffer":"The credential offer is expired or already used",
