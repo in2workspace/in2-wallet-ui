@@ -23,9 +23,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((errorResp: HttpErrorResponse) => {
         let errMessage = errorResp.error?.message || errorResp.message || 'Unknown Http error';
-       
+
         if ( //todo review this handler
-          errMessage?.startsWith('The credentials list is empty') && 
+          errMessage?.startsWith('The credentials list is empty') &&
           request.url.endsWith(environment.server_uri.credentials_uri)
         ) {
           console.error('Handled silently:', errMessage);
@@ -38,7 +38,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           {
             if(errMessage.startsWith('The credentials list is empty')){
               errMessage = "There are no credentials available to login";
-            } 
+            }
             else if(!errMessage.startsWith('The received QR content cannot be processed'))
             {
               errMessage = 'There was a problem processing the QR. It might be invalid or already have been used';
