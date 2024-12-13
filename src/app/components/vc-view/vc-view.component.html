@@ -121,7 +121,7 @@
           style="width: auto; height: 40px; cursor: pointer"
         />
 
-        <!-- <span
+        <span
           *ngIf="
             isExpired && credentialInput.status !== credentialStatus.ISSUED
           "
@@ -135,7 +135,7 @@
           "
         >
           {{ "credentials.expiration" | translate }}
-        </span> -->
+        </span>
 
         <!-- todo FIXME add '&& !isExpired', removed only temporarily -->
         <span

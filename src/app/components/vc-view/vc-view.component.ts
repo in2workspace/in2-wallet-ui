@@ -97,8 +97,7 @@ export class VcViewComponent implements OnInit {
         },
       });
     } else {
-      // todo FIXME removed temporarily
-      // this.isAlertExpirationOpenNotFound = true;
+      this.isAlertExpirationOpenNotFound = true;
     }
   }
 
@@ -112,11 +111,11 @@ export class VcViewComponent implements OnInit {
 
   public checkExpirationVC(): void {
     if (this.credentialInput.status !== CredentialStatus.ISSUED) {
-      const expirationDate: Date = new Date(
-        this.credentialInput.expirationDate
+      const validUntil: Date = new Date(
+        this.credentialInput.validUntil
       );
       const currentDate: Date = new Date();
-      this.isExpired = expirationDate < currentDate;
+      this.isExpired = validUntil < currentDate;
     } else {
       this.isExpired = false;
     }
@@ -136,9 +135,8 @@ export class VcViewComponent implements OnInit {
 
   public isCredentialIssuedAndNotExpired(): boolean {
     return (
-      this.credentialInput.status === CredentialStatus.ISSUED 
-      // todo FIXME add && !isExpired, removed only temporarily
-      // && !this.isExpired
+      this.credentialInput.status === CredentialStatus.ISSUED
+      && !this.isExpired
     );
   }
 

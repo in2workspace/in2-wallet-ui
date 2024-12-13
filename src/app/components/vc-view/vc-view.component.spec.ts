@@ -44,7 +44,8 @@ describe('VcViewComponent', () => {
       issuer: { id: 'issuerId' },
       issuanceDate: '',
       validFrom: '',
-      expirationDate: new Date(Date.now() + 86400000).toISOString(),
+      expirationDate: '',
+      validUntil: new Date(Date.now() + 86400000).toISOString(),
       credentialSubject: {
         mandate: {
           id: 'mandateId',
