@@ -1,17 +1,17 @@
-import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
-import { AlertController, IonicModule } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
-import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { of, throwError, Subject } from 'rxjs';
-import { CredentialsPage } from './credentials.page';
-import { WalletService } from 'src/app/services/wallet.service';
-import { WebsocketService } from 'src/app/services/websocket.service';
-import { DataService } from 'src/app/services/data.service';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
-import { Storage } from '@ionic/storage-angular';
+import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {AlertController, IonicModule} from '@ionic/angular';
+import {TranslateModule} from '@ngx-translate/core';
+import {RouterTestingModule} from '@angular/router/testing';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {of, Subject, throwError} from 'rxjs';
+import {CredentialsPage} from './credentials.page';
+import {WalletService} from 'src/app/services/wallet.service';
+import {WebsocketService} from 'src/app/services/websocket.service';
+import {DataService} from 'src/app/services/data.service';
+import {AuthenticationService} from 'src/app/services/authentication.service';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {CredentialStatus, VerifiableCredential} from 'src/app/interfaces/verifiable-credential';
+import {Storage} from '@ionic/storage-angular';
 
 class MockRouter {
   public events = new Subject<any>();
@@ -152,6 +152,7 @@ describe('CredentialsPage', () => {
         "issuanceDate": "2021-01-01T00:00:00Z",
         "validFrom": "2021-01-01T00:00:00Z",
         "expirationDate": "2025-12-31T23:59:59Z",
+        "validUntil": "2025-12-31T23:59:59Z",
         "credentialSubject": {
           "mandate": {
             "id": "mandateId1",
@@ -210,6 +211,7 @@ describe('CredentialsPage', () => {
       "issuanceDate": "2024-04-02T09:23:22.637345122Z",
       "validFrom": "2024-04-02T09:23:22.637345122Z",
       "expirationDate": "2025-04-02T09:23:22.637345122Z",
+      "validUntil": "2025-04-02T09:23:22.637345122Z",
       "credentialSubject": {
         "mandate": {
           "id": "mandateId1",
