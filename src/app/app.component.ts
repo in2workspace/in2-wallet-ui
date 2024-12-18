@@ -46,7 +46,8 @@ export class AppComponent implements OnInit {
 
   public logout() {
     this.authenticationService.logout().subscribe(() => {
-      this.router.navigate(['/home'], {});
+      const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
+      window.location.href = cleanUrl;
     });
   }
 
