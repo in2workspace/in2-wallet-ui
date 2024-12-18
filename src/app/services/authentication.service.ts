@@ -3,7 +3,7 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthenticationService {
   public name: BehaviorSubject<string> = new BehaviorSubject<string>('');
@@ -13,7 +13,6 @@ export class AuthenticationService {
 
   public constructor(public oidcSecurityService: OidcSecurityService) {
     this.checkAuth().subscribe();
-    this.monitorAuthentication();
   }
   public checkAuth() {
     return this.oidcSecurityService.checkAuth().pipe(
@@ -32,13 +31,5 @@ export class AuthenticationService {
   }
   public getName(): Observable<string> {
     return this.name;
-  }
-  private monitorAuthentication(): void {
-    this.oidcSecurityService.isAuthenticated$.subscribe((isAuthenticated) => {
-      if (!isAuthenticated) {
-        const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
-        window.location.href = cleanUrl;
-      }
-    });
   }
 }
