@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, finalize, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +10,11 @@ export class AuthenticationService {
   private token!: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private userData: any;
+  private logoutInProgress = false;
 
   public constructor(public oidcSecurityService: OidcSecurityService) {
     this.checkAuth().subscribe();
+    this.monitorAuthentication()
   }
   public checkAuth() {
     return this.oidcSecurityService.checkAuth().pipe(
@@ -24,8 +26,23 @@ export class AuthenticationService {
     );
   }
   public logout() {
-    return this.oidcSecurityService.logoff();
+    this.logoutInProgress = true;
+    return this.oidcSecurityService.logoff().pipe(
+      finalize(() => {
+        this.logoutInProgress = false;
+      })
+    );
   }
+  
+  private monitorAuthentication(): void {
+    this.oidcSecurityService.isAuthenticated$.subscribe((isAuthenticated) => {
+      if (!isAuthenticated && !this.logoutInProgress) {
+        const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
+        window.location.href = cleanUrl;
+      }
+    });
+  }
+
   public getToken(): string {
     return this.token;
   }
