@@ -13,7 +13,6 @@ export class AuthenticationService {
 
   public constructor(public oidcSecurityService: OidcSecurityService) {
     this.checkAuth().subscribe();
-    this.listenToStsCallback();
   }
   public checkAuth() {
     return this.oidcSecurityService.checkAuth().pipe(
@@ -26,20 +25,6 @@ export class AuthenticationService {
   }
   public logout() {
     return this.oidcSecurityService.logoff();
-  }
-
-  private listenToStsCallback(): void {
-    this.oidcSecurityService.stsCallback$.subscribe(() => {
-      console.log('Evento del servidor recibido. Validando estado de la sesión...');
-      const token = this.oidcSecurityService.getAccessToken();
-      if (!token) {
-        console.log('Sesión invalidada. Redirigiendo al dominio base...');
-        const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
-        window.location.href = cleanUrl;
-      } else {
-        console.log('El token sigue activo. No se redirige.');
-      }
-    });
   }
 
   public getToken(): string {

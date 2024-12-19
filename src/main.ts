@@ -50,7 +50,7 @@ bootstrapApplication(AppComponent, {
         postLoginRoute: '/tabs/home',
         authority: environment.iam_url+environment.iam_params.iam_uri,
         redirectUrl: `${window.location.origin}/callback`,
-        postLogoutRedirectUri: `${window.location.origin}`,
+        postLogoutRedirectUri: `${window.location.origin}?nocache=${Date.now()}`,
         clientId: environment.iam_params.client_id,
         scope: environment.iam_params.scope,
         responseType: environment.iam_params.grant_type,

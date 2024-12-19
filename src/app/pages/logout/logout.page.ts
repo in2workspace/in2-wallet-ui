@@ -21,9 +21,11 @@ export class LogoutPage {
   ) {}
   public logout() {
     this.authenticationService.logout().subscribe(() => {
-      this.router.navigate(['/home'], {});
+      const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
+      this.router.navigateByUrl(cleanUrl);
     });
     this.popOverController.dismiss();
   }
+
 
 }
