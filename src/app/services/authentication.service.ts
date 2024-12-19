@@ -31,6 +31,7 @@ export class AuthenticationService {
     return this.oidcSecurityService.logoff().pipe(
       finalize(() => {
         this.logoutInProgress = false;
+        console.log('Logout completado o fallido. Estado reset.');
       })
     );
   }
