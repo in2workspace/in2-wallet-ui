@@ -42,6 +42,13 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.userName = this.authenticationService.getName();
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.get('nocache') === 'true') {
+      const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
+      window.location.href = cleanUrl;
+    }
   }
 
   public logout() {
