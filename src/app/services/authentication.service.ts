@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, finalize, map } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthenticationService {
   public name: BehaviorSubject<string> = new BehaviorSubject<string>('');
@@ -24,8 +24,9 @@ export class AuthenticationService {
     );
   }
   public logout() {
-    return this.oidcSecurityService.logoff();
+    return this.oidcSecurityService.logoffAndRevokeTokens();
   }
+
   public getToken(): string {
     return this.token;
   }
