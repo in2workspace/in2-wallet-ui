@@ -11,7 +11,7 @@ describe('AuthenticationService', () => {
     oidcSecurityService = {
       checkAuth: jest.fn(),
       authorizeWithPopUp: jest.fn(),
-      logoff: jest.fn()
+      logoffAndRevokeTokens: jest.fn()
     };
 
     oidcSecurityService.checkAuth.mockReturnValue(of({
@@ -52,8 +52,8 @@ describe('AuthenticationService', () => {
     });
   });
 
-  it('logout should call oidcSecurityService.logoff', () => {
+  it('logout should call oidcSecurityService.logoffAndRevokeTokens', () => {
     service.logout();
-    expect(oidcSecurityService.logoff).toHaveBeenCalled();
+    expect(oidcSecurityService.logoffAndRevokeTokens).toHaveBeenCalled();
   });
 });

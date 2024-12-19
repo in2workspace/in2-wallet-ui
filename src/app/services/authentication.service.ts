@@ -24,7 +24,7 @@ export class AuthenticationService {
     );
   }
   public logout() {
-    return this.oidcSecurityService.logoff();
+    return this.oidcSecurityService.logoffAndRevokeTokens();
   }
 
   public getToken(): string {

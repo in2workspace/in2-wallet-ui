@@ -21,11 +21,8 @@ export class LogoutPage {
   ) {}
   public logout() {
     this.authenticationService.logout().subscribe(() => {
-      const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
-      this.router.navigateByUrl(cleanUrl);
+      this.router.navigate(['/home'], {});
     });
     this.popOverController.dismiss();
   }
-
-
 }
