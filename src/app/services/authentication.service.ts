@@ -10,7 +10,6 @@ export class AuthenticationService {
   private token!: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private userData: any;
-  private logoutInProgress = false;
 
   public constructor(public oidcSecurityService: OidcSecurityService) {
     this.checkAuth().subscribe();
@@ -26,20 +25,13 @@ export class AuthenticationService {
     );
   }
   public logout() {
-    this.logoutInProgress = true;
-    console.log('Iniciando logout...');
-    return this.oidcSecurityService.logoff().pipe(
-      finalize(() => {
-        this.logoutInProgress = false;
-        console.log('Logout completado o fallido. Estado reset.');
-      })
-    );
+    return this.oidcSecurityService.logoff();
   }
 
   private monitorAuthentication(): void {
     this.oidcSecurityService.isAuthenticated$.subscribe((isAuthenticated) => {
       console.log('Estado de autenticación cambiado:', isAuthenticated);
-      if (!isAuthenticated && !this.logoutInProgress) {
+      if (!isAuthenticated) {
         console.log('Sesión cerrada. Redirigiendo con nocache...');
         const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
         window.location.href = cleanUrl;
