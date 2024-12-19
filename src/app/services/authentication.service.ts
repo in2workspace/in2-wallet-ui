@@ -31,7 +31,7 @@ export class AuthenticationService {
   private monitorAuthentication(): void {
     this.oidcSecurityService.isAuthenticated$.subscribe((isAuthenticated) => {
       console.log('Estado de autenticación cambiado:', isAuthenticated);
-      if (!isAuthenticated) {
+      if (!isAuthenticated.isAuthenticated) {
         console.log('Sesión cerrada. Redirigiendo con nocache...');
         const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
         window.location.href = cleanUrl;
