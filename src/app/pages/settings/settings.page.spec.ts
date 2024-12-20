@@ -48,23 +48,23 @@ describe('SettingsPage', () => {
 
 
     await TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-        declarations:[TranslatePipe],
-        imports: [
+    schemas: [NO_ERRORS_SCHEMA],
+    declarations: [TranslatePipe],
+    imports: [
         SettingsPage,
-          IonicModule.forRoot(),
-          RouterModule.forRoot([]),
-          TranslateModule.forRoot()
-        ],
-        providers: [
-          { provide: Router, useValue: routerMock },
-          { provide: DataService, useValue: dataServiceMock },
-          { provide: CameraLogsService, useValue: cameraLogsServiceMock },
-          { provide: TranslateService, useValue: translateServiceMock },
-          { provide: NavController, useValue: navCtrlMock },
-          { provide: ActivatedRoute, useValue: { snapshot: { data: { data: "" } } } }
-        ]
-      }).compileComponents();
+        IonicModule.forRoot(),
+        RouterModule.forRoot([]),
+        TranslateModule.forRoot()
+    ],
+    providers: [
+        { provide: Router, useValue: routerMock },
+        { provide: DataService, useValue: dataServiceMock },
+        { provide: CameraLogsService, useValue: cameraLogsServiceMock },
+        { provide: TranslateService, useValue: translateServiceMock },
+        { provide: NavController, useValue: navCtrlMock },
+        { provide: ActivatedRoute, useValue: { snapshot: { data: { data: "" } } } }
+    ]
+}).compileComponents();
  
     fixture = TestBed.createComponent(SettingsPage);
     component = fixture.componentInstance;
