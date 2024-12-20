@@ -59,6 +59,10 @@ const routes: Routes = [
             loadComponent: () =>
               import('../logs/camera-logs/camera-logs.page').then((m) => m.CameraLogsPage),
           },
+          {
+            path: '**',
+            redirectTo: '/',
+          }
         ],
       },
       {
@@ -72,6 +76,10 @@ const routes: Routes = [
         redirectTo: 'home',
         pathMatch: 'full',
       },
+      {
+        path: '**',
+        redirectTo: '/',
+      }
     ],
   },
 ];
