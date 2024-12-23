@@ -12,7 +12,7 @@ import { AuthValidatorService } from '../../services/auth-validator.service';
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CallbackPage{
-  public constructor(private authValidatorService: AuthValidatorService) {}
+  public constructor(private readonly authValidatorService: AuthValidatorService) {}
   
   ngOnInit(): void {
     this.authValidatorService.validateAuthParams();
