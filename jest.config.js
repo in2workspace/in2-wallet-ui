@@ -21,9 +21,11 @@ module.exports = {
     "src/app/guards/**/*.ts",                  
     "src/app/pages/credentials/**/*.ts",       
     "src/app/pages/settings/**/*.ts",          
-    "src/app/pages/logs/**/*.ts",               
+    "src/app/pages/logs/**/*.ts",
+    "src/app/pages/callback/**/*.ts",                
     "src/app/services/camera-logs.service.ts",
-    "src/app/services/toast.ts"
+    "src/app/services/toast.ts",
+    "src/app/services/auth-validator.service.ts"
   ],
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules/', 
