@@ -23,10 +23,13 @@ export class AuthValidatorService {
     const storedState = parsedData.authStateControl;
 
     if (urlState !== storedState) {
-      console.error('State no válido. Redirigiendo a la página principal.');
+      console.error('State no válido. Limpiando y redirigiendo...');
+      delete parsedData.authStateControl;
+      localStorage.setItem('0-auth-client', JSON.stringify(parsedData));
       this.router.navigate(['/tabs/home']);
       this.hasRedirected = true;
       return;
     }
+    
   }
 }
