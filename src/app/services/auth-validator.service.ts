@@ -1,11 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthValidatorService {
-  constructor(private readonly route: ActivatedRoute, private readonly router: Router) {}
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   validateAuthParams(): void {
     const urlState = this.route.snapshot.queryParamMap.get('state');

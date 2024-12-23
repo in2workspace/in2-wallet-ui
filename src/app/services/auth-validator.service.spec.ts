@@ -10,7 +10,7 @@ describe('AuthValidatorService', () => {
 
   beforeEach(() => {
     mockRouter = {
-      navigateByUrl: jest.fn(),
+      navigate: jest.fn(),
     } as unknown as jest.Mocked<Router>;
 
     mockActivatedRoute = {
@@ -19,7 +19,6 @@ describe('AuthValidatorService', () => {
           get: jest.fn().mockImplementation((param: string) => {
             const params: { [key: string]: string; } = {
               state: 'validState',
-              nonce: 'validNonce',
             };
             return params[param] || null;
           }),
@@ -70,7 +69,7 @@ describe('AuthValidatorService', () => {
 
     service.validateAuthParams();
 
-    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/');
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
   });
 
   it('should redirect to base URL if state does not match', () => {
@@ -83,7 +82,7 @@ describe('AuthValidatorService', () => {
 
     service.validateAuthParams();
 
-    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/');
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
   });
   
 
@@ -97,6 +96,6 @@ describe('AuthValidatorService', () => {
 
     service.validateAuthParams();
 
-    expect(mockRouter.navigateByUrl).not.toHaveBeenCalled();
+    expect(mockRouter.navigate).not.toHaveBeenCalled();
   });
 });
