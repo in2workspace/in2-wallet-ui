@@ -9,13 +9,19 @@ export class AuthValidatorService {
   private route = inject(ActivatedRoute);
   private hasRedirected = false;
 
-  validateAuthParams(): void {
+  async validateAuthParams(): Promise<void> {
     if (this.hasRedirected) return;
+    
     const urlState = this.route.snapshot.queryParamMap.get('state');
+    if (!urlState) {
+      console.error('State no presente en la URL.');
+      await this.delayedRedirect();
+      return;
+    }
+    
     const authClientData = localStorage.getItem('0-auth-client');
     if (!authClientData) {
-      this.router.navigate(['/tabs/home']);
-      this.hasRedirected = true;
+      await this.delayedRedirect();
       return;
     }
 
@@ -26,10 +32,19 @@ export class AuthValidatorService {
       console.error('State no válido. Limpiando y redirigiendo...');
       delete parsedData.authStateControl;
       localStorage.setItem('0-auth-client', JSON.stringify(parsedData));
-      this.router.navigate(['/tabs/home']);
-      this.hasRedirected = true;
+      await this.delayedRedirect();
       return;
     }
-    
+  }
+
+  private delayedRedirect(): Promise<void> {
+    this.hasRedirected = true;
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        this.router.navigate(['/tabs/home']);
+        resolve();
+      }, 1000);
+    });
   }
 }

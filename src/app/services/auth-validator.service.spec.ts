@@ -64,15 +64,15 @@ describe('AuthValidatorService', () => {
     localStorage.clear();
   });
 
-  it('should redirect to base URL if 0-auth-client is missing in storage', () => {
+  it('should redirect to base URL if 0-auth-client is missing in storage', async () => {
     localStorage.removeItem('0-auth-client');
 
-    service.validateAuthParams();
+    await service.validateAuthParams();
 
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/tabs/home']);
   });
 
-  it('should redirect to base URL if state does not match', () => {
+  it('should redirect to base URL if state does not match', async () => {
     localStorage.setItem(
       '0-auth-client',
       JSON.stringify({
@@ -80,13 +80,12 @@ describe('AuthValidatorService', () => {
       })
     );
 
-    service.validateAuthParams();
+    await service.validateAuthParams();
 
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/tabs/home']);
   });
 
-
-  it('should not redirect if state  match', () => {
+  it('should not redirect if state matches', async () => {
     localStorage.setItem(
       '0-auth-client',
       JSON.stringify({
@@ -94,7 +93,7 @@ describe('AuthValidatorService', () => {
       })
     );
 
-    service.validateAuthParams();
+    await service.validateAuthParams(); 
 
     expect(mockRouter.navigate).not.toHaveBeenCalled();
   });
