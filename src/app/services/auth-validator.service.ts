@@ -13,7 +13,7 @@ export class AuthValidatorService {
 
     const authClientData = localStorage.getItem('0-auth-client');
     if (!authClientData) {
-      this.router.navigate(['/']);
+      this.router.navigate(['/tabs/home']);
       return;
     }
 
@@ -22,7 +22,7 @@ export class AuthValidatorService {
 
     if (urlState !== storedState) {
       console.error('State no válido. Redirigiendo a la página principal.');
-      this.router.navigate(['/']);
+      this.router.navigate(['/tabs/home']);
     }
   }
 }
