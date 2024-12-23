@@ -1,0 +1,102 @@
+import { TestBed } from '@angular/core/testing';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { AuthValidatorService } from './auth-validator.service';
+
+describe('AuthValidatorService', () => {
+  let service: AuthValidatorService;
+  let mockRouter: jest.Mocked<Router>;
+  let mockActivatedRoute: Partial<ActivatedRoute>;
+
+  beforeEach(() => {
+    mockRouter = {
+      navigateByUrl: jest.fn(),
+    } as unknown as jest.Mocked<Router>;
+
+    mockActivatedRoute = {
+      snapshot: {
+        queryParamMap: {
+          get: jest.fn().mockImplementation((param: string) => {
+            const params: { [key: string]: string; } = {
+              state: 'validState',
+              nonce: 'validNonce',
+            };
+            return params[param] || null;
+          }),
+          has: jest.fn().mockReturnValue(true),
+          getAll: jest.fn().mockReturnValue([]),
+          keys: []
+        },
+        url: [],
+        params: {},
+        queryParams: {},
+        fragment: null,
+        data: {},
+        outlet: 'primary',
+        component: null,
+        routeConfig: null,
+        root: {} as ActivatedRouteSnapshot,
+        parent: null,
+        firstChild: null,
+        children: [],
+        pathFromRoot: [],
+        paramMap: {
+          get: jest.fn(),
+          has: jest.fn(),
+          getAll: jest.fn(),
+          keys: []
+        },
+        title: undefined
+      },
+    };
+
+    TestBed.configureTestingModule({
+      providers: [
+        AuthValidatorService,
+        { provide: Router, useValue: mockRouter },
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+      ],
+    });
+
+    service = TestBed.inject(AuthValidatorService);
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+  });
+
+  it('should redirect to base URL if 0-auth-client is missing in storage', () => {
+    localStorage.removeItem('0-auth-client'); 
+
+    service.validateAuthParams();
+
+    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/');
+  });
+
+  it('should redirect to base URL if state does not match', () => {
+    localStorage.setItem(
+      '0-auth-client',
+      JSON.stringify({
+        authStateControl: 'differentState',
+      })
+    );
+
+    service.validateAuthParams();
+
+    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/');
+  });
+  
+
+  it('should not redirect if state  match', () => {
+    localStorage.setItem(
+      '0-auth-client',
+      JSON.stringify({
+        authStateControl: 'validState',
+      })
+    );
+
+    service.validateAuthParams();
+
+    expect(mockRouter.navigateByUrl).not.toHaveBeenCalled();
+  });
+});

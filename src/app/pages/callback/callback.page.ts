@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { AuthValidatorService } from '../../services/auth-validator.service';
 
 @Component({
   selector: 'app-callback',
@@ -11,4 +12,9 @@ import { IonicModule } from '@ionic/angular';
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CallbackPage{
+  public constructor(private authValidatorService: AuthValidatorService) {}
+  
+  ngOnInit(): void {
+    this.authValidatorService.validateAuthParams();
+  }
 }
