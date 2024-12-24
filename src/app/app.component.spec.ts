@@ -3,7 +3,7 @@ import { AppComponent } from './app.component';
 import { TranslateService } from '@ngx-translate/core';
 import { PopoverController, IonicModule, NavController } from '@ionic/angular';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { of } from 'rxjs';
+import {EMPTY, of } from 'rxjs';
 import { AuthenticationService } from './services/authentication.service';
 import { StorageService } from './services/storage.service';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -66,6 +66,8 @@ describe('AppComponent', () => {
 
     routerMock = {
       navigate: jest.fn(),
+      events: EMPTY, 
+      url: '/callback?test=true',
     } as unknown as jest.Mocked<Router>;
 
     authenticationServiceMock = {
