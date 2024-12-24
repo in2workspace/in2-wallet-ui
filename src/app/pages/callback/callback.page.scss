@@ -4,5 +4,9 @@ p {
     @media (prefers-color-scheme: dark) {
       color: white;
     }
-  }
+}
+ion-tab-button[disabled] {
+  pointer-events: none; 
+  opacity: 1; 
+}
   

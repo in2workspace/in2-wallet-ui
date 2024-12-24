@@ -1,4 +1,4 @@
-<ion-app>
+<ion-app [ngClass]="{ 'blurred': isCallbackRoute }">
   <ion-header [translucent]="false">
     <ion-toolbar class="toolbar">
       <img alt src="assets/icon/dome_white_logo.png" width="auto" slot="start" height="35px"/>
@@ -6,6 +6,7 @@
         slot="end"
         color="primary"
         class="toolbar-but"
+        [disabled]="isCallbackRoute"
         (click)="openPopover($event)"
         (keydown)="handleKeydown($event)"
         >
