@@ -7,6 +7,7 @@ import { AuthValidatorService } from '../../services/auth-validator.service';
 @Component({
   selector: 'app-callback',
   templateUrl: './callback.page.html',
+  styleUrls: ['./callback.page.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
