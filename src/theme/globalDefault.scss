@@ -1,5 +1,14 @@
+html, body {
+  background-color: white;
+  @media (prefers-color-scheme: dark) {
+    background-color: white;
+  }
+}
+
 .main-content{
   margin-top: 4rem;
+  background-color: #DDE6F6;
+  --ion-background-color: #DDE6F6;
 }
 
 .toast-custom {
