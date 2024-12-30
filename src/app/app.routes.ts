@@ -25,9 +25,7 @@ export const routes: Routes = [
             canActivate: [AutoLoginPartialRoutesGuard],
             data: { credentialOfferUri: 'credentialOfferUri' },
             loadComponent: () =>
-              import('./pages/credentials/credentials.page').then(
-                (m) => m.CredentialsPage
-              ),
+              import('./pages/home/home.page').then((m) => m.HomePage),
           }
         ]
       },
