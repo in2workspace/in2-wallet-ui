@@ -54,7 +54,6 @@ export class CredentialsPage implements OnInit {
   public credentialOfferUri = '';
   public ebsiFlag = false;
   public did = '';
-  public isCredOffer = false;
 
   private walletService = inject(WalletService);
   private router = inject(Router);
@@ -217,7 +216,7 @@ export class CredentialsPage implements OnInit {
             setTimeout(()=>{
               this.router.navigate(['/tabs/home'])
             }, 1000);
-            
+
           },
         });
     });
@@ -302,9 +301,9 @@ export class CredentialsPage implements OnInit {
       `,
       cssClass: 'custom-alert-ok',
     });
-  
+
     await alert.present();
-  
+
     setTimeout(async () => {
       await alert.dismiss();
       this.refresh();
