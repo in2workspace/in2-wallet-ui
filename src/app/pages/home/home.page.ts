@@ -47,9 +47,11 @@ export class HomePage implements OnInit {
     }
   }
   public ngOnInit() {
+    console.log("After logIn to keycloak execute this?¿")
     this.route.queryParams.subscribe((params) => {
       const credentialOfferUri = params['credential_offer_uri'];
       if (credentialOfferUri) {
+        console.log("Credential Offer Uri exists? --> " + credentialOfferUri);
         this.router.navigate(['/tabs/credentials'], {
           queryParams: { credentialOfferUri: credentialOfferUri },
         });
