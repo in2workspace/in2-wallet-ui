@@ -27,6 +27,20 @@ if (environment.production) {
   enableProdMode();
 }
 
+//if there are client_id & request_uri query params, add them to callback url
+let redirectCallbackUrl = `${window.location.origin}/callback`;
+
+const credentialOfferUri  = getQueryParams();
+const params = new URLSearchParams();
+
+if (credentialOfferUri) {
+  params.append('credential_offer_uri', credentialOfferUri);
+}
+
+if (credentialOfferUri && params.toString()) {
+  redirectCallbackUrl += `?${params.toString()}`;
+}
+
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -71,4 +85,9 @@ bootstrapApplication(AppComponent, {
 });
 export function httpTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http);
+}
+
+function getQueryParams() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('credential_offer_uri');
 }
