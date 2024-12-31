@@ -27,17 +27,6 @@ if (environment.production) {
   enableProdMode();
 }
 
-//if there are client_id & request_uri query params, add them to callback url
-let redirectCallbackUrl = `${window.location.origin}/callback`;
-
-const credentialOfferUri  = getQueryParams();
-const params = new URLSearchParams();
-
-if (credentialOfferUri) {
-  params.append('credential_offer_uri', credentialOfferUri);
-  redirectCallbackUrl = `${window.location.origin}/tabs/home/openid-credential-offer?${params.toString()}`;
-}
-
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -60,7 +49,7 @@ bootstrapApplication(AppComponent, {
       config: {
         postLoginRoute: '/tabs/home',
         authority: environment.iam_url+environment.iam_params.iam_uri,
-        redirectUrl: redirectCallbackUrl,
+        redirectUrl: `${window.location.origin}/callback`,
         postLogoutRedirectUri: `${window.location.origin}?nocache=true`,
         clientId: environment.iam_params.client_id,
         scope: environment.iam_params.scope,
@@ -82,12 +71,4 @@ bootstrapApplication(AppComponent, {
 });
 export function httpTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http);
-}
-
-function getQueryParams() {
-  console.log("Get Query Params")
-  const urlParams = new URLSearchParams(window.location.search);
-  console.log("PARAMS: ", urlParams);
-  console.log("Credential offer uri: " +  urlParams.get('credential_offer_uri'));
-  return urlParams.get('credential_offer_uri');
 }
