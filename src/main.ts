@@ -88,6 +88,8 @@ export function httpTranslateLoader(http: HttpClient) {
 }
 
 function getQueryParams() {
+  console.info("Get Query Params")
   const urlParams = new URLSearchParams(window.location.search);
+  console.info("Credential offer uri: " +  urlParams.get('credential_offer_uri'));
   return urlParams.get('credential_offer_uri');
 }
