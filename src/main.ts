@@ -35,10 +35,8 @@ const params = new URLSearchParams();
 
 if (credentialOfferUri) {
   params.append('credential_offer_uri', credentialOfferUri);
-}
+  redirectCallbackUrl = `${window.location.origin}/tabs/home/openid-credential-offer?${params.toString()}`;
 
-if (credentialOfferUri && params.toString()) {
-  redirectCallbackUrl += `?${params.toString()}`;
 }
 
 bootstrapApplication(AppComponent, {
@@ -88,8 +86,8 @@ export function httpTranslateLoader(http: HttpClient) {
 }
 
 function getQueryParams() {
-  console.info("Get Query Params")
+  console.log("Get Query Params")
   const urlParams = new URLSearchParams(window.location.search);
-  console.info("Credential offer uri: " +  urlParams.get('credential_offer_uri'));
+  console.log("Credential offer uri: " +  urlParams.get('credential_offer_uri'));
   return urlParams.get('credential_offer_uri');
 }
