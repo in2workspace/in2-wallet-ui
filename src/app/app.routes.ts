@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { AutoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 import { logsEnabledGuard } from './guards/logs-enabled.guard';
-import {CustomRedirectGuard} from "./guards/custom-redirect-guard";
 
 export const routes: Routes = [
   {
@@ -23,7 +22,7 @@ export const routes: Routes = [
         children: [
           {
             path: 'openid-credential-offer',
-            canActivate: [AutoLoginPartialRoutesGuard,CustomRedirectGuard],
+            canActivate: [AutoLoginPartialRoutesGuard],
             data: { credentialOfferUri: 'credentialOfferUri' },
             loadComponent: () =>
               import('./pages/credentials/credentials.page').then(

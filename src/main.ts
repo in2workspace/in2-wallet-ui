@@ -36,7 +36,6 @@ const params = new URLSearchParams();
 if (credentialOfferUri) {
   params.append('credential_offer_uri', credentialOfferUri);
   redirectCallbackUrl = `${window.location.origin}/tabs/home/openid-credential-offer?${params.toString()}`;
-
 }
 
 bootstrapApplication(AppComponent, {
@@ -61,7 +60,7 @@ bootstrapApplication(AppComponent, {
       config: {
         postLoginRoute: '/tabs/home',
         authority: environment.iam_url+environment.iam_params.iam_uri,
-        redirectUrl: `${window.location.origin}/callback`,
+        redirectUrl: redirectCallbackUrl,
         postLogoutRedirectUri: `${window.location.origin}?nocache=true`,
         clientId: environment.iam_params.client_id,
         scope: environment.iam_params.scope,
@@ -88,6 +87,7 @@ export function httpTranslateLoader(http: HttpClient) {
 function getQueryParams() {
   console.log("Get Query Params")
   const urlParams = new URLSearchParams(window.location.search);
+  console.log("PARAMS: ", urlParams);
   console.log("Credential offer uri: " +  urlParams.get('credential_offer_uri'));
   return urlParams.get('credential_offer_uri');
 }
