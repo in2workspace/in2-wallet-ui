@@ -13,11 +13,6 @@ export class AuthValidatorService {
     if (this.hasRedirected) return;
     
     const urlState = this.route.snapshot.queryParamMap.get('state');
-    const urlCode = this.route.snapshot.queryParamMap.get('code');
-    if (!urlCode && !urlState) {
-      await this.delayedRedirect();
-      return;
-    }
     if (!urlState) {
       await this.delayedRedirect();
       return;
