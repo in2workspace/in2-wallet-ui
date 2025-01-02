@@ -54,7 +54,6 @@ export class WalletService {
   }
 
   public requestCredential(credentialOfferUri: string): Observable<JSON> {
-    console.log("WalletService --> requestCredential() --> credentialOfferUri = " + credentialOfferUri);
     return this.http.post<JSON>(
       environment.server_url + environment.server_uri.request_credential_uri,
       { credential_offer_uri: credentialOfferUri },
