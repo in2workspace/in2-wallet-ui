@@ -39,7 +39,7 @@ describe('CredentialsPage', () => {
 
     walletServiceSpy = {
       getAllVCs: jest.fn().mockReturnValue(of([])),
-      requestCredential: jest.fn().mockReturnValue(of({} as any)),
+      requestOpenidCredentialOffer: jest.fn().mockReturnValue(of({} as any)),
       deleteVC: jest.fn(),
       executeContent: jest.fn().mockReturnValue(of({} as any))
     } as unknown as jest.Mocked<WalletService>;
