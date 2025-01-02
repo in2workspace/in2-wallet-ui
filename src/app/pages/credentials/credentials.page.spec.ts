@@ -136,7 +136,7 @@ describe('CredentialsPage', () => {
     // Avanzar el tiempo para simular el retraso en la conexión del WebSocket
     tick(1000);
 
-    expect(walletServiceSpy.requestCredential).toHaveBeenCalledWith(mockCredentialOfferUri);
+    expect(walletServiceSpy.requestOpenidCredentialOffer).toHaveBeenCalledWith(mockCredentialOfferUri);
     expect(websocketServiceSpy.connect).toHaveBeenCalled();
   }));
 
@@ -342,12 +342,12 @@ describe('CredentialsPage', () => {
     // Simulamos el retraso para que se complete la conexión y solicitud
     tick(1000);
 
-    expect(walletServiceSpy.requestCredential).toHaveBeenCalled();
+    expect(walletServiceSpy.requestOpenidCredentialOffer).toHaveBeenCalled();
     expect(websocketServiceSpy.closeConnection).toHaveBeenCalled();
   }));
 
   it('should close websocket connection if an error occurs', fakeAsync(() => {
-    jest.spyOn(walletServiceSpy, 'requestCredential').mockReturnValueOnce(throwError(() => new Error('Test error')));
+    jest.spyOn(walletServiceSpy, 'requestOpenidCredentialOffer').mockReturnValueOnce(throwError(() => new Error('Test error')));
 
     component.credentialOfferUri = 'mockCredentialOfferUri';
     component.generateCred();
@@ -355,7 +355,7 @@ describe('CredentialsPage', () => {
     // Simulamos el retraso para que se complete la conexión y solicitud
     tick(1000);
 
-    expect(walletServiceSpy.requestCredential).toHaveBeenCalled();
+    expect(walletServiceSpy.requestOpenidCredentialOffer).toHaveBeenCalled();
     expect(websocketServiceSpy.closeConnection).toHaveBeenCalled();
   }));
 

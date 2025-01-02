@@ -227,7 +227,7 @@ export class CredentialsPage implements OnInit {
 
     // Esperar un segundo antes de continuar
     this.delay(1000).then(() => {
-      this.walletService.requestCredential(this.credentialOfferUri).subscribe({
+      this.walletService.requestOpenidCredentialOffer(this.credentialOfferUri).subscribe({
         next: () => {
           this.refresh();
           this.websocket.closeConnection();
