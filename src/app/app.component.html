@@ -1,6 +1,6 @@
-<ion-app [ngClass]="{ 'blurred': isCallbackRoute }">
+<ion-app>
   <ion-header [translucent]="false">
-    <ion-toolbar class="toolbar">
+    <ion-toolbar class="toolbar" [ngClass]="{ 'blurred': isCallbackRoute }">
       <img alt src="assets/icon/dome_white_logo.png" width="auto" slot="start" height="35px"/>
       <ion-button
         slot="end"

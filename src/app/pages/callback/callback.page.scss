@@ -10,7 +10,16 @@ ion-tab-button[disabled] {
   opacity: 1; 
 }
 
+.blurred {
+  transition: fileter 0.3s ease;
+  filter: blur(1.5px);
+}
+
 .loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 60px;
   aspect-ratio: 2;
   --_g: no-repeat radial-gradient(circle closest-side, #000 90%, #0000);
