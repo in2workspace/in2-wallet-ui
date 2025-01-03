@@ -37,7 +37,7 @@ describe('CallbackPage', () => {
   });
 
   it('should call validateAuthParams on ngOnInit', () => {
-    component.ngOnInit();
+    component.ngAfterViewInit();
     expect(mockAuthValidatorService.validateAuthParams).toHaveBeenCalled();
   });
 });
