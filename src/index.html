@@ -27,12 +27,19 @@
       background: #ffffff;
       text-align: center;
     }
+
     .loading-container {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: white;
+      z-index: 9999;
     }
+
     .spinner {
       width: 50px;
       height: 50px;
@@ -40,10 +47,16 @@
       border-top-color: #3498db;
       border-radius: 50%;
       animation: spin 1s linear infinite;
+      margin-bottom: 10px;
     }
+
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+    }
+
+    app-root {
+      display: none;
     }
   </style>
 </head>
@@ -51,9 +64,20 @@
 <body>
   <div class="loading-container">
     <div class="spinner"></div>
-    <p>Cargando Wallet Dome...</p>
+    <p>Autenticando...</p>
   </div>
-  <app-root></app-root>
+  <app-root style="display: none;"></app-root>
+
+  <script>
+    if (window.location.pathname === "/callback") {
+      document.querySelector('.loading-container').style.display = 'block';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('.loading-container').style.display = 'none';
+      document.querySelector('app-root').style.display = 'block';
+    });
+  </script>
 </body>
 
 </html>
