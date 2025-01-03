@@ -5,26 +5,11 @@
   <meta charset="utf-8" />
   <title>Wallet-ui</title>
 
-  <base href="/" />
-
-  <meta name="color-scheme" content="light dark" />
-  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="format-detection" content="telephone=no" />
-  <meta name="msapplication-tap-highlight" content="no" />
-
-  <link rel="icon" type="image/png" href="assets/icon/favicon.png" />
-  <link rel="apple-touch-icon" href="assets/icon/favicon.png">
-
-  <!-- add to homescreen for ios -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <script src="assets/env.js"></script>
-
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #ffffff;
+      background: white;
       text-align: center;
     }
 
@@ -59,23 +44,38 @@
       display: none;
     }
   </style>
+
+  <base href="/" />
+
+  <meta name="color-scheme" content="light dark" />
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <link rel="icon" type="image/png" href="assets/icon/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/icon/favicon.png">
+
+  <!-- add to homescreen for ios -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <script src="assets/env.js"></script>
 </head>
 
 <body>
-  <div class="loading-container">
+  <div id="loading-container">
     <div class="spinner"></div>
-    <p>Autenticando...</p>
+    <p>Cargando Wallet Dome...</p>
   </div>
-  <app-root style="display: none;"></app-root>
+
+  <app-root></app-root>
 
   <script>
     if (window.location.pathname === "/callback") {
-      document.querySelector('.loading-container').style.display = 'block';
+      document.getElementById("loading-container").style.display = "flex";
     }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      document.querySelector('.loading-container').style.display = 'none';
-      document.querySelector('app-root').style.display = 'block';
+    window.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("loading-container").style.display = "none";
+      document.querySelector("app-root").style.display = "block";
     });
   </script>
 </body>
