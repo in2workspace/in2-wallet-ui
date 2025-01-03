@@ -9,18 +9,18 @@ export class AuthValidatorService {
   private readonly route = inject(ActivatedRoute);
   private hasRedirected = false;
 
-  async validateAuthParams(): Promise<void> {
+  validateAuthParams(): void {
     if (this.hasRedirected) return;
     
     const urlState = this.route.snapshot.queryParamMap.get('state');
     if (!urlState) {
-      await this.delayedRedirect();
+      this.delayedRedirect();
       return;
     }
     
     const authClientData = localStorage.getItem('0-auth-client');
     if (!authClientData) {
-      await this.delayedRedirect();
+      this.delayedRedirect();
       return;
     }
 
@@ -30,18 +30,12 @@ export class AuthValidatorService {
     if (urlState !== storedState) {
       delete parsedData.authStateControl;
       localStorage.setItem('0-auth-client', JSON.stringify(parsedData));
-      await this.delayedRedirect();
+      this.delayedRedirect();
     }
   }
 
-  private delayedRedirect(): Promise<void> {
+  private delayedRedirect(): void {
     this.hasRedirected = true;
-
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        this.router.navigate(['/tabs/home']);
-        resolve();
-      }, 1000);
-    });
+    this.router.navigate(['/tabs/home']);
   }
 }
