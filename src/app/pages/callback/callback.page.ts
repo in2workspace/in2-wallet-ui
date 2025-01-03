@@ -15,8 +15,8 @@ import { TranslateModule } from '@ngx-translate/core';
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CallbackPage{
   public constructor(private readonly authValidatorService: AuthValidatorService) {}
-  
-  ngOnInit(): void {
+
+  ngAfterViewInit(): void {
     this.authValidatorService.validateAuthParams();
   }
 }
