@@ -1,43 +1,36 @@
-import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { CallbackPage } from './callback.page';
-import { AuthValidatorService } from '../../services/auth-validator.service';
-import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 describe('CallbackPage', () => {
   let component: CallbackPage;
-  let fixture: ComponentFixture<CallbackPage>;
-  let mockAuthValidatorService: jest.Mocked<AuthValidatorService>;
-  let mockTranslateService: jest.Mocked<TranslateService>;
+  let mockRouter: jest.Mocked<Router>;
 
-  beforeEach(async () => {
-    mockAuthValidatorService = {
-      validateAuthParams: jest.fn(),
-    } as unknown as jest.Mocked<AuthValidatorService>;
+  beforeEach(() => {
+    jest.useFakeTimers(); 
 
-    mockTranslateService = {
-      get: jest.fn().mockReturnValue({ subscribe: jest.fn() }),
-      use: jest.fn(),
-      setDefaultLang: jest.fn(),
-    } as unknown as jest.Mocked<TranslateService>;
+    mockRouter = {
+      navigate: jest.fn(),
+    } as unknown as jest.Mocked<Router>;
 
-    await TestBed.configureTestingModule({
-      imports: [CallbackPage],
+    TestBed.configureTestingModule({
       providers: [
-        { provide: AuthValidatorService, useValue: mockAuthValidatorService },
-        { provide: TranslateService, useValue: mockTranslateService },
+        CallbackPage,
+        { provide: Router, useValue: mockRouter },
       ],
-    }).compileComponents();
+    });
 
-    fixture = TestBed.createComponent(CallbackPage);
-    component = fixture.componentInstance;
+    component = TestBed.inject(CallbackPage);
   });
 
   it('should create the CallbackPage component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call validateAuthParams on ngOnInit', () => {
+  it('should navigate to /tabs/home after 2 seconds on ngOnInit', () => {
     component.ngAfterViewInit();
-    expect(mockAuthValidatorService.validateAuthParams).toHaveBeenCalled();
+    expect(mockRouter.navigate).not.toHaveBeenCalled();
+    jest.advanceTimersByTime(2000);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/tabs/home']);
   });
 });

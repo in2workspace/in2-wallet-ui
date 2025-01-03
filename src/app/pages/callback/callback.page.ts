@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { AuthValidatorService } from '../../services/auth-validator.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-callback',
@@ -14,9 +15,16 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CallbackPage{
-  public constructor(private readonly authValidatorService: AuthValidatorService) {}
+/*   public constructor(private readonly authValidatorService: AuthValidatorService) {}
 
   ngAfterViewInit(): void {
     this.authValidatorService.validateAuthParams();
-  }
+  } */
+    constructor(private readonly router: Router) {}
+
+    ngAfterViewInit(): void {
+      setTimeout(() => {
+        this.router.navigate(['/tabs/home']);
+      }, 2000);
+    }
 }
