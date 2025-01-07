@@ -15,7 +15,6 @@ import { Router } from '@angular/router';
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CallbackPage{
     constructor(private readonly router: Router) {}
-
     ngAfterViewInit(): void {
       setTimeout(() => {
         this.router.navigate(['/tabs/home']);
