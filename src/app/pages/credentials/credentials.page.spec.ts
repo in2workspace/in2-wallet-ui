@@ -134,7 +134,7 @@ describe('CredentialsPage', () => {
     component.generateCred();
 
     // Avanzar el tiempo para simular el retraso en la conexión del WebSocket
-    tick(1000);
+    tick(4000);
 
     expect(walletServiceSpy.requestOpenidCredentialOffer).toHaveBeenCalledWith(mockCredentialOfferUri);
     expect(websocketServiceSpy.connect).toHaveBeenCalled();
@@ -340,7 +340,7 @@ describe('CredentialsPage', () => {
     component.generateCred();
 
     // Simulamos el retraso para que se complete la conexión y solicitud
-    tick(1000);
+    tick(4000);
 
     expect(walletServiceSpy.requestOpenidCredentialOffer).toHaveBeenCalled();
     expect(websocketServiceSpy.closeConnection).toHaveBeenCalled();
