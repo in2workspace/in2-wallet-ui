@@ -225,6 +225,7 @@ export class CredentialsPage implements OnInit {
     this.delay(1000).then(() => {
       this.walletService.requestOpenidCredentialOffer(this.credentialOfferUri).subscribe({
         next: () => {
+          this.okMessage();
           this.successRefresh();
           this.websocket.closeConnection();
         },
@@ -306,7 +307,7 @@ export class CredentialsPage implements OnInit {
     }, 2000);
   }
 
-  private successRefresh(): void{
+  private successRefresh(): void {
     setTimeout(() => {
       this.isAlertOpen = false;
       this.scaned_cred = false;
