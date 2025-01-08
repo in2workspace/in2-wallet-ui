@@ -96,6 +96,11 @@ describe('ToastServiceHandler', () => {
     tick();
     expect(translateSpy).toHaveBeenCalledWith("errors.unsigned");
     
+    service.showErrorAlert("PIN expired");
+    tick();
+    expect(translateSpy).toHaveBeenCalledWith("errors.pin-expired");
+
+
     service.showErrorAlert("ErrorUnsigned");
     tick();
     expect(translateSpy).toHaveBeenCalledWith("errors.Errunsigned");

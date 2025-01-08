@@ -131,7 +131,8 @@
         "invalid-issuerMetadata":"Los metadatos del Issuer son incorrectos",
         "cannot-get-VC":"No se pudo obtener la credencial del Issuer",
         "cannot-save-VC":"No se pudo guardar correctamente la credencial",
-        "incorrect-pin":"PIN incorrecto",
+        "incorrect-pin":"PIN incorrecto. Por favor, renueve la oferta de credencial. Si el problema persiste, póngase en contacto con el equipo de soporte.",
+        "pin-expired": "No ha introducido el PIN dentro del límite de tiempo. Por favor, renueve la oferta de credencial. Si el problema persiste, póngase en contacto con el equipo de soporte.",
         "unsigned": "La credencial firmada aún no esta disponible.",
         "Errunsigned": "No se pudo obtener la credencial"
     },
