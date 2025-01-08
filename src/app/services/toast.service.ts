@@ -47,8 +47,6 @@ export class ToastServiceHandler {
       messageBody = "errors.unsigned";
     }else if (message.startsWith("ErrorUnsigned")) {
       messageBody = "errors.Errunsigned";
-    }else if(message.startsWith("PIN expired")){
-      messageBody = "errors.pin-expired"
     }
 
     return this.translate.get(messageBody).pipe(
