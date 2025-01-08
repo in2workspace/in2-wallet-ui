@@ -142,6 +142,10 @@ ion-item{
     justify-content: end !important;
   }
 
+  ion-toolbar {
+    --min-height: 4rem;
+  }
+
   ion-button.toolbar-but {
     --box-shadow: none !important;
     text-transform: none;
