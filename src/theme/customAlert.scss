@@ -15,6 +15,7 @@ ion-alert.custom-alert-error .alert-wrapper {
   }
   
   ion-alert.custom-alert-error .alert-message ion-icon {
+    width: 55px;
     font-size: 38px;
     color: var(--custom-alert-error-text);
   }
@@ -51,5 +52,7 @@ ion-alert.custom-alert-error .alert-wrapper {
 
   // For the PIN counter
   ion-alert small.counter{
+    display: block;
+    padding-top: 0.5em;
     font-weight: bold;
   }

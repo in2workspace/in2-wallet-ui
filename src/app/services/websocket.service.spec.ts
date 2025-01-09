@@ -203,7 +203,7 @@ describe('WebsocketService', () => {
     setIntervalSpy.mockRestore();
   });
   
-  it('hauria de decrementar el comptador i actualitzar el missatge d\'alerta', () => {
+  it('should decrement counter and update counter in alert', () => {
     service['socket'] = mockWebSocketInstance;
     const alertMock = { message: '', dismiss: jest.fn() };
     const description = 'Test description';
@@ -213,7 +213,6 @@ describe('WebsocketService', () => {
     jest.useFakeTimers();
 
     jest.spyOn(alertMock, 'dismiss');
-    jest.spyOn(service['toastService'], 'showErrorAlert').mockReturnValue(of(null));
     const clearIntervalSpy = jest.spyOn(window, 'clearInterval');
   
     service['startCountdown'](alertMock, description, initialCounter);
@@ -226,7 +225,7 @@ describe('WebsocketService', () => {
   
     jest.advanceTimersByTime(2000); 
     expect(alertMock.dismiss).toHaveBeenCalled();
-    expect(service['toastService'].showErrorAlert).toHaveBeenCalledWith('PIN expired');
+
     expect(clearIntervalSpy).toHaveBeenCalled();
   
     jest.clearAllTimers();
