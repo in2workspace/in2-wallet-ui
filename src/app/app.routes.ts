@@ -12,7 +12,7 @@ export const routes: Routes = [
   },
   {
     path: 'callback',
-    loadChildren: () => import('./pages/callback/callback.routes').then(m => m.default),
+    loadComponent: () => import('./pages/callback/callback.page').then((m) => m.CallbackPage),
   },
   {
     path: '**',
