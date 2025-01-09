@@ -45,6 +45,7 @@ describe('WalletService', () => {
       issuanceDate: '2024-04-02T09:23:22.637345122Z',
       validFrom: '2024-04-02T09:23:22.637345122Z',
       expirationDate: '2025-01-01T00:00:00Z',
+      validUntil: '2025-01-01T00:00:00Z',
       credentialSubject: {
         mandate: {
           id: 'mandateId1',
@@ -113,28 +114,24 @@ describe('WalletService', () => {
     req.flush(mockResponse);
   });
 
-  it('should request a new credential', (done) => {
+  it('should request a new credential', () => {
     const mockCredentialOfferUri = 'test-offer-uri';
     const expectedResponse = {
       message: 'Credential request successful',
     };
-
+  
     service.requestOpenidCredentialOffer(mockCredentialOfferUri).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
-      done();
     });
-
+  
     const req = httpTestingController.expectOne(
-      `${
-        environment.server_url + environment.server_uri.request_credential_uri
-      }`
+      `${environment.server_url}${environment.server_uri.request_credential_uri}?credentialOfferUri=${mockCredentialOfferUri}`
     );
-    expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual({
-      credential_offer_uri: mockCredentialOfferUri,
-    });
+    expect(req.request.method).toBe('GET');
+    expect(req.request.params.get('credentialOfferUri')).toBe(mockCredentialOfferUri);
     req.flush(expectedResponse);
   });
+  
 
   it('should execute Verifiable Credential and return response', (done) => {
     const mockVCReply: VCReply = {
@@ -173,6 +170,7 @@ describe('WalletService', () => {
         issuanceDate: '2024-04-02T09:23:22.637345122Z',
         validFrom: '2024-04-02T09:23:22.637345122Z',
         expirationDate: '2030-01-01T00:00:00Z',
+        validUntil: '2030-01-01T00:00:00Z',
         credentialSubject: {
           mandate: {
             id: 'mandateId1',
@@ -236,6 +234,7 @@ describe('WalletService', () => {
       issuanceDate: '2024-04-02T09:23:22.637345122Z',
       validFrom: '2024-04-02T09:23:22.637345122Z',
       expirationDate: '2030-01-01T00:00:00Z',
+      validUntil: '2030-01-01T00:00:00Z',
       credentialSubject: {
         mandate: {
           id: 'mandateId1',

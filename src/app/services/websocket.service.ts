@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DestroyRef, Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { BehaviorSubject } from 'rxjs';
 import { AlertController } from '@ionic/angular';
@@ -10,14 +11,15 @@ import { ToastServiceHandler } from './toast.service';
   providedIn: 'root',
 })
 export class WebsocketService {
-  private socket!: WebSocket;
   private messageSubject = new BehaviorSubject<string>('');
+  private socket!: WebSocket;
 
   public constructor(
     private authenticationService: AuthenticationService,
     private alertController: AlertController,
-    public translate: TranslateService,
-    private toastService: ToastServiceHandler
+    private destroyRef: DestroyRef,
+    private toastService: ToastServiceHandler,
+    public translate: TranslateService
   ) {}
 
   public connect(): void {
@@ -37,15 +39,11 @@ export class WebsocketService {
       const data = JSON.parse(event.data);
   
       let description = data.tx_code?.description || '';
+      let counter = data.timeout || 60;
   
-      if (data.tx_code?.description) {
-        description = data.tx_code.description;
-      }
-  
-      let counter = 60; //todo get from backend
       const alert = await this.alertController.create({
         header: this.translate.instant('confirmation.pin'),
-        message: `${description}<br>Time remaining: ${counter} seconds`,
+        message: `${description}<br><small class="counter">Time remaining: ${counter} seconds</small>`,
         inputs: [
           {
             name: 'pin',
@@ -76,13 +74,16 @@ export class WebsocketService {
       });
   
       const interval = setInterval(() => {
+        console.log('inici interval'); //todo
         if (counter > 0) {
           counter--;
-          alert.message = `${description}<br>Time remaining: ${counter} seconds`;
+          alert.message = `${description}<br><small class="counter">Time remaining: ${counter} seconds</small>`;
         } else {
           clearInterval(interval);
           alert.dismiss();
-          this.toastService.showErrorAlert("PIN expired");
+          this.toastService.showErrorAlert("PIN expired")
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe();
         }
       }, 1000);
   
@@ -98,8 +99,11 @@ export class WebsocketService {
   public sendMessage(message: string): void {
     console.log('my websocket'); //todo remove debug console
     console.log(this.socket);
+    console.log(this.socket.readyState);
     console.log('websocket.open');
+    console.log(WebSocket);
     console.log(WebSocket.OPEN);
+
     if (this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(message);
     } else {

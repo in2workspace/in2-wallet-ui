@@ -48,3 +48,8 @@ ion-alert.custom-alert-error .alert-wrapper {
   ion-alert .alert-message span {
     line-height: 1.2;
   }
+
+  // For the PIN counter
+  ion-alert small.counter{
+    font-weight: bold;
+  }
