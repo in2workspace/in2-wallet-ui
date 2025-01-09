@@ -110,9 +110,10 @@ export class WebsocketService {
       } else {
         window.clearInterval(interval);
         alert.dismiss();
-        this.toastService.showErrorAlert("PIN expired")
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe();
+        //todo remove if only after pin 504 is returned
+        // this.toastService.showErrorAlert("PIN expired")
+        //   .pipe(takeUntilDestroyed(this.destroyRef))
+        //   .subscribe();
       }
     }, 1000);
   

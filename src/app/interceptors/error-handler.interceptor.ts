@@ -39,6 +39,12 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             if(errMessage.startsWith('The credentials list is empty')){
               errMessage = "There are no credentials available to login";
             }
+            else if(errMessage.startsWith('Incorrect PIN')){
+              //simply don't change the message
+            }else if(errorResp.status === 504){
+              //todo segur? no hi ha altres casos de 504?
+              errMessage = "PIN expired"
+            }
             else if(!errMessage.startsWith('The received QR content cannot be processed'))
             {
               errMessage = 'There was a problem processing the QR. It might be invalid or already have been used';
