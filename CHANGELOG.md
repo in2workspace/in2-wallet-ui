@@ -7,12 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v1.4.0](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.4.0)
 ### Changed
 - Refactor architecture to standalone.
-- Changed callback page design
-### Added
-- Added AuthValidator to validate state parameter.
+- Changed callback page design.
 ### Fixed
-- Fixed the persistent callback page when state is invalid.
+- Fixed the persistent callback page when state is invalid or other reasons.
 - Fixed routing issues.
+- Fixed some styles.
 
 ## [v1.3.7](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.3.7)
 ### Fixed
