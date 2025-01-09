@@ -15,11 +15,11 @@ export class WebsocketService {
   private socket!: WebSocket;
 
   public constructor(
-    private authenticationService: AuthenticationService,
-    private alertController: AlertController,
-    private destroyRef: DestroyRef,
-    private toastService: ToastServiceHandler,
-    public translate: TranslateService
+    private readonly authenticationService: AuthenticationService,
+    private readonly alertController: AlertController,
+    private readonly destroyRef: DestroyRef,
+    private readonly toastService: ToastServiceHandler,
+    public readonly translate: TranslateService
   ) {}
 
   public connect(): void {
@@ -73,19 +73,7 @@ export class WebsocketService {
         ],
       });
   
-      const interval = setInterval(() => {
-        console.log('inici interval'); //todo
-        if (counter > 0) {
-          counter--;
-          alert.message = `${description}<br><small class="counter">Time remaining: ${counter} seconds</small>`;
-        } else {
-          clearInterval(interval);
-          alert.dismiss();
-          this.toastService.showErrorAlert("PIN expired")
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe();
-        }
-      }, 1000);
+      const interval = this.startCountdown(alert, description, counter);
   
       await alert.present();
     };
@@ -97,13 +85,6 @@ export class WebsocketService {
   
 
   public sendMessage(message: string): void {
-    console.log('my websocket'); //todo remove debug console
-    console.log(this.socket);
-    console.log(this.socket.readyState);
-    console.log('websocket.open');
-    console.log(WebSocket);
-    console.log(WebSocket.OPEN);
-
     if (this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(message);
     } else {
@@ -114,4 +95,28 @@ export class WebsocketService {
   public closeConnection(): void {
     this.socket.close();
   }
+
+  private startCountdown(
+    alert: any,
+    description: string,
+    initialCounter: number
+  ): number {
+    let counter = initialCounter;
+  
+    const interval = window.setInterval(() => {
+      if (counter > 0) {
+        counter--;
+        alert.message = `${description}<br><small class="counter">Time remaining: ${counter} seconds</small>`;
+      } else {
+        window.clearInterval(interval);
+        alert.dismiss();
+        this.toastService.showErrorAlert("PIN expired")
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe();
+      }
+    }, 1000);
+  
+    return interval;
+  }
+  
 }

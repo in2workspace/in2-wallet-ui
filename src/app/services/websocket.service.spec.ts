@@ -145,52 +145,10 @@ describe('WebsocketService', () => {
         ],
       })
     );
+    tick();
   }));
 
-  // todo
-  // it('should decrement the counter in the alert message over time', fakeAsync(() => {
-  //   const description = 'Test description';
-  //   let counter = 60; // Inicialitzem el comptador
-  //   const messageEvent = new MessageEvent('message', {
-  //     data: JSON.stringify({ tx_code: { description } }),
-  //   });
-  
-  //   const alertMock = {
-  //     message: `${description}timeout`,
-  //     present: jest.fn(),
-  //     dismiss: jest.fn(),
-  //   };
-  //   jest.spyOn(service['alertController'], 'create').mockResolvedValue(alertMock as any);
-  //   const toastSpy = jest.spyOn(service['toastService'], 'showErrorAlert');
-  
-  //   // Mock de setInterval per controlar manualment la callback
-  //   jest.spyOn(window, 'setInterval').mockImplementation((callback: Function) => {
-  //     const intervalId = setInterval(() => {
-  //       callback();
-  //     }, 1000);
-  //     return intervalId;
-  //   });
-  //   jest.spyOn(window, 'clearInterval').mockImplementation((id) => clearInterval(id));
-  
-  //   service.connect();
-  
-  //   mockWebSocketInstance.onmessage(messageEvent);
-  //   tick(); // Simula el temps fins a la creació de l'alerta
-  
-  //   expect(alertMock.message).toBe(`${description}<br>Time remaining: 60 seconds`);
-  
-  //   // Simulem la reducció del comptador manualment
-  //   for (let i = 59; i >= 0; i--) {
-  //     tick(1000); // Simulem el pas d'un segon
-  //     counter--; // Reduïm el comptador
-  //     alertMock.message = `${description}<br>Time remaining: ${counter} seconds`; // Actualitzem el missatge
-  //     expect(alertMock.message).toBe(`${description}<br>Time remaining: ${i} seconds`);
-  //   }
-  
-  //   // Comprovem el comportament final
-  //   expect(alertMock.dismiss).toHaveBeenCalled();
-  //   expect(toastSpy).toHaveBeenCalledWith('PIN expired');
-  // }));
+
   
 
   it('should log message on WebSocket close', fakeAsync(() => {
@@ -227,5 +185,54 @@ describe('WebsocketService', () => {
     expect(service['socket'].close).toHaveBeenCalledTimes(1);
   });
 
+  it('hauria de cridar setInterval', () => {
+    service['socket'] = mockWebSocketInstance;
+    const alertMock = { message: '', dismiss: jest.fn() };
+    const description = 'Test description';
+    const initialCounter = 3;
+  
+    jest.useFakeTimers();
+  
+    const setIntervalSpy = jest.spyOn(window, 'setInterval');
+  
+    service['startCountdown'](alertMock, description, initialCounter);
+  
+    expect(setIntervalSpy).toHaveBeenCalled();
+    expect(setIntervalSpy).toHaveBeenCalledWith(expect.any(Function), 1000);
+  
+    setIntervalSpy.mockRestore();
+  });
+  
+  it('hauria de decrementar el comptador i actualitzar el missatge d\'alerta', () => {
+    service['socket'] = mockWebSocketInstance;
+    const alertMock = { message: '', dismiss: jest.fn() };
+    const description = 'Test description';
+    const initialCounter = 3;
+  
+
+    jest.useFakeTimers();
+
+    jest.spyOn(alertMock, 'dismiss');
+    jest.spyOn(service['toastService'], 'showErrorAlert').mockReturnValue(of(null));
+    const clearIntervalSpy = jest.spyOn(window, 'clearInterval');
+  
+    service['startCountdown'](alertMock, description, initialCounter);
+  
+    jest.advanceTimersByTime(1000); 
+    expect(alertMock.message).toContain('Time remaining: 2 seconds');
+  
+    jest.advanceTimersByTime(1000);
+    expect(alertMock.message).toContain('Time remaining: 1 seconds');
+  
+    jest.advanceTimersByTime(2000); 
+    expect(alertMock.dismiss).toHaveBeenCalled();
+    expect(service['toastService'].showErrorAlert).toHaveBeenCalledWith('PIN expired');
+    expect(clearIntervalSpy).toHaveBeenCalled();
+  
+    jest.clearAllTimers();
+    clearIntervalSpy.mockRestore();
+  });
+  
+  
 
 });

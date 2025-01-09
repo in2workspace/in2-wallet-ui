@@ -92,16 +92,6 @@ export class WalletService {
     );
   }
 
-  // Deprecated
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  public submitCredential(arg0: {}) {
-    return this.http.post<string>(
-      environment.server_url + environment.server_uri.credentials_uri,
-      arg0,
-      options
-    );
-  }
-
   // Delete the selected Verifiable Credential from the Wallet Data
   public deleteVC(VC: string) {
     return this.http.delete<string>(
@@ -121,5 +111,15 @@ export class WalletService {
       options
     );
   }
+
+  // Deprecated
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  // public submitCredential(arg0: {}) {
+  //   return this.http.post<string>(
+  //     environment.server_url + environment.server_uri.credentials_uri,
+  //     arg0,
+  //     options
+  //   );
+  // }
 
 }
