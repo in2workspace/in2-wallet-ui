@@ -23,7 +23,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((errorResp: HttpErrorResponse) => {
         let errMessage = errorResp.error?.message || errorResp.message || 'Unknown Http error';
-
+        let errStatus = errorResp.status || errorResp.error?.status;
         if ( //todo review this handler
           errMessage?.startsWith('The credentials list is empty') &&
           request.url.endsWith(environment.server_uri.credentials_uri)
@@ -33,7 +33,15 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         else if(request.url.endsWith(environment.server_uri.verifiable_presentation_uri))
         {
           console.error('Handled silently:', errMessage);
-        } else {
+        } 
+        //same-device credential offer request
+        else if(request.url.endsWith(
+          environment.server_uri.request_credential_uri) 
+          && (errStatus === 408 || errStatus === 504)
+        ){
+          errMessage = "PIN expired"
+        }
+        else {
           if (request.url.endsWith(environment.server_uri.execute_content_uri))
           {
             if(errMessage.startsWith('The credentials list is empty')){
@@ -41,8 +49,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             }
             else if(errMessage.startsWith('Incorrect PIN')){
               //simply don't change the message
-            }else if(errorResp.status === 504){
-              //todo segur? no hi ha altres casos de 504?
+            }else if(errorResp.status === 504 || errorResp.status === 408){
+              //504 for nginx Gateway timeout, 408 for backend
               errMessage = "PIN expired"
             }
             else if(!errMessage.startsWith('The received QR content cannot be processed'))

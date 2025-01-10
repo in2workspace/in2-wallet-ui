@@ -19,11 +19,11 @@ module.exports = {
   collectCoverageFrom: [
     "src/app/components/barcode-scanner/**/*.ts",         
     "src/app/guards/**/*.ts",                  
-    "src/app/pages/credentials/**/*.ts",       
-    "src/app/pages/settings/**/*.ts",          
-    "src/app/pages/logs/**/*.ts",
-    "src/app/pages/callback/**/*.ts",                
-    "src/app/services/auth-validator.service.ts"
+    "src/app/pages/pages/**/*.ts",             
+    "src/app/services/**/*.ts",
+    "src/app/interceptors/**/*.ts",
+    "src/app/guards/**/*.ts",
+    "src/app/components/**/*.ts",
   ],
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules/', 
