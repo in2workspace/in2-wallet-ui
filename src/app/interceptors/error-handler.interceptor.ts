@@ -24,7 +24,22 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       catchError((errorResp: HttpErrorResponse) => {
         let errMessage = errorResp.error?.message || errorResp.message || 'Unknown Http error';
         let errStatus = errorResp.status || errorResp.error?.status;
-        if ( //todo review this handler
+        console.info('request url: ');
+        console.info(request.url);
+        console.info('status: ');
+        console.info(errStatus);
+        console.info(request.url.endsWith(
+          environment.server_uri.request_credential_uri) 
+          && (errStatus === 408 || errStatus === 504));
+          //same-device
+        if(request.url.endsWith(
+          environment.server_uri.request_credential_uri) 
+          && (errStatus === 408 || errStatus === 504)
+        ){
+          console.log('error is detected')
+          errMessage = "PIN expired"
+        }
+        else if ( //todo review this handler
           errMessage?.startsWith('The credentials list is empty') &&
           request.url.endsWith(environment.server_uri.credentials_uri)
         ) {
@@ -39,6 +54,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           environment.server_uri.request_credential_uri) 
           && (errStatus === 408 || errStatus === 504)
         ){
+          console.log('error is detected')
           errMessage = "PIN expired"
         }
         else {
@@ -68,6 +84,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           this.toastServiceHandler
             .showErrorAlert(errMessage)
             .subscribe(); //TODO unsubscribe?
+            console.log('error message sent to alert');
+            console.log(errMessage);
           console.error('Error occurred:', errorResp);
         }
         return throwError(() => errorResp);
