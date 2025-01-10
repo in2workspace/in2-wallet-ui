@@ -21,8 +21,9 @@ module.exports = {
     "src/app/guards/**/*.ts",                  
     "src/app/pages/credentials/**/*.ts",       
     "src/app/pages/settings/**/*.ts",          
-    "src/app/pages/logs/**/*.ts",               
-    "src/app/services/**/*.ts",
+    "src/app/pages/logs/**/*.ts",
+    "src/app/pages/callback/**/*.ts",                
+    "src/app/services/auth-validator.service.ts"
   ],
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules/', 

@@ -25,7 +25,8 @@ import { Observable } from 'rxjs';
 export class AppComponent implements OnInit {
   public userName: Observable<string> | undefined;
   private authenticationService = inject(AuthenticationService);
-  private router = inject(Router);
+  private router = inject(Router)
+  public isCallbackRoute = false;;
 
   public constructor(
     public translate: TranslateService,
@@ -49,6 +50,10 @@ export class AppComponent implements OnInit {
       const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
       window.location.href = cleanUrl;
     }
+    this.router.events.subscribe(() => {
+      const currentUrl = this.router.url.split('?')[0];
+      this.isCallbackRoute = currentUrl.startsWith('/callback');
+    });
   }
 
   public logout() {
@@ -67,6 +72,9 @@ export class AppComponent implements OnInit {
   }
 
   public async openPopover(ev: Event) {
+    if (this.isCallbackRoute) {
+      return; 
+    }
     const popover = await this.popoverController.create({
       component: LogoutPage,
       event: ev,
