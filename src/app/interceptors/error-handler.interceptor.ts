@@ -31,15 +31,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         console.info(request.url.endsWith(
           environment.server_uri.request_credential_uri) 
           && (errStatus === 408 || errStatus === 504));
-          //same-device
-        if(request.url.endsWith(
-          environment.server_uri.request_credential_uri) 
-          && (errStatus === 408 || errStatus === 504)
-        ){
-          console.log('error is detected')
-          errMessage = "PIN expired"
-        }
-        else if ( //todo review this handler
+
+        if ( //todo review this handler
           errMessage?.startsWith('The credentials list is empty') &&
           request.url.endsWith(environment.server_uri.credentials_uri)
         ) {
@@ -49,16 +42,15 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         {
           console.error('Handled silently:', errMessage);
         } 
+        else {
         //same-device credential offer request
-        else if(request.url.endsWith(
+        if(request.url.endsWith(
           environment.server_uri.request_credential_uri) 
           && (errStatus === 408 || errStatus === 504)
         ){
           console.log('error is detected')
           errMessage = "PIN expired"
-        }
-        else {
-          if (request.url.endsWith(environment.server_uri.execute_content_uri))
+        } else if (request.url.endsWith(environment.server_uri.execute_content_uri))
           {
             if(errMessage.startsWith('The credentials list is empty')){
               errMessage = "There are no credentials available to login";
@@ -84,8 +76,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           this.toastServiceHandler
             .showErrorAlert(errMessage)
             .subscribe(); //TODO unsubscribe?
-            console.log('error message sent to alert');
-            console.log(errMessage);
           console.error('Error occurred:', errorResp);
         }
         return throwError(() => errorResp);
