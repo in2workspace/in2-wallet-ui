@@ -114,3 +114,16 @@ ion-note {
 ion-item.selected {
   --color: var(--ion-color-secondary);
 }
+
+ion-button[disabled] {
+  pointer-events: none; 
+  opacity: 1; 
+}
+
+ion-toolbar {
+  transition: filter 0.3s ease; 
+
+  &.blurred {
+    filter: blur(1.5px); 
+  }
+}

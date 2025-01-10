@@ -21,9 +21,11 @@ module.exports = {
     "src/app/guards/**/*.ts",                  
     "src/app/pages/credentials/**/*.ts",       
     "src/app/pages/settings/**/*.ts",          
-    "src/app/pages/logs/**/*.ts",               
+    "src/app/pages/logs/**/*.ts",
+    "src/app/pages/callback/**/*.ts",                
     "src/app/services/camera-logs.service.ts",
-    "src/app/services/toast.ts"
+    "src/app/services/toast.ts",
+    "src/app/services/auth-validator.service.ts"
   ],
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules/', 
@@ -31,8 +33,8 @@ module.exports = {
     '<rootDir>/src/app/components/(?!barcode-scanner)',
     '<rootDir>/src/app/interceptors',
     '<rootDir>/src/app/interfaces',
-    '<rootDir>/src/app/pages/(?!settings|logs|credentials)',
-    '<rootDir>/src/app/services/(?!camera-logs|toast)'
+    '<rootDir>/src/app/pages/(?!settings|logs|credentials|callback)',
+    '<rootDir>/src/app/services/(?!camera-logs|toast|auth-validator)'
   ],
   transformIgnorePatterns: ['/node_modules/(?!@stencil|stencil)/'],
   testPathIgnorePatterns: [
@@ -41,7 +43,7 @@ module.exports = {
     '/src/app/components/(?!barcode-scanner)',
     '/src/app/interceptors',
     '/src/app/interfaces',
-    '/src/app/pages/(?!settings|logs|credentials)',
-    '/src/app/services/(?!camera-logs|toast)'
+    '/src/app/pages/(?!settings|logs|credentials|callback)',
+    '/src/app/services/(?!camera-logs|toast|auth-validator)'
   ]
 };
