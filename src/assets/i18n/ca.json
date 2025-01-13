@@ -127,7 +127,7 @@
     },
     "errors":{
         "default":"Error no reconegut",
-        "failed-qr-process": "Hi ha hagut un problema en processar el QR. Pot ser que sigui invàlid o que ja hagi estat utilitzat abans",
+        "failed-qr-process": "Hi ha hagut un problema en processar el QR. Pot ser que sigui invàlid o que ja hagi estat utilitzat abans. Refresqueu l'oferta de credencial. Si el problema persisteix, contacteu <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>",
         "invalid-qr":"El QR presentat és invàlid",
         "no-credentials-available": "No hi ha cap credencial disponible per al login",
         "expired-credentialOffer":"La oferta de credencial està expirada o ja utilitzada",
@@ -135,8 +135,8 @@
         "invalid-issuerMetadata":"Les metadades del Issuer són incorrectes",
         "cannot-get-VC":"No s'ha pogut obtenir la credencial del Issuer",
         "cannot-save-VC":"No s'ha pogut guardar correctamente la credencial",
-        "incorrect-pin":"PIN incorrecte. Si us plau, actualitzeu l'oferta de credencials. Si el problema persisteix, poseu-vos en contacte amb l'equip de suport.",
-        "pin-expired": "No ha introduït el PIN dins del límit de temps. Si us plau, renoveu l'oferta de credencial. Si el problema persisteix, poseu-vos en contacte amb l'equip de suport.",
+        "incorrect-pin":"PIN incorrecte. Si us plau, actualitzeu l'oferta de credencials. Si el problema persisteix, poseu-vos en contacte amb <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>.",
+        "pin-expired": "No ha introduït el PIN dins del límit de temps. Si us plau, renoveu l'oferta de credencial. Si el problema persisteix, poseu-vos en contacte amb <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>.",
         "unsigned": "La credencial signada encara no està disponible",
         "Errunsigned": "No s'ha pogut obtenir la credencial"
     },
