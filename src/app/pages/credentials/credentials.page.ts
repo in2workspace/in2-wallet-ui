@@ -228,6 +228,7 @@ export class CredentialsPage implements OnInit {
           this.okMessage();
           this.successRefresh();
           this.websocket.closeConnection();
+          this.router.navigate(['/tabs/credentials']);
         },
         error: (err) => {
           console.error(err);

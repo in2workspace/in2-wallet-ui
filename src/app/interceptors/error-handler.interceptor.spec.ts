@@ -123,6 +123,25 @@ describe('HttpErrorInterceptor with HttpClient', () => {
     req.flush({message: 'Random error message'}, { status: 500, statusText: 'AnyText' });
   });
 
+  it('should handle errors silently for verifiable presentation URI', () => {
+    const testUrl = environment.server_uri.verifiable_presentation_uri;
+    const spy = jest.spyOn(console, 'error');
+
+    httpClient.get(testUrl).subscribe({
+      error: (error) => {
+        expect(spy).toHaveBeenCalledWith('Handled silently:', 'Test error message');
+        expect(error).toBeTruthy();
+      },
+    });
+
+    const req = httpMock.expectOne(testUrl);
+    req.flush(
+      { message: 'Test error message' },
+      { status: 400, statusText: 'Bad Request' }
+    );
+  });
+
+
   it('should show a toast with "PIN expired" on a 408 Request Timeout response', () => {
     const expectedMessage = 'PIN expired';
     const spy = jest.spyOn(mockToastServiceHandler, 'showErrorAlert');
