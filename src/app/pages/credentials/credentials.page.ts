@@ -55,18 +55,18 @@ export class CredentialsPage implements OnInit {
   public ebsiFlag = false;
   public did = '';
 
-  private walletService = inject(WalletService);
-  private router = inject(Router);
-  private websocket = inject(WebsocketService);
-  private dataService = inject(DataService);
-  private route = inject(ActivatedRoute);
-  private destroyRef = inject(DestroyRef);
+  private readonly walletService = inject(WalletService);
+  private readonly router = inject(Router);
+  private readonly websocket = inject(WebsocketService);
+  private readonly dataService = inject(DataService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly alertController = inject(AlertController);
+  private readonly translate = inject(TranslateService);
+  private readonly cameraLogsService = inject(CameraLogsService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-  public constructor(
-    private alertController: AlertController,
-    public translate: TranslateService,
-    private cameraLogsService: CameraLogsService,
-    private cdr: ChangeDetectorRef)
+  public constructor()
     {
     this.credOfferEndpoint = window.location.origin + '/tabs/home';
     this.route.queryParams.subscribe((params) => {

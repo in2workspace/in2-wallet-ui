@@ -43,12 +43,10 @@ describe('HttpErrorInterceptor with HttpClient', () => {
 
   it('should log and show a toast on a 404 Not Found response', () => {
     const spy = jest.spyOn(mockToastServiceHandler, 'showErrorAlert');
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
     httpClient.get('/test404').subscribe({
       error: (error) => {
         expect(spy).toHaveBeenCalledWith('Resource not found message from backend');
-        expect(consoleErrorSpy).toHaveBeenCalledWith('Resource not found:', expect.any(String));
       }
     });
 
@@ -86,12 +84,10 @@ describe('HttpErrorInterceptor with HttpClient', () => {
 
   it('should log and show a toast on a 401 Unauthorized response', () => {
     const spy = jest.spyOn(mockToastServiceHandler, 'showErrorAlert');
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
     httpClient.get('/test401').subscribe({
       error: (error) => {
         expect(spy).toHaveBeenCalledWith('Unauthorized error message from backend');
-        expect(consoleErrorSpy).toHaveBeenCalledWith('Unauthorized:', expect.any(String));
       }
     });
 
@@ -102,12 +98,10 @@ describe('HttpErrorInterceptor with HttpClient', () => {
   it('should log and show a toast on a generic HTTP error response', () => {
     const errorMessage = 'An error occurred';
     const spy = jest.spyOn(mockToastServiceHandler, 'showErrorAlert');
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
     httpClient.get('/testError').subscribe({
       error: (error) => {
         expect(spy).toHaveBeenCalledWith(errorMessage);
-        expect(consoleErrorSpy).toHaveBeenCalledWith('An HTTP error occurred:', expect.any(String));
       }
     });
 

@@ -1,11 +1,9 @@
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DestroyRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { BehaviorSubject } from 'rxjs';
 import { AlertController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { TranslateService } from '@ngx-translate/core';
-import { ToastServiceHandler } from './toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,8 +15,6 @@ export class WebsocketService {
   public constructor(
     private readonly authenticationService: AuthenticationService,
     private readonly alertController: AlertController,
-    private readonly destroyRef: DestroyRef,
-    private readonly toastService: ToastServiceHandler,
     public readonly translate: TranslateService
   ) {}
 
@@ -110,10 +106,6 @@ export class WebsocketService {
       } else {
         window.clearInterval(interval);
         alert.dismiss();
-        //todo remove if only after pin 504 is returned
-        // this.toastService.showErrorAlert("PIN expired")
-        //   .pipe(takeUntilDestroyed(this.destroyRef))
-        //   .subscribe();
       }
     }, 1000);
   
