@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -53,11 +53,14 @@ export class WalletService {
     );
   }
 
-  public requestCredential(credentialOfferUri: string): Observable<JSON> {
-    return this.http.post<JSON>(
+  public requestOpenidCredentialOffer(credentialOfferUri: string): Observable<JSON> {
+    const params = new HttpParams().set('credentialOfferUri', credentialOfferUri);
+    return this.http.get<JSON>(
       environment.server_url + environment.server_uri.request_credential_uri,
-      { credential_offer_uri: credentialOfferUri },
-      options
+      {
+        params,
+        headers: options.headers
+      }
     );
   }
 
@@ -89,16 +92,6 @@ export class WalletService {
     );
   }
 
-  // Deprecated
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  public submitCredential(arg0: {}) {
-    return this.http.post<string>(
-      environment.server_url + environment.server_uri.credentials_uri,
-      arg0,
-      options
-    );
-  }
-
   // Delete the selected Verifiable Credential from the Wallet Data
   public deleteVC(VC: string) {
     return this.http.delete<string>(
@@ -118,5 +111,15 @@ export class WalletService {
       options
     );
   }
+
+  // Deprecated
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  // public submitCredential(arg0: {}) {
+  //   return this.http.post<string>(
+  //     environment.server_url + environment.server_uri.credentials_uri,
+  //     arg0,
+  //     options
+  //   );
+  // }
 
 }

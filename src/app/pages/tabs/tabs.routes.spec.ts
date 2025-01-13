@@ -82,8 +82,8 @@ describe('App Routes', () => {
   });
 
   it('should redirect to / for unknown paths', async () => {
-    await router.navigate(['/unknown-path']);
-    expect(location.path()).toBe('/');
+    await router.navigate(['tabs/unknown-path']);
+    expect(location.path()).toBe('/home');
   });
 
   it('should apply AutoLoginPartialRoutesGuard on /home', async () => {

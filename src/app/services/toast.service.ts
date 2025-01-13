@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { mergeMap, map, Observable } from 'rxjs';
-import { AlertController, IonicModule } from '@ionic/angular';
+import { map, Observable } from 'rxjs';
+import { AlertController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToastServiceHandler {
   public constructor(
-    private toastController: ToastController,
-    private translate: TranslateService,
-    private alertController: AlertController
+    private readonly translate: TranslateService,
+    private readonly alertController: AlertController
   ) {}
 
   //todo use title instead of message
@@ -47,6 +45,8 @@ export class ToastServiceHandler {
       messageBody = "errors.unsigned";
     }else if (message.startsWith("ErrorUnsigned")) {
       messageBody = "errors.Errunsigned";
+    }else if(message.startsWith("PIN expired")){
+      messageBody = "errors.pin-expired"
     }
 
     return this.translate.get(messageBody).pipe(

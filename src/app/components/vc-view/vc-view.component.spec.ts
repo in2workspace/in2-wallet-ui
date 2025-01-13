@@ -106,11 +106,12 @@ describe('VcViewComponent', () => {
   it('checkExpirationVC should set isExpired to true if credential is expired', () => {
     component.credentialInput = {
       id: 'testId',
-      expirationDate: new Date(Date.now() - 86400000).toISOString(),
+      validUntil: new Date(Date.now() - 86400000).toISOString(), // Camp corregit
+      status: CredentialStatus.REVOKED,
     } as VerifiableCredential;
-
+  
     component.checkExpirationVC();
-
+  
     expect(component.isExpired).toBeTruthy();
   });
 
