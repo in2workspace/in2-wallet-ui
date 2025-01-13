@@ -16,13 +16,11 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: "./coverage/app",
   coverageReporters: ["lcov", "text-summary", "cobertura", "html"],
-  collectCoverageFrom: [
-    "src/app/components/barcode-scanner/**/*.ts",         
+  collectCoverageFrom: [   
     "src/app/guards/**/*.ts",                  
     "src/app/pages/pages/**/*.ts",             
     "src/app/services/**/*.ts",
     "src/app/interceptors/**/*.ts",
-    "src/app/guards/**/*.ts",
     "src/app/components/**/*.ts",
   ],
   coveragePathIgnorePatterns: [
