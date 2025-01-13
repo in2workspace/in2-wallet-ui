@@ -380,4 +380,23 @@ describe('CredentialsPage', () => {
     expect(component.toggleScan).toBe(false);
     expect(addCameraLogSpy).toHaveBeenCalledWith(new Error(errorMessage), 'httpError');
   }));
+
+  it('should reset isAlertOpen and scaned_cred after TIME_IN_MS and call refresh', fakeAsync(() => {
+    component.isAlertOpen = true;
+    component.scaned_cred = true;
+  
+    const refreshSpy = jest.spyOn(component, 'refresh');
+  
+    component['successRefresh']();
+  
+    expect(refreshSpy).toHaveBeenCalled();
+  
+    expect(component.isAlertOpen).toBe(true);
+    expect(component.scaned_cred).toBe(true);
+
+    tick(TIME_IN_MS);
+  
+    expect(component.isAlertOpen).toBe(false);
+    expect(component.scaned_cred).toBe(false);
+  }));
 });
