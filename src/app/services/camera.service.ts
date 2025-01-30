@@ -1,44 +1,71 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, distinctUntilChanged, shareReplay } from 'rxjs';
 import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CameraService {
-  public mediaDeviceInfoNull: MediaDeviceInfo = {
-    deviceId: '',
-    groupId: '',
-    kind: 'audiooutput',
-    label: '',
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    toJSON() {},
-  };
-  public camara = new BehaviorSubject<MediaDeviceInfo>(
+  public mediaDeviceInfoNull: MediaDeviceInfo|undefined = undefined;
+  public cameraSubj = new BehaviorSubject<MediaDeviceInfo|undefined>(
     this.mediaDeviceInfoNull
   );
-  public navCamera$ = this.camara.asObservable();
+  public navCamera$ = this.cameraSubj.asObservable().pipe(
+    distinctUntilChanged(),
+    shareReplay(1),
+    );
 
-  public constructor(private storageService: StorageService) {
+  private storageService = inject(StorageService);
+
+  public constructor() {
     this.updateCamera();
   }
 
-  public changeCamera(camara: MediaDeviceInfo) {
-    this.camara.next(camara);
-    this.storageService.set('camara', camara);
+  public changeCamera(camera: MediaDeviceInfo) {
+    this.cameraSubj.next(camera);
+    this.storageService.set('camera', camera);
   }
 
-  public updateCamera() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.storageService.get('camara').then((result: any) => {
-      if (result != null) {
-        this.camara.next(result);
+  public async updateCamera() {
+    const storedCamera = await this.storageService.get('camera');
+    console.log('Camera from storage:');
+    console.log(storedCamera);
+
+    if (storedCamera != null && this.isValidMediaDeviceInfo(storedCamera)) {
+      const isAvailable = await this.isCameraAvailable(storedCamera);
+      
+      if (isAvailable) {
+        this.cameraSubj.next(storedCamera);
+      } else {
+        console.warn('Stored camera not available');
+        this.noCamera();
       }
-    });
+    } else {
+      console.warn('Stored camera is not valid or null');
+      this.noCamera();
+    }
   }
 
-  public noCamera() {
-    this.storageService.remove('camara');
-    this.camara.next(this.mediaDeviceInfoNull);
+  public async noCamera() {
+    await this.storageService.remove('camera');
+    this.cameraSubj.next(this.mediaDeviceInfoNull);
+  }
+
+  public async isCameraAvailable(camera: MediaDeviceInfo): Promise<boolean> {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const availableCamera = devices.find(
+      (device) => device.deviceId === camera.deviceId && device.kind === 'videoinput'
+    );
+    return !!availableCamera;
+  }
+
+  private isValidMediaDeviceInfo(object: any): object is MediaDeviceInfo {
+    return (
+      object &&
+      typeof object.deviceId === 'string' &&
+      typeof object.label === 'string' &&
+      typeof object.kind === 'string' &&
+      object.kind === 'videoinput'
+    );
   }
 }

@@ -3,7 +3,7 @@
     #scanner
     class="scanner"
     [autostart]="true"
-    [device]="newSelectedCamera"
+    [device]="(selectedDevice$|async) ?? undefined"
     [formats]="allowedFormats"
     (camerasFound)="onCamerasFound($event)"
     (scanSuccess)="onCodeResult($event)"

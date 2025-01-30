@@ -15,7 +15,8 @@
     "camera-selector":{
         "title":"Camara",
         "settings": "Configuración de la camara",
-        "no-device": "Sin dispositivo"
+        "no-device": "Sin dispositivo",
+        "default-device": "Dispositivo por defecto"
     },
     "credential-offer":{
         "title":"Oferta de Credencial",

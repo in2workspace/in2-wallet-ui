@@ -16,8 +16,8 @@
     "camera-selector":{
         "title":"Camera",
         "settings": "Camera settings",
-        "no-device": "No device"
-
+        "no-device": "No device",
+        "default-device": "Default device"
     },
     "credential-offer":{
         "title":"Credential Offer",
