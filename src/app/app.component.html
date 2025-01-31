@@ -4,13 +4,12 @@
       <img alt src="assets/icon/dome_white_logo.png" width="auto" slot="start" height="35px"/>
       <ion-button
         slot="end"
-        color="primary"
         class="toolbar-but"
         [disabled]="isCallbackRoute"
         (click)="openPopover($event)"
         (keydown)="handleKeydown($event)"
         >
-        {{userName | async}}
+        {{userName | async}} 
         <ion-icon
           slot="end"
           class="ion-icon-home"

@@ -155,9 +155,15 @@ ion-item{
     --background: #00ADD3;
   }
   .logout-list {
-    background-color: #00ADD3;
+    background-color: var(--primary-custom-color);
   }
 
+  .logout-list ion-item{
+    --ion-item-background: var(--primary-custom-color);
+    --ion-item-color: var(--primary-contrast-custom-color);
+    --border-color:var(--primary-contrast-custom-color) !important;
+  }
+  
   .background-content {
     --ion-background-color: #DDE6F6;
   }

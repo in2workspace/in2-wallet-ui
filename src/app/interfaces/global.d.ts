@@ -22,6 +22,10 @@ interface Window {
       websocket_uri?: string;
       logs_enabled?: boolean;
       logs_email?: string;
+      primary: string;
+      primary_contrast: string;
+      secondary: string;
+      secondary_contrast: string;
     };
   }
   

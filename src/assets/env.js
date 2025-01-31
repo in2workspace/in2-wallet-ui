@@ -21,4 +21,8 @@
   window["env"]["cbor_uri"] = '/api/v2/vp/cbor';
   window["env"]["logs_enabled"] = "false";
   window["env"]["logs_email"] = "domesupport@in2.es";
+  window["env"]["primary"] = "${PRIMARY}";
+  window["env"]["primary_contrast"]= "${PRIMARY_CONTRAST}";
+  window["env"]["secondary"] = "${SECONDARY}";
+  window["env"]["secondary_contrast"]= "${SECONDARY_CONTRAST}"
 })(this);
