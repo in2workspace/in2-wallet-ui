@@ -16,8 +16,7 @@
     "camera-selector":{
         "title":"Camara",
         "settings": "Configuració de la camara",
-        "no-device": "Sense dispositiu",
-        "default-device": "Dispositiu per defecte"
+        "no-device": "Sense dispositiu"
     },
     "credential-offer":{
         "title":"Oferta de Credencial",

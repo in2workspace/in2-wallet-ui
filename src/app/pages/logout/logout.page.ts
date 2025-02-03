@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+// import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router, RouterModule } from '@angular/router';
 import { IonicModule, PopoverController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
@@ -16,13 +16,13 @@ import { TranslateModule } from '@ngx-translate/core';
 export class LogoutPage {
   public constructor(
     private popOverController: PopoverController,
-    private authenticationService: AuthenticationService,
+    // private authenticationService: AuthenticationService,
     private router: Router
   ) {}
   public logout() {
-    this.authenticationService.logout().subscribe(() => {
-      this.router.navigate(['/home'], {});
-    });
+    // this.authenticationService.logout().subscribe(() => {
+    //   this.router.navigate(['/home'], {});
+    // });
     this.popOverController.dismiss();
   }
 }

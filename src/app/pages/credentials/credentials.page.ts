@@ -38,7 +38,6 @@ const TIME_IN_MS = 3000;
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CredentialsPage implements OnInit {
-  @Input() public availableDevices: MediaDeviceInfo[] = [];
   public alertButtons = ['OK'];
   public userName = '';
   public credList: Array<VerifiableCredential> = [];

@@ -34,14 +34,12 @@ import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/ro
   imports: [CommonModule, ZXingScannerModule, RouterModule],
 })
 export class BarcodeScannerComponent implements OnInit {
-  @Output() public availableDevices: EventEmitter<MediaDeviceInfo[]> =
-    new EventEmitter();
   @Output() public qrCode: EventEmitter<string> = new EventEmitter();
   @ViewChild('scanner') public scanner!: ZXingScannerComponent;
   public allowedFormats = [BarcodeFormat.QR_CODE];
 
   //is assigned CameraService.selectedDevice after scanner is autostarted
-  public selectedDevice$: Observable<MediaDeviceInfo|undefined>=of(undefined);
+  public selectedDevice$ = this.cameraService.selectedCamera$;
   readonly scanFailureSubject = new Subject<Error>();
   private readonly scanFailureDebounceDelay = 3000;
   private originalConsoleError: undefined|((...data: any[]) => void);
@@ -73,42 +71,37 @@ export class BarcodeScannerComponent implements OnInit {
       }
     });
     }
-  public ngOnInit(): void {
-    setTimeout(() => {
-      this.cameraService.updateCamera();
-    }, 2000);
+  public async ngOnInit(): Promise<void> {
+    const cameraResult = await this.cameraService.getCameraFlow(); //potser després de canviar el console.error
 
     //Redefine console.log to capture the errors that were previously captured by zxing-scanner
      this.originalConsoleError = console.error;
  
-     console.error = (message?: string, ...optionalParams: string[]) => {
-      if(message==="@zxing/ngx-scanner"){
-        const logMessage = formatLogMessage(message, optionalParams);
-        const err = new Error(logMessage);
+    //  console.error = (message?: string, ...optionalParams: string[]) => {
+    //   if(message==="@zxing/ngx-scanner"){
+    //     const logMessage = formatLogMessage(message, optionalParams);
+    //     const err = new Error(logMessage);
 
-        if(optionalParams[0]==="Can't get user media, this is not supported."){
-          alert("Error: " + optionalParams[0]);
-          this.saveErrorLog(err, 'noMediaError');
-        }else{
-          alert("Error: There was an error when trying to connect to the camera. It might be a permission error.");
-          this.saveErrorLog(err, 'undefinedError');
-        }
-        return;
-      }
+    //     if(optionalParams[0]==="Can't get user media, this is not supported."){
+    //       alert("Error: " + optionalParams[0]);
+    //       this.saveErrorLog(err, 'noMediaError');
+    //     }else{
+    //       alert("Error: There was an error when trying to connect to the camera. It might be a permission error.");
+    //       this.saveErrorLog(err, 'undefinedError');
+    //     }
+    //     return;
+    //   }
 
-      if (this.originalConsoleError) {
-        this.originalConsoleError(message, ...optionalParams);
-      }
+    //   if (this.originalConsoleError) {
+    //     this.originalConsoleError(message, ...optionalParams);
+    //   }
       
-     };
+    //  };
   }
+
 
   public onCodeResult(resultString: string) {
     this.qrCode.emit(resultString);
-  }
-
-  public async onCamerasFound(devices: MediaDeviceInfo[]): Promise<void> {
-     this.availableDevices.emit(devices);
   }
 
   public onScanError(error: Error){

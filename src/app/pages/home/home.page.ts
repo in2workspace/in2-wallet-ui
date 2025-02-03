@@ -30,8 +30,6 @@ export class HomePage implements OnInit {
 
   public async startScan() {
     try{
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      stream.getTracks().forEach(track => track.stop());
       this.router.navigate(['/tabs/credentials/'], {
         queryParams: { toggleScan: true, from: 'home', show_qr: true },
       });

@@ -1,12 +1,17 @@
 
+@if(selectedDevice$() === undefined){
+    <div class="no-device">
+        Trying to get device... You might need to allow camera access.
+    </div>
+}
+
 <zxing-scanner
-    #scanner
-    class="scanner"
-    [autostart]="true"
-    [device]="(selectedDevice$|async) ?? undefined"
-    [formats]="allowedFormats"
-    (camerasFound)="onCamerasFound($event)"
-    (scanSuccess)="onCodeResult($event)"
-    (scanError)="onScanError($event)" 
-    (scanFailure)="onScanFailure($event)"
-    ></zxing-scanner>
+#scanner
+class="scanner"
+[autostart]="true"
+[device]="selectedDevice$()"
+[formats]="allowedFormats"
+(scanSuccess)="onCodeResult($event)"
+(scanError)="onScanError($event)" 
+(scanFailure)="onScanFailure($event)"
+></zxing-scanner>

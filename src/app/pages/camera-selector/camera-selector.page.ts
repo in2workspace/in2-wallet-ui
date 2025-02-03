@@ -7,7 +7,7 @@ import { CameraService } from 'src/app/services/camera.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs';
 import { NavigationEnd, Router } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-camera-selector',
   templateUrl: './camera-selector.page.html',
@@ -23,67 +23,44 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CameraSelectorPage {
-  @Input() public availableDevices: MediaDeviceInfo[] = [];
   public cameraService = inject(CameraService);
-  private router = inject(Router);
-  private cdr = inject(ChangeDetectorRef);
 
   public showBarcode = true;
-  private componentIsInitialized = false;
+  public availableDevices$ = this.cameraService.availableDevices$;
+  public selectedDevice$ = toObservable(this.cameraService.selectedCamera$);
 
-  public selectedDevice$ = this.cameraService.navCamera$.pipe(
-    map((device) => {
-      return device?.deviceId ?? 'Default';
-    }),
-    distinctUntilChanged(),
-    shareReplay(1)
-  );
+  constructor(){  }
 
-  constructor(){
-    this.router.events
-    .pipe(
-      filter(event => event instanceof NavigationEnd),
-      takeUntilDestroyed()
-    )
-    .subscribe((event: NavigationEnd) => {
-      if (this.componentIsInitialized &&
-        event.urlAfterRedirects.startsWith('/tabs/camera-selector')) {
-       this.resetBarcode();
-      }else{
-        this.componentIsInitialized = true;
-      }
-    });
-  }
+  public async onDeviceSelectChange(selectedDevice: MediaDeviceInfo) {
+    //comprovar si la càmera és available: updateAvailable
+    //si és available, actualitzar selectedCamera
+    await this.cameraService.updateAvailableCameras();
+    const isAvailable = this.cameraService.isCameraAvailableById(selectedDevice.deviceId);
+    if(isAvailable){
+      this.cameraService.changeCamera(selectedDevice);
+    }else{
+      alert('Selected camera is not available.');
+      location.reload();
+    }
+}
 
-  public resetBarcode(){
-    console.log('reset barcode from selector')
-    this.showBarcode = false;
-    this.cdr.detectChanges();
+  public createBarcode(){
+    console.log('turn on barcode from selector')
     this.showBarcode = true;
   }
-  
 
-  public availableDevicesEmit(devices: MediaDeviceInfo[]) {
-    if (devices.length <= 1) {
-      this.availableDevices = devices;
-      return;
-    }
-    
-    //prioritize rear cameras
-    const selectedDevices = devices.filter(device => /back|rear|environment/gi.test(device.label));
-    this.availableDevices = selectedDevices.length > 0 ? selectedDevices : devices;
+  public destroyBarcode(){
+    console.log('turnf off barcode from selector')
+    this.showBarcode = false;
   }
 
-  public onDeviceSelectChange(selected: string) {
-    if (selected != '') {
-      const device: MediaDeviceInfo | undefined = this.availableDevices.find(
-        (x) => x.deviceId === selected
-      );
-      if (device != undefined) {
-        this.cameraService.changeCamera(device);
-      }
-    } else {
-      this.cameraService.noCamera();
-    }
+  ionViewWillEnter(){
+    console.log('ionViewWillEnter: camera-selector');
+    this.createBarcode();
+  }
+
+  ionViewWillLeave(){
+    console.log('ionViewWillLeave: camera-selector');
+    this.destroyBarcode();
   }
 }
