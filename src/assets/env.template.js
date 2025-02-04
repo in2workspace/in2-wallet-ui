@@ -24,6 +24,8 @@
   window["env"]["primary"] = "${PRIMARY}";
   window["env"]["primary_contrast"]= "${PRIMARY_CONTRAST}";
   window["env"]["secondary"] = "${SECONDARY}";
-  window["env"]["secondary_contrast"]= "${SECONDARY_CONTRAST}"
-  window["env"]["logo_src"]= "${LOGO_SRC}"
+  window["env"]["secondary_contrast"]= "${SECONDARY_CONTRAST}";
+  window["env"]["logo_light_src"]= "${lOGO_lIGHT_SRC}"
+  window["env"]["logo_dark_src"]= "${lOGO_DARK_SRC}"
+
 })(this);
