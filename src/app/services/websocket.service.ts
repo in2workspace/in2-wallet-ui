@@ -13,7 +13,7 @@ export class WebsocketService {
   private socket!: WebSocket;
 
   public constructor(
-    // private readonly authenticationService: AuthenticationService,
+    private readonly authenticationService: AuthenticationService,
     private readonly alertController: AlertController,
     public readonly translate: TranslateService
   ) {}
@@ -25,9 +25,9 @@ export class WebsocketService {
   
     this.socket.onopen = () => {
       console.log('WebSocket connection opened');
-      // this.sendMessage(
-      //   JSON.stringify({ id: this.authenticationService.getToken() })
-      // );
+      this.sendMessage(
+        JSON.stringify({ id: this.authenticationService.getToken() })
+      );
     };
   
     this.socket.onmessage = async (event) => {

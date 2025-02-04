@@ -3,7 +3,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule, PopoverController } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-// import { AuthenticationService } from './services/authentication.service';
+import { AuthenticationService } from './services/authentication.service';
 import { LogoutPage } from './pages/logout/logout.page';
 import { StorageService } from './services/storage.service';
 import { Observable } from 'rxjs';
@@ -25,7 +25,7 @@ import { CameraService } from './services/camera.service';
 
 export class AppComponent implements OnInit {
   public userName: Observable<string> | undefined;
-  // private authenticationService = inject(AuthenticationService);
+  private authenticationService = inject(AuthenticationService);
   private router = inject(Router)
   public isCallbackRoute = false;;
 
@@ -53,7 +53,7 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // this.userName = this.authenticationService.getName();
+    this.userName = this.authenticationService.getName();
 
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -68,9 +68,9 @@ export class AppComponent implements OnInit {
   }
 
   public logout() {
-    // this.authenticationService.logout().subscribe(() => {
-    //   this.router.navigate(['/home'], {});
-    // });
+    this.authenticationService.logout().subscribe(() => {
+      this.router.navigate(['/home'], {});
+    });
   }
 
 
