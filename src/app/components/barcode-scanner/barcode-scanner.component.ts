@@ -38,6 +38,7 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, ZXingScannerModule, RouterModule],
 })
 export class BarcodeScannerComponent implements OnInit {
+  @Input() public parentComponent: string = '';
   @Output() public qrCode: EventEmitter<string> = new EventEmitter();
   @ViewChild('scanner') public scanner!: ZXingScannerComponent;
   public allowedFormats = [BarcodeFormat.QR_CODE];
@@ -83,11 +84,11 @@ export class BarcodeScannerComponent implements OnInit {
 
     public async ngAfterViewInit(){
       await this.cameraService.getCameraFlow(); 
-      console.log('BARCODE: camera flow completd.')
+      console.log('BARCODE: camera flow completed: ' + this.parentComponent)
       this.activateScanner();
   }
   public activateScanner(){
-    console.log('BARCODE: activating scanner')
+    console.log('BARCODE: activating scanner: ' + this.parentComponent)
     if(this.scanner){
       this.scanner.enable = true;
       this.scanner.askForPermission().then((hasPermission) => {
@@ -101,6 +102,7 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
   public async ngOnInit(): Promise<void> {
+    console.log('BARCODE: on init from' + this.parentComponent)
 
     //Redefine console.log to capture the errors that were previously captured by zxing-scanner
      this.originalConsoleError = console.error;
@@ -147,12 +149,13 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
   public ngOnDestroy() {
+    console.log('BARCODE: on destroy from ' + this.parentComponent);
     //generally, when scanner is destroyed, its stream is closed; however, if the tab is switched very fast and scanner is still
     //setting device after getting permission, destroying the scanner will not close the stream; since the stream is internal to the scanner,
     //the only way is to wait for the scanner to finish setting the device and then close the stream
     //so normally this won't be necessary, only in the case of a very fast tab switch
       setTimeout(() => {
-        console.log('BARCODE: scanner destroyed timeout');
+        console.log('BARCODE: scanner destroyed timeout from ' + this.parentComponent);
         this.scanner.enable = false;
       }, 4000);
 

@@ -53,10 +53,12 @@ export class CameraSelectorPage {
   }
   
   ionViewWillEnter(){
+    console.log('SELECTOR: Entering-createBarcode')
     this.createBarcode();
   }
 
   async ionViewWillLeave(){
+    console.log('SELECTOR: Leaving-destroyBarcode')
     this.destroyBarcode();
   }
 
