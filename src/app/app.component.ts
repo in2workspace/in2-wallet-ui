@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
   private authenticationService = inject(AuthenticationService);
   private router = inject(Router)
   public isCallbackRoute = false;;
-  public readonly logoSrc=environment.customizations.logo_light_src
+  public readonly logoSrc=environment.customizations.logo_src;
 
   public constructor(
     public translate: TranslateService,
