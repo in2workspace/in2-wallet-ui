@@ -2,7 +2,6 @@ import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
@@ -22,6 +21,7 @@ import {
   authInterceptor,
 } from 'angular-auth-oidc-client';
 import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 if (environment.production) {
   enableProdMode();
@@ -34,7 +34,7 @@ bootstrapApplication(AppComponent, {
       IonicModule.forRoot({ innerHTMLTemplatesEnabled: true })
     ),
     provideHttpClient(withInterceptorsFromDi()),
-    //importProvidersFrom(HttpClientTestingModule),
+    importProvidersFrom(HttpClientTestingModule),
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {
@@ -45,27 +45,27 @@ bootstrapApplication(AppComponent, {
       })
     ),
     importProvidersFrom(IonicStorageModule.forRoot()),
-    // importProvidersFrom( AuthModule.forRoot({
-    //   config: {
-    //     postLoginRoute: '/tabs/home',
-    //     authority: environment.iam_url+environment.iam_params.iam_uri,
-    //     redirectUrl: `${window.location.origin}/callback`,
-    //     postLogoutRedirectUri: `${window.location.origin}?nocache=true`,
-    //     clientId: environment.iam_params.client_id,
-    //     scope: environment.iam_params.scope,
-    //     responseType: environment.iam_params.grant_type,
-    //     silentRenew: true,
-    //     useRefreshToken: true,
-    //     ignoreNonceAfterRefresh: true,
-    //     triggerRefreshWhenIdTokenExpired: false,
-    //     autoUserInfo: false,
-    //     secureRoutes:[environment.server_url]
-    //   }
-    // })
-    // ),
-    // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    importProvidersFrom( AuthModule.forRoot({
+      config: {
+        postLoginRoute: '/tabs/home',
+        authority: environment.iam_url+environment.iam_params.iam_uri,
+        redirectUrl: `${window.location.origin}/callback`,
+        postLogoutRedirectUri: `${window.location.origin}?nocache=true`,
+        clientId: environment.iam_params.client_id,
+        scope: environment.iam_params.scope,
+        responseType: environment.iam_params.grant_type,
+        silentRenew: true,
+        useRefreshToken: true,
+        ignoreNonceAfterRefresh: true,
+        triggerRefreshWhenIdTokenExpired: false,
+        autoUserInfo: false,
+        secureRoutes:[environment.server_url]
+      }
+    })
+    ),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
-    // provideHttpClient(withInterceptors([authInterceptor()])),
+    provideHttpClient(withInterceptors([authInterceptor()])),
     provideRouter(routes)
   ],
 });
