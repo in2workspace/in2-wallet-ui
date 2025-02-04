@@ -48,12 +48,13 @@ export class BarcodeScannerComponent implements OnInit {
   private updateScannerDeviceEffect = effect(() => {
     const selecteDevice = this.selectedDevice$();
     if(this.scanner && selecteDevice && this.scanner.device !== selecteDevice){
-      console.log('DEVICE CHANGED: ' + selecteDevice.label);
+      console.log('BARCODE: device changed: ' + selecteDevice.label);
       this.scanner.askForPermission().then((hasPermission) => {
+        console.log('BARCODE: permission after device changed')
         if(hasPermission){
           this.scanner.device = selecteDevice;
         }else{
-          console.error('Permission denied');
+          console.error('BARCODE: Permission denied');
           alert('Permission denied. Please allow camera access to continue.');
         }
       });
@@ -82,13 +83,15 @@ export class BarcodeScannerComponent implements OnInit {
 
     public async ngAfterViewInit(){
       await this.cameraService.getCameraFlow(); 
+      console.log('BARCODE: camera flow completd.')
       this.activateScanner();
   }
   public activateScanner(){
+    console.log('BARCODE: activating scanner')
     if(this.scanner){
       this.scanner.enable = true;
       this.scanner.askForPermission().then((hasPermission) => {
-        console.log('Permission from activateScanner: ' + hasPermission);
+        console.log('BARCODE: Permission from barcode.activateScanner: ' + hasPermission);
         if(this.scanner.device !== this.cameraService.selectedCamera$()){
         this.scanner.device = this.cameraService.selectedCamera$();
         }
@@ -143,17 +146,13 @@ export class BarcodeScannerComponent implements OnInit {
     this.cameraLogsService.addCameraLog(error, exceptionType);
   }
 
-  onDeviceSelectChange() {
-    console.log('ON DEVICE SELECTED CHANGE');
-  }
-
   public ngOnDestroy() {
     //generally, when scanner is destroyed, its stream is closed; however, if the tab is switched very fast and scanner is still
     //setting device after getting permission, destroying the scanner will not close the stream; since the stream is internal to the scanner,
     //the only way is to wait for the scanner to finish setting the device and then close the stream
     //so normally this won't be necessary, only in the case of a very fast tab switch
       setTimeout(() => {
-        console.log('scanner destroyed timeout');
+        console.log('BARCODE: scanner destroyed timeout');
         this.scanner.enable = false;
       }, 4000);
 

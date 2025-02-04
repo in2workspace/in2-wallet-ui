@@ -29,7 +29,9 @@ export class CameraSelectorPage {
 
 
   public async onDeviceSelectChange(selectedDeviceId: string) {
+    console.log('SELECTOR: onDeviceSelectChange')
     await this.cameraService.updateAvailableCameras();
+    console.log('SELECTOR: onDeviceSelectChange: updateAvailableCameras')
     const isAvailable = this.cameraService.isCameraAvailableById(selectedDeviceId);
     if(isAvailable){
       const selectedDevice = this.cameraService.getAvailableCameraById(selectedDeviceId);

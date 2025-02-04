@@ -20,6 +20,7 @@ export class CameraService {
   }
 
   public setCamera(camera: MediaDeviceInfo) {
+    console.log('SERVICE: set camera');
     this.selectedCamera$.set(camera);
     const storedCamera = {
       deviceId: camera.deviceId,
@@ -30,6 +31,7 @@ export class CameraService {
   }
 
   public getAvailableCameraById(id: string){
+    console.log('SERVICE: getAvailableCameraById');
     const devices = this.availableDevices$();
     return devices.filter(device  => device.deviceId === id )[0];
   }
@@ -37,6 +39,7 @@ export class CameraService {
   //todo return something?
   //todo estats amb enum
   public async getCameraFlow(): Promise<MediaDeviceInfo|'PERMISSION_DENIED'|'NO_CAMERA_AVAILABLE'> {
+    console.log('SERVICE: getCameraFlow');
     this.hasCameraPermission$.set(undefined);
     const hasPermission = await this.getCameraPermissionAndStopTracks();
     if(!hasPermission){
@@ -59,6 +62,7 @@ export class CameraService {
 
   //1
   public async getCameraPermissionAndStopTracks(){
+    console.log('SERVICE: getCameraPermissionAndStopTracks')
     try{
       const stream = await navigator.mediaDevices.getUserMedia({video: true});
       this.stopMediaTracks(stream); //necessary? crec que sí per si s'està utilitzant la càmera en un altre lloc
@@ -72,6 +76,7 @@ export class CameraService {
 //2
 //should be called only if permission is granted
 public async updateAvailableCameras(): Promise<MediaDeviceInfo[]> {
+  console.log('SERVICE: updateAvailableCameras');
   const devices = await navigator.mediaDevices.enumerateDevices();
   const videoinputDevices = devices.filter((device) => device.kind === 'videoinput');
   this.availableDevices$.set(videoinputDevices);
@@ -81,6 +86,7 @@ public async updateAvailableCameras(): Promise<MediaDeviceInfo[]> {
 //3
 //obtenir càmera seleccionada; si no, stored; si no, qualsevol de les available (ja obtingudes); si no, undefined...
 public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAILABLE'> {
+  console.log('SERVICE: updateAvailableCameras');
   const selectedCamera = this.selectedCamera$();
   if(selectedCamera && this.isCameraAvailableById(selectedCamera.deviceId)) return selectedCamera;
 
@@ -91,6 +97,7 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   }
 
   const defaultCamera = await this.getDefaultAvailableCamera();
+  console.log('SERVICE: updateAvailableCameras');
   if(defaultCamera && this.isCameraAvailableById(defaultCamera.deviceId)){
     this.setCamera(defaultCamera);
     return defaultCamera;
@@ -100,6 +107,7 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
 }
 
   public async getCameraFromStorage(): Promise<MediaDeviceInfo|undefined> {
+    console.log('SERVICE: updateAvailableCameras');
     const storedCamera = await this.storageService.get('camera');
     // const storedCamera  = JSON.parse(storedCameraUnparsed) as MediaDeviceInfo;
     console.log('Camera from storage:');
@@ -113,6 +121,7 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   }
 
   public async getDefaultAvailableCamera(){
+    console.log('SERVICE: updateAvailableCameras');
     const defaultCamera = this.availableDevices$().find((device) => /back|rear|environment/gi.test(device.label));
     return defaultCamera ?? this.availableDevices$()[0];
   }
@@ -135,15 +144,17 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   }
 
   public async setUndefinedCamera() {
+    console.log('SERVICE: set UNDEFINED camera');
     await this.storageService.remove('camera');
     this.selectedCamera$.set(undefined);
   }
 
   public stopMediaTracks(stream: MediaStream): void {
+    console.log('SERVICE: stop Media Tracks');
     console.log('stream to stop: ');
     console.log(stream);
     stream.getTracks().forEach((track) => {
-      console.log('track: ');
+      console.log('track in stopMediaTracks: ');
       console.log(track);
       track.stop()});
   }

@@ -306,11 +306,12 @@ export class CredentialsPage implements OnInit {
   }
 
   ionViewWillLeave(){
+    console.log('leaving credentials')
     this.untoggleScan();
     this.cdr.detectChanges();
-    setTimeout(async ()=>{
-      await this.cameraService.getCameraPermissionAndStopTracks();
-    });
+    // setTimeout(async ()=>{
+    //   await this.cameraService.getCameraPermissionAndStopTracks();
+    // });
   }
 
 }
