@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-// import { AuthenticationService } from './authentication.service';
+import { AuthenticationService } from './authentication.service';
 import { BehaviorSubject } from 'rxjs';
 import { AlertController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
