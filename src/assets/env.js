@@ -25,4 +25,5 @@
   window["env"]["primary_contrast"]= "${PRIMARY_CONTRAST}";
   window["env"]["secondary"] = "${SECONDARY}";
   window["env"]["secondary_contrast"]= "${SECONDARY_CONTRAST}"
+  window["env"]["logo_src"]= "${LOGO_SRC}"
 })(this);

@@ -31,5 +31,6 @@ export const environment = {
       secondary: window["env"]["secondary"] || '#50c8ff',
       secondary_contrast: window["env"]["secondary_contrast"] || '#000000'
     },
+    logo_src:"assets/icon/dome_white_logo.png"
   }
 };
