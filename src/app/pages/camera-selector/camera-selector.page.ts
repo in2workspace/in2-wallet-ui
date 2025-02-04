@@ -1,13 +1,10 @@
-import { ChangeDetectorRef, Component, Input, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { BarcodeScannerComponent } from '../../components/barcode-scanner/barcode-scanner.component';
 import { CameraService } from 'src/app/services/camera.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { distinctUntilChanged, filter, map, shareReplay, tap } from 'rxjs';
-import { NavigationEnd, Router } from '@angular/router';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-camera-selector',
   templateUrl: './camera-selector.page.html',
@@ -24,20 +21,19 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CameraSelectorPage {
   public cameraService = inject(CameraService);
+  private cdr = inject(ChangeDetectorRef);
 
   public showBarcode = true;
   public availableDevices$ = this.cameraService.availableDevices$;
-  public selectedDevice$ = toObservable(this.cameraService.selectedCamera$);
+  public selectedDevice$ = this.cameraService.selectedCamera$;
 
-  constructor(){  }
 
-  public async onDeviceSelectChange(selectedDevice: MediaDeviceInfo) {
-    //comprovar si la càmera és available: updateAvailable
-    //si és available, actualitzar selectedCamera
+  public async onDeviceSelectChange(selectedDeviceId: string) {
     await this.cameraService.updateAvailableCameras();
-    const isAvailable = this.cameraService.isCameraAvailableById(selectedDevice.deviceId);
+    const isAvailable = this.cameraService.isCameraAvailableById(selectedDeviceId);
     if(isAvailable){
-      this.cameraService.changeCamera(selectedDevice);
+      const selectedDevice = this.cameraService.getAvailableCameraById(selectedDeviceId);
+      this.cameraService.setCamera(selectedDevice);
     }else{
       alert('Selected camera is not available.');
       location.reload();
@@ -45,22 +41,21 @@ export class CameraSelectorPage {
 }
 
   public createBarcode(){
-    console.log('turn on barcode from selector')
     this.showBarcode = true;
+    this.cdr.detectChanges();
   }
 
   public destroyBarcode(){
-    console.log('turnf off barcode from selector')
     this.showBarcode = false;
+    this.cdr.detectChanges();
   }
-
+  
   ionViewWillEnter(){
-    console.log('ionViewWillEnter: camera-selector');
     this.createBarcode();
   }
 
-  ionViewWillLeave(){
-    console.log('ionViewWillLeave: camera-selector');
+  async ionViewWillLeave(){
     this.destroyBarcode();
   }
+
 }

@@ -15,6 +15,7 @@ import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
+import { CameraService } from 'src/app/services/camera.service';
 
 const TIME_IN_MS = 3000;
 
@@ -54,6 +55,7 @@ export class CredentialsPage implements OnInit {
   public ebsiFlag = false;
   public did = '';
 
+  private cameraService = inject(CameraService);
   private readonly walletService = inject(WalletService);
   private readonly router = inject(Router);
   private readonly websocket = inject(WebsocketService);
@@ -79,18 +81,6 @@ export class CredentialsPage implements OnInit {
       if (data != '') {
         this.ebsiFlag = true;
         this.did = data;
-      }
-    });
-
-    this.router.events
-    .pipe(
-      filter(event => event instanceof NavigationEnd),
-      takeUntilDestroyed()
-    )
-    .subscribe((event: NavigationEnd) => {
-      if (this.route.snapshot.routeConfig?.path==='credentials' && !event.urlAfterRedirects.startsWith('/tabs/credentials')) {
-        this.untoggleScan();
-        this.cdr.detectChanges();
       }
     });
 
@@ -313,6 +303,14 @@ export class CredentialsPage implements OnInit {
       this.scaned_cred = false;
     }, TIME_IN_MS);
     this.refresh();
+  }
+
+  ionViewWillLeave(){
+    this.untoggleScan();
+    this.cdr.detectChanges();
+    setTimeout(async ()=>{
+      await this.cameraService.getCameraPermissionAndStopTracks();
+    });
   }
 
 }

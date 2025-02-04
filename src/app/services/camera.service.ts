@@ -1,5 +1,5 @@
-import { Injectable, signal } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, shareReplay } from 'rxjs';
+import { computed, effect, Injectable, signal } from '@angular/core';
+import { BehaviorSubject, distinctUntilChanged, map, shareReplay } from 'rxjs';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -7,13 +7,19 @@ import { StorageService } from './storage.service';
 })
 export class CameraService {
   public selectedCamera$ = signal<MediaDeviceInfo|undefined>(undefined);
+  public computedSelectedCameraLabel$ = computed(() => this.selectedCamera$()?.label);
   public availableDevices$ = signal<MediaDeviceInfo[]>([]);
   public hasCameraPermission$ = signal<boolean|undefined>(undefined);
+
+  public updateSelecteCameraEffect = effect(() => { 
+    console.log('Camera selected: ' + this.selectedCamera$()?.label
+);
+  })
 
   public constructor(private storageService: StorageService) {
   }
 
-  public changeCamera(camera: MediaDeviceInfo) {
+  public setCamera(camera: MediaDeviceInfo) {
     this.selectedCamera$.set(camera);
     const storedCamera = {
       deviceId: camera.deviceId,
@@ -23,13 +29,20 @@ export class CameraService {
     this.storageService.set('camera', storedCamera);
   }
 
+  public getAvailableCameraById(id: string){
+    const devices = this.availableDevices$();
+    return devices.filter(device  => device.deviceId === id )[0];
+  }
+
   //todo return something?
   //todo estats amb enum
   public async getCameraFlow(): Promise<MediaDeviceInfo|'PERMISSION_DENIED'|'NO_CAMERA_AVAILABLE'> {
     this.hasCameraPermission$.set(undefined);
-    const hasPermission = await this.getCameraPermission();
+    const hasPermission = await this.getCameraPermissionAndStopTracks();
     if(!hasPermission){
       console.error('Camera permission denied');
+      alert('Camera permission denied. Please allow camera access to continue.');
+      this.hasCameraPermission$.set(false);
       return'PERMISSION_DENIED';
     }
     this.hasCameraPermission$.set(true); //
@@ -45,7 +58,7 @@ export class CameraService {
   }
 
   //1
-  public async getCameraPermission(){
+  public async getCameraPermissionAndStopTracks(){
     try{
       const stream = await navigator.mediaDevices.getUserMedia({video: true});
       this.stopMediaTracks(stream); //necessary? crec que sí per si s'està utilitzant la càmera en un altre lloc
@@ -79,7 +92,7 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
 
   const defaultCamera = await this.getDefaultAvailableCamera();
   if(defaultCamera && this.isCameraAvailableById(defaultCamera.deviceId)){
-    this.changeCamera(defaultCamera);
+    this.setCamera(defaultCamera);
     return defaultCamera;
   }
 
@@ -126,8 +139,13 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
     this.selectedCamera$.set(undefined);
   }
 
-  private stopMediaTracks(stream: MediaStream): void {
-    stream.getTracks().forEach((track) => track.stop());
+  public stopMediaTracks(stream: MediaStream): void {
+    console.log('stream to stop: ');
+    console.log(stream);
+    stream.getTracks().forEach((track) => {
+      console.log('track: ');
+      console.log(track);
+      track.stop()});
   }
 
   public isIOSVersionLowerThan(version: number): boolean {

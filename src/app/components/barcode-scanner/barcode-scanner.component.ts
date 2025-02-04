@@ -1,27 +1,31 @@
 import { CameraLogsService } from './../../services/camera-logs.service';
 import { CommonModule } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   Component,
   Output,
   EventEmitter,
   OnInit,
-  ViewChild
+  ViewChild,
+  signal,
+  WritableSignal,
+  Input,
+  ChangeDetectorRef,
+  effect
 } from '@angular/core';
 import { BarcodeFormat, Exception } from '@zxing/library';
 import { ZXingScannerModule, ZXingScannerComponent } from '@zxing/ngx-scanner';
 import {
   BehaviorSubject,
-  Observable,
   Subject,
   debounceTime,
+  delayWhen,
   distinctUntilChanged,
   filter,
-  of,
+  take,
 } from 'rxjs';
 import { CameraLogType } from 'src/app/interfaces/camera-log';
 import { CameraService } from 'src/app/services/camera.service';
-import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 // ! Since console.error is intercepted (to capture the error already caught by zxing), be careful to avoid recursion
 // ! (i.e., console.error should not be called within the execution flow of another console.error)
@@ -37,9 +41,25 @@ export class BarcodeScannerComponent implements OnInit {
   @Output() public qrCode: EventEmitter<string> = new EventEmitter();
   @ViewChild('scanner') public scanner!: ZXingScannerComponent;
   public allowedFormats = [BarcodeFormat.QR_CODE];
+  autoStart = false;
 
   //is assigned CameraService.selectedDevice after scanner is autostarted
-  public selectedDevice$ = this.cameraService.selectedCamera$;
+  public selectedDevice$: WritableSignal<MediaDeviceInfo|undefined> = this.cameraService.selectedCamera$;
+  private updateScannerDeviceEffect = effect(() => {
+    const selecteDevice = this.selectedDevice$();
+    if(this.scanner && selecteDevice && this.scanner.device !== selecteDevice){
+      console.log('DEVICE CHANGED: ' + selecteDevice.label);
+      this.scanner.askForPermission().then((hasPermission) => {
+        if(hasPermission){
+          this.scanner.device = selecteDevice;
+        }else{
+          console.error('Permission denied');
+          alert('Permission denied. Please allow camera access to continue.');
+        }
+      });
+  }});
+
+
   readonly scanFailureSubject = new Subject<Error>();
   private readonly scanFailureDebounceDelay = 3000;
   private originalConsoleError: undefined|((...data: any[]) => void);
@@ -47,9 +67,7 @@ export class BarcodeScannerComponent implements OnInit {
   public scanSuccess$ = new BehaviorSubject<string>('');
   public constructor(
     private readonly cameraService: CameraService,
-    private readonly cameraLogsService: CameraLogsService, 
-    private readonly router: Router,
-    private readonly route: ActivatedRoute) {
+    private readonly cameraLogsService: CameraLogsService) {
       // Requires debounce since this type of error is emitted constantly
       this.scanFailureSubject.pipe(
         distinctUntilChanged((
@@ -60,43 +78,51 @@ export class BarcodeScannerComponent implements OnInit {
         this.saveErrorLog(err, 'scanFailure');
       });
 
-      this.router.events
-    .pipe(
-      filter(event => event instanceof NavigationEnd),
-      takeUntilDestroyed()
-    )
-    .subscribe((event: NavigationEnd) => {
-      if (!event.urlAfterRedirects.startsWith('/tabs/credentials')) {
-        this.scanner.reset();
-      }
-    });
     }
+
+    public async ngAfterViewInit(){
+      await this.cameraService.getCameraFlow(); 
+      this.activateScanner();
+  }
+  public activateScanner(){
+    if(this.scanner){
+      this.scanner.enable = true;
+      this.scanner.askForPermission().then((hasPermission) => {
+        console.log('Permission from activateScanner: ' + hasPermission);
+        if(this.scanner.device !== this.cameraService.selectedCamera$()){
+        this.scanner.device = this.cameraService.selectedCamera$();
+        }
+      });
+      
+    }
+  }
+
   public async ngOnInit(): Promise<void> {
-    const cameraResult = await this.cameraService.getCameraFlow(); //potser després de canviar el console.error
 
     //Redefine console.log to capture the errors that were previously captured by zxing-scanner
      this.originalConsoleError = console.error;
  
-    //  console.error = (message?: string, ...optionalParams: string[]) => {
-    //   if(message==="@zxing/ngx-scanner"){
-    //     const logMessage = formatLogMessage(message, optionalParams);
-    //     const err = new Error(logMessage);
+     console.error = (message?: string, ...optionalParams: string[]) => {
+      if(message==="@zxing/ngx-scanner"){
+        const logMessage = formatLogMessage(message, optionalParams);
+        const err = new Error(logMessage);
 
-    //     if(optionalParams[0]==="Can't get user media, this is not supported."){
-    //       alert("Error: " + optionalParams[0]);
-    //       this.saveErrorLog(err, 'noMediaError');
-    //     }else{
-    //       alert("Error: There was an error when trying to connect to the camera. It might be a permission error.");
-    //       this.saveErrorLog(err, 'undefinedError');
-    //     }
-    //     return;
-    //   }
+        if(optionalParams[0]==="Can't get user media, this is not supported."){
+          alert("Error: " + optionalParams[0]);
+          this.saveErrorLog(err, 'noMediaError');
+        }else{
+          // todo no sé si cal ara que ja controlem errors de permisos
+          alert("Error: There was an error when trying to connect to the camera. It might be a permission error.");
+          this.saveErrorLog(err, 'undefinedError');
+        }
+        return;
+      }
 
-    //   if (this.originalConsoleError) {
-    //     this.originalConsoleError(message, ...optionalParams);
-    //   }
+      if (this.originalConsoleError) {
+        this.originalConsoleError(message, ...optionalParams);
+      }
       
-    //  };
+     };
   }
 
 
@@ -117,7 +143,20 @@ export class BarcodeScannerComponent implements OnInit {
     this.cameraLogsService.addCameraLog(error, exceptionType);
   }
 
-  public ngOnDestroy(): void {
+  onDeviceSelectChange() {
+    console.log('ON DEVICE SELECTED CHANGE');
+  }
+
+  public ngOnDestroy() {
+    //generally, when scanner is destroyed, its stream is closed; however, if the tab is switched very fast and scanner is still
+    //setting device after getting permission, destroying the scanner will not close the stream; since the stream is internal to the scanner,
+    //the only way is to wait for the scanner to finish setting the device and then close the stream
+    //so normally this won't be necessary, only in the case of a very fast tab switch
+      setTimeout(() => {
+        console.log('scanner destroyed timeout');
+        this.scanner.enable = false;
+      }, 4000);
+
     if(this.originalConsoleError){
       console.error = this.originalConsoleError;
     }

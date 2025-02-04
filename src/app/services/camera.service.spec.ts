@@ -43,7 +43,7 @@ describe('CameraService', () => {
       toJSON() { return {}; }
     };
 
-    cameraService.changeCamera(mockCamera);
+    cameraService.setCamera(mockCamera);
     tick();
 
     cameraService.navCamera$.subscribe((camera) => {

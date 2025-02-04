@@ -3,19 +3,23 @@
     <b class="pages_titles">{{"camera-selector.settings" | translate}}</b>
     <p class="camera-selector-title">{{"camera-selector.title" | translate}}</p>
     <ion-row class="ion-justify-content-start" class="camera-row">
-      <ng-container *ngIf="(selectedDevice$|async)?.deviceId">
-        <ion-select [ngModel]="'holaaa'" (ionChange)="onDeviceSelectChange($event.target.value)" interface="popover" class="camera-select">
-          <ion-select-option value="" *ngIf="availableDevices$().length < 1">{{"camera-selector.no-device" | translate}}</ion-select-option>
-          <ion-select-option *ngFor="let camera of availableDevices$()" [value]="camera">
-            {{ camera.label}}
-          </ion-select-option>
-        </ion-select>
-    </ng-container>
+      @if(selectedDevice$()){
+        <ng-container>
+          <ion-select [ngModel]="selectedDevice$()?.deviceId" (ionChange)="onDeviceSelectChange($event.target.value)" interface="popover" class="camera-select">
+            @if(availableDevices$().length < 1){
+              <ion-select-option value="">{{"camera-selector.no-device" | translate}}</ion-select-option>
+            }
+            <ion-select-option *ngFor="let camera of availableDevices$()" [value]="camera.deviceId">
+              {{ camera.label}}
+            </ion-select-option>
+          </ion-select>
+        </ng-container>
+      }
     </ion-row>
 
     @if(showBarcode){
       <ion-row class="ion-justify-content-center">
-        <app-barcode-scanner
+        <app-barcode-scanner 
         ></app-barcode-scanner>
       </ion-row>
     }

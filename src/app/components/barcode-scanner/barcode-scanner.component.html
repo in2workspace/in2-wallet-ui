@@ -5,13 +5,16 @@
     </div>
 }
 
+
 <zxing-scanner
 #scanner
+[style.display]="selectedDevice$() ? 'block' : 'none'"
 class="scanner"
-[autostart]="true"
-[device]="selectedDevice$()"
+[autostart]="false"
 [formats]="allowedFormats"
 (scanSuccess)="onCodeResult($event)"
 (scanError)="onScanError($event)" 
 (scanFailure)="onScanFailure($event)"
 ></zxing-scanner>
+
+
