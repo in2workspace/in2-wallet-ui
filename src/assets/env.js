@@ -25,6 +25,6 @@
   window["env"]["primary_contrast"]= "#ffffff";
   window["env"]["secondary"] = "#50c8ff";
   window["env"]["secondary_contrast"]= "#000000";
-  window["env"]["logo_light_src"]= "assets/icon/dome_white_logo.png"
-  window["env"]["logo_dark_src"]= "assets/icon/dome_white_logo.png"
+  window["env"]["logo_light_src"]= "assets/logos/no-image.png"
+  window["env"]["logo_dark_src"]= "assets/logos/no-image.png"
 })(this);
