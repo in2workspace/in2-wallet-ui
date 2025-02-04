@@ -60,6 +60,7 @@ export class BarcodeScannerComponent implements OnInit {
         }
       });
   }});
+  isDestroyingBarcode$ = this.cameraService.destroyingBarcodeList$;
 
 
   readonly scanFailureSubject = new Subject<Error>();
@@ -82,11 +83,27 @@ export class BarcodeScannerComponent implements OnInit {
 
     }
 
-    public async ngAfterViewInit(){
-      await this.cameraService.getCameraFlow(); 
-      console.log('BARCODE: camera flow completed: ' + this.parentComponent)
-      this.activateScanner();
-  }
+    public async ngAfterViewInit() {
+      
+      //activate scanner once there are no other barcode in deactivation process
+      const destroyingBarcodeList = this.cameraService.destroyingBarcodeListSubj.getValue();
+      console.log('BARCODE (afterViewInit):  destroying list: ' + destroyingBarcodeList);
+      if (destroyingBarcodeList.length === 0) {
+        await this.cameraService.getCameraFlow(); 
+        console.log('BARCODE: camera flow completed: ' + this.parentComponent);
+        this.activateScanner();
+      } else {
+        this.cameraService.destroyingBarcodeList$
+          .pipe(
+            filter(value => value.length === 0),
+            take(1)
+          )
+          .subscribe(() => {
+            this.activateScanner();
+          });
+      }
+    }
+
   public activateScanner(){
     console.log('BARCODE: activating scanner: ' + this.parentComponent)
     if(this.scanner){
@@ -151,13 +168,16 @@ export class BarcodeScannerComponent implements OnInit {
   public ngOnDestroy() {
     console.log('BARCODE: on destroy from ' + this.parentComponent);
     //generally, when scanner is destroyed, its stream is closed; however, if the tab is switched very fast and scanner is still
-    //setting device after getting permission, destroying the scanner will not close the stream; since the stream is internal to the scanner,
+    //setting device after getting permission on init, destroying the scanner will not close the stream; since the stream is internal to the scanner,
     //the only way is to wait for the scanner to finish setting the device and then close the stream
     //so normally this won't be necessary, only in the case of a very fast tab switch
-      setTimeout(() => {
+    const barcodeId = Math.random().toString();
+    this.cameraService.addDestroyingBarcode(barcodeId);
+    setTimeout(() => {
         console.log('BARCODE: scanner destroyed timeout from ' + this.parentComponent);
         this.scanner.enable = false;
-      }, 4000);
+        this.cameraService.removeDestroyingBarcode(barcodeId);
+      }, 3000);
 
     if(this.originalConsoleError){
       console.error = this.originalConsoleError;

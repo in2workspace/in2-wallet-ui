@@ -1,5 +1,5 @@
 import { computed, effect, Injectable, signal } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, map, shareReplay } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, map, shareReplay, tap } from 'rxjs';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -10,6 +10,25 @@ export class CameraService {
   public computedSelectedCameraLabel$ = computed(() => this.selectedCamera$()?.label);
   public availableDevices$ = signal<MediaDeviceInfo[]>([]);
   public hasCameraPermission$ = signal<boolean|undefined>(undefined);
+  public destroyingBarcodeListSubj = new BehaviorSubject<string[]>([])
+  public destroyingBarcodeList$ = this.destroyingBarcodeListSubj.asObservable()
+  .pipe(
+    tap(list => {
+      console.log('update barcode on destroy list: ');
+      console.log(list);
+    })
+  );
+
+  public addDestroyingBarcode(barcodeId:string){
+    const destroyingBarcode = this.destroyingBarcodeListSubj.getValue();
+    this.destroyingBarcodeListSubj.next([...destroyingBarcode, barcodeId]);
+  }
+
+  public removeDestroyingBarcode(barcodeId:string){
+    const destroyingBarcode = this.destroyingBarcodeListSubj.getValue();
+    const updatedList = destroyingBarcode.filter(id => id !== barcodeId);
+    this.destroyingBarcodeListSubj.next([...updatedList]);
+  }
 
   public updateSelecteCameraEffect = effect(() => { 
     console.log('Camera selected: ' + this.selectedCamera$()?.label
