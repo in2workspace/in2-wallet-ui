@@ -62,7 +62,7 @@ export class AppComponent implements OnInit {
     const problematicIosVersion = this.cameraService.isIOSVersionLowerThan(14.3);
     const isNotSafari = this.cameraService.isNotSafari();
     if (problematicIosVersion && isNotSafari) {
-      alert('This application scanner is probably not supported on this device. If you have issues, use Safari browser.');
+      alert('This application scanner is probably not supported on this device with this browser. If you have issues, use Safari browser.');
     }
   }
 

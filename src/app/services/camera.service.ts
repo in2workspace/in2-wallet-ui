@@ -190,6 +190,8 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   
   public isNotSafari(): boolean {
     const ua = navigator.userAgent;
+    console.log('User agent:');
+    console.log(ua);
     const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
     return !isSafari;
   }
