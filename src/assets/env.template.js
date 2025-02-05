@@ -21,4 +21,10 @@
   window["env"]["cbor_uri"] = "${WALLET_API_CBOR_PATH}";
   window["env"]["logs_enabled"] = "${LOGS_ENABLED}";
   window["env"]["logs_email"] = "${LOGS_EMAIL}";
+  window["env"]["primary"] = "${PRIMARY}";
+  window["env"]["primary_contrast"]= "${PRIMARY_CONTRAST}";
+  window["env"]["secondary"] = "${SECONDARY}";
+  window["env"]["secondary_contrast"]= "${SECONDARY_CONTRAST}";
+  window["env"]["logo_src"]= "${lOGO_SRC}"
+
 })(this);

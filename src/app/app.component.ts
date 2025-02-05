@@ -8,7 +8,7 @@ import { LogoutPage } from './pages/logout/logout.page';
 import { StorageService } from './services/storage.service';
 import { Observable } from 'rxjs';
 import { CameraService } from './services/camera.service';
-
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -28,6 +28,7 @@ export class AppComponent implements OnInit {
   private authenticationService = inject(AuthenticationService);
   private router = inject(Router)
   public isCallbackRoute = false;;
+  public readonly logoSrc=environment.customizations.logo_src;
 
   public constructor(
     private cameraService: CameraService,
@@ -35,6 +36,19 @@ export class AppComponent implements OnInit {
     private popoverController: PopoverController,
     private storageService: StorageService
   ) {
+    const root = document.documentElement;
+
+    const cssVarMap = {
+      '--primary-custom-color': environment.customizations.colors.primary,
+      '--primary-contrast-custom-color': environment.customizations.colors.primary_contrast,
+      '--secondary-custom-color': environment.customizations.colors.secondary,
+      '--secondary-contrast-custom-color': environment.customizations.colors.secondary_contrast,
+    };
+  
+    Object.entries(cssVarMap).forEach(([cssVariable, colorValue]) => {
+      root.style.setProperty(cssVariable, colorValue);
+    });
+
     //language setup
     translate.addLangs(['en', 'es', 'ca']);
     translate.setDefaultLang('en');

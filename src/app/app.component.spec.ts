@@ -7,7 +7,7 @@ import {EMPTY, of } from 'rxjs';
 import { AuthenticationService } from './services/authentication.service';
 import { StorageService } from './services/storage.service';
 import { RouterTestingModule } from '@angular/router/testing';
-
+import { environment } from '../environments/environment';
 describe('AppComponent', () => {
   let component: AppComponent;
   let translateServiceMock: jest.Mocked<TranslateService>;
@@ -103,6 +103,20 @@ describe('AppComponent', () => {
 
   it('should create the app component', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should set CSS variables from environment in the constructor', () => {
+    const cssVarMap = {
+      '--primary-custom-color': environment.customizations.colors.primary,
+      '--primary-contrast-custom-color': environment.customizations.colors.primary_contrast,
+      '--secondary-custom-color': environment.customizations.colors.secondary,
+      '--secondary-contrast-custom-color': environment.customizations.colors.secondary_contrast,
+    };
+
+    Object.entries(cssVarMap).forEach(([cssVariable, expectedValue]) => {
+      const actualValue = document.documentElement.style.getPropertyValue(cssVariable);
+      expect(actualValue).toBe(expectedValue);
+    });
   });
 
   it('should set default language to "en" on initialization', async () => {

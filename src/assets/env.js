@@ -21,4 +21,9 @@
   window["env"]["cbor_uri"] = '/api/v2/vp/cbor';
   window["env"]["logs_enabled"] = "false";
   window["env"]["logs_email"] = "domesupport@in2.es";
+  window["env"]["primary"] = "#00ADD3";
+  window["env"]["primary_contrast"]= "#ffffff";
+  window["env"]["secondary"] = "#50c8ff";
+  window["env"]["secondary_contrast"]= "#000000";
+  window["env"]["logo_src"]= "assets/logos/no-image.png"
 })(this);

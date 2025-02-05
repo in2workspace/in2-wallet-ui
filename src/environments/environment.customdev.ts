@@ -22,5 +22,14 @@ export const environment = {
   },
   websocket_uri: window["env"]["websocket_uri"] || '/api/v2/pin',
   logs_enabled: window["env"]["logs_enabled"] || false,
-  logs_email: window["env"]["logs_email"] || "domesupport@in2.es"
+  logs_email: window["env"]["logs_email"] || "domesupport@in2.es",
+  customizations:{
+    colors:{ 
+      primary:window["env"]["primary"] || '#00ADD3',
+      primary_contrast: window["env"]["primary_contrast"] ||'#ffffff',
+      secondary: window["env"]["secondary"] || '#50c8ff',
+      secondary_contrast: window["env"]["secondary_contrast"] || '#000000'
+    },
+    logo_src:"assets/logos/no-image.png",
+  }
 };
