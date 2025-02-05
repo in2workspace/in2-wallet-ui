@@ -95,6 +95,7 @@ export class CredentialsPage implements OnInit {
     }
   }
   public scan() {
+    console.log('CREDENTIALS: scan');
     this.toggleScan = true;
     this.show_qr = true;
     this.ebsiFlag = false;

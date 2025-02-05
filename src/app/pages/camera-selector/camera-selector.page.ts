@@ -27,6 +27,9 @@ export class CameraSelectorPage {
   public availableDevices$ = this.cameraService.availableDevices$;
   public selectedDevice$ = this.cameraService.selectedCamera$;
 
+  ngOnInit(){
+    console.log('SELECTOR (OnInit): showBarcode = ' + this.showBarcode);
+  }
 
   public async onDeviceSelectChange(selectedDeviceId: string) {
     console.log('SELECTOR: onDeviceSelectChange')
@@ -53,8 +56,14 @@ export class CameraSelectorPage {
   }
   
   ionViewWillEnter(){
-    console.log('SELECTOR: Entering-createBarcode')
-    this.createBarcode();
+    console.log('SELECTOR (IonViewWillEnter): showBarcode = ' + this.showBarcode);
+    //! PER QUÈ S'EXECUTA DESPRÉS DE BARCODE?? Per les vegades que no són la primera
+    if(this.showBarcode !== true){
+      console.log('SELECTOR (IonViewWillEnter): createBarcode')
+      this.createBarcode();
+    }else{
+      console.log('SELECTOR (IonViewWillEnter): barcode is already created (showbarcode = true): ')
+    }
   }
 
   async ionViewWillLeave(){

@@ -1,14 +1,22 @@
 
-@if(selectedDevice$() === undefined){
+<!-- todo -->
+@if( !this.firstActivationCompleted && (!isDestroyingBarcode$()?.length || isDestroyingBarcode$()?.length === 0) ){
+    <div class="">
+        Disabling previous camera streams...
+    </div>
+}@else if(selectedDevice$() === undefined){
     <div class="no-device">
-        Trying to get device... You might need to allow camera access.
+        Trying to get to a device...
+    </div>
+}@else if(!firstActivationCompleted){
+    <div class="">
+        Activating scanner...
     </div>
 }
 
-
 <zxing-scanner
 #scanner
-[style.display]="selectedDevice$() ? 'block' : 'none'"
+[style.display]="(selectedDevice$() && firstActivationCompleted) ? 'block' : 'none'"
 class="scanner"
 [autostart]="false"
 [formats]="allowedFormats"
@@ -16,5 +24,6 @@ class="scanner"
 (scanError)="onScanError($event)" 
 (scanFailure)="onScanFailure($event)"
 ></zxing-scanner>
+
 
 

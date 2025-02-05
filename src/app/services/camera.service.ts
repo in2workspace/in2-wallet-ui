@@ -20,6 +20,7 @@ export class CameraService {
   );
 
   public addDestroyingBarcode(barcodeId:string){
+    console.log('SERVICE: addDestroyingBarcode: ' + barcodeId);
     const destroyingBarcode = this.destroyingBarcodeListSubj.getValue();
     this.destroyingBarcodeListSubj.next([...destroyingBarcode, barcodeId]);
   }
@@ -30,8 +31,9 @@ export class CameraService {
     this.destroyingBarcodeListSubj.next([...updatedList]);
   }
 
+  //todo
   public updateSelecteCameraEffect = effect(() => { 
-    console.log('Camera selected: ' + this.selectedCamera$()?.label
+    console.log('SERVICE: updated camera: ' + this.selectedCamera$()?.label
 );
   })
 
@@ -58,7 +60,7 @@ export class CameraService {
   //todo return something?
   //todo estats amb enum
   public async getCameraFlow(): Promise<MediaDeviceInfo|'PERMISSION_DENIED'|'NO_CAMERA_AVAILABLE'> {
-    console.log('SERVICE: getCameraFlow');
+    console.log('SERVICE: STARTING getCameraFlow');
     this.hasCameraPermission$.set(undefined);
     const hasPermission = await this.getCameraPermissionAndStopTracks();
     if(!hasPermission){
@@ -105,7 +107,7 @@ public async updateAvailableCameras(): Promise<MediaDeviceInfo[]> {
 //3
 //obtenir càmera seleccionada; si no, stored; si no, qualsevol de les available (ja obtingudes); si no, undefined...
 public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAILABLE'> {
-  console.log('SERVICE: updateAvailableCameras');
+  console.log('SERVICE: getCameraFromAvailables');
   const selectedCamera = this.selectedCamera$();
   if(selectedCamera && this.isCameraAvailableById(selectedCamera.deviceId)) return selectedCamera;
 
@@ -116,7 +118,6 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   }
 
   const defaultCamera = await this.getDefaultAvailableCamera();
-  console.log('SERVICE: updateAvailableCameras');
   if(defaultCamera && this.isCameraAvailableById(defaultCamera.deviceId)){
     this.setCamera(defaultCamera);
     return defaultCamera;
@@ -126,7 +127,7 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
 }
 
   public async getCameraFromStorage(): Promise<MediaDeviceInfo|undefined> {
-    console.log('SERVICE: updateAvailableCameras');
+    console.log('SERVICE: getCameraFromStorage');
     const storedCamera = await this.storageService.get('camera');
     // const storedCamera  = JSON.parse(storedCameraUnparsed) as MediaDeviceInfo;
     console.log('Camera from storage:');
@@ -140,7 +141,7 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   }
 
   public async getDefaultAvailableCamera(){
-    console.log('SERVICE: updateAvailableCameras');
+    console.log('SERVICE: getDefaultAvailableCamera');
     const defaultCamera = this.availableDevices$().find((device) => /back|rear|environment/gi.test(device.label));
     return defaultCamera ?? this.availableDevices$()[0];
   }
