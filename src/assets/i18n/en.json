@@ -140,7 +140,8 @@
         "incorrect-pin": "Incorrect PIN. Please refresh the credential offer. If the problem persists, report it to the <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>support team</a>.",
         "pin-expired": "You didn't enter the PIN within the time limit. Please refresh the credential offer. If the problem persists, report it to the <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>support team</a>.",
         "unsigned": "The signed credential is not yet available",
-        "Errunsigned": "Credential could not be obtained"
+        "Errunsigned": "Credential could not be obtained",
+        "no-connection": "No internet connection. Please check your network and try again."
     },
     "confirmation":{
         "header":"Send credential?",

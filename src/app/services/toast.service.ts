@@ -47,6 +47,8 @@ export class ToastServiceHandler {
       messageBody = "errors.Errunsigned";
     }else if(message.startsWith("PIN expired")){
       messageBody = "errors.pin-expired"
+    }else if(message.startsWith("No internet connection")){
+      messageBody = "errors.no-connection"
     }
 
     return this.translate.get(messageBody).pipe(

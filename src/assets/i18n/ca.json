@@ -138,7 +138,8 @@
         "incorrect-pin":"PIN incorrecte. Si us plau, actualitzeu l'oferta de credencials. Si el problema persisteix, poseu-vos en contacte amb <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>.",
         "pin-expired": "No ha introduït el PIN dins del límit de temps. Si us plau, renoveu l'oferta de credencial. Si el problema persisteix, poseu-vos en contacte amb <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>.",
         "unsigned": "La credencial signada encara no està disponible",
-        "Errunsigned": "No s'ha pogut obtenir la credencial"
+        "Errunsigned": "No s'ha pogut obtenir la credencial",
+        "no-connection": "No hi ha connexió a internet. Comprovi la connexió i torni-ho a intentar."
     },
     "confirmation":{
         "header":"Enviar credencial?",
