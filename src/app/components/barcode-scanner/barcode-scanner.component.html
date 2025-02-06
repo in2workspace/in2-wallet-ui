@@ -1,22 +1,15 @@
 
-<!-- todo -->
-@if( !this.firstActivationCompleted && (!isActivatingBarcode$()?.length || isActivatingBarcode$()?.length === 0) ){
-    <div class="">
-        Disabling previous camera streams...
-    </div>
-}@else if(selectedDevice$() === undefined){
-    <div class="no-device">
-        Trying to get to a device...
-    </div>
+@if(isError$()){
+    <div><ion-icon aria-hidden="true" name="videocam-off-outline"></ion-icon></div>
 }@else if(!firstActivationCompleted){
     <div class="">
-        Activating scanner...
+        {{ "barcode.initializing" | translate}} <ion-spinner></ion-spinner>
     </div>
 }
 
 <zxing-scanner
 #scanner
-[style.display]="(selectedDevice$() && firstActivationCompleted) ? 'block' : 'none'"
+[style.display]="firstActivationCompleted ? 'block' : 'none'"
 class="scanner"
 [autostart]="false"
 [formats]="allowedFormats"

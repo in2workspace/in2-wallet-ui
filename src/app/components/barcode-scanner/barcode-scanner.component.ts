@@ -34,7 +34,9 @@ import {
 import { CameraLogType } from 'src/app/interfaces/camera-log';
 import { CameraService } from 'src/app/services/camera.service';
 import { RouterModule } from '@angular/router';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { IonicModule } from '@ionic/angular';
 
 // ! Since console.error is intercepted (to capture the error already caught by zxing), be careful to avoid recursion
 // ! (i.e., console.error should not be called within the execution flow of another console.error)
@@ -48,7 +50,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
   selector: 'app-barcode-scanner',
   templateUrl: './barcode-scanner.component.html',
   standalone: true,
-  imports: [CommonModule, ZXingScannerModule, RouterModule],
+  imports: [CommonModule, ZXingScannerModule, RouterModule, TranslateModule, IonicModule],
 })
 export class BarcodeScannerComponent implements OnInit {
   @Input() public parentComponent: string = '';
@@ -60,7 +62,7 @@ export class BarcodeScannerComponent implements OnInit {
   private barcodeId = Math.random().toString();
 
   //COUNTDOWN
-  //todo change time?
+  public isError$ = this.cameraService.isCameraError$;
   private activationTimeoutInSeconds = 4;
   private activateScanner$$ = new Subject<void>();
   private activationCountdown$ = this.activateScanner$$.pipe(
@@ -72,12 +74,11 @@ export class BarcodeScannerComponent implements OnInit {
         tap(val=>console.log('BARCODE - COUNTDOWN: ' + val))
       )
     ),
-    // startWith(6000),
     shareReplay(1),
   );
   private activationCountdownValue$ = toSignal(this.activationCountdown$, {initialValue:6000});
 
-  //is assigned CameraService.selectedDevice after scanner is autostarted
+  //todo: is assigned CameraService.selectedDevice after scanner is autostarted (?)
   public selectedDevice$: WritableSignal<MediaDeviceInfo|undefined> = this.cameraService.selectedCamera$;
   private updateScannerDeviceEffect = effect(() => {
     const selectedDevice = this.selectedDevice$();
@@ -109,7 +110,8 @@ export class BarcodeScannerComponent implements OnInit {
 
   public constructor(
     private readonly cameraService: CameraService,
-    private readonly cameraLogsService: CameraLogsService,) {
+    private readonly cameraLogsService: CameraLogsService
+  ) {
 
       // Requires debounce since this type of error is emitted constantly
       this.scanFailureSubject.pipe(
@@ -139,6 +141,7 @@ export class BarcodeScannerComponent implements OnInit {
       this.destroy$.next();
       this.setActivatingTimeout();
       this.restoreOriginalConsoleError();
+      this.cameraService.isCameraError$.set(false);
     }
 
     private async initCameraIfNoActivateBarcodes(): Promise<void>{

@@ -121,6 +121,9 @@
         "delete-cancel": "Cancela",
         "unsigned": "Sin firmar"
     },
+    "barcode":{
+        "initializing": "Inicializando escàner..."
+    },
     "errors":{
         "default":"Error no reconocido",
         "failed-qr-process": "Ha habido un error al procesar QR. Puede que sea inválido o que ya haya sido usado antes. Refresque la oferta de credencial, por favor. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>",
