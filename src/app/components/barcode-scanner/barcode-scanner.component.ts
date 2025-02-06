@@ -60,17 +60,19 @@ export class BarcodeScannerComponent implements OnInit {
   private barcodeId = Math.random().toString();
 
   //COUNTDOWN
+  private activationTimeoutInSeconds = 4;
   private activateScanner$$ = new Subject<void>();
   private activationCountdown$ = this.activateScanner$$.pipe(
     switchMap(() => interval(1000)
       .pipe(
-        take(7),
-        map(seconds => 6000 - seconds * 1000),
+        //todo
+        take(this.activationTimeoutInSeconds + 1),
+        map(seconds => this.activationTimeoutInSeconds * 1000 - seconds * 1000),
+        tap(val=>console.log('BARCODE - COUNTDOWN: ' + val))
       )
     ),
     // startWith(6000),
     shareReplay(1),
-    tap(val=>console.log('BARCODE - COUNTDOWN: ' + val))
   );
   private activationCountdownValue$ = toSignal(this.activationCountdown$, {initialValue:6000});
 
