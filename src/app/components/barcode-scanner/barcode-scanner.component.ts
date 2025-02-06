@@ -171,11 +171,50 @@ export class BarcodeScannerComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     console.log('BARCODE: on init from' + this.parentComponent)
+    this.modifyConsoleError();
+  }
 
+  public ngOnDestroy() {
+    console.warn('BARCODE: on destroy from ' + this.parentComponent);
+    this.destroy$.next();
+    this.setActivatingTimeout();
+    this.restoreOriginalConsoleError();
+  }
+
+
+  public onCodeResult(resultString: string) {
+    this.qrCode.emit(resultString);
+  }
+
+  public onScanError(error: Error){
+    this.saveErrorLog(error, 'scanError');
+  }
+
+  public onScanFailure(error: Exception|undefined){
+    const exception: Error = error ?? new Error('Undefined scan failure');
+    this.scanFailureSubject.next(exception);
+  }
+
+  public saveErrorLog(error: Error|undefined, exceptionType: CameraLogType) {
+    this.cameraLogsService.addCameraLog(error, exceptionType);
+  }
+
+  public setActivatingTimeout(){
+    this.cameraService.addActivatingBarcode(this.barcodeId);
+    const activationCountDownValue = this.activationCountdownValue$();
+    console.log('BARCODE: activation countdown value: ' + activationCountDownValue);
+
+    setTimeout(() => {
+        console.warn('BARCODE: scanner destroyed after' + activationCountDownValue + 'timeout from ' + this.parentComponent);
+        this.scanner.enable = false;
+        this.cameraService.removeActivatingBarcode(this.barcodeId);
+      }, activationCountDownValue );
+  }
+
+  private modifyConsoleError(){
     //Redefine console.log to capture the errors that were previously captured by zxing-scanner
-     this.originalConsoleError = console.error;
- 
-     console.error = (message?: string, ...optionalParams: string[]) => {
+    this.originalConsoleError = console.error;
+    console.error = (message?: string, ...optionalParams: string[]) => {
       if(message==="@zxing/ngx-scanner"){
         const logMessage = formatLogMessage(message, optionalParams);
         const err = new Error(logMessage);
@@ -198,44 +237,12 @@ export class BarcodeScannerComponent implements OnInit {
      };
   }
 
-
-  public onCodeResult(resultString: string) {
-    this.qrCode.emit(resultString);
-  }
-
-  public onScanError(error: Error){
-    this.saveErrorLog(error, 'scanError');
-  }
-
-  public onScanFailure(error: Exception|undefined){
-    const exception: Error = error ?? new Error('Undefined scan failure');
-    this.scanFailureSubject.next(exception);
-  }
-
-  public saveErrorLog(error: Error|undefined, exceptionType: CameraLogType) {
-    this.cameraLogsService.addCameraLog(error, exceptionType);
-  }
-
-  public ngOnDestroy() {
-    console.warn('BARCODE: on destroy from ' + this.parentComponent);
-    this.destroy$.next();
-    //generally, when scanner is destroyed, its stream is closed; however, if the tab is switched very fast and scanner is still
-    //setting device after getting permission on init, destroying the scanner will not close the stream; since the stream is internal to the scanner,
-    //the only way is to wait for the scanner to finish setting the device and then close the stream
-    //so normally this won't be necessary, only in the case of a very fast tab switch
-    this.cameraService.addActivatingBarcode(this.barcodeId);
-    const activationCountDownValue = this.activationCountdownValue$();
-    console.log('BARCODE: activation countdown value: ' + activationCountDownValue);
-
-    setTimeout(() => {
-        console.warn('BARCODE: scanner destroyed after' + activationCountDownValue + 'timeout from ' + this.parentComponent);
-        this.cameraService.removeActivatingBarcode(this.barcodeId);
-      }, activationCountDownValue );
-
+  private restoreOriginalConsoleError(){
     if(this.originalConsoleError){
       console.error = this.originalConsoleError;
     }
   }
+
 }
 
 export function formatLogMessage(message: any, optionalParams: any[]): string {
