@@ -31,6 +31,6 @@ export const environment = {
       secondary: window["env"]["secondary"] || '#50c8ff',
       secondary_contrast: window["env"]["secondary_contrast"] || '#000000'
     },
-    logo_src:"assets/logos/no-image.png",
-  }
+    logo_src: window["env"]["logo_src"] || "assets/logos/no-image.png",
+    }
 };

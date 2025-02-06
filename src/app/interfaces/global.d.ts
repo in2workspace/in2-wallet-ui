@@ -26,6 +26,7 @@ interface Window {
       primary_contrast: string;
       secondary: string;
       secondary_contrast: string;
+      logo_src:string;
     };
   }
   
