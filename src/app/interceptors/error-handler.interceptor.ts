@@ -23,7 +23,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((errorResp: HttpErrorResponse) => {
         let errMessage = errorResp.error?.message || errorResp.message || 'Unknown Http error';
-        let errStatus = errorResp.status || errorResp.error?.status;
+        let errStatus = errorResp.status ?? errorResp.error?.status;
 
         //DONT'T SHOW POPUP CASES
         if ( //todo review this handler
