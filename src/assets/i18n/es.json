@@ -135,7 +135,18 @@
         "pin-expired": "No ha introducido el PIN dentro del límite de tiempo. Por favor, renueve la oferta de credencial. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>.",
         "unsigned": "La credencial firmada aún no esta disponible.",
         "Errunsigned": "No se pudo obtener la credencial",
-        "no-connection": "No hay conexión a internet. Comprueve su conexión e inténtelo de nuevo."
+        "no-connection": "No hay conexión a internet. Comprueve su conexión e inténtelo de nuevo.",
+        "camera": {
+            "not-readable": "No se puede acceder a la cámara. Asegúrate de que ninguna otra aplicación la esté utilizando. Es posible que necesites actualizar la página.",
+            "not-allowed": "El acceso a la cámara está denegado. Revisa los permisos de tu navegador. Si el problema persiste, intenta actualizar la página.",
+            "not-found": "No se encontró ninguna cámara en este dispositivo. Asegúrate de que está correctamente conectada y actualiza la página.",
+            "overconstrained": "La configuración de la cámara no es compatible. Intenta seleccionar una cámara diferente o actualizar la página.",
+            "security": "El acceso a la cámara está bloqueado por restricciones de seguridad. Es posible que necesites actualizar la página o revisar la configuración de tu navegador.",
+            "abort": "El acceso a la cámara se canceló antes de conceder los permisos. Revisa los permisos de tu navegador y asegúrate de que ninguna otra aplicación la esté utilizando. Inténtalo de nuevo o actualiza la página.",
+            "type": "Error de configuración: la solicitud de la cámara no es válida. Intenta actualizar la página o revisar la configuración de la cámara.",
+            "not-supported": "Tu navegador no admite el acceso a la cámara. Considera utilizar un navegador diferente.",
+            "default": "Error inesperado. Revisa los permisos de tu navegador y asegúrate de que ninguna otra aplicación esté utilizando la cámara. Intenta actualizar la página."
+        }
     },
     "confirmation":{
         "header":"¿Enviar Credencial?",

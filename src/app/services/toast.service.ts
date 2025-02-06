@@ -51,7 +51,11 @@ export class ToastServiceHandler {
       messageBody = "errors.no-connection"
     }
 
-    return this.translate.get(messageBody).pipe(
+    return this.showErrorAlertByTranslateLabel(messageBody);
+  }
+
+  public showErrorAlertByTranslateLabel(message: string){
+    return this.translate.get(message).pipe(
       map(async (translatedMessage) => {
         const alert = await this.alertController.create({
           message: `
@@ -75,4 +79,5 @@ export class ToastServiceHandler {
       })
     );
   }
+
 }

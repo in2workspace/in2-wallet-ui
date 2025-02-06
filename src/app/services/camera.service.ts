@@ -1,15 +1,23 @@
-import { computed, effect, Injectable, signal } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, map, shareReplay, tap } from 'rxjs';
+import { computed, effect, Injectable, signal, inject } from '@angular/core';
+import { BehaviorSubject, distinctUntilChanged, map, shareReplay, take, tap } from 'rxjs';
 import { StorageService } from './storage.service';
+import { ToastServiceHandler } from './toast.service';
+import { CameraLogsPage } from '../pages/logs/camera-logs/camera-logs.page';
+import { CameraLogsService } from './camera-logs.service';
+import { CameraLogType } from '../interfaces/camera-log';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CameraService {
+  private cameraLogsService = inject(CameraLogsService);
+  private storageService = inject(StorageService);
+  private toastService = inject(ToastServiceHandler);
+
   public selectedCamera$ = signal<MediaDeviceInfo|undefined>(undefined);
   public computedSelectedCameraLabel$ = computed(() => this.selectedCamera$()?.label);
   public availableDevices$ = signal<MediaDeviceInfo[]>([]);
-  public hasCameraPermission$ = signal<boolean|undefined>(undefined);
+  public isCameraError$ = signal<boolean|undefined>(undefined);
   public activatingBarcodeListSubj = new BehaviorSubject<string[]>([])
   public activatingBarcodeList$ = this.activatingBarcodeListSubj.asObservable()
   .pipe(
@@ -35,10 +43,7 @@ export class CameraService {
   public updateSelecteCameraEffect = effect(() => { 
     console.log('SERVICE: updated camera: ' + this.selectedCamera$()?.label
 );
-  })
-
-  public constructor(private storageService: StorageService) {
-  }
+  });
 
   public setCamera(camera: MediaDeviceInfo) {
     console.log('SERVICE: set camera');
@@ -61,23 +66,25 @@ export class CameraService {
   //todo estats amb enum
   public async getCameraFlow(): Promise<MediaDeviceInfo|'PERMISSION_DENIED'|'NO_CAMERA_AVAILABLE'> {
     console.log('SERVICE: STARTING getCameraFlow');
-    this.hasCameraPermission$.set(undefined);
-    const hasPermission = await this.getCameraPermissionAndStopTracks();
-    if(!hasPermission){
-      console.error('Camera permission denied');
-      alert('Camera permission denied. Please allow camera access to continue.');
-      this.hasCameraPermission$.set(false);
+    this.isCameraError$.set(false);
+
+    try{
+      await this.getCameraPermissionAndStopTracks();
+    }catch(e: any){
+      this.handleCameraErrors(e, 'fetchError');
       return'PERMISSION_DENIED';
     }
-    this.hasCameraPermission$.set(true); //
 
     let availableDevices = await this.updateAvailableCameras();
     if(availableDevices.length === 0){
-      console.error('No camera available');
+      this.handleCameraErrors('CustomNoAvailable', 'fetchError');
       return 'NO_CAMERA_AVAILABLE';
     }
 
     const selectedCamera = await this.getCameraFromAvailables();
+    if(selectedCamera === 'NO_CAMERA_AVAILABLE'){
+      this.handleCameraErrors('CustomNoAvailable', 'fetchError');
+    }
     return selectedCamera;
   }
 
@@ -88,9 +95,8 @@ export class CameraService {
       const stream = await navigator.mediaDevices.getUserMedia({video: true});
       this.stopMediaTracks(stream); //necessary? crec que sí per si s'està utilitzant la càmera en un altre lloc
       return true;
-    }catch(e){
-      console.error('Camera permission denied');
-      return false;
+    }catch(e: any){
+      throw e;
   }
 }
 
@@ -179,6 +185,41 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
       track.stop()});
   }
 
+  public handleCameraErrors(e: any, type?: CameraLogType){
+    console.error(e);
+    this.isCameraError$.set(true);
+    this.alertCameraErrors(e.name);
+    this.cameraLogsService.addCameraLog(e, type ?? 'undefinedError');
+  }
+
+  public alertCameraErrors(errMsg: string) {
+    console.log('SERVICE: alert camera errors: ' + errMsg);
+    
+    let errorLabel = 'errors.camera.default';
+  
+    if (errMsg.startsWith('NotReadableError')) {
+      errorLabel = 'errors.camera.not-readable';
+    } else if (errMsg.startsWith('NotAllowedError')) {
+      errorLabel = 'errors.camera.not-allowed';
+    } else if (errMsg.startsWith('NotFoundError') || errMsg.startsWith('CustomNoAvailable')) {
+      errorLabel = 'errors.camera.not-found';
+    } else if (errMsg.startsWith('OverconstrainedError')) {
+      errorLabel = 'errors.camera.overconstrained';
+    } else if (errMsg.startsWith('SecurityError')) {
+      errorLabel = 'errors.camera.security';
+    } else if (errMsg.startsWith('AbortError')) {
+      errorLabel = 'errors.camera.abort';
+    } else if (errMsg.startsWith('TypeError')) {
+      errorLabel = 'errors.camera.type';
+    } else if (errMsg.startsWith('NotSupportedError')) {
+      errorLabel = 'errors.camera.not-supported';
+    }
+  
+    this.toastService.showErrorAlertByTranslateLabel(errorLabel)
+      .pipe(take(1))
+      .subscribe();
+  }
+  
   public isIOSVersionLowerThan(version: number): boolean {
     const match = navigator.userAgent.match(/OS (\d+)_/);
     if (match) {
