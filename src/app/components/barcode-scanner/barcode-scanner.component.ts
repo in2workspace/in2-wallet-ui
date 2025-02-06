@@ -23,6 +23,10 @@ import {
   distinctUntilChanged,
   filter,
   interval,
+  map,
+  shareReplay,
+  startWith,
+  switchMap,
   take,
   takeUntil,
   tap,
@@ -56,12 +60,19 @@ export class BarcodeScannerComponent implements OnInit {
   private barcodeId = Math.random().toString();
 
   //COUNTDOWN
-  private countdownInMsSubj = new BehaviorSubject<number>(0);
-  countdownInMs$ = this.countdownInMsSubj.asObservable().pipe(
+  private activateScanner$$ = new Subject<void>();
+  private activationCountdown$ = this.activateScanner$$.pipe(
+    switchMap(() => interval(1000)
+      .pipe(
+        take(7),
+        map(seconds => 6000 - seconds * 1000),
+      )
+    ),
+    // startWith(6000),
+    shareReplay(1),
     tap(val=>console.log('BARCODE - COUNTDOWN: ' + val))
   );
-  private subscription: Subscription | null = null;
-  scannerActivatedSubj = new Subject<void>();
+  private activationCountdownValue$ = toSignal(this.activationCountdown$, {initialValue:6000});
 
   //is assigned CameraService.selectedDevice after scanner is autostarted
   public selectedDevice$: WritableSignal<MediaDeviceInfo|undefined> = this.cameraService.selectedCamera$;
@@ -73,7 +84,7 @@ export class BarcodeScannerComponent implements OnInit {
         console.log('BARCODE: permission after device changed')
         if(hasPermission){
           this.scanner.device = selectedDevice;
-          this.startCountdown();
+          this.activateScanner$$.next();
         }else{
           console.error('BARCODE: Permission denied');
           alert('Permission denied. Please allow camera access to continue.');
@@ -82,7 +93,7 @@ export class BarcodeScannerComponent implements OnInit {
   }else{
     console.log('BARCODE: efecte anul·lat; first activation completed? ' + this.firstActivationCompleted);
   }});
-  isDestroyingBarcode$ = toSignal( this.cameraService.destroyingBarcodeList$);
+  isActivatingBarcode$ = toSignal(this.cameraService.activatingBarcodeList$);
 
 
   readonly scanFailureSubject = new Subject<Error>();
@@ -96,15 +107,6 @@ export class BarcodeScannerComponent implements OnInit {
   public constructor(
     private readonly cameraService: CameraService,
     private readonly cameraLogsService: CameraLogsService,) {
-      this.scannerActivatedSubj
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(() => {
-          this.startCountdown();
-        });
-      //todo unsubscribe
-      this.countdownInMs$
-        .pipe(takeUntil(this.destroy$))
-        .subscribe();
 
       // Requires debounce since this type of error is emitted constantly
       this.scanFailureSubject.pipe(
@@ -119,39 +121,23 @@ export class BarcodeScannerComponent implements OnInit {
       });
 
     }
-
-    private startCountdown() {
-      if (this.subscription) {
-        this.subscription.unsubscribe();
-      }
-      console.log('START COUNTDOWN');
-  
-      this.subscription = interval(1000).pipe(take(7))
-        .pipe(
-          tap(val => console.log('Subscription countdown: ' + val)),
-          takeUntil(this.destroy$))
-        .subscribe(time => {
-          this.countdownInMsSubj.next(time*1000);
-        });
-    }
   
 
     public async ngAfterViewInit() {
       //activate scanner once there are no other barcode in deactivation process
-      const destroyingBarcodeList = this.cameraService.destroyingBarcodeListSubj.getValue();
+      const destroyingBarcodeList = this.isActivatingBarcode$();
       console.log('BARCODE (afterViewInit): check current barcode in destroying process list before starting camera flow: ' + destroyingBarcodeList);
-      if (destroyingBarcodeList.length === 0) {
+      if (destroyingBarcodeList?.length === 0) {
         console.log('BARCODE: since there are no barcode components being destroyed, get camera flow')
         //todo agrupar en una funció el cameraflow + activate+firstactivation
         await this.cameraService.getCameraFlow(); 
         //potser faltaria condicional en cas de permission denied o no available devices
         console.log('BARCODE: camera flow completed: ' + this.parentComponent);
         this.activateScanner();
-        this.startCountdown();
         this.firstActivationCompleted = true;
       } else {
         console.warn('BARCODE: there is at least one destroying barcode, waiting for starting camera flow')
-        this.cameraService.destroyingBarcodeList$
+        this.cameraService.activatingBarcodeList$
           .pipe(
             filter(value => value.length === 0),
             takeUntil(this.destroy$),
@@ -162,7 +148,6 @@ export class BarcodeScannerComponent implements OnInit {
             console.log('BARCODE: camera flow completed: ' + this.parentComponent);
             console.log('BARCODE: there are no destroying barcodes in the list, starting camera flow')
             this.activateScanner();
-            this.startCountdown();
             this.firstActivationCompleted = true;
           });
       }
@@ -176,6 +161,7 @@ export class BarcodeScannerComponent implements OnInit {
         console.log('BARCODE: Permission to activacte scanner: ' + hasPermission);
         if(this.scanner.device !== this.selectedDevice$()){
           this.scanner.device = this.selectedDevice$();
+          this.activateScanner$$.next();
           console.log('BARCODE: end of activateScanner')
           console.warn('Activation process of the scanner es pot allargar');
         }
@@ -237,18 +223,14 @@ export class BarcodeScannerComponent implements OnInit {
     //setting device after getting permission on init, destroying the scanner will not close the stream; since the stream is internal to the scanner,
     //the only way is to wait for the scanner to finish setting the device and then close the stream
     //so normally this won't be necessary, only in the case of a very fast tab switch
-    this.cameraService.addDestroyingBarcode(this.barcodeId);
-    const countDownValue = this.countdownInMsSubj.getValue();
-    console.log('BARCODE: countdown value: ' + countDownValue);
-    
-    const timeOutValue = 6000 - countDownValue;
-    console.log('BARCODE: timeout value: ' + timeOutValue);
+    this.cameraService.addActivatingBarcode(this.barcodeId);
+    const activationCountDownValue = this.activationCountdownValue$();
+    console.log('BARCODE: activation countdown value: ' + activationCountDownValue);
 
     setTimeout(() => {
-        console.warn('BARCODE: scanner destroyed after' + timeOutValue + 'timeout from ' + this.parentComponent);
-        this.scanner.enable = false;
-        this.cameraService.removeDestroyingBarcode(this.barcodeId);
-      }, timeOutValue );
+        console.warn('BARCODE: scanner destroyed after' + activationCountDownValue + 'timeout from ' + this.parentComponent);
+        this.cameraService.removeActivatingBarcode(this.barcodeId);
+      }, activationCountDownValue );
 
     if(this.originalConsoleError){
       console.error = this.originalConsoleError;

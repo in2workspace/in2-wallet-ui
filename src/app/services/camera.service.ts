@@ -10,8 +10,8 @@ export class CameraService {
   public computedSelectedCameraLabel$ = computed(() => this.selectedCamera$()?.label);
   public availableDevices$ = signal<MediaDeviceInfo[]>([]);
   public hasCameraPermission$ = signal<boolean|undefined>(undefined);
-  public destroyingBarcodeListSubj = new BehaviorSubject<string[]>([])
-  public destroyingBarcodeList$ = this.destroyingBarcodeListSubj.asObservable()
+  public activatingBarcodeListSubj = new BehaviorSubject<string[]>([])
+  public activatingBarcodeList$ = this.activatingBarcodeListSubj.asObservable()
   .pipe(
     tap(list => {
       console.log('update barcode on destroy list: ');
@@ -19,16 +19,16 @@ export class CameraService {
     })
   );
 
-  public addDestroyingBarcode(barcodeId:string){
+  public addActivatingBarcode(barcodeId:string){
     console.log('SERVICE: addDestroyingBarcode: ' + barcodeId);
-    const destroyingBarcode = this.destroyingBarcodeListSubj.getValue();
-    this.destroyingBarcodeListSubj.next([...destroyingBarcode, barcodeId]);
+    const destroyingBarcode = this.activatingBarcodeListSubj.getValue();
+    this.activatingBarcodeListSubj.next([...destroyingBarcode, barcodeId]);
   }
 
-  public removeDestroyingBarcode(barcodeId:string){
-    const destroyingBarcode = this.destroyingBarcodeListSubj.getValue();
+  public removeActivatingBarcode(barcodeId:string){
+    const destroyingBarcode = this.activatingBarcodeListSubj.getValue();
     const updatedList = destroyingBarcode.filter(id => id !== barcodeId);
-    this.destroyingBarcodeListSubj.next([...updatedList]);
+    this.activatingBarcodeListSubj.next([...updatedList]);
   }
 
   //todo
