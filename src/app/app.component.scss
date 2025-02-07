@@ -122,8 +122,13 @@ ion-button[disabled] {
 
 ion-toolbar {
   transition: filter 0.3s ease; 
-
+  --ion-toolbar-background: var(--primary-custom-color);
   &.blurred {
     filter: blur(1.5px); 
   }
+}
+
+ion-toolbar ion-button {
+  --ion-toolbar-color: var(--primary-custom-color);
+  --ion-toolbar-background:var(--primary-contrast-custom-color);
 }

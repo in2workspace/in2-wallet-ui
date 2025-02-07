@@ -22,5 +22,14 @@ export const environment = {
   },
   websocket_uri: '/api/v1/pin',
   logs_enabled: false,
-  logs_email: "domesupport@in2.es"
+  logs_email: "domesupport@in2.es",
+  customizations:{
+    colors:{ 
+      primary:'#00ADD3',
+      primary_contrast:'#ffffff',
+      secondary:'#50c8ff',
+      secondary_contrast:'#000000'
+    },
+    logo_src:"assets/logos/dome_white_logo.png",
+  }
 };
