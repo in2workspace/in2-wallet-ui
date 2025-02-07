@@ -16,10 +16,10 @@
         "initializing": "Initializing barcode... Please wait."
     },
     "camera-selector":{
-        "title":"Camera",
+        "title":"Selected camera",
         "settings": "Camera settings",
-        "no-device": "No device"
-
+        "no-device": "No device",
+        "changing-device": "Switching camera..."
     },
     "credential-offer":{
         "title":"Credential Offer",

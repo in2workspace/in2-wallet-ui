@@ -5,6 +5,7 @@ import { IonicModule, IonSelect, IonSelectOption } from '@ionic/angular';
 import { BarcodeScannerComponent } from '../../components/barcode-scanner/barcode-scanner.component';
 import { CameraService } from 'src/app/services/camera.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastServiceHandler } from 'src/app/services/toast.service';
 @Component({
   selector: 'app-camera-selector',
   templateUrl: './camera-selector.page.html',
@@ -24,26 +25,61 @@ export class CameraSelectorPage {
   private cdr = inject(ChangeDetectorRef);
 
   public showBarcode = true;
+  public isChangingDevice = false;
   public availableDevices$ = this.cameraService.availableDevices$;
   public selectedDevice$ = this.cameraService.selectedCamera$;
 
-  ngOnInit(){
+  private ngOnInit(){
     console.log('SELECTOR (OnInit): showBarcode = ' + this.showBarcode);
   }
 
+  private ionViewWillEnter(){
+    console.log('SELECTOR (IonViewWillEnter): showBarcode = ' + this.showBarcode);
+    if(this.showBarcode !== true){
+      console.log('SELECTOR (IonViewWillEnter): createBarcode')
+      this.createBarcode();
+    }else{
+      console.log('SELECTOR (IonViewWillEnter): barcode is already created (showbarcode = true): ')
+    }
+  }
+
+  private async ionViewWillLeave(){
+    console.log('SELECTOR: Leaving-destroyBarcode')
+    this.destroyBarcode();
+  }
+
   public async onDeviceSelectChange(selectedDeviceId: string) {
-    console.log('SELECTOR: onDeviceSelectChange')
-    await this.cameraService.updateAvailableCameras();
+    //todo moure a servei
+    console.log('SELECTOR: onDeviceSelectChange');
+    this.showIsChangingDeviceTemp();
+    const availableDevices = await this.cameraService.updateAvailableCameras();
+    if(availableDevices.length === 0){
+      this.handleCameraErrorAndReload();
+      return;
+    }
     console.log('SELECTOR: onDeviceSelectChange: updateAvailableCameras')
     const isAvailable = this.cameraService.isCameraAvailableById(selectedDeviceId);
     if(isAvailable){
       const selectedDevice = this.cameraService.getAvailableCameraById(selectedDeviceId);
       this.cameraService.setCamera(selectedDevice);
+      return;
     }else{
-      alert('Selected camera is not available.');
-      location.reload();
+      this.handleCameraErrorAndReload();
+      return;
     }
 }
+
+  public handleCameraErrorAndReload(){
+    this.cameraService.handleCameraErrors({name: 'CustomNoAvailable'}, 'fetchError');
+    //todo anything else?
+  }
+
+  public showIsChangingDeviceTemp(){
+    this.isChangingDevice = true;
+    setTimeout(()=>{
+      this.isChangingDevice = false;
+    }, 2000);
+  }
 
   public createBarcode(){
     this.showBarcode = true;
@@ -55,20 +91,5 @@ export class CameraSelectorPage {
     this.cdr.detectChanges();
   }
   
-  ionViewWillEnter(){
-    console.log('SELECTOR (IonViewWillEnter): showBarcode = ' + this.showBarcode);
-    //! PER QUÈ S'EXECUTA DESPRÉS DE BARCODE?? Per les vegades que no són la primera
-    if(this.showBarcode !== true){
-      console.log('SELECTOR (IonViewWillEnter): createBarcode')
-      this.createBarcode();
-    }else{
-      console.log('SELECTOR (IonViewWillEnter): barcode is already created (showbarcode = true): ')
-    }
-  }
-
-  async ionViewWillLeave(){
-    console.log('SELECTOR: Leaving-destroyBarcode')
-    this.destroyBarcode();
-  }
 
 }

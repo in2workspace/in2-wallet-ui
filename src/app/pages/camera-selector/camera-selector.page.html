@@ -3,7 +3,8 @@
     <b class="settings-pages-title">{{"camera-selector.settings" | translate}}</b>
     <p class="camera-selector-title">{{"camera-selector.title" | translate}}</p>
     <ion-row class="ion-justify-content-start" class="select-row">
-      @if(selectedDevice$()){
+      @if(selectedDevice$() && !cameraService.isCameraError$()){
+        <div class="selector-container">
           <ion-select placeholder="Select a camera" [ngModel]="selectedDevice$()?.deviceId" (ionChange)="onDeviceSelectChange($event.target.value)" interface="popover" class="camera-select">
             @if(availableDevices$().length < 1){
               <ion-select-option value="">{{"camera-selector.no-device" | translate}}</ion-select-option>
@@ -12,6 +13,13 @@
               {{ camera.label}}
             </ion-select-option>
           </ion-select>
+          @if(isChangingDevice){
+            <div class="switching">
+              <ion-spinner name="lines"></ion-spinner> 
+              <span>{{ "camera-selector.changing-device" | translate}}</span>
+            </div>
+          }
+        </div>
       }
     </ion-row>
 

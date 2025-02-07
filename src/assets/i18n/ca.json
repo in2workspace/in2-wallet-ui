@@ -6,16 +6,17 @@
         "dids":"Dids",
         "camera-selector":"Selector de Camara",
         "language-selector":"Selector d'Idioma",
-        "terms-of-user":"Terms d'Us",
-        "privacy-policy":"Politica de Privacitat",
+        "terms-of-user":"Termes d'Us",
+        "privacy-policy":"Política de Privacitat",
         "faqs":"FAQs",
         "settings":"Settings",
         "logout":"Tancar sessió"
     },
     "camera-selector":{
-        "title":"Camara",
-        "settings": "Configuració de la camara",
-        "no-device": "Sense dispositiu"
+        "title":"Càmera seleccionada",
+        "settings": "Configuració de la càmera",
+        "no-device": "Sense dispositiu",
+        "changing-device": "Canviant de càmera..."
     },
     "credential-offer":{
         "title":"Oferta de Credencial",
@@ -101,7 +102,7 @@
         "title":"Configuració"
     },
     "terms-of-use":{
-        "title":"Terms d'Us"
+        "title":"Termes d'Us"
     },
     "vc-selector":{
         "title":"Selector de VC",
@@ -158,7 +159,7 @@
     "confirmation":{
         "header":"Enviar credencial?",
         "ok":"Ok",
-        "cancel":"Cancelar",
+        "cancel":"Cancel·lar",
         "pin":"Introdueix PIN"
     }
 }

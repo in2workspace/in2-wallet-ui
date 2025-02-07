@@ -76,13 +76,13 @@ export class CameraService {
 
     let availableDevices = await this.updateAvailableCameras();
     if(availableDevices.length === 0){
-      this.handleCameraErrors('CustomNoAvailable', 'fetchError');
+      this.handleCameraErrors({name: 'CustomNoAvailable'}, 'fetchError');
       return 'NO_CAMERA_AVAILABLE';
     }
 
     const selectedCamera = await this.getCameraFromAvailables();
     if(selectedCamera === 'NO_CAMERA_AVAILABLE'){
-      this.handleCameraErrors('CustomNoAvailable', 'fetchError');
+      this.handleCameraErrors({name: 'CustomNoAvailable'}, 'fetchError');
     }
     return selectedCamera;
   }
@@ -184,14 +184,18 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
       track.stop()});
   }
 
-  public handleCameraErrors(e: any, type?: CameraLogType){
+  //todo enum or map with possible error labels
+  public handleCameraErrors(e: Error | { name: string }, type?: CameraLogType) {
     console.error(e);
     this.isCameraError$.set(true);
-    this.alertCameraErrors(e.name);
-    this.cameraLogsService.addCameraLog(e, type ?? 'undefinedError');
+    this.alertCameraErrorsByErrorName(e.name);
+  
+    const errorInstance: Error = e instanceof Error ? e : new Error(e.name);
+    
+    this.cameraLogsService.addCameraLog(errorInstance, type ?? 'undefinedError');
   }
 
-  public alertCameraErrors(errMsg: string) {
+  public alertCameraErrorsByErrorName(errMsg: string) {
     console.log('SERVICE: alert camera errors: ' + errMsg);
     
     let errorLabel = 'errors.camera.default';

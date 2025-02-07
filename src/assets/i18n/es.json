@@ -4,7 +4,7 @@
         "home":"Inicio",
         "credentials":"Credenciales",
         "dids":"Dids",
-        "camera-selector":"Selector de Camara",
+        "camera-selector":"Selector de Cámara",
         "language-selector":"Selector de Idioma",
         "terms-of-user":"Terminos de Uso",
         "privacy-policy":"Politica de Privacidad",
@@ -13,9 +13,10 @@
         "logout":"Cerrar sesión"
     },
     "camera-selector":{
-        "title":"Camara",
-        "settings": "Configuración de la camara",
-        "no-device": "Sin dispositivo"
+        "title":"Cámara seleccionada",
+        "settings": "Configuración de la cámara",
+        "no-device": "Sin dispositivo",
+        "changing-device": "Cambiando cámara..."
     },
     "credential-offer":{
         "title":"Oferta de Credencial",
