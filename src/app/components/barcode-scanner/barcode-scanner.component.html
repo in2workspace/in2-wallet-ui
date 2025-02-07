@@ -1,9 +1,12 @@
 
 @if(isError$()){
-    <div><ion-icon aria-hidden="true" name="videocam-off-outline"></ion-icon></div>
+    <div>
+        <ion-icon size="large" aria-hidden="true" name="videocam-off-outline"></ion-icon>
+    </div>
 }@else if(!firstActivationCompleted){
-    <div class="">
-        {{ "barcode.initializing" | translate}} <ion-spinner></ion-spinner>
+    <div class="loading">
+        <ion-spinner name="lines"></ion-spinner> 
+        <span>{{ "barcode.initializing" | translate}}</span>
     </div>
 }
 

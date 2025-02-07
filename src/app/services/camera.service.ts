@@ -72,7 +72,7 @@ export class CameraService {
       await this.getCameraPermissionAndStopTracks();
     }catch(e: any){
       this.handleCameraErrors(e, 'fetchError');
-      return'PERMISSION_DENIED';
+      return 'PERMISSION_DENIED';
     }
 
     let availableDevices = await this.updateAvailableCameras();

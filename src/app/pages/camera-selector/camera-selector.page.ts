@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Input, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, IonSelect, IonSelectOption } from '@ionic/angular';
 import { BarcodeScannerComponent } from '../../components/barcode-scanner/barcode-scanner.component';
 import { CameraService } from 'src/app/services/camera.service';
 import { TranslateModule } from '@ngx-translate/core';

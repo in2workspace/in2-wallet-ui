@@ -49,6 +49,7 @@ import { IonicModule } from '@ionic/angular';
 @Component({
   selector: 'app-barcode-scanner',
   templateUrl: './barcode-scanner.component.html',
+  styleUrl:'./barcode-scanner.component.scss' ,
   standalone: true,
   imports: [CommonModule, ZXingScannerModule, RouterModule, TranslateModule, IonicModule],
 })
@@ -167,7 +168,11 @@ export class BarcodeScannerComponent implements OnInit {
              take(1),
            )
            .subscribe(async () => {
-             await this.cameraService.getCameraFlow(); 
+             const cameraFlowResult = await this.cameraService.getCameraFlow(); 
+             if(cameraFlowResult === 'NO_CAMERA_AVAILABLE' || cameraFlowResult === 'PERMISSION_DENIED'){
+              console.warn('BARCODE: camera flow not completed; scanner will not be activated.');
+              return;
+            }
              console.log('BARCODE: camera flow completed: ' + this.parentComponent);
              console.log('BARCODE: there are no destroying barcodes in the list, starting camera flow')
              this.activateScannerInitially();
@@ -175,24 +180,23 @@ export class BarcodeScannerComponent implements OnInit {
        }
     }
 
-  public activateScanner(){
+  public async activateScanner(){
     console.log('BARCODE: activating scanner: ' + this.parentComponent)
     if(this.scanner){
       this.scanner.enable = true;
-      this.scanner.askForPermission().then((hasPermission) => {
-        console.log('BARCODE: Permission to activacte scanner: ' + hasPermission);
+      const hasPermission = await this.scanner.askForPermission();
+      console.log('BARCODE: Permission to activacte scanner: ' + hasPermission);
         if(this.scanner.device !== this.selectedDevice$() && hasPermission){
           this.scanner.device = this.selectedDevice$();
           this.activateScanner$$.next();
           console.log('BARCODE: end of activateScanner')
           console.warn('Activation process of the scanner es pot allargar');
         }
-      });
     }
   }
 
-  public activateScannerInitially(){
-    this.activateScanner();
+  public async activateScannerInitially(){
+    await this.activateScanner();
     this.firstActivationCompleted = true;  
   }
 

@@ -1,8 +1,9 @@
 <ion-content [fullscreen]="true" class="background-content">
-  <b class="pages_titles">
+  <ion-grid class="settings-pages-grid">
+  <b class="settings-pages-title">
     {{"camera-logs-selector.title"|translate}}
   </b>
-  <ion-list class="logs-list">
+  <ion-list class="logs-pages-list">
     @for(log of displayedLogs; track $index){
       <ion-item>
         <ion-grid>
@@ -35,6 +36,7 @@
     <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more logs...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
+  </ion-grid>
 </ion-content>
 
      

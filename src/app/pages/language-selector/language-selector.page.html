@@ -1,7 +1,7 @@
-<ion-content [fullscreen]="true">
-  <ion-grid>
-    <p style="font-weight: bold;">{{"language-selector.title"|translate}}</p>
-    <ion-row class="ion-justify-content-start">
+<ion-content [fullscreen]="true" class="settings-pages-grid">
+  <ion-grid class="settings-pages-grid">
+    <div class="settings-pages-title">{{"language-selector.title"|translate}}</div>
+    <ion-row class="ion-justify-content-center">
       <ion-list>
         <ion-radio-group [ngModel]="languageSelected | async" (ionChange)="languageChange($any($event).target?.value)">
           <ion-item *ngFor="let language of languageList">

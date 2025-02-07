@@ -1,17 +1,14 @@
 .camera-selector-content {
-    --ion-background-color: #DDE6F6
+    --ion-background-color: #DDE6F6;
   }
 
-  .camera-select {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-
-  .camera-row {
-    margin-left: 10px;
+  .select-row {
     margin-bottom: 10px;
   }
 
-  .camera-selector-title {
-    margin-left: 10px;
+  .camera-select {
+    width: auto;
+    padding-inline: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
   }
