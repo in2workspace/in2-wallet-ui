@@ -92,7 +92,6 @@ export class BarcodeScannerComponent implements OnInit {
           this.activateScanner$$.next();
         }else{
           console.error('BARCODE: Permission denied');
-          // alert('Permission denied. Please allow camera access to continue.');
         }
       });
   }else{

@@ -53,7 +53,7 @@ export class SettingsPage {
   public async sendCameraLogs() {
     this.translate.get('mailto_permission_alert').subscribe(async (translatedMsg: string) => {
       try {
-        alert(translatedMsg)
+        alert(translatedMsg); //acceptable alert, not in PRD
         await this.cameraLogsService.fetchCameraLogs();
         this.cameraLogsService.sendCameraLogs();
       } catch (error) {

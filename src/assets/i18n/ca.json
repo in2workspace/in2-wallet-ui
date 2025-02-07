@@ -1,17 +1,16 @@
 
 {
     "menu":{
-    "home":"Home",
-    "credentials":"Credencials",
-    "dids":"Dids",
-    "camera-selector":"Selector de Camara",
-    "language-selector":"Selector d'Idioma",
-    "terms-of-user":"Terms d'Us",
-    "privacy-policy":"Politica de Privacitat",
-    "faqs":"FAQs",
-    "settings":"Settings",
-    "logout":"Tancar sessió"
-
+        "home":"Home",
+        "credentials":"Credencials",
+        "dids":"Dids",
+        "camera-selector":"Selector de Camara",
+        "language-selector":"Selector d'Idioma",
+        "terms-of-user":"Terms d'Us",
+        "privacy-policy":"Politica de Privacitat",
+        "faqs":"FAQs",
+        "settings":"Settings",
+        "logout":"Tancar sessió"
     },
     "camera-selector":{
         "title":"Camara",
@@ -129,7 +128,7 @@
         "initializing": "Inicialitzant escàner..."
     },
     "errors":{
-        "default":"Error no reconegut",
+        "default":"Error inesperat. Si el problema persisteix, contacteu <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>",
         "failed-qr-process": "Hi ha hagut un problema en processar el QR. Pot ser que sigui invàlid o que ja hagi estat utilitzat abans. Refresqueu l'oferta de credencial. Si el problema persisteix, contacteu <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>",
         "invalid-qr":"El QR presentat és invàlid",
         "no-credentials-available": "No hi ha cap credencial disponible per al login",
@@ -143,6 +142,7 @@
         "unsigned": "La credencial signada encara no està disponible",
         "Errunsigned": "No s'ha pogut obtenir la credencial",
         "no-connection": "No hi ha connexió a internet. Comprovi la connexió i torni-ho a intentar.",
+        "navigation": "Error inesperat en intentar accedir a la pàgina. Si el problema persisteix, contacteu <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>",
         "camera": {
             "not-readable": "No es pot accedir a la càmera. Assegura't que cap altra aplicació l'estigui utilitzant. Pot ser que hagis de refrescar la pàgina.",
             "not-allowed": "L'accés a la càmera està denegat. Comprova els permisos del teu navegador. Si el problema persisteix, intenta refrescar la pàgina.",

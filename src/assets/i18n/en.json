@@ -1,17 +1,16 @@
 
 {
     "menu":{
-
-    "home":"Home",
-    "credentials":"Credentials",
-    "dids":"Dids",
-    "camera-selector":"Camera Selector",
-    "language-selector":"Language Selector",
-    "terms-of-user":"Terms of User",
-    "privacy-policy":"Privacy Policy",
-    "faqs":"FAQs",
-    "settings":"Settings",
-    "logout":"Logout"
+        "home":"Home",
+        "credentials":"Credentials",
+        "dids":"Dids",
+        "camera-selector":"Camera Selector",
+        "language-selector":"Language Selector",
+        "terms-of-user":"Terms of User",
+        "privacy-policy":"Privacy Policy",
+        "faqs":"FAQs",
+        "settings":"Settings",
+        "logout":"Logout"
     },
     "barcode":{
         "initializing": "Initializing barcode... Please wait."
@@ -131,7 +130,7 @@
         "unsigned": "Unsigned"
     },
     "errors":{
-        "default":"Error not recognized",
+        "default": "Unexpected error. If the problem persists, contact the <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>support team</a>.",
         "failed-qr-process": "We couldn't process the QR code.<br>It might be invalid or already used. Please refresh the credential offer. If the problem persists, report it to the <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>support team</a>.",
         "invalid-qr":"The QR presented is invalid",
         "no-credentials-available": "There are no credentials available to login",
@@ -145,6 +144,7 @@
         "unsigned": "The signed credential is not yet available",
         "Errunsigned": "Credential could not be obtained",
         "no-connection": "No internet connection. Please check your network and try again.",
+        "navigation": "There was an unexpected problem when trying to access the page. If the problem persists, report it to the <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>support team</a>.",
         "camera": {
             "not-readable": "The camera cannot be accessed. Make sure no other application is using it. You may need to refresh the page.",
             "not-allowed": "Camera access is denied. Check your browser permissions. If the issue persists, try refreshing the page.",

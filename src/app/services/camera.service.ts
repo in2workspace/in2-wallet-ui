@@ -62,7 +62,6 @@ export class CameraService {
     return devices.filter(device  => device.deviceId === id )[0];
   }
 
-  //todo return something?
   //todo estats amb enum
   public async getCameraFlow(): Promise<MediaDeviceInfo|'PERMISSION_DENIED'|'NO_CAMERA_AVAILABLE'> {
     console.log('SERVICE: STARTING getCameraFlow');
