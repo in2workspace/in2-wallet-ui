@@ -30,6 +30,6 @@ export const environment = {
       secondary:'#50c8ff',
       secondary_contrast:'#000000'
     },
-    logo_src:"assets/logos/no-image.png",
+    logo_src:"assets/logos/dome_white_logo.png",
   }
 };
