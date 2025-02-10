@@ -61,7 +61,7 @@ export class CameraLogsService {
     const logs = await this.getCameraLogs();
   
     if (logs.length === 0) {
-      alert("Could not find any stored log");
+      alert("Could not find any stored log"); //acceptable alert, not in PRD
       return;
     }
   

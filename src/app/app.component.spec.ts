@@ -156,5 +156,66 @@ describe('AppComponent', () => {
     component.handleKeydown(mockEvent);
     expect(component.openPopover).toHaveBeenCalledWith(mockEvent);
   });
+
+  it('should show an alert if iOS version is below 14.3 and the browser is not Safari', () => {
+    // Mock del servei CameraService
+    const isIOSVersionLowerThanSpy = jest.spyOn(component['cameraService'], 'isIOSVersionLowerThan').mockReturnValue(true);
+    const isNotSafariSpy = jest.spyOn(component['cameraService'], 'isNotSafari').mockReturnValue(true);
+
+    // Espia la funció global alert
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    // Crear el component
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    expect(isIOSVersionLowerThanSpy).toHaveBeenCalled();
+    expect(isNotSafariSpy).toHaveBeenCalled();
+    expect(alertSpy).toHaveBeenCalledWith(
+      'This application scanner is probably not supported on this device with this browser. If you have issues, use Safari browser.'
+    );
+
+    // Restaurar espies
+    isIOSVersionLowerThanSpy.mockRestore();
+    isNotSafariSpy.mockRestore();
+    alertSpy.mockRestore();
+  });
+
+  it('should NOT show an alert if iOS version is 14.3 or above', () => {
+    const isIOSVersionLowerThanSpy = jest.spyOn(component['cameraService'], 'isIOSVersionLowerThan').mockReturnValue(false);
+    const isNotSafariSpy = jest.spyOn(component['cameraService'], 'isNotSafari').mockReturnValue(true);
+    
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    expect(isIOSVersionLowerThanSpy).toHaveBeenCalled();
+    expect(isNotSafariSpy).toHaveBeenCalled();
+    expect(alertSpy).not.toHaveBeenCalled();
+
+    isIOSVersionLowerThanSpy.mockRestore();
+    isNotSafariSpy.mockRestore();
+    alertSpy.mockRestore();
+  });
+
+  it('should NOT show an alert if browser is Safari', () => {
+    const isIOSVersionLowerThanSpy = jest.spyOn(component['cameraService'], 'isIOSVersionLowerThan').mockReturnValue(true);
+    const isNotSafariSpy = jest.spyOn(component['cameraService'], 'isNotSafari').mockReturnValue(false);
+    
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    expect(isIOSVersionLowerThanSpy).toHaveBeenCalled();
+    expect(isNotSafariSpy).toHaveBeenCalled();
+    expect(alertSpy).not.toHaveBeenCalled();
+
+    isIOSVersionLowerThanSpy.mockRestore();
+    isNotSafariSpy.mockRestore();
+    alertSpy.mockRestore();
+  });
+
   
 });

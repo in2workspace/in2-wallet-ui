@@ -79,6 +79,7 @@ ion-item{
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 8px;
 }
 .ion-button-custom{
     --ion-color-base:#B0FF2B!important;
@@ -102,11 +103,30 @@ ion-item{
     margin-right: 20px;
   }
 
-  .pages_titles {
-    margin: 20px;
+  //SETTINGS
+  .settings-pages-title{
     font-size: 1em;
     font-weight: bold;
   }
+
+  .settings-pages-grid{
+    padding-inline: 12px;
+    padding-top: 12px;
+  }
+
+  //LOGS
+  .logs-pages-list {
+    margin-top: 12px;
+    --ion-item-background: white;
+    --ion-item-color: grey;
+  }
+
+  .logs-pages-icon {
+      margin-right: 1rem;
+  }
+
+
+//CUSTOM ALERT
   .custom-alert-delete {
     display: flex;
   }

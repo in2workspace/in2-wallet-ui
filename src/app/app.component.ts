@@ -7,6 +7,7 @@ import { AuthenticationService } from './services/authentication.service';
 import { LogoutPage } from './pages/logout/logout.page';
 import { StorageService } from './services/storage.service';
 import { Observable } from 'rxjs';
+import { CameraService } from './services/camera.service';
 import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-root',
@@ -30,6 +31,7 @@ export class AppComponent implements OnInit {
   public readonly logoSrc=environment.customizations.logo_src;
 
   public constructor(
+    private cameraService: CameraService,
     public translate: TranslateService,
     private popoverController: PopoverController,
     private storageService: StorageService
@@ -47,12 +49,21 @@ export class AppComponent implements OnInit {
       root.style.setProperty(cssVariable, colorValue);
     });
 
+    //language setup
     translate.addLangs(['en', 'es', 'ca']);
     translate.setDefaultLang('en');
     this.storageService.get('language').then((res:string) => {
       if (res) translate.setDefaultLang(res);
       else this.storageService.set('language', 'en');
     });
+
+
+    //alert for IOs below 14.3
+    const problematicIosVersion = this.cameraService.isIOSVersionLowerThan(14.3);
+    const isNotSafari = this.cameraService.isNotSafari();
+    if (problematicIosVersion && isNotSafari) {
+      alert('This application scanner is probably not supported on this device with this browser. If you have issues, use Safari browser.');
+    }
   }
 
   public ngOnInit(): void {

@@ -15,6 +15,7 @@ import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
+import { CameraService } from 'src/app/services/camera.service';
 
 const TIME_IN_MS = 3000;
 
@@ -38,7 +39,6 @@ const TIME_IN_MS = 3000;
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CredentialsPage implements OnInit {
-  @Input() public availableDevices: MediaDeviceInfo[] = [];
   public alertButtons = ['OK'];
   public userName = '';
   public credList: Array<VerifiableCredential> = [];
@@ -55,6 +55,7 @@ export class CredentialsPage implements OnInit {
   public ebsiFlag = false;
   public did = '';
 
+  private cameraService = inject(CameraService);
   private readonly walletService = inject(WalletService);
   private readonly router = inject(Router);
   private readonly websocket = inject(WebsocketService);
@@ -83,18 +84,6 @@ export class CredentialsPage implements OnInit {
       }
     });
 
-    this.router.events
-    .pipe(
-      filter(event => event instanceof NavigationEnd),
-      takeUntilDestroyed()
-    )
-    .subscribe((event: NavigationEnd) => {
-      if (this.route.snapshot.routeConfig?.path==='credentials' && !event.urlAfterRedirects.startsWith('/tabs/credentials')) {
-        this.untoggleScan();
-        this.cdr.detectChanges();
-      }
-    });
-
   }
 
   public ngOnInit() {
@@ -106,6 +95,7 @@ export class CredentialsPage implements OnInit {
     }
   }
   public scan() {
+    console.log('CREDENTIALS: scan');
     this.toggleScan = true;
     this.show_qr = true;
     this.ebsiFlag = false;
@@ -314,6 +304,12 @@ export class CredentialsPage implements OnInit {
       this.scaned_cred = false;
     }, TIME_IN_MS);
     this.refresh();
+  }
+
+  ionViewWillLeave(){
+    console.log('leaving credentials')
+    this.untoggleScan();
+    this.cdr.detectChanges();
   }
 
 }
