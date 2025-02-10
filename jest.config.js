@@ -32,12 +32,13 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/', 
     '/dist/',
+    // '/src/app/app.routes',
     // '/src/app/app.component',
-    // '/src/app/components/',
+    // '/src/app/components/(?!barcode)', 
     // '/src/app/guards/',
     // '/src/app/interceptors',
     // '/src/app/interfaces',
     // '/src/app/pages/',
-    // '/src/app/services/(?!websocket)'
+    // '/src/app/services/(?!camera.service)'
   ]
 };

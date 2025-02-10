@@ -35,7 +35,7 @@ import { CameraLogType } from 'src/app/interfaces/camera-log';
 import { CameraService } from 'src/app/services/camera.service';
 import { RouterModule } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { IonicModule } from '@ionic/angular';
 
 // ! Since console.error is intercepted (to capture the error already caught by zxing), be careful to avoid recursion
@@ -54,19 +54,19 @@ import { IonicModule } from '@ionic/angular';
   imports: [CommonModule, ZXingScannerModule, RouterModule, TranslateModule, IonicModule],
 })
 export class BarcodeScannerComponent implements OnInit {
+  //todo remove parentComponent
   @Input() public parentComponent: string = '';
   @Output() public qrCode: EventEmitter<string> = new EventEmitter();
   @ViewChild('scanner') public scanner!: ZXingScannerComponent;
   public allowedFormats = [BarcodeFormat.QR_CODE];
-  autoStart = false;
   firstActivationCompleted = false;
   private barcodeId = Math.random().toString();
 
   //COUNTDOWN
   public isError$ = this.cameraService.isCameraError$;
   private activationTimeoutInSeconds = 4;
-  private activateScanner$$ = new Subject<void>();
-  private activationCountdown$ = this.activateScanner$$.pipe(
+  private activatedScanner$$ = new Subject<void>();
+  private activationCountdown$ = this.activatedScanner$$.pipe( //todo test
     switchMap(() => interval(1000)
       .pipe(
         take(this.activationTimeoutInSeconds + 1),
@@ -81,7 +81,7 @@ export class BarcodeScannerComponent implements OnInit {
 
   //todo: is assigned CameraService.selectedDevice after scanner is autostarted (?)
   public selectedDevice$: WritableSignal<MediaDeviceInfo|undefined> = this.cameraService.selectedCamera$;
-  private updateScannerDeviceEffect = effect(() => {
+  private updateScannerDeviceEffect = effect(() => { //todo test
     const selectedDevice = this.selectedDevice$();
     if(this.firstActivationCompleted && this.scanner && selectedDevice && this.scanner.device !== selectedDevice){
       console.log('BARCODE: device changed: ' + selectedDevice.label);
@@ -89,7 +89,7 @@ export class BarcodeScannerComponent implements OnInit {
         console.log('BARCODE: permission after device changed')
         if(hasPermission){
           this.scanner.device = selectedDevice;
-          this.activateScanner$$.next();
+          this.activatedScanner$$.next();
         }else{
           console.error('BARCODE: Permission denied');
         }
@@ -114,7 +114,7 @@ export class BarcodeScannerComponent implements OnInit {
   ) {
 
       // Requires debounce since this type of error is emitted constantly
-      this.scanFailureSubject.pipe(
+      this.scanFailureSubject.pipe( //todo test
         distinctUntilChanged((
           previous, current) => 
             JSON.stringify(previous) === JSON.stringify(current)),
@@ -144,7 +144,8 @@ export class BarcodeScannerComponent implements OnInit {
       this.cameraService.isCameraError$.set(false);
     }
 
-    private async initCameraIfNoActivateBarcodes(): Promise<void>{
+    //todo test
+    public async initCameraIfNoActivateBarcodes(): Promise<void>{
        //activate scanner once there are no other barcode in deactivation process
        const activatingBarcodeList = this.isActivatingBarcode$();
        console.log('BARCODE (afterViewInit): check current barcode in destroying process list before starting camera flow: ' + activatingBarcodeList);
@@ -185,9 +186,9 @@ export class BarcodeScannerComponent implements OnInit {
       this.scanner.enable = true;
       const hasPermission = await this.scanner.askForPermission();
       console.log('BARCODE: Permission to activacte scanner: ' + hasPermission);
-        if(this.scanner.device !== this.selectedDevice$() && hasPermission){
+        if(this.scanner.device?.deviceId !== this.selectedDevice$()?.deviceId && hasPermission){
           this.scanner.device = this.selectedDevice$();
-          this.activateScanner$$.next();
+          this.activatedScanner$$.next();
           console.log('BARCODE: end of activateScanner')
           console.warn('Activation process of the scanner es pot allargar');
         }
@@ -229,7 +230,7 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
 
-  private modifyConsoleErrorToSaveScannerErrors(){
+  public modifyConsoleErrorToSaveScannerErrors(){
     //Redefine console.log to capture the errors that were previously captured by zxing-scanner
     this.originalConsoleError = console.error;
     console.error = (message?: string, ...optionalParams: any[]) => {
@@ -252,7 +253,7 @@ export class BarcodeScannerComponent implements OnInit {
      };
   }
 
-  private restoreOriginalConsoleError(){
+  public restoreOriginalConsoleError(){
     if(this.originalConsoleError){
       console.error = this.originalConsoleError;
     }
