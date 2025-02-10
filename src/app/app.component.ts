@@ -29,7 +29,6 @@ export class AppComponent implements OnInit {
   private router = inject(Router)
   public isCallbackRoute = false;;
   public readonly logoSrc=environment.customizations.logo_src;
-  public readonly logoSrc=environment.customizations.logo_src;
 
   public constructor(
     private cameraService: CameraService,
