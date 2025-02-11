@@ -20,15 +20,15 @@ export class CameraService {
   public isCameraError$ = signal<boolean|undefined>(undefined);
   public activatingBarcodeListSubj = new BehaviorSubject<string[]>([])
   public activatingBarcodeList$ = this.activatingBarcodeListSubj.asObservable()
-  .pipe(
-    tap(list => {
-      console.log('update barcode on destroy list: ');
-      console.log(list);
-    })
-  );
+  // .pipe(
+  //   tap(list => {
+  //     console.log('update barcode on destroy list: ');
+  //     console.log(list);
+  //   })
+  // );
 
   public addActivatingBarcode(barcodeId:string){
-    console.log('SERVICE: addDestroyingBarcode: ' + barcodeId);
+    // console.log('SERVICE: addDestroyingBarcode: ' + barcodeId);
     const destroyingBarcode = this.activatingBarcodeListSubj.getValue();
     this.activatingBarcodeListSubj.next([...destroyingBarcode, barcodeId]);
   }
@@ -40,13 +40,13 @@ export class CameraService {
   }
 
   //todo
-  public updateSelecteCameraEffect = effect(() => { 
-    console.log('SERVICE: updated camera: ' + this.selectedCamera$()?.label
-);
-  });
+//   public updateSelecteCameraEffect = effect(() => { 
+//     console.log('SERVICE: updated camera: ' + this.selectedCamera$()?.label
+// );
+//   });
 
   public setCamera(camera: MediaDeviceInfo) {
-    console.log('SERVICE: set camera');
+    // console.log('SERVICE: set camera');
     this.selectedCamera$.set(camera);
     const storedCamera = {
       deviceId: camera.deviceId,
@@ -57,14 +57,14 @@ export class CameraService {
   }
 
   public getAvailableCameraById(id: string){
-    console.log('SERVICE: getAvailableCameraById');
+    // console.log('SERVICE: getAvailableCameraById');
     const devices = this.availableDevices$();
     return devices.filter(device  => device.deviceId === id )[0];
   }
 
   //todo estats amb enum
   public async getCameraFlow(): Promise<MediaDeviceInfo|'PERMISSION_DENIED'|'NO_CAMERA_AVAILABLE'> {
-    console.log('SERVICE: STARTING getCameraFlow');
+    // console.log('SERVICE: STARTING getCameraFlow');
     this.isCameraError$.set(false);
 
     try{
@@ -89,7 +89,7 @@ export class CameraService {
 
   //1
   public async getCameraPermissionAndStopTracks(){
-    console.log('SERVICE: getCameraPermissionAndStopTracks')
+    // console.log('SERVICE: getCameraPermissionAndStopTracks')
     try{
       const stream = await navigator.mediaDevices.getUserMedia({video: true});
       this.stopMediaTracks(stream); //necessary? crec que sí per si s'està utilitzant la càmera en un altre lloc
@@ -102,7 +102,7 @@ export class CameraService {
 //2
 //should be called only if permission is granted
 public async updateAvailableCameras(): Promise<MediaDeviceInfo[]> {
-  console.log('SERVICE: updateAvailableCameras');
+  // console.log('SERVICE: updateAvailableCameras');
   const devices = await navigator.mediaDevices.enumerateDevices();
   const videoinputDevices = devices.filter((device) => device.kind === 'videoinput');
   this.availableDevices$.set(videoinputDevices);
@@ -112,7 +112,7 @@ public async updateAvailableCameras(): Promise<MediaDeviceInfo[]> {
 //3
 //obtenir càmera seleccionada; si no, stored; si no, qualsevol de les available (ja obtingudes); si no, undefined...
 public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAILABLE'> {
-  console.log('SERVICE: getCameraFromAvailables');
+  // console.log('SERVICE: getCameraFromAvailables');
   const selectedCamera = this.selectedCamera$();
   if(selectedCamera && this.isCameraAvailableById(selectedCamera.deviceId)) return selectedCamera;
 
@@ -132,11 +132,11 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
 }
 
   public async getCameraFromStorage(): Promise<MediaDeviceInfo|undefined> {
-    console.log('SERVICE: getCameraFromStorage');
+    // console.log('SERVICE: getCameraFromStorage');
     const storedCamera = await this.storageService.get('camera');
     // const storedCamera  = JSON.parse(storedCameraUnparsed) as MediaDeviceInfo;
-    console.log('Camera from storage:');
-    console.log(storedCamera);
+    // console.log('Camera from storage:');
+    // console.log(storedCamera);
     const isValidMediaDeviceInfo = this.isValidMediaDeviceInfo(storedCamera);
 
     if (storedCamera !== null && isValidMediaDeviceInfo) {
@@ -146,7 +146,7 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   }
 
   public async getDefaultAvailableCamera(){
-    console.log('SERVICE: getDefaultAvailableCamera');
+    // console.log('SERVICE: getDefaultAvailableCamera');
     const defaultCamera = this.availableDevices$().find((device) => /back|rear|environment/gi.test(device.label));
     return defaultCamera ?? this.availableDevices$()[0];
   }
@@ -169,24 +169,24 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   }
 
   public async setUndefinedCamera() {
-    console.log('SERVICE: set UNDEFINED camera');
+    // console.log('SERVICE: set UNDEFINED camera');
     await this.storageService.remove('camera');
     this.selectedCamera$.set(undefined);
   }
 
   public stopMediaTracks(stream: MediaStream): void {
-    console.log('SERVICE: stop Media Tracks');
-    console.log('stream to stop: ');
-    console.log(stream);
+    // console.log('SERVICE: stop Media Tracks');
+    // console.log('stream to stop: ');
+    // console.log(stream);
     stream.getTracks().forEach((track) => {
-      console.log('track in stopMediaTracks: ');
-      console.log(track);
+      // console.log('track in stopMediaTracks: ');
+      // console.log(track);
       track.stop()});
   }
 
   //todo enum or map with possible error labels
   public handleCameraErrors(e: Error | { name: string }, type?: CameraLogType) {
-    console.error(e);
+    // console.error(e);
     this.isCameraError$.set(true);
     this.alertCameraErrorsByErrorName(e.name);
   
@@ -196,7 +196,7 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   }
 
   public alertCameraErrorsByErrorName(errMsg: string) {
-    console.log('SERVICE: alert camera errors: ' + errMsg);
+    // console.log('SERVICE: alert camera errors: ' + errMsg);
     
     let errorLabel = 'errors.camera.default';
   
@@ -234,8 +234,8 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   
   public isNotSafari(): boolean {
     const ua = navigator.userAgent;
-    console.log('User agent:');
-    console.log(ua);
+    // console.log('User agent:');
+    // console.log(ua);
     const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
     return !isSafari;
   }
