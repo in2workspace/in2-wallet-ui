@@ -640,6 +640,65 @@ describe('CameraService', () => {
       expect(mockToastService.showErrorAlertByTranslateLabel).toHaveBeenCalledWith('errors.camera.default');
     });
   });
+
+  describe('CameraService - getCameraFlow', () => {
+    beforeEach(() => {
+      jest.spyOn(cameraService, 'getCameraPermissionAndStopTracks').mockResolvedValue(true);
+      jest.spyOn(cameraService, 'updateAvailableCameras').mockResolvedValue([]);
+      jest.spyOn(cameraService, 'getCameraFromAvailables').mockResolvedValue('NO_CAMERA_AVAILABLE');
+      jest.spyOn(cameraService, 'handleCameraErrors').mockImplementation();
+    });
+  
+    it('hauria de retornar PERMISSION_DENIED si getCameraPermissionAndStopTracks llença un error', async () => {
+      jest.spyOn(cameraService, 'getCameraPermissionAndStopTracks').mockRejectedValue(new Error('Permission Denied'));
+  
+      const result = await cameraService.getCameraFlow();
+  
+      expect(result).toBe('PERMISSION_DENIED');
+      expect(cameraService.handleCameraErrors).toHaveBeenCalledWith(expect.any(Error), 'fetchError');
+    });
+  
+    it('hauria de retornar PERMISSION_DENIED si getCameraPermissionAndStopTracks retorna false', async () => {
+      jest.spyOn(cameraService, 'getCameraPermissionAndStopTracks').mockRejectedValue(new Error(''))
+  
+      const result = await cameraService.getCameraFlow();
+  
+      expect(result).toBe('PERMISSION_DENIED');
+      expect(cameraService.handleCameraErrors).toHaveBeenCalledWith(expect.any(Error), 'fetchError');
+    });
+  
+    it('hauria de retornar NO_CAMERA_AVAILABLE si no hi ha càmeres disponibles', async () => {
+      jest.spyOn(cameraService, 'updateAvailableCameras').mockResolvedValue([]);
+  
+      const result = await cameraService.getCameraFlow();
+  
+      expect(result).toBe('NO_CAMERA_AVAILABLE');
+      expect(cameraService.handleCameraErrors).toHaveBeenCalledWith({ name: 'CustomNoAvailable' }, 'fetchError');
+    });
+  
+    it('hauria de retornar NO_CAMERA_AVAILABLE si getCameraFromAvailables retorna NO_CAMERA_AVAILABLE', async () => {
+      jest.spyOn(cameraService, 'updateAvailableCameras').mockResolvedValue([{ deviceId: '123', label: 'Mock Camera', kind: 'videoinput', groupId: 'group1', toJSON: jest.fn() }]);
+      jest.spyOn(cameraService, 'getCameraFromAvailables').mockResolvedValue('NO_CAMERA_AVAILABLE');
+  
+      const result = await cameraService.getCameraFlow();
+  
+      expect(result).toBe('NO_CAMERA_AVAILABLE');
+      expect(cameraService.handleCameraErrors).toHaveBeenCalledWith({ name: 'CustomNoAvailable' }, 'fetchError');
+    });
+  
+    it('hauria de retornar una càmera si està disponible', async () => {
+      const mockCamera: MediaDeviceInfo = { deviceId: '123', label: 'Mock Camera', kind: 'videoinput', groupId: 'group1', toJSON: jest.fn() };
+  
+      jest.spyOn(cameraService, 'updateAvailableCameras').mockResolvedValue([mockCamera]);
+      jest.spyOn(cameraService, 'getCameraFromAvailables').mockResolvedValue(mockCamera);
+  
+      const result = await cameraService.getCameraFlow();
+  
+      expect(result).toBe(mockCamera);
+      expect(cameraService.handleCameraErrors).not.toHaveBeenCalled();
+    });
+  });
+  
   
   });
 

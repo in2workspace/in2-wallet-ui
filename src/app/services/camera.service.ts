@@ -88,7 +88,7 @@ export class CameraService {
   }
 
   //1
-  public async getCameraPermissionAndStopTracks(){
+  public async getCameraPermissionAndStopTracks(): Promise<boolean>{
     // console.log('SERVICE: getCameraPermissionAndStopTracks')
     try{
       const stream = await navigator.mediaDevices.getUserMedia({video: true});
