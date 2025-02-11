@@ -158,8 +158,8 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
     return !!availableCamera;
   }
 
-  private isValidMediaDeviceInfo(object: any): object is MediaDeviceInfo {
-    return (
+  public isValidMediaDeviceInfo(object: any): object is MediaDeviceInfo {
+    return !!(
       object &&
       typeof object.deviceId === 'string' &&
       typeof object.label === 'string' &&
@@ -167,13 +167,7 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
       object.kind === 'videoinput'
     );
   }
-
-  public async setUndefinedCamera() {
-    // console.log('SERVICE: set UNDEFINED camera');
-    await this.storageService.remove('camera');
-    this.selectedCamera$.set(undefined);
-  }
-
+  
   public stopMediaTracks(stream: MediaStream): void {
     // console.log('SERVICE: stop Media Tracks');
     // console.log('stream to stop: ');
