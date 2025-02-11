@@ -1,5 +1,6 @@
 import { CameraLogsService } from './../../services/camera-logs.service';
 import { CommonModule } from '@angular/common';
+import { v4 as uuidv4 } from 'uuid';
 import {
   Component,
   Output,
@@ -60,7 +61,7 @@ export class BarcodeScannerComponent implements OnInit {
   @ViewChild('scanner') public scanner!: ZXingScannerComponent;
   public allowedFormats = [BarcodeFormat.QR_CODE];
   firstActivationCompleted = false;
-  private barcodeId = Math.random().toString();
+  private barcodeId = uuidv4();
 
   //COUNTDOWN
   public isError$ = this.cameraService.isCameraError$;
