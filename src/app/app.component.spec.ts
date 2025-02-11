@@ -124,6 +124,58 @@ describe('AppComponent', () => {
     expect(translateServiceMock.setDefaultLang).toHaveBeenCalledWith('en');
   });
 
+  it('should show an alert if the device is an iOS version lower than 14.3 and not using Safari', () => {
+    const isIOSVersionLowerThanSpy = jest
+      .spyOn(component['cameraService'], 'isIOSVersionLowerThan')
+      .mockReturnValue(true);
+    const isNotSafariSpy = jest
+      .spyOn(component['cameraService'], 'isNotSafari')
+      .mockReturnValue(true);
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {}); 
+
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    expect(isIOSVersionLowerThanSpy).toHaveBeenCalledWith(14.3);
+    expect(isNotSafariSpy).toHaveBeenCalled();
+    expect(alertSpy).toHaveBeenCalledWith(
+      'This application scanner is probably not supported on this device with this browser. If you have issues, use Safari browser.'
+    );
+
+    jest.restoreAllMocks();
+  });
+
+  it('should NOT show an alert if the device is an iOS version 14.3 or higher', () => {
+    jest
+      .spyOn(component['cameraService'], 'isIOSVersionLowerThan')
+      .mockReturnValue(false);
+    jest.spyOn(component['cameraService'], 'isNotSafari').mockReturnValue(true);
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {}); 
+
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    expect(alertSpy).not.toHaveBeenCalled();
+
+    jest.restoreAllMocks();
+  });
+
+  it('should NOT show an alert if the browser is Safari', () => {
+    jest
+      .spyOn(component['cameraService'], 'isIOSVersionLowerThan')
+      .mockReturnValue(true);
+    jest.spyOn(component['cameraService'], 'isNotSafari').mockReturnValue(false);
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {}); 
+
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    expect(alertSpy).not.toHaveBeenCalled();
+
+    jest.restoreAllMocks();
+  });
+
+
   it('should initialize userName observable on ngOnInit', () => {
     component.ngOnInit();
     expect(authenticationServiceMock.getName).toHaveBeenCalled();
