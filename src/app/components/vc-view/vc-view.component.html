@@ -26,7 +26,7 @@
   <div style="height: 2%"></div>
   <ion-col>
     <img alt src="assets/icon/bannerLogo2.png" width="auto" height="40px" />
-    <ion-col style="margin-left: 35px">
+    <ion-col style="margin-inline: 20px">
       <img
         width="70"
         height="70"
@@ -38,7 +38,7 @@
     <ion-col>
       <ion-col size="12">
         <ion-card-header
-          style="padding: 0% !important; margin-left: 35px; height: 28%"
+          style="padding: 0% !important; margin-inline: 20px; height: 28%"
         >
           <ion-row>
             <ion-card-title
@@ -180,7 +180,7 @@
         >
         </span>
 
-        <ion-row style="justify-content: end">
+        <ion-row style="justify-content: end" class="button-row">
           <!-- todo FIXME temporarily isCredentialIssuedAndNotExpired only checks if VC is issued -->
           <ion-button
             *ngIf="isCredentialIssuedAndNotExpired()"

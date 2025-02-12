@@ -217,7 +217,8 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   }
   
   public isIOSVersionLowerThan(version: number): boolean {
-    const match = navigator.userAgent.match(/OS (\d+)_/);
+    const regex = /OS (\d+)_/;
+    const match = regex.exec(navigator.userAgent);
     if (match) {
       const iosVersion = parseInt(match[1], 10);
       return iosVersion < version;
