@@ -14,7 +14,6 @@ import { DataService } from 'src/app/services/data.service';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CameraService } from 'src/app/services/camera.service';
 
 const TIME_IN_MS = 3000;
 

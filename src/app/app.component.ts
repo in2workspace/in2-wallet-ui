@@ -49,14 +49,6 @@ export class AppComponent implements OnInit {
       root.style.setProperty(cssVariable, colorValue);
     });
 
-    //language setup
-    translate.addLangs(['en', 'es', 'ca']);
-    translate.setDefaultLang('en');
-    this.storageService.get('language').then((res:string) => {
-      if (res) translate.setDefaultLang(res);
-      else this.storageService.set('language', 'en');
-    });
-
 
     //alert for IOs below 14.3
     const problematicIosVersion = this.cameraService.isIOSVersionLowerThan(14.3);
@@ -66,8 +58,10 @@ export class AppComponent implements OnInit {
     }
   }
 
-  public ngOnInit(): void {
+  public async ngOnInit(): Promise<void> {
     this.userName = this.authenticationService.getName();
+
+    await this.setLanguage();
 
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -108,6 +102,15 @@ export class AppComponent implements OnInit {
     });
 
     await popover.present();
+  }
+
+  public async setLanguage(){
+    this.translate.addLangs(['en', 'es', 'ca']);
+    this.translate.setDefaultLang('en');
+    this.storageService.get('language').then((res:string) => {
+      if (res) this.translate.setDefaultLang(res);
+      else this.storageService.set('language', 'en');
+    });
   }
 
 }

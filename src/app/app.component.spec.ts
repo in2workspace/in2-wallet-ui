@@ -119,10 +119,24 @@ describe('AppComponent', () => {
     });
   });
 
-  it('should set default language to "en" on initialization', async () => {
-    await storageServiceMock.get('language');
-    expect(translateServiceMock.setDefaultLang).toHaveBeenCalledWith('en');
+  it('should add available languages', () => {
+    component.setLanguage();
+    expect(translateServiceMock.addLangs).toHaveBeenCalledWith(['en', 'es', 'ca']);
   });
+
+  it('should set default language to "en" if no stored language is found', async () => {
+    storageServiceMock.get.mockResolvedValueOnce('');
+    await component.setLanguage();
+    expect(translateServiceMock.setDefaultLang).toHaveBeenCalledWith('en');
+    expect(storageServiceMock.set).toHaveBeenCalledWith('language', 'en');
+  });
+
+  it('should set default language from storage if available', async () => {
+    storageServiceMock.get.mockResolvedValueOnce('ca');
+    await component.setLanguage();
+    expect(translateServiceMock.setDefaultLang).toHaveBeenCalledWith('ca');
+  });
+
 
   it('should show an alert if the device is an iOS version lower than 14.3 and not using Safari', () => {
     const isIOSVersionLowerThanSpy = jest
@@ -181,7 +195,7 @@ describe('AppComponent', () => {
     expect(authenticationServiceMock.getName).toHaveBeenCalled();
   });
 
-  it('should redirect to a clean URL if "nocache=true" is in query params', () => {
+  it('should redirect to a clean URL if "nocache=true" is in query params', async () => {
     const originalLocation = window.location;
     delete (window as any).location;
     (window as any).location = {
@@ -190,7 +204,7 @@ describe('AppComponent', () => {
       origin: 'http://example.com',
       search: '?nocache=true',
     };
-    component.ngOnInit();
+    await component.ngOnInit();
     expect(window.location.href).toContain('?nocache=');
     window.location = originalLocation;
   });

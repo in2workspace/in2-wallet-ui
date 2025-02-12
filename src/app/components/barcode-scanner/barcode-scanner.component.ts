@@ -8,7 +8,6 @@ import {
   OnInit,
   ViewChild,
   WritableSignal,
-  Input,
   effect
 } from '@angular/core';
 import { BarcodeFormat, Exception } from '@zxing/library';
@@ -70,7 +69,7 @@ export class BarcodeScannerComponent implements OnInit {
     ),
     shareReplay(1),
   );
-  private activationCountdownValue$ = toSignal(this.activationCountdown$, {initialValue:6000});
+  private readonly activationCountdownValue$ = toSignal(this.activationCountdown$, {initialValue:6000});
 
   //todo: is assigned CameraService.selectedDevice after scanner is autostarted (?)
   public readonly selectedDevice$: WritableSignal<MediaDeviceInfo|undefined> = this.cameraService.selectedCamera$;
@@ -228,13 +227,14 @@ export class BarcodeScannerComponent implements OnInit {
     console.error = (message?: string, ...optionalParams: any[]) => {
       if(message === "@zxing/ngx-scanner"){
         const logMessage = formatLogMessage(message, optionalParams);
-        const err = new Error(logMessage);
+        //todo revisar
+        const err = {...new Error(logMessage), name: optionalParams[1]};
         const errorType = optionalParams[0] === 
           "Can't get user media, this is not supported." ?
           'noMediaError' :
           'undefinedError';
 
-        this.cameraService.handleCameraErrors(optionalParams[1], errorType);
+        this.cameraService.handleCameraErrors(err, errorType);
         return;
       }
 
