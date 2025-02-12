@@ -7,10 +7,8 @@ import {
   EventEmitter,
   OnInit,
   ViewChild,
-  signal,
   WritableSignal,
   Input,
-  ChangeDetectorRef,
   effect
 } from '@angular/core';
 import { BarcodeFormat, Exception } from '@zxing/library';
@@ -18,19 +16,15 @@ import { ZXingScannerModule, ZXingScannerComponent } from '@zxing/ngx-scanner';
 import {
   BehaviorSubject,
   Subject,
-  Subscription,
   debounceTime,
-  delayWhen,
   distinctUntilChanged,
   filter,
   interval,
   map,
   shareReplay,
-  startWith,
   switchMap,
   take,
-  takeUntil,
-  tap,
+  takeUntil
 } from 'rxjs';
 import { CameraLogType } from 'src/app/interfaces/camera-log';
 import { CameraService } from 'src/app/services/camera.service';
@@ -55,19 +49,17 @@ import { IonicModule } from '@ionic/angular';
   imports: [CommonModule, ZXingScannerModule, RouterModule, TranslateModule, IonicModule],
 })
 export class BarcodeScannerComponent implements OnInit {
-  //todo remove parentComponent
-  @Input() public parentComponent: string = '';
   @Output() public qrCode: EventEmitter<string> = new EventEmitter();
   @ViewChild('scanner') public scanner!: ZXingScannerComponent;
   public allowedFormats = [BarcodeFormat.QR_CODE];
   firstActivationCompleted = false;
-  private barcodeId = uuidv4();
+  private readonly barcodeId = uuidv4();
 
   //COUNTDOWN
-  public isError$ = this.cameraService.isCameraError$;
-  private activationTimeoutInSeconds = 4;
-  private activatedScanner$$ = new Subject<void>();
-  private activationCountdown$ = this.activatedScanner$$.pipe( //todo test
+  public readonly isError$ = this.cameraService.isCameraError$;
+  private readonly activationTimeoutInSeconds = 4;
+  private readonly activatedScanner$$ = new Subject<void>();
+  private readonly activationCountdown$ = this.activatedScanner$$.pipe( //todo test
     switchMap(() => interval(1000)
       .pipe(
         take(this.activationTimeoutInSeconds + 1),
@@ -81,12 +73,12 @@ export class BarcodeScannerComponent implements OnInit {
   private activationCountdownValue$ = toSignal(this.activationCountdown$, {initialValue:6000});
 
   //todo: is assigned CameraService.selectedDevice after scanner is autostarted (?)
-  public selectedDevice$: WritableSignal<MediaDeviceInfo|undefined> = this.cameraService.selectedCamera$;
-  private updateScannerDeviceEffect = effect(() => { //todo test
+  public readonly selectedDevice$: WritableSignal<MediaDeviceInfo|undefined> = this.cameraService.selectedCamera$;
+  private readonly updateScannerDeviceEffect = effect(async () => { //todo test
     const selectedDevice = this.selectedDevice$();
     if(this.firstActivationCompleted && this.scanner && selectedDevice && this.scanner.device !== selectedDevice){
       // console.log('BARCODE: device changed: ' + selectedDevice.label);
-      this.scanner.askForPermission().then((hasPermission) => {
+      const hasPermission = await this.scanner.askForPermission()
         // console.log('BARCODE: permission after device changed')
         if(hasPermission){
           this.scanner.device = selectedDevice;
@@ -94,14 +86,13 @@ export class BarcodeScannerComponent implements OnInit {
         }else{
           console.error('BARCODE: Permission denied');
         }
-      });
   }else{
     // console.log('BARCODE: efecte anul·lat; first activation completed? ' + this.firstActivationCompleted);
   }});
-  isActivatingBarcode$ = toSignal(this.cameraService.activatingBarcodeList$);
+  private readonly isActivatingBarcode$ = toSignal(this.cameraService.activatingBarcodeList$);
 
 
-  readonly scanFailureSubject = new Subject<Error>();
+  private readonly scanFailureSubject = new Subject<Error>();
   private readonly scanFailureDebounceDelay = 3000;
   private originalConsoleError: undefined|((...data: any[]) => void);
 
@@ -133,11 +124,11 @@ export class BarcodeScannerComponent implements OnInit {
       this.modifyConsoleErrorToSaveScannerErrors();
     }
   
-    public async ngAfterViewInit() {
+    public async ngAfterViewInit(): Promise<void> {
       this.initCameraIfNoActivateBarcodes();
     }
 
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
       // console.warn('BARCODE: on destroy from ' + this.parentComponent);
       this.destroy$.next();
       this.setActivatingTimeout();
@@ -181,7 +172,7 @@ export class BarcodeScannerComponent implements OnInit {
        }
     }
 
-  public async activateScanner(){
+  public async activateScanner(): Promise<void>{
     // console.log('BARCODE: activating scanner: ' + this.parentComponent)
     if(this.scanner){
       this.scanner.enable = true;
@@ -196,29 +187,29 @@ export class BarcodeScannerComponent implements OnInit {
     }
   }
 
-  public async activateScannerInitially(){
+  public async activateScannerInitially(): Promise<void>{
     await this.activateScanner();
     this.firstActivationCompleted = true;  
   }
 
-  public onCodeResult(resultString: string) {
+  public onCodeResult(resultString: string): void {
     this.qrCode.emit(resultString);
   }
 
-  public onScanError(error: Error){
+  public onScanError(error: Error): void{
     this.saveErrorLog(error, 'scanError');
   }
 
-  public onScanFailure(error: Exception|undefined){
+  public onScanFailure(error: Exception|undefined): void{
     const exception: Error = error ?? new Error('Undefined scan failure');
     this.scanFailureSubject.next(exception);
   }
 
-  public saveErrorLog(error: Error|undefined, exceptionType: CameraLogType) {
+  public saveErrorLog(error: Error|undefined, exceptionType: CameraLogType): void {
     this.cameraLogsService.addCameraLog(error, exceptionType);
   }
 
-  public setActivatingTimeout(){
+  public setActivatingTimeout(): void{
     this.cameraService.addActivatingBarcode(this.barcodeId);
     const activationCountDownValue = this.activationCountdownValue$();
     // console.log('BARCODE: activation countdown value: ' + activationCountDownValue);
@@ -231,7 +222,7 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
 
-  public modifyConsoleErrorToSaveScannerErrors(){
+  public modifyConsoleErrorToSaveScannerErrors(): void{
     //Redefine console.log to capture the errors that were previously captured by zxing-scanner
     this.originalConsoleError = console.error;
     console.error = (message?: string, ...optionalParams: any[]) => {
@@ -254,7 +245,7 @@ export class BarcodeScannerComponent implements OnInit {
      };
   }
 
-  public restoreOriginalConsoleError(){
+  public restoreOriginalConsoleError(): void{
     if(this.originalConsoleError){
       console.error = this.originalConsoleError;
     }

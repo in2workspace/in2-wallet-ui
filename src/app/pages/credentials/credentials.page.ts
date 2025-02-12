@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
@@ -8,13 +8,12 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { WalletService } from 'src/app/services/wallet.service';
 import { VcViewComponent } from '../../components/vc-view/vc-view.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { DataService } from 'src/app/services/data.service';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter } from 'rxjs';
 import { CameraService } from 'src/app/services/camera.service';
 
 const TIME_IN_MS = 3000;
@@ -55,17 +54,16 @@ export class CredentialsPage implements OnInit {
   public ebsiFlag = false;
   public did = '';
 
-  private cameraService = inject(CameraService);
-  private readonly walletService = inject(WalletService);
-  private readonly router = inject(Router);
-  private readonly websocket = inject(WebsocketService);
-  private readonly dataService = inject(DataService);
-  private readonly route = inject(ActivatedRoute);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly alertController = inject(AlertController);
-  private readonly translate = inject(TranslateService);
-  private readonly cameraLogsService = inject(CameraLogsService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly dataService = inject(DataService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
+  private readonly walletService = inject(WalletService);
+  private readonly websocket = inject(WebsocketService);
+  private readonly cameraLogsService = inject(CameraLogsService);
 
   public constructor()
     {
@@ -86,7 +84,7 @@ export class CredentialsPage implements OnInit {
 
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.scaned_cred = false;
     this.refresh();
     // TODO: Find a better way to handle this
@@ -94,7 +92,7 @@ export class CredentialsPage implements OnInit {
       this.generateCred();
     }
   }
-  public scan() {
+  public scan(): void {
     console.log('CREDENTIALS: scan');
     this.toggleScan = true;
     this.show_qr = true;
@@ -102,7 +100,7 @@ export class CredentialsPage implements OnInit {
   }
 
   // TODO: This should be moved to the settings page because this is something recreated to ebsi and this option is enabled in the settings page
-  public async copyToClipboard(textToCopy: string) {
+  public async copyToClipboard(textToCopy: string): Promise<void> {
     let text = '';
 
     if (textToCopy === 'did-text') {
@@ -131,7 +129,7 @@ export class CredentialsPage implements OnInit {
     }
   }
 
-  public refresh() {
+  public refresh(): void {
     this.walletService
       .getAllVCs()
       .subscribe({
@@ -151,13 +149,13 @@ export class CredentialsPage implements OnInit {
       });
   }
 
-  public vcDelete(cred: VerifiableCredential) {
+  public vcDelete(cred: VerifiableCredential): void {
     this.walletService.deleteVC(cred.id).subscribe(() => {
       this.refresh();
     });
   }
 
-  public qrCodeEmit(qrCode: string) {
+  public qrCodeEmit(qrCode: string): void {
     console.log('qr code emit')
     this.toggleScan = false;
     this.websocket.connect();
@@ -208,7 +206,7 @@ export class CredentialsPage implements OnInit {
     });
   }
 
-  public generateCred() {
+  public generateCred(): void {
     this.websocket.connect();
 
     // Esperar un segundo antes de continuar
@@ -229,7 +227,7 @@ export class CredentialsPage implements OnInit {
   }
 
 
-  public untoggleScan() {
+  public untoggleScan(): void {
     this.toggleScan = false;
   }
   public handleButtonKeydown(event: KeyboardEvent, action: string): void {
@@ -242,7 +240,7 @@ export class CredentialsPage implements OnInit {
       event.preventDefault();
     }
   }
-  public async credentialClick() {
+  public async credentialClick(): Promise<void> {
     const alert = await this.alertController.create({
       header: this.translate.instant('credentials.confirmation'),
       message: this.translate.instant('confirmationMessage.confirmation'),
@@ -279,7 +277,7 @@ export class CredentialsPage implements OnInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  private async okMessage() {
+  private async okMessage(): Promise<void> {
     const alert = await this.alertController.create({
       message: `
         <div style="display: flex; align-items: center; gap: 50px;">
@@ -306,7 +304,7 @@ export class CredentialsPage implements OnInit {
     this.refresh();
   }
 
-  ionViewWillLeave(){
+  ionViewWillLeave(): void{
     console.log('leaving credentials')
     this.untoggleScan();
     this.cdr.detectChanges();

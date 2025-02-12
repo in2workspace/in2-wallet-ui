@@ -1,8 +1,7 @@
-import { computed, effect, Injectable, signal, inject } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, map, shareReplay, take, tap } from 'rxjs';
+import { computed, Injectable, signal, inject } from '@angular/core';
+import { BehaviorSubject, take } from 'rxjs';
 import { StorageService } from './storage.service';
 import { ToastServiceHandler } from './toast.service';
-import { CameraLogsPage } from '../pages/logs/camera-logs/camera-logs.page';
 import { CameraLogsService } from './camera-logs.service';
 import { CameraLogType } from '../interfaces/camera-log';
 
@@ -10,9 +9,9 @@ import { CameraLogType } from '../interfaces/camera-log';
   providedIn: 'root',
 })
 export class CameraService {
-  private cameraLogsService = inject(CameraLogsService);
-  private storageService = inject(StorageService);
-  private toastService = inject(ToastServiceHandler);
+  private readonly cameraLogsService = inject(CameraLogsService);
+  private readonly storageService = inject(StorageService);
+  private readonly toastService = inject(ToastServiceHandler);
 
   public selectedCamera$ = signal<MediaDeviceInfo|undefined>(undefined);
   public computedSelectedCameraLabel$ = computed(() => this.selectedCamera$()?.label);
@@ -88,7 +87,7 @@ export class CameraService {
   }
 
   //1
-  public async getCameraPermissionAndStopTracks(): Promise<boolean>{
+  public async getCameraPermissionAndStopTracks(): Promise<true>{
     // console.log('SERVICE: getCameraPermissionAndStopTracks')
     try{
       const stream = await navigator.mediaDevices.getUserMedia({video: true});

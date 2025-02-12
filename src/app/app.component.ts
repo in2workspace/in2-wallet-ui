@@ -24,17 +24,17 @@ import { environment } from 'src/environments/environment';
 })
 
 export class AppComponent implements OnInit {
+  private readonly authenticationService = inject(AuthenticationService);
+  private readonly router = inject(Router)
   public userName: Observable<string> | undefined;
-  private authenticationService = inject(AuthenticationService);
-  private router = inject(Router)
-  public isCallbackRoute = false;;
+  public isCallbackRoute = false;
   public readonly logoSrc=environment.customizations.logo_src;
 
   public constructor(
-    private cameraService: CameraService,
-    public translate: TranslateService,
-    private popoverController: PopoverController,
-    private storageService: StorageService
+    private readonly cameraService: CameraService,
+    public readonly translate: TranslateService,
+    private readonly popoverController: PopoverController,
+    private readonly storageService: StorageService
   ) {
     const root = document.documentElement;
 

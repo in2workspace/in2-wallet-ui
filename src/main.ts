@@ -21,7 +21,6 @@ import {
   authInterceptor,
 } from 'angular-auth-oidc-client';
 import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 if (environment.production) {
   enableProdMode();
@@ -34,7 +33,6 @@ bootstrapApplication(AppComponent, {
       IonicModule.forRoot({ innerHTMLTemplatesEnabled: true })
     ),
     provideHttpClient(withInterceptorsFromDi()),
-    importProvidersFrom(HttpClientTestingModule),
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {

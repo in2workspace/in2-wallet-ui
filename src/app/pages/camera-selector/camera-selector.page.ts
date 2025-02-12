@@ -1,11 +1,10 @@
-import { ChangeDetectorRef, Component, Input, effect, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, IonSelect, IonSelectOption } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { BarcodeScannerComponent } from '../../components/barcode-scanner/barcode-scanner.component';
 import { CameraService } from 'src/app/services/camera.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { ToastServiceHandler } from 'src/app/services/toast.service';
 @Component({
   selector: 'app-camera-selector',
   templateUrl: './camera-selector.page.html',
@@ -21,19 +20,19 @@ import { ToastServiceHandler } from 'src/app/services/toast.service';
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CameraSelectorPage {
-  public cameraService = inject(CameraService);
-  private cdr = inject(ChangeDetectorRef);
+  public readonly cameraService = inject(CameraService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   public showBarcode = true;
   public isChangingDevice = false;
   public availableDevices$ = this.cameraService.availableDevices$;
   public selectedDevice$ = this.cameraService.selectedCamera$;
 
-  private ngOnInit(){
+  private ngOnInit():void{
     // console.log('SELECTOR (OnInit): showBarcode = ' + this.showBarcode);
   }
 
-  private ionViewWillEnter(){
+  private ionViewWillEnter(): void{
     // console.log('SELECTOR (IonViewWillEnter): showBarcode = ' + this.showBarcode);
     if(this.showBarcode !== true){
       // console.log('SELECTOR (IonViewWillEnter): createBarcode')
@@ -44,12 +43,12 @@ export class CameraSelectorPage {
     // }
   }
 
-  private async ionViewWillLeave(){
+  private async ionViewWillLeave(): Promise<void>{
     // console.log('SELECTOR: Leaving-destroyBarcode')
     this.destroyBarcode();
   }
 
-  public async onDeviceSelectChange(selectedDeviceId: string) {
+  public async onDeviceSelectChange(selectedDeviceId: string): Promise<void> {
     //todo moure a servei
     // console.log('SELECTOR: onDeviceSelectChange');
     this.showIsChangingDeviceTemp();
@@ -63,31 +62,29 @@ export class CameraSelectorPage {
     if(isAvailable){
       const selectedDevice = this.cameraService.getAvailableCameraById(selectedDeviceId);
       this.cameraService.setCamera(selectedDevice);
-      return;
     }else{
       this.handleCameraErrorAndReload();
-      return;
     }
 }
 
-  public handleCameraErrorAndReload(){
+  public handleCameraErrorAndReload(): void{
     this.cameraService.handleCameraErrors({name: 'CustomNoAvailable'}, 'fetchError');
     //todo anything else?
   }
 
-  public showIsChangingDeviceTemp(){
+  public showIsChangingDeviceTemp(): void{
     this.isChangingDevice = true;
     setTimeout(()=>{
       this.isChangingDevice = false;
     }, 2000);
   }
 
-  public createBarcode(){
+  public createBarcode(): void{
     this.showBarcode = true;
     this.cdr.detectChanges();
   }
 
-  public destroyBarcode(){
+  public destroyBarcode(): void{
     this.showBarcode = false;
     this.cdr.detectChanges();
   }

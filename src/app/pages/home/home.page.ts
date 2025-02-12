@@ -27,10 +27,10 @@ export class HomePage implements OnInit {
   public userName = '';
   public desactivar = true;
 
-  public constructor(private router: Router, private route: ActivatedRoute, 
-    private toastService: ToastServiceHandler) { }
+  public constructor(private readonly router: Router, private readonly route: ActivatedRoute, 
+    private readonly toastService: ToastServiceHandler) { }
 
-  public async startScan() {
+  public async startScan(): Promise<void> {
     const scanRoute = '/tabs/credentials/';
     try{
       await this.router.navigate([scanRoute], {
@@ -48,7 +48,7 @@ export class HomePage implements OnInit {
       event.preventDefault();
     }
   }
-  public ngOnInit() {    
+  public ngOnInit(): void {    
     this.route.queryParams.subscribe((params) => {
       const credentialOfferUri = params['credential_offer_uri'];
       if (credentialOfferUri) {
