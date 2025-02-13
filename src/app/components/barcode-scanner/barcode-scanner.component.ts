@@ -58,7 +58,7 @@ export class BarcodeScannerComponent implements OnInit {
   public readonly isError$ = this.cameraService.isCameraError$;
   private readonly activationTimeoutInSeconds = 4;
   private readonly activatedScanner$$ = new Subject<void>();
-  private readonly activationCountdown$ = this.activatedScanner$$.pipe( //todo test
+  private readonly activationCountdown$ = this.activatedScanner$$.pipe(
     switchMap(() => interval(1000)
       .pipe(
         take(this.activationTimeoutInSeconds + 1),
@@ -70,9 +70,8 @@ export class BarcodeScannerComponent implements OnInit {
   );
   private readonly activationCountdownValue$ = toSignal(this.activationCountdown$, {initialValue:6000});
 
-  //todo: is assigned CameraService.selectedDevice after scanner is autostarted (?)
   public readonly selectedDevice$: WritableSignal<MediaDeviceInfo|undefined> = this.cameraService.selectedCamera$;
-  private readonly updateScannerDeviceEffect = effect(async () => { //todo test
+  private readonly updateScannerDeviceEffect = effect(async () => {
     const selectedDevice = this.selectedDevice$();
     if(this.firstActivationCompleted && this.scanner && selectedDevice && this.scanner.device !== selectedDevice){
       const hasPermission = await this.scanner.askForPermission()
@@ -100,7 +99,7 @@ export class BarcodeScannerComponent implements OnInit {
   ) {
 
       // Requires debounce since this type of error is emitted constantly
-      this.scanFailureSubject.pipe( //todo test
+      this.scanFailureSubject.pipe(
         distinctUntilChanged((
           previous, current) => 
             JSON.stringify(previous) === JSON.stringify(current)),
@@ -128,12 +127,10 @@ export class BarcodeScannerComponent implements OnInit {
       this.cameraService.isCameraError$.set(false);
     }
 
-    //todo test
     public async initCameraIfNoActivateBarcodes(): Promise<void>{
        //activate scanner once there are no other barcode in deactivation process
        const activatingBarcodeList = this.isActivatingBarcode$();
        if (activatingBarcodeList?.length === 0) {
-         //todo agrupar en una funció el cameraflow + activate + firstactivation
          const cameraFlowResult = await this.cameraService.getCameraFlow(); 
          if(cameraFlowResult === 'NO_CAMERA_AVAILABLE' || cameraFlowResult === 'PERMISSION_DENIED'){
           console.warn('BARCODE: camera flow not completed; scanner will not be activated.');
@@ -210,7 +207,6 @@ export class BarcodeScannerComponent implements OnInit {
     console.error = (message?: string, ...optionalParams: any[]) => {
       if(message === "@zxing/ngx-scanner"){
         const logMessage = formatLogMessage(message, optionalParams);
-        //todo revisar
         const err = {...new Error(logMessage), name: optionalParams[1]};
         const errorType = optionalParams[0] === 
           "Can't get user media, this is not supported." ?

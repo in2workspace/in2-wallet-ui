@@ -46,7 +46,6 @@ export class CameraService {
     return devices.filter(device  => device.deviceId === id )[0];
   }
 
-  //todo estats amb enum
   public async getCameraFlow(): Promise<MediaDeviceInfo|'PERMISSION_DENIED'|'NO_CAMERA_AVAILABLE'> {
     console.info('Starting flow to get camera.');
     this.isCameraError$.set(false);
@@ -72,7 +71,6 @@ export class CameraService {
     return selectedCamera;
   }
 
-  //1
   public async getCameraPermissionAndStopTracks(): Promise<true>{
     try{
       const stream = await navigator.mediaDevices.getUserMedia({video: true});
@@ -83,8 +81,7 @@ export class CameraService {
   }
 }
 
-//2
-//should be called only if permission is granted
+//should be called only after permission is granted
 public async updateAvailableCameras(): Promise<MediaDeviceInfo[]> {
   const devices = await navigator.mediaDevices.enumerateDevices();
   const videoinputDevices = devices.filter((device) => device.kind === 'videoinput');
@@ -160,7 +157,6 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
       track.stop()});
   }
 
-  //todo enum or map with possible error labels
   public handleCameraErrors(e: Error | { name: string }, type?: CameraLogType) {
     console.error(e);
     this.isCameraError$.set(true);

@@ -56,7 +56,6 @@ export class CameraSelectorPage {
 
   public handleCameraError(): void{
     this.cameraService.handleCameraErrors({name: 'CustomNoAvailable'}, 'fetchError');
-    //todo anything else?
   }
 
   public showIsChangingDeviceTemp(): void{

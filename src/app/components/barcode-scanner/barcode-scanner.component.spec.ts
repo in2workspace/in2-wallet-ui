@@ -70,11 +70,6 @@ describe('BarcodeScannerComponent', () => {
       expect(component.allowedFormats).toEqual([BarcodeFormat.QR_CODE]);
     });
   
-    //todo s'actualitza
-    // it('should initialize firstActivationCompleted as false', () => {
-    //   expect(component.firstActivationCompleted).toBe(false);
-    // });
-  
     it('should initialize barcodeId as a random string', () => {
       expect(typeof component['barcodeId']).toBe('string');
       expect(component['barcodeId'].length).toBeGreaterThan(0);
