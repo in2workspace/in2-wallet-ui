@@ -28,46 +28,33 @@ export class CameraSelectorPage {
   public availableDevices$ = this.cameraService.availableDevices$;
   public selectedDevice$ = this.cameraService.selectedCamera$;
 
-  private ngOnInit():void{
-    // console.log('SELECTOR (OnInit): showBarcode = ' + this.showBarcode);
-  }
-
   private ionViewWillEnter(): void{
-    // console.log('SELECTOR (IonViewWillEnter): showBarcode = ' + this.showBarcode);
     if(this.showBarcode !== true){
-      // console.log('SELECTOR (IonViewWillEnter): createBarcode')
       this.createBarcode();
     }
-    // else{
-    //   console.log('SELECTOR (IonViewWillEnter): barcode is already created (showbarcode = true): ')
-    // }
   }
 
   private async ionViewWillLeave(): Promise<void>{
-    // console.log('SELECTOR: Leaving-destroyBarcode')
     this.destroyBarcode();
   }
 
   public async onDeviceSelectChange(selectedDeviceId: string): Promise<void> {
-    //todo moure a servei
-    // console.log('SELECTOR: onDeviceSelectChange');
     this.showIsChangingDeviceTemp();
     const availableDevices = await this.cameraService.updateAvailableCameras();
     if(availableDevices.length === 0){
-      this.handleCameraErrorAndReload();
+      this.handleCameraError();
       return;
     }
-    // console.log('SELECTOR: onDeviceSelectChange: updateAvailableCameras')
     const isAvailable = this.cameraService.isCameraAvailableById(selectedDeviceId);
     if(isAvailable){
       const selectedDevice = this.cameraService.getAvailableCameraById(selectedDeviceId);
       this.cameraService.setCamera(selectedDevice);
     }else{
-      this.handleCameraErrorAndReload();
+      this.handleCameraError();
     }
 }
 
-  public handleCameraErrorAndReload(): void{
+  public handleCameraError(): void{
     this.cameraService.handleCameraErrors({name: 'CustomNoAvailable'}, 'fetchError');
     //todo anything else?
   }

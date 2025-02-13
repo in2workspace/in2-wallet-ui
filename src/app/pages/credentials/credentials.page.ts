@@ -92,7 +92,6 @@ export class CredentialsPage implements OnInit {
     }
   }
   public scan(): void {
-    console.log('CREDENTIALS: scan');
     this.toggleScan = true;
     this.show_qr = true;
     this.ebsiFlag = false;
@@ -155,7 +154,6 @@ export class CredentialsPage implements OnInit {
   }
 
   public qrCodeEmit(qrCode: string): void {
-    console.log('qr code emit')
     this.toggleScan = false;
     this.websocket.connect();
 
@@ -248,13 +246,13 @@ export class CredentialsPage implements OnInit {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('User canceled');
+            console.info('User canceled');
           },
         },
         {
           text: 'Accept',
           handler: () => {
-            console.log('User accepted');
+            console.info('User accepted');
             setTimeout(() => {
               this.isAlertOpen = false;
               this.toggleScan = false;
@@ -304,7 +302,6 @@ export class CredentialsPage implements OnInit {
   }
 
   ionViewWillLeave(): void{
-    console.log('leaving credentials')
     this.untoggleScan();
     this.cdr.detectChanges();
   }

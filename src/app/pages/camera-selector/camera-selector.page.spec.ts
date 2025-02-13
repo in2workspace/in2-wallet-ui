@@ -107,7 +107,7 @@ describe('CameraSelectorPage', () => {
   });
 
   it('handle camera errors', ()=>{
-    component.handleCameraErrorAndReload();
+    component.handleCameraError();
     expect(cameraServiceMock.handleCameraErrors).toHaveBeenCalledWith({name: 'CustomNoAvailable'}, 'fetchError');
   });
 
@@ -146,14 +146,14 @@ describe('CameraSelectorPage', () => {
     expect(cameraServiceMock.updateAvailableCameras).toHaveBeenCalled();
   });
 
-  it('should call handleCameraErrorAndReload if no cameras are available', async () => {
+  it('should call handleCameraError if no cameras are available', async () => {
     const selectedDeviceId = 'camera-1';
-    jest.spyOn(component as any, 'handleCameraErrorAndReload');
+    jest.spyOn(component as any, 'handleCameraError');
     cameraServiceMock.updateAvailableCameras.mockResolvedValue([]);
 
     await component.onDeviceSelectChange(selectedDeviceId);
 
-    expect(component['handleCameraErrorAndReload']).toHaveBeenCalled();
+    expect(component['handleCameraError']).toHaveBeenCalled();
   });
 
   it('should set the selected camera if it is available', async () => {
@@ -171,17 +171,17 @@ describe('CameraSelectorPage', () => {
     expect(cameraServiceMock.setCamera).toHaveBeenCalledWith(mockDevice);
   });
 
-  it('should call handleCameraErrorAndReload if selected camera is not available', async () => {
+  it('should call handleCameraError if selected camera is not available', async () => {
     const selectedDeviceId = 'camera-1';
 
     cameraServiceMock.updateAvailableCameras.mockResolvedValue([{ deviceId: 'camera-2' } as MediaDeviceInfo]);
     cameraServiceMock.isCameraAvailableById.mockReturnValue(false);
-    jest.spyOn(component as any, 'handleCameraErrorAndReload');
+    jest.spyOn(component as any, 'handleCameraError');
 
     await component.onDeviceSelectChange(selectedDeviceId);
 
     expect(cameraServiceMock.isCameraAvailableById).toHaveBeenCalledWith(selectedDeviceId);
-    expect(component['handleCameraErrorAndReload']).toHaveBeenCalled();
+    expect(component['handleCameraError']).toHaveBeenCalled();
   });
 
 

@@ -141,7 +141,7 @@ export class BarcodeScannerComponent implements OnInit {
         }
          this.activateScannerInitially();
        } else {
-         console.warn('BARCODE: there is at least one destroying barcode, waiting for starting camera flow')
+         console.warn('BARCODE: there is at least one active barcode, waiting before starting next camera flow.')
          this.cameraService.activatingBarcodeList$
            .pipe(
              filter(value => value.length === 0),
@@ -151,11 +151,8 @@ export class BarcodeScannerComponent implements OnInit {
            .subscribe(async () => {
              const cameraFlowResult = await this.cameraService.getCameraFlow(); 
              if(cameraFlowResult === 'NO_CAMERA_AVAILABLE' || cameraFlowResult === 'PERMISSION_DENIED'){
-              // console.warn('BARCODE: camera flow not completed; scanner will not be activated.');
               return;
             }
-            //  console.log('BARCODE: camera flow completed: ' + this.parentComponent);
-            //  console.log('BARCODE: there are no destroying barcodes in the list, starting camera flow')
              this.activateScannerInitially();
            });
        }
