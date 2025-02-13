@@ -63,24 +63,27 @@ export class CameraService {
 
   //todo estats amb enum
   public async getCameraFlow(): Promise<MediaDeviceInfo|'PERMISSION_DENIED'|'NO_CAMERA_AVAILABLE'> {
-    // console.log('SERVICE: STARTING getCameraFlow');
+    console.log('SERVICE: STARTING getCameraFlow');
     this.isCameraError$.set(false);
 
     try{
       await this.getCameraPermissionAndStopTracks();
     }catch(e: any){
+      console.log('error in permission')
       this.handleCameraErrors(e, 'fetchError');
       return 'PERMISSION_DENIED';
     }
 
     let availableDevices = await this.updateAvailableCameras();
     if(availableDevices.length === 0){
+      console.log('error in available cameras')
       this.handleCameraErrors({name: 'CustomNoAvailable'}, 'fetchError');
       return 'NO_CAMERA_AVAILABLE';
     }
 
     const selectedCamera = await this.getCameraFromAvailables();
     if(selectedCamera === 'NO_CAMERA_AVAILABLE'){
+      console.log('error in default')
       this.handleCameraErrors({name: 'CustomNoAvailable'}, 'fetchError');
     }
     return selectedCamera;
@@ -179,7 +182,8 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
 
   //todo enum or map with possible error labels
   public handleCameraErrors(e: Error | { name: string }, type?: CameraLogType) {
-    // console.error(e);
+    console.log('SERVICE: handleCameraErrors')
+    console.error(e);
     this.isCameraError$.set(true);
     this.alertCameraErrorsByErrorName(e.name);
   
@@ -189,7 +193,7 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   }
 
   public alertCameraErrorsByErrorName(errMsg: string) {
-    // console.log('SERVICE: alert camera errors: ' + errMsg);
+    console.log('SERVICE: alert camera errors: ' + errMsg);
     
     let errorLabel = 'errors.camera.default';
   

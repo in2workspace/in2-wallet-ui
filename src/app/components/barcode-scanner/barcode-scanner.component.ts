@@ -234,6 +234,7 @@ export class BarcodeScannerComponent implements OnInit {
           'noMediaError' :
           'undefinedError';
 
+          console.log('modified console error before handle')
         this.cameraService.handleCameraErrors(err, errorType);
         return;
       }
