@@ -114,7 +114,7 @@ export class BarcodeScannerComponent implements OnInit {
     }
   
     public async ngOnInit(): Promise<void> {
-      this.modifyConsoleErrorToSaveScannerErrors();
+      this.modifyConsoleErrorToHandleScannerErrors();
     }
   
     public async ngAfterViewInit(): Promise<void> {
@@ -204,7 +204,7 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
 
-  public modifyConsoleErrorToSaveScannerErrors(): void{
+  public modifyConsoleErrorToHandleScannerErrors(): void{
     //Redefine console.error to capture the errors that were previously captured by zxing-scanner
     this.originalConsoleError = console.error;
     console.error = (message?: string, ...optionalParams: any[]) => {

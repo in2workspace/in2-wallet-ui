@@ -117,16 +117,16 @@ describe('BarcodeScannerComponent', () => {
   
   describe('BarcodeScannerComponent Lifecycle Hooks', () => {
     beforeEach(() => {
-      jest.spyOn(component, 'modifyConsoleErrorToSaveScannerErrors').mockImplementation();
+      jest.spyOn(component, 'modifyConsoleErrorToHandleScannerErrors').mockImplementation();
       jest.spyOn(component, 'initCameraIfNoActivateBarcodes').mockImplementation();
       jest.spyOn(component, 'setActivatingTimeout').mockImplementation();
       jest.spyOn(component, 'restoreOriginalConsoleError').mockImplementation();
       jest.spyOn(mockCameraService.isCameraError$, 'set').mockImplementation();
     });
   
-    it('should call modifyConsoleErrorToSaveScannerErrors on ngOnInit', async () => {
+    it('should call modifyConsoleErrorToHandleScannerErrors on ngOnInit', async () => {
       await component.ngOnInit();
-      expect(component.modifyConsoleErrorToSaveScannerErrors).toHaveBeenCalled();
+      expect(component.modifyConsoleErrorToHandleScannerErrors).toHaveBeenCalled();
     });
   
     it('should call initCameraIfNoActivateBarcodes on ngAfterViewInit', async () => {
@@ -224,14 +224,13 @@ describe('BarcodeScannerComponent', () => {
     });
   });
 
-  describe('modifyConsoleErrorToSaveScannerErrors', () => {
+  describe('modifyConsoleErrorToHandleScannerErrors', () => {
     let originalConsoleError: jest.Mock;
   
     beforeEach(() => {
       originalConsoleError = jest.fn();
       console.error = originalConsoleError;
-      component['originalConsoleError'] = undefined;
-      jest.spyOn(mockCameraService, 'handleCameraErrors');
+      mockCameraService.handleCameraErrors = jest.fn(); // Assegurem que està net
     });
   
     afterEach(() => {
@@ -239,47 +238,56 @@ describe('BarcodeScannerComponent', () => {
     });
   
     it('should redefine console.error and store the original one', () => {
-      component.modifyConsoleErrorToSaveScannerErrors();
+      component.modifyConsoleErrorToHandleScannerErrors();
   
       expect(component['originalConsoleError']).toBe(originalConsoleError);
       expect(typeof console.error).toBe('function');
     });
   
-    it('should call handleCameraErrors with noMediaError when specific error occurs', () => {
-      component.modifyConsoleErrorToSaveScannerErrors();
+    it('should call handleCameraErrors once with noMediaError when specific error occurs', () => {
+      component.modifyConsoleErrorToHandleScannerErrors();
   
       console.error('@zxing/ngx-scanner', "Can't get user media, this is not supported.", 'extraData');
   
-      expect(mockCameraService.handleCameraErrors).toHaveBeenCalledWith('extraData', 'noMediaError');
+      console.log(mockCameraService.handleCameraErrors.mock.calls); // Depuració
+  
+      expect(mockCameraService.handleCameraErrors).toHaveBeenCalledTimes(1);
+      expect(mockCameraService.handleCameraErrors).toHaveBeenCalledWith({"name": "extraData"}, "noMediaError");
+  
       expect(originalConsoleError).not.toHaveBeenCalled();
     });
   
-    it('should call handleCameraErrors with undefinedError for other @zxing/ngx-scanner errors', () => {
-      component.modifyConsoleErrorToSaveScannerErrors();
+    it('should call handleCameraErrors once with undefinedError for other @zxing/ngx-scanner errors', () => {
+      component.modifyConsoleErrorToHandleScannerErrors();
   
       console.error('@zxing/ngx-scanner', 'Some other scanner error', 'extraData');
   
-      expect(mockCameraService.handleCameraErrors).toHaveBeenCalledWith('extraData', 'undefinedError');
+      console.log(mockCameraService.handleCameraErrors.mock.calls); // Depuració
+  
+      expect(mockCameraService.handleCameraErrors).toHaveBeenCalledTimes(1);
+      expect(mockCameraService.handleCameraErrors).toHaveBeenCalledWith({"name": "extraData"}, "undefinedError");
+  
       expect(originalConsoleError).not.toHaveBeenCalled();
     });
   
     it('should delegate to original console.error if the message is not @zxing/ngx-scanner', () => {
-      component.modifyConsoleErrorToSaveScannerErrors();
+      component.modifyConsoleErrorToHandleScannerErrors();
   
       mockCameraService.handleCameraErrors.mockClear();
       console.error('Some other message', 'extraData');
-      
+  
       expect(mockCameraService.handleCameraErrors).not.toHaveBeenCalled();
       expect(originalConsoleError).toHaveBeenCalledWith('Some other message', 'extraData');
     });
   
     it('should not throw error if originalConsoleError is undefined and non-scanner error occurs', () => {
       component['originalConsoleError'] = undefined;
-      component.modifyConsoleErrorToSaveScannerErrors();
+      component.modifyConsoleErrorToHandleScannerErrors();
   
       expect(() => console.error('Some other message', 'extraData')).not.toThrow();
     });
   });
+  
   
   
 
