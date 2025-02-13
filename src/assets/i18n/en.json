@@ -148,10 +148,10 @@
         "camera": {
             "not-readable": "The camera cannot be accessed. Make sure no other application is using it. You may need to refresh the page.",
             "not-allowed": "Camera access is denied. Check your browser permissions. If the issue persists, try refreshing the page.",
-            "not-found": "No camera found on this device. Make sure it is properly connected and refresh the page.",
+            "not-found": "Camera not found on this device. Make sure it is properly connected and refresh the page.",
             "overconstrained": "The camera configuration is not compatible. Try selecting a different camera or refreshing the page.",
             "security": "Camera access is blocked due to security restrictions. You may need to refresh the page or check your browser settings.",
-            "abort": "Camera access was canceled before permissions were granted. Check your browser permissions and make sure no other application is using the camera. Try again or refresh the page.",
+            "abort": "Camera access was aborted. Check your browser permissions and make sure no other application is using the camera. Try again or refresh the page.",
             "type": "Configuration error: the camera request is invalid. Try refreshing the page or checking your camera settings",
             "not-supported": "Your browser does not support camera access. Consider using a different browser.",
             "default": "Unexpected error. Check your browser permissions and make sure no other application is using the camera. Try refreshing the page."

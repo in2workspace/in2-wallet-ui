@@ -64,7 +64,6 @@ export class BarcodeScannerComponent implements OnInit {
         take(this.activationTimeoutInSeconds + 1),
         takeUntil(this.destroy$),
         map(seconds => this.activationTimeoutInSeconds * 1000 - seconds * 1000),
-        // tap(val=>console.log('BARCODE - COUNTDOWN: ' + val))
       )
     ),
     shareReplay(1),
@@ -76,17 +75,13 @@ export class BarcodeScannerComponent implements OnInit {
   private readonly updateScannerDeviceEffect = effect(async () => { //todo test
     const selectedDevice = this.selectedDevice$();
     if(this.firstActivationCompleted && this.scanner && selectedDevice && this.scanner.device !== selectedDevice){
-      // console.log('BARCODE: device changed: ' + selectedDevice.label);
       const hasPermission = await this.scanner.askForPermission()
-        // console.log('BARCODE: permission after device changed')
         if(hasPermission){
           this.scanner.device = selectedDevice;
           this.activatedScanner$$.next();
         }else{
           console.error('BARCODE: Permission denied');
         }
-  }else{
-    // console.log('BARCODE: efecte anul·lat; first activation completed? ' + this.firstActivationCompleted);
   }});
   private readonly isActivatingBarcode$ = toSignal(this.cameraService.activatingBarcodeList$);
 
@@ -119,7 +114,6 @@ export class BarcodeScannerComponent implements OnInit {
     }
   
     public async ngOnInit(): Promise<void> {
-      // console.log('BARCODE: on init from' + this.parentComponent)
       this.modifyConsoleErrorToSaveScannerErrors();
     }
   
@@ -128,7 +122,6 @@ export class BarcodeScannerComponent implements OnInit {
     }
 
     public ngOnDestroy(): void {
-      // console.warn('BARCODE: on destroy from ' + this.parentComponent);
       this.destroy$.next();
       this.setActivatingTimeout();
       this.restoreOriginalConsoleError();
@@ -139,16 +132,13 @@ export class BarcodeScannerComponent implements OnInit {
     public async initCameraIfNoActivateBarcodes(): Promise<void>{
        //activate scanner once there are no other barcode in deactivation process
        const activatingBarcodeList = this.isActivatingBarcode$();
-      //  console.log('BARCODE (afterViewInit): check current barcode in destroying process list before starting camera flow: ' + activatingBarcodeList);
        if (activatingBarcodeList?.length === 0) {
-        //  console.log('BARCODE: since there are no barcode components being destroyed, get camera flow')
          //todo agrupar en una funció el cameraflow + activate + firstactivation
          const cameraFlowResult = await this.cameraService.getCameraFlow(); 
          if(cameraFlowResult === 'NO_CAMERA_AVAILABLE' || cameraFlowResult === 'PERMISSION_DENIED'){
           console.warn('BARCODE: camera flow not completed; scanner will not be activated.');
           return;
         }
-        //  console.log('BARCODE: camera flow completed: ' + this.parentComponent);
          this.activateScannerInitially();
        } else {
          console.warn('BARCODE: there is at least one destroying barcode, waiting for starting camera flow')
@@ -172,17 +162,13 @@ export class BarcodeScannerComponent implements OnInit {
     }
 
   public async activateScanner(): Promise<void>{
-    // console.log('BARCODE: activating scanner: ' + this.parentComponent)
     if(this.scanner){
       this.scanner.enable = true;
       const hasPermission = await this.scanner.askForPermission();
-      // console.log('BARCODE: Permission to activacte scanner: ' + hasPermission);
-        if(this.scanner.device?.deviceId !== this.selectedDevice$()?.deviceId && hasPermission){
-          this.scanner.device = this.selectedDevice$();
-          this.activatedScanner$$.next();
-          // console.log('BARCODE: end of activateScanner')
-          // console.warn('Activation process of the scanner es pot allargar');
-        }
+      if(this.scanner.device?.deviceId !== this.selectedDevice$()?.deviceId && hasPermission){
+        this.scanner.device = this.selectedDevice$();
+        this.activatedScanner$$.next();
+      }
     }
   }
 
@@ -211,10 +197,10 @@ export class BarcodeScannerComponent implements OnInit {
   public setActivatingTimeout(): void{
     this.cameraService.addActivatingBarcode(this.barcodeId);
     const activationCountDownValue = this.activationCountdownValue$();
-    // console.log('BARCODE: activation countdown value: ' + activationCountDownValue);
+    console.warn('Scanner activation countdown value: ' + activationCountDownValue + ' ms');
 
     setTimeout(() => {
-        // console.warn('BARCODE: scanner destroyed after' + activationCountDownValue + 'timeout from ' + this.parentComponent);
+        console.warn('Scanner destroyed after' + activationCountDownValue);
         this.scanner.enable = false;
         this.cameraService.removeActivatingBarcode(this.barcodeId);
       }, activationCountDownValue );
@@ -222,7 +208,7 @@ export class BarcodeScannerComponent implements OnInit {
 
 
   public modifyConsoleErrorToSaveScannerErrors(): void{
-    //Redefine console.log to capture the errors that were previously captured by zxing-scanner
+    //Redefine console.error to capture the errors that were previously captured by zxing-scanner
     this.originalConsoleError = console.error;
     console.error = (message?: string, ...optionalParams: any[]) => {
       if(message === "@zxing/ngx-scanner"){
@@ -234,7 +220,6 @@ export class BarcodeScannerComponent implements OnInit {
           'noMediaError' :
           'undefinedError';
 
-          console.log('modified console error before handle')
         this.cameraService.handleCameraErrors(err, errorType);
         return;
       }
