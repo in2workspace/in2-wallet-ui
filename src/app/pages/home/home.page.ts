@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { BarcodeScannerComponent } from 'src/app/components/barcode-scanner/barcode-scanner.component';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { ToastServiceHandler } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-home',
@@ -26,17 +27,18 @@ export class HomePage implements OnInit {
   public userName = '';
   public desactivar = true;
 
-  public constructor(private router: Router, private route: ActivatedRoute) { }
+  public constructor(private readonly router: Router, private readonly route: ActivatedRoute, 
+    private readonly toastService: ToastServiceHandler) { }
 
-  public async startScan() {
+  public async startScan(): Promise<void> {
+    const scanRoute = '/tabs/credentials/';
     try{
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      stream.getTracks().forEach(track => track.stop());
-      this.router.navigate(['/tabs/credentials/'], {
+      await this.router.navigate([scanRoute], {
         queryParams: { toggleScan: true, from: 'home', show_qr: true },
       });
     }catch(err){
-      alert('Error: ' + err);
+      console.error('Error when trying to navigate to ' + scanRoute);
+      this.toastService.showErrorAlertByTranslateLabel("errors.navigation");
     }
   }
   public handleButtonKeydown(event: KeyboardEvent): void {
@@ -46,7 +48,7 @@ export class HomePage implements OnInit {
       event.preventDefault();
     }
   }
-  public ngOnInit() {
+  public ngOnInit(): void {    
     this.route.queryParams.subscribe((params) => {
       const credentialOfferUri = params['credential_offer_uri'];
       if (credentialOfferUri) {

@@ -1,11 +1,10 @@
-import { Component, Input, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { BarcodeScannerComponent } from '../../components/barcode-scanner/barcode-scanner.component';
 import { CameraService } from 'src/app/services/camera.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { distinctUntilChanged, map, shareReplay } from 'rxjs';
 @Component({
   selector: 'app-camera-selector',
   templateUrl: './camera-selector.page.html',
@@ -16,52 +15,65 @@ import { distinctUntilChanged, map, shareReplay } from 'rxjs';
     CommonModule,
     FormsModule,
     TranslateModule,
-    BarcodeScannerComponent,
+    BarcodeScannerComponent
   ],
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CameraSelectorPage {
-  @Input() public availableDevices: MediaDeviceInfo[] = [];
-  public cameraService = inject(CameraService);
+  public readonly cameraService = inject(CameraService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-  public selectedDevice = this.cameraService.navCamera$.pipe(
-    map((device) => {
-      return device.deviceId;
-    }),
-    distinctUntilChanged(),
-    shareReplay(1)
-  );
+  public showBarcode = true;
+  public isChangingDevice = false;
+  public availableDevices$ = this.cameraService.availableDevices$;
+  public selectedDevice$ = this.cameraService.selectedCamera$;
 
-  public availableDevicesEmit(devices: MediaDeviceInfo[]) {
-    if (devices.length <= 1) {
-      this.availableDevices = devices;
-    } else {
-      //selects the devices's back camera by default
-      const selectedDevices: MediaDeviceInfo[] = [];
-      for (const device of devices) {
-        if (/back|rear|environment/gi.test(device.label)) {
-          selectedDevices.push(device);
-          break;
-        }
-      }
-      if (selectedDevices.length === 0) {
-        this.availableDevices = devices;
-      } else {
-        this.availableDevices = selectedDevices;
-      }
+  private ionViewWillEnter(): void{
+    if(this.showBarcode !== true){
+      this.createBarcode();
     }
   }
 
-  public onDeviceSelectChange(selected: string) {
-    if (selected != '') {
-      const device: MediaDeviceInfo | undefined = this.availableDevices.find(
-        (x) => x.deviceId === selected
-      );
-      if (device != undefined) {
-        this.cameraService.changeCamera(device);
-      }
-    } else {
-      this.cameraService.noCamera();
-    }
+  private async ionViewWillLeave(): Promise<void>{
+    this.destroyBarcode();
   }
+
+  public async onDeviceSelectChange(selectedDeviceId: string): Promise<void> {
+    this.showIsChangingDeviceTemp();
+    const availableDevices = await this.cameraService.updateAvailableCameras();
+    if(availableDevices.length === 0){
+      this.handleCameraError();
+      return;
+    }
+    const isAvailable = this.cameraService.isCameraAvailableById(selectedDeviceId);
+    if(isAvailable){
+      const selectedDevice = this.cameraService.getAvailableCameraById(selectedDeviceId);
+      this.cameraService.setCamera(selectedDevice);
+    }else{
+      this.handleCameraError();
+    }
+}
+
+  public handleCameraError(): void{
+    this.cameraService.handleCameraErrors({name: 'CustomNoAvailable'}, 'fetchError');
+  }
+
+  public showIsChangingDeviceTemp(): void{
+    this.isChangingDevice = true;
+    setTimeout(()=>{
+      this.isChangingDevice = false;
+    }, 2000);
+  }
+
+  public createBarcode(): void{
+    this.showBarcode = true;
+    this.cdr.detectChanges();
+  }
+
+  public destroyBarcode(): void{
+    this.showBarcode = false;
+    this.cdr.detectChanges();
+  }
+  
+
 }

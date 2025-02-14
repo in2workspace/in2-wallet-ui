@@ -1,115 +1,219 @@
 import { CameraLogsService } from './../../services/camera-logs.service';
 import { CommonModule } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { v4 as uuidv4 } from 'uuid';
 import {
   Component,
   Output,
   EventEmitter,
   OnInit,
   ViewChild,
+  WritableSignal,
+  effect
 } from '@angular/core';
 import { BarcodeFormat, Exception } from '@zxing/library';
 import { ZXingScannerModule, ZXingScannerComponent } from '@zxing/ngx-scanner';
 import {
   BehaviorSubject,
-  Observable,
   Subject,
   debounceTime,
   distinctUntilChanged,
   filter,
+  interval,
   map,
   shareReplay,
+  switchMap,
+  take,
+  takeUntil
 } from 'rxjs';
 import { CameraLogType } from 'src/app/interfaces/camera-log';
 import { CameraService } from 'src/app/services/camera.service';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslateModule } from '@ngx-translate/core';
+import { IonicModule } from '@ionic/angular';
 
 // ! Since console.error is intercepted (to capture the error already caught by zxing), be careful to avoid recursion
 // ! (i.e., console.error should not be called within the execution flow of another console.error)
 
+//when a barcode component is created, it waits for the "destroying barcode list" is empty
+//a barcode component is removed from such list not right after being destroyed, but after some delay,
+//This delay is due to a time range in which the camera stream is deactivated after destroying scanner component
+//Without this delay, if user tries to switch fast betwee two barcode pages, the barcode might be blocked
 
 @Component({
   selector: 'app-barcode-scanner',
   templateUrl: './barcode-scanner.component.html',
+  styleUrl:'./barcode-scanner.component.scss' ,
   standalone: true,
-  imports: [CommonModule, ZXingScannerModule, RouterModule],
+  imports: [CommonModule, ZXingScannerModule, RouterModule, TranslateModule, IonicModule],
 })
 export class BarcodeScannerComponent implements OnInit {
-  @Output() public availableDevices: EventEmitter<MediaDeviceInfo[]> =
-    new EventEmitter();
   @Output() public qrCode: EventEmitter<string> = new EventEmitter();
   @ViewChild('scanner') public scanner!: ZXingScannerComponent;
-  public newSelectedCamera!: MediaDeviceInfo;
   public allowedFormats = [BarcodeFormat.QR_CODE];
+  firstActivationCompleted = false;
+  private readonly barcodeId = uuidv4();
 
-  public devices$ = new BehaviorSubject<MediaDeviceInfo[]>([]);
-
-  public toggleCamera$ = new BehaviorSubject<boolean>(false);
-  public enable$ = this.toggleCamera$.pipe(
-    map((value) => {
-      return value;
-    }),
-    distinctUntilChanged(),
-    shareReplay(1)
+  //COUNTDOWN
+  public readonly isError$ = this.cameraService.isCameraError$;
+  private readonly activationTimeoutInSeconds = 4;
+  private readonly activatedScanner$$ = new Subject<void>();
+  private readonly activationCountdown$ = this.activatedScanner$$.pipe(
+    switchMap(() => interval(1000)
+      .pipe(
+        take(this.activationTimeoutInSeconds + 1),
+        takeUntil(this.destroy$),
+        map(seconds => this.activationTimeoutInSeconds * 1000 - seconds * 1000),
+      )
+    ),
+    shareReplay(1),
   );
-  public selectedDevice$: Observable<MediaDeviceInfo> =
-    this.cameraService.navCamera$.pipe(
-      map((device) => {
-        this.toggleCamera$.next(device.deviceId != '');
-        return device;
-      }),
-      distinctUntilChanged(),
-      shareReplay(1)
-    );
-    private readonly scanFailureSubject = new Subject<Error>();
-    private readonly scanFailureDebounceDelay = 3000;
-    private originalConsoleError: undefined|((...data: any[]) => void);
+  private readonly activationCountdownValue$ = toSignal(this.activationCountdown$, {initialValue:6000});
 
-  public scanSuccess$ = new BehaviorSubject<string>('');
+  public readonly selectedDevice$: WritableSignal<MediaDeviceInfo|undefined> = this.cameraService.selectedCamera$;
+  private readonly updateScannerDeviceEffect = effect(async () => {
+    const selectedDevice = this.selectedDevice$();
+    if(this.firstActivationCompleted && this.scanner && selectedDevice && this.scanner.device !== selectedDevice){
+      const hasPermission = await this.scanner.askForPermission()
+        if(hasPermission){
+          this.scanner.device = selectedDevice;
+          this.activatedScanner$$.next();
+        }else{
+          console.error('BARCODE: Permission denied');
+        }
+  }});
+  private readonly isActivatingBarcode$ = toSignal(this.cameraService.activatingBarcodeList$);
+
+
+  private readonly scanFailureSubject = new Subject<Error>();
+  private readonly scanFailureDebounceDelay = 3000;
+  private originalConsoleError: undefined|((...data: any[]) => void);
+
+  public scanSuccess$ = new BehaviorSubject<string>('');  
+  public destroy$ = new Subject<void>();
+
+
   public constructor(
     private readonly cameraService: CameraService,
-    private readonly cameraLogsService: CameraLogsService, private readonly router: Router) {
+    private readonly cameraLogsService: CameraLogsService
+  ) {
+
       // Requires debounce since this type of error is emitted constantly
       this.scanFailureSubject.pipe(
         distinctUntilChanged((
           previous, current) => 
             JSON.stringify(previous) === JSON.stringify(current)),
         debounceTime(this.scanFailureDebounceDelay)
-      ).subscribe(err=>{
+      )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(err=>{
         this.saveErrorLog(err, 'scanFailure');
       });
 
-      this.router.events
-    .pipe(
-      filter(event => event instanceof NavigationEnd),
-      takeUntilDestroyed()
-    )
-    .subscribe((event: NavigationEnd) => {
-      if (!event.urlAfterRedirects.startsWith('/tabs/credentials')) {
-        this.scanner.reset();
-      }
-    });
     }
-  public ngOnInit(): void {
-    setTimeout(() => {
-      this.cameraService.updateCamera();
-    }, 2000);
+  
+    public async ngOnInit(): Promise<void> {
+      this.modifyConsoleErrorToHandleScannerErrors();
+    }
+  
+    public async ngAfterViewInit(): Promise<void> {
+      this.initCameraIfNoActivateBarcodes();
+    }
 
-    //Redefine console.log to capture the errors that were previously captured by zxing-scanner
-     this.originalConsoleError = console.error;
- 
-     console.error = (message?: string, ...optionalParams: string[]) => {
-      if(message==="@zxing/ngx-scanner"){
-        const logMessage = formatLogMessage(message, optionalParams);
-        const err = new Error(logMessage);
+    public ngOnDestroy(): void {
+      this.destroy$.next();
+      this.setActivatingTimeout();
+      this.restoreOriginalConsoleError();
+      this.cameraService.isCameraError$.set(false);
+    }
 
-        if(optionalParams[0]==="Can't get user media, this is not supported."){
-          alert("Error: " + optionalParams[0]);
-          this.saveErrorLog(err, 'noMediaError');
-        }else{
-          alert("Error: There was an error when trying to connect to the camera. It might be a permission error.");
-          this.saveErrorLog(err, 'undefinedError');
+    public async initCameraIfNoActivateBarcodes(): Promise<void>{
+       //activate scanner once there are no other barcode in deactivation process
+       const activatingBarcodeList = this.isActivatingBarcode$();
+       if (activatingBarcodeList?.length === 0) {
+         const cameraFlowResult = await this.cameraService.getCameraFlow(); 
+         if(cameraFlowResult === 'NO_CAMERA_AVAILABLE' || cameraFlowResult === 'PERMISSION_DENIED'){
+          console.warn('BARCODE: camera flow not completed; scanner will not be activated.');
+          return;
         }
+         this.activateScannerInitially();
+       } else {
+         console.warn('BARCODE: there is at least one active barcode, waiting before starting next camera flow.')
+         this.cameraService.activatingBarcodeList$
+           .pipe(
+             filter(value => value.length === 0),
+             takeUntil(this.destroy$),
+             take(1),
+           )
+           .subscribe(async () => {
+             const cameraFlowResult = await this.cameraService.getCameraFlow(); 
+             if(cameraFlowResult === 'NO_CAMERA_AVAILABLE' || cameraFlowResult === 'PERMISSION_DENIED'){
+              return;
+            }
+             this.activateScannerInitially();
+           });
+       }
+    }
+
+  public async activateScanner(): Promise<void>{
+    if(this.scanner){
+      this.scanner.enable = true;
+      const hasPermission = await this.scanner.askForPermission();
+      if(this.scanner.device?.deviceId !== this.selectedDevice$()?.deviceId && hasPermission){
+        this.scanner.device = this.selectedDevice$();
+        this.activatedScanner$$.next();
+      }
+    }
+  }
+
+  public async activateScannerInitially(): Promise<void>{
+    await this.activateScanner();
+    this.firstActivationCompleted = true;  
+  }
+
+  public onCodeResult(resultString: string): void {
+    this.qrCode.emit(resultString);
+  }
+
+  public onScanError(error: Error): void{
+    this.saveErrorLog(error, 'scanError');
+  }
+
+  public onScanFailure(error: Exception|undefined): void{
+    const exception: Error = error ?? new Error('Undefined scan failure');
+    this.scanFailureSubject.next(exception);
+  }
+
+  public saveErrorLog(error: Error|undefined, exceptionType: CameraLogType): void {
+    this.cameraLogsService.addCameraLog(error, exceptionType);
+  }
+
+  public setActivatingTimeout(): void{
+    this.cameraService.addActivatingBarcode(this.barcodeId);
+    const activationCountDownValue = this.activationCountdownValue$();
+    console.warn('Scanner activation countdown value: ' + activationCountDownValue + ' ms');
+
+    setTimeout(() => {
+        console.warn('Scanner destroyed after' + activationCountDownValue);
+        this.scanner.enable = false;
+        this.cameraService.removeActivatingBarcode(this.barcodeId);
+      }, activationCountDownValue );
+  }
+
+
+  public modifyConsoleErrorToHandleScannerErrors(): void{
+    //Redefine console.error to capture the errors that were previously captured by zxing-scanner
+    this.originalConsoleError = console.error;
+    console.error = (message?: string, ...optionalParams: any[]) => {
+      if(message === "@zxing/ngx-scanner"){
+        const logMessage = formatLogMessage(message, optionalParams);
+        const err = {...new Error(logMessage), name: optionalParams[1]};
+        const errorType = optionalParams[0] === 
+          "Can't get user media, this is not supported." ?
+          'noMediaError' :
+          'undefinedError';
+
+        this.cameraService.handleCameraErrors(err, errorType);
         return;
       }
 
@@ -120,45 +224,12 @@ export class BarcodeScannerComponent implements OnInit {
      };
   }
 
-  public onCodeResult(resultString: string) {
-    this.qrCode.emit(resultString);
-  }
-
-  public async onCamerasFound(devices: MediaDeviceInfo[]): Promise<void> {
-    const selectedDevices: MediaDeviceInfo[] = [];
-    for (const device of devices) {
-      if (/back|rear|environment/gi.test(device.label)) {
-        selectedDevices.push(device);
-        break;
-      }
-    }
-    if (selectedDevices.length === 0) {
-      this.newSelectedCamera = devices[1] || devices[0];
-    } else {
-      this.newSelectedCamera = selectedDevices[0];
-    }
-
-    this.availableDevices.emit(devices);
-  }
-
-  public onScanError(error: Error){
-    this.saveErrorLog(error, 'scanError');
-  }
-
-  public onScanFailure(error: Exception|undefined){
-    const exception: Error = error ?? new Error('Undefined scan failure');
-    this.scanFailureSubject.next(exception);
-  }
-
-  public saveErrorLog(error: Error|undefined, exceptionType: CameraLogType) {
-    this.cameraLogsService.addCameraLog(error, exceptionType);
-  }
-
-  public ngOnDestroy(): void {
+  public restoreOriginalConsoleError(): void{
     if(this.originalConsoleError){
       console.error = this.originalConsoleError;
     }
   }
+
 }
 
 export function formatLogMessage(message: any, optionalParams: any[]): string {

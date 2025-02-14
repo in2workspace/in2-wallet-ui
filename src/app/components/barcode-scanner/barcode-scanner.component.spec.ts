@@ -2,18 +2,15 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { CommonModule } from '@angular/common';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { CameraService } from 'src/app/services/camera.service';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { BarcodeScannerComponent, formatLogMessage } from './barcode-scanner.component';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { Storage } from '@ionic/storage-angular';
-import { Exception } from '@zxing/library';
+import { BarcodeFormat, Exception } from '@zxing/library';
 import { CameraLogType } from 'src/app/interfaces/camera-log';
 import { NavigationEnd, Router } from '@angular/router';
-
-class MockCameraService {
-  updateCamera(): void {}
-  navCamera$ = new BehaviorSubject<any>({ deviceId: '' });
-}
+import { signal, WritableSignal } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 class MockRouter {
   public events = new Subject<any>();
@@ -22,21 +19,37 @@ class MockRouter {
 describe('BarcodeScannerComponent', () => {
   let component: BarcodeScannerComponent;
   let fixture: ComponentFixture<BarcodeScannerComponent>;
-  let mockCameraService: MockCameraService;
+  let mockCameraService: {
+    selectedCamera$: jest.Mock;
+    isCameraError$: WritableSignal<boolean>;
+    activatingBarcodeList$: Observable<[]>;
+    getCameraFlow: jest.Mock;
+    addActivatingBarcode: jest.Mock;
+    removeActivatingBarcode: jest.Mock;
+    handleCameraErrors: jest.Mock;
+  };
   let mockCameraLogsService: CameraLogsService;
   let mockRouter: MockRouter;
 
   beforeEach(async () => {
-    mockCameraService = new MockCameraService();
+    mockCameraService = {
+      selectedCamera$: jest.fn().mockReturnValue({deviceid: 'devide-id'}),
+      isCameraError$: signal(false),
+      activatingBarcodeList$: of([]),
+      getCameraFlow: jest.fn(),
+      addActivatingBarcode: jest.fn(),
+      removeActivatingBarcode: jest.fn(),
+      handleCameraErrors: jest.fn()
+    };
     mockCameraLogsService = {
       addCameraLog: jest.fn()
     } as any;
     mockRouter = new MockRouter();
 
     await TestBed.configureTestingModule({
-      imports: [CommonModule, ZXingScannerModule],
+      imports: [CommonModule, ZXingScannerModule, TranslateModule.forRoot()],
       providers: [
-        { provide: CameraService, useClass: MockCameraService }, 
+        { provide: CameraService, useValue: mockCameraService }, 
         { provide: CameraLogsService, useValue:mockCameraLogsService },
         { provide: Router, useValue: mockRouter },
         Storage
@@ -52,37 +65,251 @@ describe('BarcodeScannerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call updateCamera after 2 seconds in ngOnInit', fakeAsync(() => {
-    const updateCameraSpy = jest.spyOn((component as any).cameraService, 'updateCamera');
-    component.ngOnInit();
-    tick(2000);
-    expect(updateCameraSpy).toHaveBeenCalled();
-  }));
+  describe('BarcodeScannerComponent Initialization', () => {
+    it('should initialize allowedFormats with QR_CODE', () => {
+      expect(component.allowedFormats).toEqual([BarcodeFormat.QR_CODE]);
+    });
+  
+    it('should initialize barcodeId as a random string', () => {
+      expect(typeof component['barcodeId']).toBe('string');
+      expect(component['barcodeId'].length).toBeGreaterThan(0);
+    });
+  
+    it('should initialize isError$ as CameraService.isCameraError$', () => {
+      expect(component.isError$).toBe(mockCameraService.isCameraError$);
+    });
+  
+    it('should initialize activationTimeoutInSeconds as 4', () => {
+      expect(component['activationTimeoutInSeconds']).toBe(4);
+    });
+  
+    it('should initialize activationCountdownValue$ with initial value 6000', () => {
+      expect(component['activationCountdownValue$']()).toBe(6000);
+    });
+  
+    it('should initialize selectedDevice$ as CameraService.selectedCamera$', () => {
+      expect(component.selectedDevice$).toBe(mockCameraService.selectedCamera$);
+    });
 
-  it('should redefine console.error and handle zxing errors correctly', () => {
-    const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
-    const saveErrorLogSpy = jest.spyOn(component, 'saveErrorLog');
-    const originalConsoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    it('should initialize scanFailureSubject as a Subject', () => {
+      expect(component['scanFailureSubject']).toBeInstanceOf(Subject);
+    });
+  
+    it('should initialize scanFailureDebounceDelay as 3000', () => {
+      expect(component['scanFailureDebounceDelay']).toBe(3000);
+    });
 
-    component.ngOnInit();
-    const message = "@zxing/ngx-scanner";
-    const params = "Can't get user media, this is not supported.";
-    console.error(message, params);
-
-    expect(saveErrorLogSpy).toHaveBeenCalledWith(new Error(formatLogMessage(message, [params])), 'noMediaError');
-    expect(originalConsoleSpy).not.toHaveBeenCalled();
-
-    expect(alertMock).toHaveBeenCalledTimes(1);
-    expect(originalConsoleSpy).not.toHaveBeenCalled();
-    console.error("Another error");
-
-    expect(alertMock).toHaveBeenCalledTimes(1);
-    expect(originalConsoleSpy).toHaveBeenCalledWith("Another error");
-
-    alertMock.mockRestore();
-    originalConsoleSpy.mockRestore();
+  
+    it('should initialize scanSuccess$ as a BehaviorSubject with an empty string', () => {
+      expect(component.scanSuccess$).toBeInstanceOf(BehaviorSubject);
+      expect(component.scanSuccess$.getValue()).toBe('');
+    });
+  
+    it('should initialize destroy$ as a Subject', () => {
+      expect(component.destroy$).toBeInstanceOf(Subject);
+    });
   });
   
+  describe('BarcodeScannerComponent Lifecycle Hooks', () => {
+    beforeEach(() => {
+      jest.spyOn(component, 'modifyConsoleErrorToHandleScannerErrors').mockImplementation();
+      jest.spyOn(component, 'initCameraIfNoActivateBarcodes').mockImplementation();
+      jest.spyOn(component, 'setActivatingTimeout').mockImplementation();
+      jest.spyOn(component, 'restoreOriginalConsoleError').mockImplementation();
+      jest.spyOn(mockCameraService.isCameraError$, 'set').mockImplementation();
+    });
+  
+    it('should call modifyConsoleErrorToHandleScannerErrors on ngOnInit', async () => {
+      await component.ngOnInit();
+      expect(component.modifyConsoleErrorToHandleScannerErrors).toHaveBeenCalled();
+    });
+  
+    it('should call initCameraIfNoActivateBarcodes on ngAfterViewInit', async () => {
+      await component.ngAfterViewInit();
+      expect(component.initCameraIfNoActivateBarcodes).toHaveBeenCalled();
+    });
+  
+    it('should call destroy$.next, setActivatingTimeout, restoreOriginalConsoleError and reset camera error on ngOnDestroy', () => {
+      jest.spyOn(component.destroy$, 'next');
+  
+      component.ngOnDestroy();
+  
+      expect(component.destroy$.next).toHaveBeenCalled();
+      expect(component.setActivatingTimeout).toHaveBeenCalled();
+      expect(component.restoreOriginalConsoleError).toHaveBeenCalled();
+      expect(mockCameraService.isCameraError$.set).toHaveBeenCalledWith(false);
+    });
+  });
+
+  describe('Activate scanner methods', () => {
+    beforeEach(() => {
+      component['scanner'] = {
+        enable: false,
+        askForPermission: jest.fn().mockResolvedValue(true),
+        device: undefined
+      } as any;
+  
+      jest.spyOn(component['activatedScanner$$'], 'next');
+    });
+  
+    it('should enable scanner and set device if permission granted in activateScanner', async () => {
+      jest.spyOn(component, 'selectedDevice$').mockReturnValue({ deviceId: 'device-123' } as any);
+  
+      await component.activateScanner();
+  
+      expect(component['scanner'].enable).toBe(true);
+      expect(component['scanner'].askForPermission).toHaveBeenCalled();
+      expect(component['scanner'].device).toEqual({ deviceId: 'device-123' });
+      expect(component['activatedScanner$$'].next).toHaveBeenCalled();
+    });
+  
+    it('should not change scanner device if already set', async () => {
+      component['scanner'].device = { deviceId: 'device-123', askForPemission: ()=>true } as any;
+      jest.spyOn(component, 'selectedDevice$').mockReturnValue({ deviceId: 'device-123' } as any);
+      
+      await component.activateScanner();
+      
+      expect(component['activatedScanner$$'].next).not.toHaveBeenCalled();
+    });
+  
+    it('should not activate scanner if scanner is undefined', async () => {
+      component['scanner'] = undefined as any;
+  
+      await component.activateScanner();
+  
+      expect(component['activatedScanner$$'].next).not.toHaveBeenCalled();
+    });
+  
+    it('should not set device if permission is denied', async () => {
+      component['scanner'].askForPermission = jest.fn().mockResolvedValue(false);
+  
+      await component.activateScanner();
+  
+      expect(component['scanner'].device).toBeUndefined();
+      expect(component['activatedScanner$$'].next).not.toHaveBeenCalled();
+    });
+  
+    it('should call activateScanner and set firstActivationCompleted in activateScannerInitially', async () => {
+      jest.spyOn(component, 'activateScanner').mockImplementation();
+  
+      await component.activateScannerInitially();
+  
+      expect(component.activateScanner).toHaveBeenCalled();
+      expect(component.firstActivationCompleted).toBe(true);
+    });
+  });
+
+  describe('restoreOriginalConsoleError', () => {
+    it('should restore console.error if originalConsoleError is defined', () => {
+      const mockConsoleError = jest.fn();
+      component['originalConsoleError'] = mockConsoleError;
+  
+      component.restoreOriginalConsoleError();
+  
+      expect(console.error).toBe(mockConsoleError);
+    });
+  
+    it('should not change console.error if originalConsoleError is undefined', () => {
+      const originalConsoleError = console.error;
+      component['originalConsoleError'] = undefined;
+  
+      component.restoreOriginalConsoleError();
+  
+      expect(console.error).toBe(originalConsoleError);
+    });
+  });
+
+  describe('modifyConsoleErrorToHandleScannerErrors', () => {
+    let originalConsoleError: jest.Mock;
+  
+    beforeEach(() => {
+      originalConsoleError = jest.fn();
+      console.error = originalConsoleError;
+      mockCameraService.handleCameraErrors = jest.fn(); // Assegurem que està net
+    });
+  
+    afterEach(() => {
+      console.error = originalConsoleError;
+    });
+  
+    it('should redefine console.error and store the original one', () => {
+      component.modifyConsoleErrorToHandleScannerErrors();
+  
+      expect(component['originalConsoleError']).toBe(originalConsoleError);
+      expect(typeof console.error).toBe('function');
+    });
+  
+    it('should call handleCameraErrors once with noMediaError when specific error occurs', () => {
+      component.modifyConsoleErrorToHandleScannerErrors();
+  
+      console.error('@zxing/ngx-scanner', "Can't get user media, this is not supported.", 'extraData');
+  
+      console.log(mockCameraService.handleCameraErrors.mock.calls); // Depuració
+  
+      expect(mockCameraService.handleCameraErrors).toHaveBeenCalledTimes(1);
+      expect(mockCameraService.handleCameraErrors).toHaveBeenCalledWith({"name": "extraData"}, "noMediaError");
+  
+      expect(originalConsoleError).not.toHaveBeenCalled();
+    });
+  
+    it('should call handleCameraErrors once with undefinedError for other @zxing/ngx-scanner errors', () => {
+      component.modifyConsoleErrorToHandleScannerErrors();
+  
+      console.error('@zxing/ngx-scanner', 'Some other scanner error', 'extraData');
+  
+      console.log(mockCameraService.handleCameraErrors.mock.calls); // Depuració
+  
+      expect(mockCameraService.handleCameraErrors).toHaveBeenCalledTimes(1);
+      expect(mockCameraService.handleCameraErrors).toHaveBeenCalledWith({"name": "extraData"}, "undefinedError");
+  
+      expect(originalConsoleError).not.toHaveBeenCalled();
+    });
+  
+    it('should delegate to original console.error if the message is not @zxing/ngx-scanner', () => {
+      component.modifyConsoleErrorToHandleScannerErrors();
+  
+      mockCameraService.handleCameraErrors.mockClear();
+      console.error('Some other message', 'extraData');
+  
+      expect(mockCameraService.handleCameraErrors).not.toHaveBeenCalled();
+      expect(originalConsoleError).toHaveBeenCalledWith('Some other message', 'extraData');
+    });
+  
+    it('should not throw error if originalConsoleError is undefined and non-scanner error occurs', () => {
+      component['originalConsoleError'] = undefined;
+      component.modifyConsoleErrorToHandleScannerErrors();
+  
+      expect(() => console.error('Some other message', 'extraData')).not.toThrow();
+    });
+  });
+  
+  
+  
+
+//   it('should redefine console.error and handle zxing errors correctly', () => {
+//     const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
+//     const saveErrorLogSpy = jest.spyOn(component, 'saveErrorLog');
+//     const originalConsoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+//     component.ngOnInit();
+//     const message = "@zxing/ngx-scanner";
+//     const params = "Can't get user media, this is not supported.";
+//     console.error(message, params);
+
+//     expect(saveErrorLogSpy).toHaveBeenCalledWith(new Error(formatLogMessage(message, [params])), 'noMediaError');
+//     expect(originalConsoleSpy).not.toHaveBeenCalled();
+
+//     expect(alertMock).toHaveBeenCalledTimes(1);
+//     expect(originalConsoleSpy).not.toHaveBeenCalled();
+//     console.error("Another error");
+
+//     expect(alertMock).toHaveBeenCalledTimes(1);
+//     expect(originalConsoleSpy).toHaveBeenCalledWith("Another error");
+
+//     alertMock.mockRestore();
+//     originalConsoleSpy.mockRestore();
+//   });
+
   it('should emit qrCode when onCodeResult is called', () => {
     const testString = 'test QR code';
     jest.spyOn(component.qrCode, 'emit');
@@ -90,43 +317,6 @@ describe('BarcodeScannerComponent', () => {
     expect(component.qrCode.emit).toHaveBeenCalledWith(testString);
   });
 
-  it('should emit availableDevices when onCamerasFound is called', () => {
-    const testDevices = [{ deviceId: '1', kind: 'videoinput', label: 'Camera 1', groupId: 'group1', toJSON: () => {} }];
-    jest.spyOn(component.availableDevices, 'emit');
-    component.onCamerasFound(testDevices as MediaDeviceInfo[]);
-    expect(component.availableDevices.emit).toHaveBeenCalledWith(testDevices as MediaDeviceInfo[]);
-  });
-
-  it('should select the back camera by default in onCamerasFound', () => {
-    const testDevices = [
-      { deviceId: '1', kind: 'videoinput', label: 'Front Camera', groupId: 'group1', toJSON: () => {} },
-      { deviceId: '2', kind: 'videoinput', label: 'Back Camera', groupId: 'group2', toJSON: () => {} }
-    ];
-    component.onCamerasFound(testDevices as MediaDeviceInfo[]);
-    expect(component.newSelectedCamera.deviceId).toBe('2');
-  });
-
-  it('should select the first camera if no back camera is found in onCamerasFound', () => {
-    const testDevices = [
-      { deviceId: '1', kind: 'videoinput', label: 'Front Camera 1', groupId: 'group1', toJSON: () => {} },
-      { deviceId: '2', kind: 'videoinput', label: 'Front Camera 2', groupId: 'group2', toJSON: () => {} }
-    ];
-    component.onCamerasFound(testDevices as MediaDeviceInfo[]);
-    expect(component.newSelectedCamera.deviceId).toBe('2');
-  });
-
-  it('should toggleCamera$ when navCamera$ emits a device with deviceId', fakeAsync(() => {
-    const testDevice = { deviceId: '1', kind: 'videoinput', label: 'Camera 1', groupId: 'group1', toJSON: () => {} };
-    let selectedDevice: any;
-    component.selectedDevice$.subscribe((device) => {
-      selectedDevice = device;
-    });
-
-    mockCameraService.navCamera$.next(testDevice);
-    tick();
-
-    expect(selectedDevice.deviceId).toBe('');
-  }));
 
   it('should save error log in saveErrorLog', () => {
     const testError = new Error('Test error');
@@ -149,7 +339,7 @@ describe('BarcodeScannerComponent', () => {
       tick(3000);
       expect(saveErrorSpy).toHaveBeenCalledWith(testError, 'scanFailure');
     }));
-    
+
   it('should save undefined scan failure log when onScanFailure is called without an error', fakeAsync(() => {
     const saveErrorSpy = jest.spyOn(component, 'saveErrorLog');
     component.onScanFailure(undefined);
@@ -157,19 +347,6 @@ describe('BarcodeScannerComponent', () => {
     expect(saveErrorSpy).toHaveBeenCalledWith(expect.any(Error), 'scanFailure');
   }));
 
-  it('should restore original console.error when ngOnDestroy is called', () => {
-    (component as any).originalConsoleError = console.error;
-    component.ngOnDestroy();
-    expect(console.error).toBe(console.error);
-  });
-
-  it('should reset scanner on NavigationEnd', fakeAsync(() => {
-    jest.spyOn(component.scanner, 'reset'); 
-    mockRouter.events.next(new NavigationEnd(1, 'http://localhost/', 'http://localhost/'));
-    tick();
-    expect(component.scanner.reset).toHaveBeenCalled();
-  }));
-});
 
 describe('formatLogMessage', () => {
   it('should format message with no optional params', () => {
@@ -198,4 +375,5 @@ describe('formatLogMessage', () => {
     const result = formatLogMessage(message, optionalParams);
     expect(result).toBe('12345. true [object Object]');
   });
+});
 });

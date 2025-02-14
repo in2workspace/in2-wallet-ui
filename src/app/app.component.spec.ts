@@ -119,17 +119,83 @@ describe('AppComponent', () => {
     });
   });
 
-  it('should set default language to "en" on initialization', async () => {
-    await storageServiceMock.get('language');
-    expect(translateServiceMock.setDefaultLang).toHaveBeenCalledWith('en');
+  it('should add available languages', () => {
+    component.setLanguage();
+    expect(translateServiceMock.addLangs).toHaveBeenCalledWith(['en', 'es', 'ca']);
   });
+
+  it('should set default language to "en" if no stored language is found', async () => {
+    storageServiceMock.get.mockResolvedValueOnce('');
+    await component.setLanguage();
+    expect(translateServiceMock.setDefaultLang).toHaveBeenCalledWith('en');
+    expect(storageServiceMock.set).toHaveBeenCalledWith('language', 'en');
+  });
+
+  it('should set default language from storage if available', async () => {
+    storageServiceMock.get.mockResolvedValueOnce('ca');
+    await component.setLanguage();
+    expect(translateServiceMock.setDefaultLang).toHaveBeenCalledWith('ca');
+  });
+
+
+  it('should show an alert if the device is an iOS version lower than 14.3 and not using Safari', () => {
+    const isIOSVersionLowerThanSpy = jest
+      .spyOn(component['cameraService'], 'isIOSVersionLowerThan')
+      .mockReturnValue(true);
+    const isNotSafariSpy = jest
+      .spyOn(component['cameraService'], 'isNotSafari')
+      .mockReturnValue(true);
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {}); 
+
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    expect(isIOSVersionLowerThanSpy).toHaveBeenCalledWith(14.3);
+    expect(isNotSafariSpy).toHaveBeenCalled();
+    expect(alertSpy).toHaveBeenCalledWith(
+      'This application scanner is probably not supported on this device with this browser. If you have issues, use Safari browser.'
+    );
+
+    jest.restoreAllMocks();
+  });
+
+  it('should NOT show an alert if the device is an iOS version 14.3 or higher', () => {
+    jest
+      .spyOn(component['cameraService'], 'isIOSVersionLowerThan')
+      .mockReturnValue(false);
+    jest.spyOn(component['cameraService'], 'isNotSafari').mockReturnValue(true);
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {}); 
+
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    expect(alertSpy).not.toHaveBeenCalled();
+
+    jest.restoreAllMocks();
+  });
+
+  it('should NOT show an alert if the browser is Safari', () => {
+    jest
+      .spyOn(component['cameraService'], 'isIOSVersionLowerThan')
+      .mockReturnValue(true);
+    jest.spyOn(component['cameraService'], 'isNotSafari').mockReturnValue(false);
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {}); 
+
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    expect(alertSpy).not.toHaveBeenCalled();
+
+    jest.restoreAllMocks();
+  });
+
 
   it('should initialize userName observable on ngOnInit', () => {
     component.ngOnInit();
     expect(authenticationServiceMock.getName).toHaveBeenCalled();
   });
 
-  it('should redirect to a clean URL if "nocache=true" is in query params', () => {
+  it('should redirect to a clean URL if "nocache=true" is in query params', async () => {
     const originalLocation = window.location;
     delete (window as any).location;
     (window as any).location = {
@@ -138,7 +204,7 @@ describe('AppComponent', () => {
       origin: 'http://example.com',
       search: '?nocache=true',
     };
-    component.ngOnInit();
+    await component.ngOnInit();
     expect(window.location.href).toContain('?nocache=');
     window.location = originalLocation;
   });
@@ -156,5 +222,66 @@ describe('AppComponent', () => {
     component.handleKeydown(mockEvent);
     expect(component.openPopover).toHaveBeenCalledWith(mockEvent);
   });
+
+  it('should show an alert if iOS version is below 14.3 and the browser is not Safari', () => {
+    // Mock del servei CameraService
+    const isIOSVersionLowerThanSpy = jest.spyOn(component['cameraService'], 'isIOSVersionLowerThan').mockReturnValue(true);
+    const isNotSafariSpy = jest.spyOn(component['cameraService'], 'isNotSafari').mockReturnValue(true);
+
+    // Espia la funció global alert
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    // Crear el component
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    expect(isIOSVersionLowerThanSpy).toHaveBeenCalled();
+    expect(isNotSafariSpy).toHaveBeenCalled();
+    expect(alertSpy).toHaveBeenCalledWith(
+      'This application scanner is probably not supported on this device with this browser. If you have issues, use Safari browser.'
+    );
+
+    // Restaurar espies
+    isIOSVersionLowerThanSpy.mockRestore();
+    isNotSafariSpy.mockRestore();
+    alertSpy.mockRestore();
+  });
+
+  it('should NOT show an alert if iOS version is 14.3 or above', () => {
+    const isIOSVersionLowerThanSpy = jest.spyOn(component['cameraService'], 'isIOSVersionLowerThan').mockReturnValue(false);
+    const isNotSafariSpy = jest.spyOn(component['cameraService'], 'isNotSafari').mockReturnValue(true);
+    
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    expect(isIOSVersionLowerThanSpy).toHaveBeenCalled();
+    expect(isNotSafariSpy).toHaveBeenCalled();
+    expect(alertSpy).not.toHaveBeenCalled();
+
+    isIOSVersionLowerThanSpy.mockRestore();
+    isNotSafariSpy.mockRestore();
+    alertSpy.mockRestore();
+  });
+
+  it('should NOT show an alert if browser is Safari', () => {
+    const isIOSVersionLowerThanSpy = jest.spyOn(component['cameraService'], 'isIOSVersionLowerThan').mockReturnValue(true);
+    const isNotSafariSpy = jest.spyOn(component['cameraService'], 'isNotSafari').mockReturnValue(false);
+    
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    expect(isIOSVersionLowerThanSpy).toHaveBeenCalled();
+    expect(isNotSafariSpy).toHaveBeenCalled();
+    expect(alertSpy).not.toHaveBeenCalled();
+
+    isIOSVersionLowerThanSpy.mockRestore();
+    isNotSafariSpy.mockRestore();
+    alertSpy.mockRestore();
+  });
+
   
 });

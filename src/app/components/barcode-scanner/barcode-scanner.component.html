@@ -1,12 +1,25 @@
 
+@if(isError$()){
+    <div>
+        <ion-icon size="large" aria-hidden="true" name="videocam-off-outline"></ion-icon>
+    </div>
+}@else if(!firstActivationCompleted){
+    <div class="loading">
+        <ion-spinner name="lines"></ion-spinner> 
+        <span>{{ "barcode.initializing" | translate}}</span>
+    </div>
+}
+
 <zxing-scanner
-    #scanner
-    class="scanner"
-    [autostart]="true"
-    [device]="newSelectedCamera"
-    [formats]="allowedFormats"
-    (camerasFound)="onCamerasFound($event)"
-    (scanSuccess)="onCodeResult($event)"
-    (scanError)="onScanError($event)" 
-    (scanFailure)="onScanFailure($event)"
-    ></zxing-scanner>
+#scanner
+[style.display]="firstActivationCompleted ? 'block' : 'none'"
+class="scanner"
+[autostart]="false"
+[formats]="allowedFormats"
+(scanSuccess)="onCodeResult($event)"
+(scanError)="onScanError($event)" 
+(scanFailure)="onScanFailure($event)"
+></zxing-scanner>
+
+
+

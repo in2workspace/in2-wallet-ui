@@ -1,22 +1,22 @@
 
 {
     "menu":{
-    "home":"Home",
-    "credentials":"Credencials",
-    "dids":"Dids",
-    "camera-selector":"Selector de Camara",
-    "language-selector":"Selector d'Idioma",
-    "terms-of-user":"Terms d'Us",
-    "privacy-policy":"Politica de Privacitat",
-    "faqs":"FAQs",
-    "settings":"Settings",
-    "logout":"Tancar sessió"
-
+        "home":"Home",
+        "credentials":"Credencials",
+        "dids":"Dids",
+        "camera-selector":"Selector de Camara",
+        "language-selector":"Selector d'Idioma",
+        "terms-of-user":"Termes d'Us",
+        "privacy-policy":"Política de Privacitat",
+        "faqs":"FAQs",
+        "settings":"Settings",
+        "logout":"Tancar sessió"
     },
     "camera-selector":{
-        "title":"Camara",
-        "settings": "Configuració de la camara",
-        "no-device": "Sense dispositiu"
+        "title":"Càmera seleccionada",
+        "settings": "Configuració de la càmera",
+        "no-device": "Sense dispositiu",
+        "changing-device": "Canviant de càmera..."
     },
     "credential-offer":{
         "title":"Oferta de Credencial",
@@ -102,7 +102,7 @@
         "title":"Configuració"
     },
     "terms-of-use":{
-        "title":"Terms d'Us"
+        "title":"Termes d'Us"
     },
     "vc-selector":{
         "title":"Selector de VC",
@@ -125,8 +125,11 @@
         "delete-cancel": "Cancel·la",
         "unsigned": "Sense signatura"
     },
+    "barcode":{
+        "initializing": "Inicialitzant escàner..."
+    },
     "errors":{
-        "default":"Error no reconegut",
+        "default":"Error inesperat. Si el problema persisteix, contacteu <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>",
         "failed-qr-process": "Hi ha hagut un problema en processar el QR. Pot ser que sigui invàlid o que ja hagi estat utilitzat abans. Refresqueu l'oferta de credencial. Si el problema persisteix, contacteu <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>",
         "invalid-qr":"El QR presentat és invàlid",
         "no-credentials-available": "No hi ha cap credencial disponible per al login",
@@ -138,12 +141,25 @@
         "incorrect-pin":"PIN incorrecte. Si us plau, actualitzeu l'oferta de credencials. Si el problema persisteix, poseu-vos en contacte amb <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>.",
         "pin-expired": "No ha introduït el PIN dins del límit de temps. Si us plau, renoveu l'oferta de credencial. Si el problema persisteix, poseu-vos en contacte amb <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>.",
         "unsigned": "La credencial signada encara no està disponible",
-        "Errunsigned": "No s'ha pogut obtenir la credencial"
+        "Errunsigned": "No s'ha pogut obtenir la credencial",
+        "no-connection": "S'ha perdut la connexió. Comprovi la connexió a internet i torni-ho a intentar.",
+        "navigation": "Error inesperat en intentar accedir a la pàgina. Si el problema persisteix, contacteu <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>",
+        "camera": {
+            "not-readable": "No es pot accedir a la càmera. Assegura't que cap altra aplicació l'estigui utilitzant. Pot ser que hagis de refrescar la pàgina.",
+            "not-allowed": "L'accés a la càmera està denegat. Comprova els permisos del teu navegador. Si el problema persisteix, intenta refrescar la pàgina.",
+            "not-found": "No s'ha trobat cap càmera en aquest dispositiu. Assegura't que està correctament connectada i refresca la pàgina.",
+            "overconstrained": "La configuració de la càmera no és compatible. Intenta seleccionar una càmera diferent o refrescar la pàgina.",
+            "security": "L'accés a la càmera està bloquejat per restriccions de seguretat. Pot ser que hagis de refrescar la pàgina o revisar la configuració del teu navegador.",
+            "abort": "L'accés a la càmera s'ha cancel·lat abans de concedir els permisos. Comprova els permisos del teu navegador i assegura't que cap altra aplicació l'estigui utilitzant. Torna-ho a intentar o refresca la pàgina.",
+            "type": "Error de configuració: la sol·licitud de la càmera no és vàlida. Intenta refrescar la pàgina o comprovar la configuració de la càmera.",
+            "not-supported": "El teu navegador no admet l'accés a la càmera. Considera utilitzar un navegador diferent.",
+            "default": "Error inesperat. Comprova els permisos del teu navegador i assegura't que cap altra aplicació estigui utilitzant la càmera. Intenta refrescar la pàgina."
+        }
     },
     "confirmation":{
         "header":"Enviar credencial?",
         "ok":"Ok",
-        "cancel":"Cancelar",
+        "cancel":"Cancel·lar",
         "pin":"Introdueix PIN"
     }
 }

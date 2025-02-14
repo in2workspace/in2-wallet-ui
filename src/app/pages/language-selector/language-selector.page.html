@@ -1,16 +1,17 @@
-<ion-content [fullscreen]="true">
-  <ion-grid>
-    <p style="font-weight: bold;">{{"language-selector.title"|translate}}</p>
-    <ion-row class="ion-justify-content-start">
-      <ion-list>
-        <ion-radio-group [ngModel]="languageSelected | async" (ionChange)="languageChange($any($event).target?.value)">
-          <ion-item *ngFor="let language of languageList">
-            <ion-label>{{ language.name }}</ion-label>
-            <ion-radio [value]="language" mode="md" slot="start"></ion-radio>
-          </ion-item>
-        </ion-radio-group>
-      </ion-list>
-    </ion-row>
-
+<ion-content [fullscreen]="true" class="background-content">
+  <ion-grid class="settings-pages-grid language-grid">
+    <div class="settings-box">
+      <div class="settings-pages-title">{{"language-selector.title"|translate}}</div>
+      <ion-row class="ion-justify-content-center">
+        <ion-list class="list">
+            <ion-radio-group class="radio-group" [ngModel]="languageSelected | async" (ionChange)="languageChange($any($event).target?.value)">
+              <ion-item class="item" *ngFor="let language of languageList">
+                <ion-label>{{ language.name }}</ion-label>
+                <ion-radio [value]="language" mode="md" slot="start"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+        </ion-list>
+      </ion-row>
+    </div>
   </ion-grid>
 </ion-content>

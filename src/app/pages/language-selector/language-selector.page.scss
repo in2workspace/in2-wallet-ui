@@ -1,0 +1,24 @@
+.language-grid{
+    padding-top: 100px;
+    display: flex;
+    justify-content: center;
+}
+
+.settings-pages-title{
+    padding: 12px;
+    text-align: start;
+}
+
+.settings-box {
+    white-space: pre-line;
+    color: grey;
+    width: fit-content;
+    border-radius: 5px;
+    background-color: #f2f4f8;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .list{
+    width: 200px;
+  }

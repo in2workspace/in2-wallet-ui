@@ -1,23 +1,25 @@
 
 {
     "menu":{
-
-    "home":"Home",
-    "credentials":"Credentials",
-    "dids":"Dids",
-    "camera-selector":"Camera Selector",
-    "language-selector":"Language Selector",
-    "terms-of-user":"Terms of User",
-    "privacy-policy":"Privacy Policy",
-    "faqs":"FAQs",
-    "settings":"Settings",
-    "logout":"Logout"
+        "home":"Home",
+        "credentials":"Credentials",
+        "dids":"Dids",
+        "camera-selector":"Camera Selector",
+        "language-selector":"Language Selector",
+        "terms-of-user":"Terms of User",
+        "privacy-policy":"Privacy Policy",
+        "faqs":"FAQs",
+        "settings":"Settings",
+        "logout":"Logout"
+    },
+    "barcode":{
+        "initializing": "Initializing barcode... Please wait."
     },
     "camera-selector":{
-        "title":"Camera",
+        "title":"Selected camera",
         "settings": "Camera settings",
-        "no-device": "No device"
-
+        "no-device": "No device",
+        "changing-device": "Switching camera..."
     },
     "credential-offer":{
         "title":"Credential Offer",
@@ -128,7 +130,7 @@
         "unsigned": "Unsigned"
     },
     "errors":{
-        "default":"Error not recognized",
+        "default": "Unexpected error. If the problem persists, contact the <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>support team</a>.",
         "failed-qr-process": "We couldn't process the QR code.<br>It might be invalid or already used. Please refresh the credential offer. If the problem persists, report it to the <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>support team</a>.",
         "invalid-qr":"The QR presented is invalid",
         "no-credentials-available": "There are no credentials available to login",
@@ -140,7 +142,20 @@
         "incorrect-pin": "Incorrect PIN. Please refresh the credential offer. If the problem persists, report it to the <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>support team</a>.",
         "pin-expired": "You didn't enter the PIN within the time limit. Please refresh the credential offer. If the problem persists, report it to the <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>support team</a>.",
         "unsigned": "The signed credential is not yet available",
-        "Errunsigned": "Credential could not be obtained"
+        "Errunsigned": "Credential could not be obtained",
+        "no-connection": "Connection was lost. Please check your network and try again.",
+        "navigation": "There was an unexpected problem when trying to access the page. If the problem persists, report it to the <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>support team</a>.",
+        "camera": {
+            "not-readable": "The camera cannot be accessed. Make sure no other application is using it. You may need to refresh the page.",
+            "not-allowed": "Camera access is denied. Check your browser permissions. If the issue persists, try refreshing the page.",
+            "not-found": "Camera not found on this device. Make sure it is properly connected and refresh the page.",
+            "overconstrained": "The camera configuration is not compatible. Try selecting a different camera or refreshing the page.",
+            "security": "Camera access is blocked due to security restrictions. You may need to refresh the page or check your browser settings.",
+            "abort": "Camera access was aborted. Check your browser permissions and make sure no other application is using the camera. Try again or refresh the page.",
+            "type": "Configuration error: the camera request is invalid. Try refreshing the page or checking your camera settings",
+            "not-supported": "Your browser does not support camera access. Consider using a different browser.",
+            "default": "Unexpected error. Check your browser permissions and make sure no other application is using the camera. Try refreshing the page."
+        }
     },
     "confirmation":{
         "header":"Send credential?",
