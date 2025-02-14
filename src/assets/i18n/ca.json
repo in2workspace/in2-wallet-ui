@@ -142,7 +142,7 @@
         "pin-expired": "No ha introduït el PIN dins del límit de temps. Si us plau, renoveu l'oferta de credencial. Si el problema persisteix, poseu-vos en contacte amb <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>.",
         "unsigned": "La credencial signada encara no està disponible",
         "Errunsigned": "No s'ha pogut obtenir la credencial",
-        "no-connection": "No hi ha connexió a internet. Comprovi la connexió i torni-ho a intentar.",
+        "no-connection": "S'ha perdut la connexió. Comprovi la connexió a internet i torni-ho a intentar.",
         "navigation": "Error inesperat en intentar accedir a la pàgina. Si el problema persisteix, contacteu <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>",
         "camera": {
             "not-readable": "No es pot accedir a la càmera. Assegura't que cap altra aplicació l'estigui utilitzant. Pot ser que hagis de refrescar la pàgina.",
