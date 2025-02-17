@@ -56,6 +56,7 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     translateServiceMock = {
       addLangs: jest.fn(),
+      getLangs: jest.fn(),
       setDefaultLang: jest.fn(),
       use: jest.fn()
     } as unknown as jest.Mocked<TranslateService>;
@@ -150,19 +151,31 @@ describe('AppComponent', () => {
   it('should set default language to "en" if no stored language is found', fakeAsync(() => {
     translateServiceMock.use.mockClear();
     storageServiceMock.get.mockResolvedValueOnce('');
+    translateServiceMock.getLangs.mockReturnValue(['en', 'es', 'ca']);
     component.setStoredLanguage();
     tick();
     expect(translateServiceMock.use).not.toHaveBeenCalled();
     expect(storageServiceMock.set).toHaveBeenCalledWith('language', 'en');
   }));
 
-  it('should set default language from storage if available', fakeAsync(() => {
+  it('should set stored language if it is in the supported languages', fakeAsync(() => {
     translateServiceMock.use.mockClear();
     storageServiceMock.get.mockResolvedValueOnce('ca');
+    translateServiceMock.getLangs.mockReturnValue(['en', 'es', 'ca']);
     component.setStoredLanguage();
     tick();
     expect(translateServiceMock.use).toHaveBeenCalledWith('ca');
     expect(storageServiceMock.set).not.toHaveBeenCalled();
+  }));
+  
+  it('should not use stored language if it is not in the supported languages', fakeAsync(() => {
+    translateServiceMock.use.mockClear();
+    storageServiceMock.get.mockResolvedValueOnce('fr');
+    translateServiceMock.getLangs.mockReturnValue(['en', 'es', 'ca']);
+    component.setStoredLanguage();
+    tick();
+    expect(translateServiceMock.use).not.toHaveBeenCalled();
+    expect(storageServiceMock.set).toHaveBeenCalledWith('language', 'en');
   }));
 
   it('should set CSS variables from environment in the constructor', () => {

@@ -76,10 +76,15 @@ export class AppComponent implements OnInit {
     this.translate.use('en');
   }
 
-  public setStoredLanguage(): void{
-    this.storageService.get('language').then((res:string) => {
-      if (res) this.translate.use(res);
-      else this.storageService.set('language', 'en');
+  public setStoredLanguage(): void {
+    this.storageService.get('language').then((res: string) => {
+      const availableLangs = this.translate.getLangs();
+      
+      if (availableLangs.includes(res)) {
+        this.translate.use(res);
+      } else {
+        this.storageService.set('language', 'en');
+      }
     });
   }
 
