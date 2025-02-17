@@ -1,9 +1,9 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { TranslateService } from '@ngx-translate/core';
 import { PopoverController, IonicModule, NavController } from '@ionic/angular';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import {EMPTY, of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { AuthenticationService } from './services/authentication.service';
 import { StorageService } from './services/storage.service';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -15,6 +15,7 @@ describe('AppComponent', () => {
   let routerMock: jest.Mocked<Router>;
   let authenticationServiceMock: jest.Mocked<AuthenticationService>;
   let storageServiceMock: jest.Mocked<StorageService>;
+  let routerEventsSubject = new Subject<Event>();
 
   const activatedRouteMock: Partial<ActivatedRoute> = {
     snapshot: {
@@ -55,7 +56,9 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     translateServiceMock = {
       addLangs: jest.fn(),
+      getLangs: jest.fn(),
       setDefaultLang: jest.fn(),
+      use: jest.fn()
     } as unknown as jest.Mocked<TranslateService>;
 
     popoverControllerMock = {
@@ -66,7 +69,7 @@ describe('AppComponent', () => {
 
     routerMock = {
       navigate: jest.fn(),
-      events: EMPTY, 
+      events: routerEventsSubject, 
       url: '/callback?test=true',
     } as unknown as jest.Mocked<Router>;
 
@@ -97,15 +100,87 @@ describe('AppComponent', () => {
       ],
     }).compileComponents();
 
+    jest.spyOn(AppComponent.prototype, 'setDefaultLanguages');
+    jest.spyOn(AppComponent.prototype, 'setStoredLanguage');
+    jest.spyOn(AppComponent.prototype, 'setCustomStyles');
+
     const fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
+
   });
 
   it('should create the app component', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should initiliaze default languages, stored language and custom styles', ()=>{
+    expect(component.setDefaultLanguages).toHaveBeenCalled();
+    expect(component.setStoredLanguage).toHaveBeenCalled();
+    expect(component.setCustomStyles).toHaveBeenCalled();
+  });
+
+  it('should track router events, handle no cache and show alert for incompatible device', ()=>{
+    jest.spyOn(component, 'handleNoCache');
+    jest.spyOn(component, 'trackRouterEvents');
+    jest.spyOn(component, 'alertIncompatibleDevice');
+
+    component.ngOnInit();
+
+    expect(component.handleNoCache).toHaveBeenCalled();
+    expect(component.trackRouterEvents).toHaveBeenCalled();
+    expect(component.alertIncompatibleDevice).toHaveBeenCalled();
+  });
+
+  it('should emit and complete destroy subject', ()=>{
+    const nextSpy = jest.spyOn(component['destroy$'], 'next');
+    const completeSpy = jest.spyOn(component['destroy$'], 'complete');
+
+    component['ngOnDestroy']();
+
+    expect(nextSpy).toHaveBeenCalledTimes(1);
+    expect(completeSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should add available languages', () => {
+    component.setDefaultLanguages();
+    expect(translateServiceMock.addLangs).toHaveBeenCalledWith(['en', 'es', 'ca']);
+    expect(translateServiceMock.setDefaultLang).toHaveBeenCalledWith('en');
+    expect(translateServiceMock.use).toHaveBeenCalledWith('en');
+  });
+
+  it('should set default language to "en" if no stored language is found', fakeAsync(() => {
+    translateServiceMock.use.mockClear();
+    storageServiceMock.get.mockResolvedValueOnce('');
+    translateServiceMock.getLangs.mockReturnValue(['en', 'es', 'ca']);
+    component.setStoredLanguage();
+    tick();
+    expect(translateServiceMock.use).not.toHaveBeenCalled();
+    expect(storageServiceMock.set).toHaveBeenCalledWith('language', 'en');
+  }));
+
+  it('should set stored language if it is in the supported languages', fakeAsync(() => {
+    translateServiceMock.use.mockClear();
+    storageServiceMock.get.mockResolvedValueOnce('ca');
+    translateServiceMock.getLangs.mockReturnValue(['en', 'es', 'ca']);
+    component.setStoredLanguage();
+    tick();
+    expect(translateServiceMock.use).toHaveBeenCalledWith('ca');
+    expect(storageServiceMock.set).not.toHaveBeenCalled();
+  }));
+  
+  it('should not use stored language if it is not in the supported languages', fakeAsync(() => {
+    translateServiceMock.use.mockClear();
+    storageServiceMock.get.mockResolvedValueOnce('fr');
+    translateServiceMock.getLangs.mockReturnValue(['en', 'es', 'ca']);
+    component.setStoredLanguage();
+    tick();
+    expect(translateServiceMock.use).not.toHaveBeenCalled();
+    expect(storageServiceMock.set).toHaveBeenCalledWith('language', 'en');
+  }));
+
   it('should set CSS variables from environment in the constructor', () => {
+    component.setCustomStyles();
+    
     const cssVarMap = {
       '--primary-custom-color': environment.customizations.colors.primary,
       '--primary-contrast-custom-color': environment.customizations.colors.primary_contrast,
@@ -119,24 +194,6 @@ describe('AppComponent', () => {
     });
   });
 
-  it('should add available languages', () => {
-    component.setLanguage();
-    expect(translateServiceMock.addLangs).toHaveBeenCalledWith(['en', 'es', 'ca']);
-  });
-
-  it('should set default language to "en" if no stored language is found', async () => {
-    storageServiceMock.get.mockResolvedValueOnce('');
-    await component.setLanguage();
-    expect(translateServiceMock.setDefaultLang).toHaveBeenCalledWith('en');
-    expect(storageServiceMock.set).toHaveBeenCalledWith('language', 'en');
-  });
-
-  it('should set default language from storage if available', async () => {
-    storageServiceMock.get.mockResolvedValueOnce('ca');
-    await component.setLanguage();
-    expect(translateServiceMock.setDefaultLang).toHaveBeenCalledWith('ca');
-  });
-
 
   it('should show an alert if the device is an iOS version lower than 14.3 and not using Safari', () => {
     const isIOSVersionLowerThanSpy = jest
@@ -146,56 +203,48 @@ describe('AppComponent', () => {
       .spyOn(component['cameraService'], 'isNotSafari')
       .mockReturnValue(true);
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {}); 
-
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-
+  
+    component.alertIncompatibleDevice(); // Crida explícita a la funció
+  
     expect(isIOSVersionLowerThanSpy).toHaveBeenCalledWith(14.3);
     expect(isNotSafariSpy).toHaveBeenCalled();
     expect(alertSpy).toHaveBeenCalledWith(
       'This application scanner is probably not supported on this device with this browser. If you have issues, use Safari browser.'
     );
-
+  
     jest.restoreAllMocks();
   });
-
+  
   it('should NOT show an alert if the device is an iOS version 14.3 or higher', () => {
     jest
       .spyOn(component['cameraService'], 'isIOSVersionLowerThan')
       .mockReturnValue(false);
     jest.spyOn(component['cameraService'], 'isNotSafari').mockReturnValue(true);
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {}); 
-
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-
+  
+    component.alertIncompatibleDevice(); // Crida explícita a la funció
+  
     expect(alertSpy).not.toHaveBeenCalled();
-
+  
     jest.restoreAllMocks();
   });
-
+  
   it('should NOT show an alert if the browser is Safari', () => {
     jest
       .spyOn(component['cameraService'], 'isIOSVersionLowerThan')
       .mockReturnValue(true);
     jest.spyOn(component['cameraService'], 'isNotSafari').mockReturnValue(false);
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {}); 
-
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-
+  
+    component.alertIncompatibleDevice(); // Crida explícita a la funció
+  
     expect(alertSpy).not.toHaveBeenCalled();
-
+  
     jest.restoreAllMocks();
   });
+  
 
-
-  it('should initialize userName observable on ngOnInit', () => {
-    component.ngOnInit();
-    expect(authenticationServiceMock.getName).toHaveBeenCalled();
-  });
-
-  it('should redirect to a clean URL if "nocache=true" is in query params', async () => {
+  it('should redirect to a clean URL if "nocache=true" is in query params', () => {
     const originalLocation = window.location;
     delete (window as any).location;
     (window as any).location = {
@@ -204,10 +253,24 @@ describe('AppComponent', () => {
       origin: 'http://example.com',
       search: '?nocache=true',
     };
-    await component.ngOnInit();
+  
+    component.handleNoCache(); // Crida explícita a la funció
+  
     expect(window.location.href).toContain('?nocache=');
+  
+    // Restaurar l'objecte original de location
     window.location = originalLocation;
   });
+
+  // it('should update isCallbackRoute when the router navigates', () => {
+  //   const event = new NavigationEnd(1, '/callback?code=123', '/callback?code=123');
+  //   routerMock.events.next(event); // Simula l'esdeveniment de navegació
+  
+  //   component.trackRouterEvents(); // Crida explícita a la funció
+  
+  //   expect(component.isCallbackRoute).toBe(true);
+  // });
+  
 
   it('should navigate to /home on logout', () => {
     component.logout();

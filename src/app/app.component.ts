@@ -6,9 +6,10 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
 import { LogoutPage } from './pages/logout/logout.page';
 import { StorageService } from './services/storage.service';
-import { Observable } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { CameraService } from './services/camera.service';
 import { environment } from 'src/environments/environment';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -26,16 +27,35 @@ import { environment } from 'src/environments/environment';
 export class AppComponent implements OnInit {
   private readonly authenticationService = inject(AuthenticationService);
   private readonly router = inject(Router)
-  public userName: Observable<string> | undefined;
+  public userName = this.authenticationService.getName();
   public isCallbackRoute = false;
-  public readonly logoSrc=environment.customizations.logo_src;
+  public readonly logoSrc = environment.customizations.logo_src;
+  private readonly destroy$ = new Subject<void>();
 
   public constructor(
     private readonly cameraService: CameraService,
-    public readonly translate: TranslateService,
     private readonly popoverController: PopoverController,
-    private readonly storageService: StorageService
+    private readonly storageService: StorageService,
+    public readonly translate: TranslateService,
   ) {
+    this.setDefaultLanguages();
+    this.setStoredLanguage();
+
+    this.setCustomStyles();
+  }
+
+  public ngOnInit() {
+    this.handleNoCache();
+    this.trackRouterEvents();
+    this.alertIncompatibleDevice();
+  }
+
+  private ngOnDestroy(){
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  public setCustomStyles(): void{
     const root = document.documentElement;
 
     const cssVarMap = {
@@ -48,9 +68,28 @@ export class AppComponent implements OnInit {
     Object.entries(cssVarMap).forEach(([cssVariable, colorValue]) => {
       root.style.setProperty(cssVariable, colorValue);
     });
+  }
 
+  public setDefaultLanguages(): void{
+    this.translate.addLangs(['en', 'es', 'ca']);
+    this.translate.setDefaultLang('en');
+    this.translate.use('en');
+  }
 
-    //alert for IOs below 14.3
+  public setStoredLanguage(): void {
+    this.storageService.get('language').then((res: string) => {
+      const availableLangs = this.translate.getLangs();
+      
+      if (availableLangs.includes(res)) {
+        this.translate.use(res);
+      } else {
+        this.storageService.set('language', 'en');
+      }
+    });
+  }
+
+  //alert for IOs below 14.3
+  public alertIncompatibleDevice(): void{
     const problematicIosVersion = this.cameraService.isIOSVersionLowerThan(14.3);
     const isNotSafari = this.cameraService.isNotSafari();
     if (problematicIosVersion && isNotSafari) {
@@ -58,31 +97,34 @@ export class AppComponent implements OnInit {
     }
   }
 
-  public async ngOnInit(): Promise<void> {
-    this.userName = this.authenticationService.getName();
-
-    await this.setLanguage();
-
+  public handleNoCache(): void {
     const urlParams = new URLSearchParams(window.location.search);
-
+  
     if (urlParams.get('nocache') === 'true') {
       const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
       window.location.href = cleanUrl;
     }
-    this.router.events.subscribe(() => {
+  }
+  
+  public trackRouterEvents(): void {
+    this.router.events
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(() => {
       const currentUrl = this.router.url.split('?')[0];
       this.isCallbackRoute = currentUrl.startsWith('/callback');
     });
   }
 
-  public logout() {
-    this.authenticationService.logout().subscribe(() => {
+  public logout(): void {
+    this.authenticationService.logout()
+    .pipe(take(1))
+    .subscribe(() => {
       this.router.navigate(['/home'], {});
     });
   }
 
 
-  public handleKeydown(event: KeyboardEvent, action = 'request') {
+  public handleKeydown(event: KeyboardEvent, action = 'request'): void {
     if (event.key === 'Enter' || event.key === ' ') {
         this.openPopover(event);
 
@@ -90,7 +132,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  public async openPopover(ev: Event) {
+  public async openPopover(ev: Event): Promise<void> {
     if (this.isCallbackRoute) {
       return; 
     }
@@ -102,15 +144,6 @@ export class AppComponent implements OnInit {
     });
 
     await popover.present();
-  }
-
-  public async setLanguage(){
-    this.translate.addLangs(['en', 'es', 'ca']);
-    this.translate.setDefaultLang('en');
-    this.storageService.get('language').then((res:string) => {
-      if (res) this.translate.setDefaultLang(res);
-      else this.storageService.set('language', 'en');
-    });
   }
 
 }
