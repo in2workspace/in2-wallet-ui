@@ -17,6 +17,8 @@ module.exports = {
   coverageDirectory: "./coverage/app",
   coverageReporters: ["lcov", "text-summary", "cobertura", "html"],
   collectCoverageFrom: [   
+    "src/app/app.component.ts",
+    "src/app/app.routes.ts",
     "src/app/guards/**/*.ts",                  
     "src/app/pages/**/*.ts",             
     "src/app/services/**/*.ts",
@@ -26,7 +28,6 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules/', 
     '<rootDir>/dist/',
-    // '<rootDir>/src/app/pages/(?!credentials)',
   ],
   transformIgnorePatterns: ['/node_modules/(?!@stencil|stencil)/'],
   testPathIgnorePatterns: [
