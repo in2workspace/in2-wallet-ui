@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { TranslateService } from '@ngx-translate/core';
 import { PopoverController, IonicModule, NavController } from '@ionic/angular';
@@ -57,6 +57,7 @@ describe('AppComponent', () => {
     translateServiceMock = {
       addLangs: jest.fn(),
       setDefaultLang: jest.fn(),
+      use: jest.fn()
     } as unknown as jest.Mocked<TranslateService>;
 
     popoverControllerMock = {
@@ -98,14 +99,13 @@ describe('AppComponent', () => {
       ],
     }).compileComponents();
 
+    jest.spyOn(AppComponent.prototype, 'setDefaultLanguages');
+    jest.spyOn(AppComponent.prototype, 'setStoredLanguage');
+    jest.spyOn(AppComponent.prototype, 'setCustomStyles');
+
     const fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
-    jest.spyOn(component, 'setDefaultLanguages');
-    jest.spyOn(component, 'setStoredLanguage');
-    jest.spyOn(component, 'setCustomStyles');
-    jest.spyOn(component, 'handleNoCache');
-    jest.spyOn(component, 'trackRouterEvents');
-    jest.spyOn(component, 'alertIncompatibleDevice');
+
   });
 
   it('should create the app component', () => {
@@ -119,6 +119,12 @@ describe('AppComponent', () => {
   });
 
   it('should track router events, handle no cache and show alert for incompatible device', ()=>{
+    jest.spyOn(component, 'handleNoCache');
+    jest.spyOn(component, 'trackRouterEvents');
+    jest.spyOn(component, 'alertIncompatibleDevice');
+
+    component.ngOnInit();
+
     expect(component.handleNoCache).toHaveBeenCalled();
     expect(component.trackRouterEvents).toHaveBeenCalled();
     expect(component.alertIncompatibleDevice).toHaveBeenCalled();
@@ -141,19 +147,23 @@ describe('AppComponent', () => {
     expect(translateServiceMock.use).toHaveBeenCalledWith('en');
   });
 
-  it('should set default language to "en" if no stored language is found', async () => {
+  it('should set default language to "en" if no stored language is found', fakeAsync(() => {
+    translateServiceMock.use.mockClear();
     storageServiceMock.get.mockResolvedValueOnce('');
     component.setStoredLanguage();
+    tick();
     expect(translateServiceMock.use).not.toHaveBeenCalled();
     expect(storageServiceMock.set).toHaveBeenCalledWith('language', 'en');
-  });
+  }));
 
-  it('should set default language from storage if available', async () => {
+  it('should set default language from storage if available', fakeAsync(() => {
+    translateServiceMock.use.mockClear();
     storageServiceMock.get.mockResolvedValueOnce('ca');
     component.setStoredLanguage();
+    tick();
     expect(translateServiceMock.use).toHaveBeenCalledWith('ca');
     expect(storageServiceMock.set).not.toHaveBeenCalled();
-  });
+  }));
 
   it('should set CSS variables from environment in the constructor', () => {
     component.setCustomStyles();
