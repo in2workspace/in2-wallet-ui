@@ -181,7 +181,7 @@ export class VcViewComponent implements OnInit {
   }
 
   public showUnsignedAlert(): void {
-    this.toastServiceHandler.showErrorAlert('Unsigned').subscribe();
+    console.log('BUTTON CLICKED');
   }
 
   public handleButtonKeydown(event: KeyboardEvent, action: string): void {
