@@ -14,6 +14,10 @@ import { DataService } from 'src/app/services/data.service';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CredentialStatus } from 'src/app/interfaces/verifiable-credential';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { ToastServiceHandler } from 'src/app/services/toast.service';
+import { catchError, forkJoin, of } from 'rxjs';
 
 const TIME_IN_MS = 3000;
 
@@ -64,7 +68,7 @@ export class CredentialsPage implements OnInit {
   private readonly websocket = inject(WebsocketService);
   private readonly cameraLogsService = inject(CameraLogsService);
 
-  public constructor()
+  public constructor(private toastServiceHandler: ToastServiceHandler)
     {
     this.credOfferEndpoint = window.location.origin + '/tabs/home';
     this.route.queryParams.subscribe((params) => {
@@ -80,7 +84,6 @@ export class CredentialsPage implements OnInit {
         this.did = data;
       }
     });
-
   }
 
   public ngOnInit(): void {
@@ -90,7 +93,50 @@ export class CredentialsPage implements OnInit {
     if (this.credentialOfferUri !== undefined) {
       this.generateCred();
     }
+
+    this.requestPendingSignatures();
   }
+
+  private requestPendingSignatures(): void {
+    const pendingCredentials = this.credList.filter(
+      (credential) => credential.status === CredentialStatus.ISSUED
+    );
+  
+    if (pendingCredentials.length === 0) {
+      return;
+    }
+  
+    const requests = pendingCredentials.map((credential) =>
+      this.walletService.requestSignature(credential.id).pipe(
+        catchError((error) => {
+          console.error(`Error signing credential ${credential.id}:`, error.message);
+          return of({ status: 500 });
+        })
+      )
+    );
+  
+    forkJoin(requests).subscribe({
+      next: (responses: (HttpResponse<string> | { status: number })[]) => {
+        const successfulResponses = responses.filter(response => response.status === 204);
+    
+        if (successfulResponses.length > 0) {
+          console.log('Signed credentials:', successfulResponses.length);
+          this.forcePageReload();
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Unexpected error in signature requests:', error.message);
+        this.toastServiceHandler.showErrorAlert('ErrorUnsigned').subscribe();
+      },
+    });
+  }
+
+  public forcePageReload(): void {
+    this.router.navigate(['/tabs/credentials']).then(() => {
+      window.location.reload();
+    });
+  }
+
   public scan(): void {
     this.toggleScan = true;
     this.show_qr = true;

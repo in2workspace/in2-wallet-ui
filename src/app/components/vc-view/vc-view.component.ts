@@ -140,7 +140,7 @@ export class VcViewComponent implements OnInit {
     );
   }
 
-  public requestSignature(): void {
+  /*public requestSignature(): void {
     if (this.credentialInput?.id) {
       this.walletService.requestSignature(this.credentialInput.id).subscribe({
         next: (response: HttpResponse<string>) => {
@@ -165,17 +165,24 @@ export class VcViewComponent implements OnInit {
     this.router.navigate(['/tabs/credentials']).then(() => {
       window.location.reload();
     });
-  }
+  } */
+
   public handleKeydown(event: KeyboardEvent, action = 'request') {
     if (event.key === 'Enter' || event.key === ' ') {
       if (action === 'qr') {
         this.qrView();
       } else {
-        this.requestSignature();
+        //this.requestSignature();
+        this.showUnsignedAlert();
       }
       event.preventDefault();
     }
   }
+
+  public showUnsignedAlert(): void {
+    this.toastServiceHandler.showErrorAlert('Unsigned').subscribe();
+  }
+
   public handleButtonKeydown(event: KeyboardEvent, action: string): void {
     if (event.key === 'Enter' || event.key === ' ') {
       if (action === 'delete') {

@@ -182,20 +182,17 @@
 
         <ion-row style="justify-content: end" class="button-row">
           <!-- todo FIXME temporarily isCredentialIssuedAndNotExpired only checks if VC is issued -->
-          <ion-button
+          <button
             *ngIf="isCredentialIssuedAndNotExpired()"
-            (click)="requestSignature()"
             (keydown)="handleKeydown($event)"
-            color="primary"
             class="request-signature-button"
-            style="width: auto; height: auto"
           >
             <img
-              src="../../../assets/icon/firma.png"
-              alt="sign"
+              src="../../../assets/icon/question_mark_black.png"
+              alt="info"
               style="width: 20px; height: 20px"
             />
-          </ion-button>
+          </button>
 
           <ion-button
           (click)="deleteVC()"

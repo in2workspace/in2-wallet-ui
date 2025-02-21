@@ -228,7 +228,7 @@ describe('VcViewComponent', () => {
     expect(component.isAlertOpenNotFound).toBeTruthy();
   })
 
-  it('requestSignature should force page reload on successful response with non-204 status', () => {
+  /* it('requestSignature should force page reload on successful response with non-204 status', () => {
     jest.spyOn((component as any).walletService, 'requestSignature').mockReturnValue(of(new HttpResponse({ status: 200 })));
     jest.spyOn(component, 'forcePageReload');
 
@@ -256,7 +256,7 @@ describe('VcViewComponent', () => {
     tick();
 
     expect(component.requestSignature).toHaveBeenCalled();
-  }));
+  })); */
 
   it('should call deleteVC on Enter key press on delete button', fakeAsync(() => {
     jest.spyOn(component, 'deleteVC');
