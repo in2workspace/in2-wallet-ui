@@ -180,22 +180,19 @@
         >
         </span>
 
-        <ion-row style="justify-content: end" class="button-row">
+        <ion-row style="justify-content: end; align-items: center; gap:5px" class="button-row">
           <!-- todo FIXME temporarily isCredentialIssuedAndNotExpired only checks if VC is issued -->
-          <ion-button
+          <button
             *ngIf="isCredentialIssuedAndNotExpired()"
-            (click)="requestSignature()"
-            (keydown)="handleKeydown($event)"
-            color="primary"
+            (keydown)="handleButtonKeydown($event, 'info')"
             class="request-signature-button"
-            style="width: auto; height: auto"
           >
             <img
-              src="../../../assets/icon/firma.png"
-              alt="sign"
+              src="../../../assets/icon/question_mark_black.png"
+              alt="info"
               style="width: 20px; height: 20px"
             />
-          </ion-button>
+          </button>
 
           <ion-button
           (click)="deleteVC()"
@@ -272,6 +269,14 @@
     [message]="'vc-view.delete-message' | translate"
     [buttons]="deleteButtons"
     (didDismiss)="setOpenDeleteNotFound(false)"
+  ></ion-alert>
+
+  <ion-alert
+    [isOpen]="isModalUnsignedOpen"
+    class="custom-alert"
+    [header]="'vc-view.unsigned-header' | translate"
+    [message]="'vc-view.unsigned-message' | translate"
+    [buttons]="unsignedButtons"
   ></ion-alert>
 
   <ion-row

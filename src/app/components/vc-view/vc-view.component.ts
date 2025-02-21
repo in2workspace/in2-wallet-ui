@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-vc-view',
   templateUrl: './vc-view.component.html',
+  styleUrls: ['./vc-view.component.scss'],
   standalone: true,
   imports: [IonicModule, QRCodeModule, TranslateModule, CommonModule],
 })
@@ -37,6 +38,7 @@ export class VcViewComponent implements OnInit {
   public isExpired = false;
   public isModalOpen = false;
   public isModalDeleteOpen = false;
+  public isModalUnsignedOpen = false;
   public showChip = false;
   public credentialStatus = CredentialStatus;
   public handlerMessage = '';
@@ -67,6 +69,15 @@ export class VcViewComponent implements OnInit {
         this.vcEmit.emit(this.credentialInput);
       },
     },
+  ];
+
+  public unsignedButtons = [{
+    text: 'Close',
+    role: 'close',
+    handler: () => {
+      this.isModalUnsignedOpen = false;
+    },
+  },
   ];
   private walletService = inject(WalletService);
   public constructor(
@@ -140,7 +151,7 @@ export class VcViewComponent implements OnInit {
     );
   }
 
-  public requestSignature(): void {
+  /*public requestSignature(): void {
     if (this.credentialInput?.id) {
       this.walletService.requestSignature(this.credentialInput.id).subscribe({
         next: (response: HttpResponse<string>) => {
@@ -165,25 +176,33 @@ export class VcViewComponent implements OnInit {
     this.router.navigate(['/tabs/credentials']).then(() => {
       window.location.reload();
     });
-  }
+  } */
+
   public handleKeydown(event: KeyboardEvent, action = 'request') {
     if (event.key === 'Enter' || event.key === ' ') {
       if (action === 'qr') {
         this.qrView();
       } else {
-        this.requestSignature();
+        //this.requestSignature();
       }
       event.preventDefault();
     }
   }
+
   public handleButtonKeydown(event: KeyboardEvent, action: string): void {
     if (event.key === 'Enter' || event.key === ' ') {
       if (action === 'delete') {
         this.deleteVC();
       } else if (action === 'close') {
         this.setOpen(false);
+      } else if (action === 'info') {
+        this.infoUnsigned();
       }
       event.preventDefault();
-    }
+  }
+  }
+
+  public infoUnsigned(): void {
+    this.isModalUnsignedOpen = true;
   }
 }
