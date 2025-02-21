@@ -10,4 +10,12 @@ ion-modal.stack-modal {
   width: 30px;
   height: 30px;
   background: transparent;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+}
+
+.request-signature-button img{
+  opacity: 0.5;
 }
