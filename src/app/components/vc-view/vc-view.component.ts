@@ -169,6 +169,10 @@ export class VcViewComponent implements OnInit {
   } */
 
   public handleKeydown(event: KeyboardEvent, action = 'request') {
+    console.log('event', event);
+    console.log('action', action);
+    
+    
     if (event.key === 'Enter' || event.key === ' ') {
       if (action === 'qr') {
         this.qrView();
