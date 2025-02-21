@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-vc-view',
   templateUrl: './vc-view.component.html',
+  styleUrls: ['./vc-view.component.scss'],
   standalone: true,
   imports: [IonicModule, QRCodeModule, TranslateModule, CommonModule],
 })
