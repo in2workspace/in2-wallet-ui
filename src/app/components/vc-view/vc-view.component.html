@@ -184,7 +184,7 @@
           <!-- todo FIXME temporarily isCredentialIssuedAndNotExpired only checks if VC is issued -->
           <button
             *ngIf="isCredentialIssuedAndNotExpired()"
-            (keydown)="handleKeydown($event)"
+            (keydown)="handleButtonKeydown($event, 'info')"
             class="request-signature-button"
           >
             <img
@@ -269,6 +269,14 @@
     [message]="'vc-view.delete-message' | translate"
     [buttons]="deleteButtons"
     (didDismiss)="setOpenDeleteNotFound(false)"
+  ></ion-alert>
+
+  <ion-alert
+    [isOpen]="isModalUnsignedOpen"
+    class="custom-alert"
+    [header]="'vc-view.unsigned-header' | translate"
+    [message]="'vc-view.unsigned-message' | translate"
+    [buttons]="unsignedButtons"
   ></ion-alert>
 
   <ion-row

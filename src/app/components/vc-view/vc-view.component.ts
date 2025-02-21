@@ -38,6 +38,7 @@ export class VcViewComponent implements OnInit {
   public isExpired = false;
   public isModalOpen = false;
   public isModalDeleteOpen = false;
+  public isModalUnsignedOpen = false;
   public showChip = false;
   public credentialStatus = CredentialStatus;
   public handlerMessage = '';
@@ -68,6 +69,15 @@ export class VcViewComponent implements OnInit {
         this.vcEmit.emit(this.credentialInput);
       },
     },
+  ];
+
+  public unsignedButtons = [{
+    text: 'Close',
+    role: 'close',
+    handler: () => {
+      this.isModalUnsignedOpen = false;
+    },
+  },
   ];
   private walletService = inject(WalletService);
   public constructor(
@@ -169,23 +179,14 @@ export class VcViewComponent implements OnInit {
   } */
 
   public handleKeydown(event: KeyboardEvent, action = 'request') {
-    console.log('event', event);
-    console.log('action', action);
-    
-    
     if (event.key === 'Enter' || event.key === ' ') {
       if (action === 'qr') {
         this.qrView();
       } else {
         //this.requestSignature();
-        this.showUnsignedAlert();
       }
       event.preventDefault();
     }
-  }
-
-  public showUnsignedAlert(): void {
-    console.log('BUTTON CLICKED');
   }
 
   public handleButtonKeydown(event: KeyboardEvent, action: string): void {
@@ -194,8 +195,14 @@ export class VcViewComponent implements OnInit {
         this.deleteVC();
       } else if (action === 'close') {
         this.setOpen(false);
+      } else if (action === 'info') {
+        this.infoUnsigned();
       }
       event.preventDefault();
-    }
+  }
+  }
+
+  public infoUnsigned(): void {
+    this.isModalUnsignedOpen = true;
   }
 }
