@@ -90,14 +90,19 @@ export class CredentialsPage implements OnInit {
     this.scaned_cred = false;
     this.refresh();
     // TODO: Find a better way to handle this
-    if (this.credentialOfferUri !== undefined) {
+    if (this.credentialOfferUri !== undefined && this.credentialOfferUri !== '') {
       this.generateCred();
     }
 
+    //this.requestPendingSignatures();
+  }
+
+  ionViewDidEnter(): void {
     this.requestPendingSignatures();
   }
 
-  private requestPendingSignatures(): void {
+  public requestPendingSignatures(): void {
+    console.log('Requesting signatures for pending credentials...');
     const pendingCredentials = this.credList.filter(
       (credential) => credential.status === CredentialStatus.ISSUED
     );
