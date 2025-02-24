@@ -116,6 +116,10 @@ export class VcViewComponent implements OnInit {
     this.isModalDeleteOpen = true;
   }
 
+  public unsignedInfo(): void {
+    this.isModalUnsignedOpen = true;
+  }
+
   public setOpen(isOpen: boolean): void {
     this.isModalOpen = isOpen;
   }
@@ -196,13 +200,10 @@ export class VcViewComponent implements OnInit {
       } else if (action === 'close') {
         this.setOpen(false);
       } else if (action === 'info') {
-        this.infoUnsigned();
+        console.log('Action info');
+        this.unsignedInfo();
       }
       event.preventDefault();
   }
-  }
-
-  public infoUnsigned(): void {
-    this.isModalUnsignedOpen = true;
   }
 }

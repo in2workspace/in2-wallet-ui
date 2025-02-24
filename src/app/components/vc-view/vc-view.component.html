@@ -184,6 +184,7 @@
           <!-- todo FIXME temporarily isCredentialIssuedAndNotExpired only checks if VC is issued -->
           <button
             *ngIf="isCredentialIssuedAndNotExpired()"
+            (click)="unsignedInfo()"
             (keydown)="handleButtonKeydown($event, 'info')"
             class="request-signature-button"
           >
