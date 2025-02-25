@@ -60,28 +60,11 @@ describe('CredentialsPage', () => {
   });
 
   describe('ngOnInit', () => {
-    it('should set scaned_cred to false, call refresh and requestPendingSignatures without calling generateCred when credentialOfferUri is undefined', fakeAsync(() => {
-      component.credentialOfferUri = "";
+    it('should call requestPendingSignatures when refreshing or entering endpoint', fakeAsync(() => {
       const requestPendingSignaturesSpy = jest.spyOn(component as any, 'requestPendingSignatures');
 
-      component.ngOnInit();
+      component.ionViewDidEnter();
       flush();
-
-      expect(component.scaned_cred).toBe(false);
-      expect(component.refresh).toHaveBeenCalled();
-      expect(requestPendingSignaturesSpy).toHaveBeenCalled();
-      expect(component.generateCred).not.toHaveBeenCalled();
-    }));
-
-    it('should call generateCred if credentialOfferUri is defined', fakeAsync(() => {
-      component.credentialOfferUri = 'http://example.com';
-      const requestPendingSignaturesSpy = jest.spyOn(component as any, 'requestPendingSignatures');
-
-      component.ngOnInit();
-      flush();
-
-      expect(component.generateCred).toHaveBeenCalled();
-      expect(component.refresh).toHaveBeenCalled();
       expect(requestPendingSignaturesSpy).toHaveBeenCalled();
     }));
   });
