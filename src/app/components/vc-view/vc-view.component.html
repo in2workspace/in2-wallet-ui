@@ -6,6 +6,18 @@
     border-radius: 20px;
   "
 >
+        <button
+            *ngIf="isCredentialIssuedAndNotExpired()"
+            (click)="unsignedInfo()"
+            (keydown)="handleButtonKeydown($event, 'info')"
+            class="request-signature-button"
+          >
+            <img
+              src="../../../assets/icon/question_mark_black.png"
+              alt="info"
+              style="width: 18px; height: 18px"
+            />
+        </button>
   <div
     style="
       position: absolute;
@@ -182,18 +194,6 @@
 
         <ion-row style="justify-content: end; align-items: center; gap:5px" class="button-row">
           <!-- todo FIXME temporarily isCredentialIssuedAndNotExpired only checks if VC is issued -->
-          <button
-            *ngIf="isCredentialIssuedAndNotExpired()"
-            (click)="unsignedInfo()"
-            (keydown)="handleButtonKeydown($event, 'info')"
-            class="request-signature-button"
-          >
-            <img
-              src="../../../assets/icon/question_mark_black.png"
-              alt="info"
-              style="width: 20px; height: 20px"
-            />
-          </button>
 
           <ion-button
           (click)="deleteVC()"
