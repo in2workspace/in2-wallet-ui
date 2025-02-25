@@ -11,10 +11,9 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { DataService } from 'src/app/services/data.service';
-import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
+import { VerifiableCredential, CredentialStatus } from 'src/app/interfaces/verifiable-credential';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CredentialStatus } from 'src/app/interfaces/verifiable-credential';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
 import { catchError, forkJoin, of } from 'rxjs';
@@ -68,7 +67,7 @@ export class CredentialsPage implements OnInit {
   private readonly websocket = inject(WebsocketService);
   private readonly cameraLogsService = inject(CameraLogsService);
 
-  public constructor(private toastServiceHandler: ToastServiceHandler)
+  public constructor(private readonly toastServiceHandler: ToastServiceHandler)
     {
     this.credOfferEndpoint = window.location.origin + '/tabs/home';
     this.route.queryParams.subscribe((params) => {
