@@ -12,6 +12,7 @@ import { of, throwError } from 'rxjs';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { CredentialStatus, Mandate } from 'src/app/interfaces/verifiable-credential';
 import { TranslateService } from '@ngx-translate/core';
+import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 
 describe('CredentialsPage', () => {
   let component: CredentialsPage;
@@ -47,7 +48,7 @@ describe('CredentialsPage', () => {
         { provide: ActivatedRoute, useValue: { queryParams: of({}) } },
         { provide: WebsocketService, useValue: { connect: jest.fn(), closeConnection: jest.fn() } },
         { provide: CameraLogsService, useValue: {} },
-        { provide: TranslateService, useValue: { instant: (key: string) => key } },
+        { provide: TranslateService, useValue: { instant: (key: string) => key } }
       ],
 
     }).compileComponents();
@@ -60,6 +61,22 @@ describe('CredentialsPage', () => {
   });
 
   describe('ngOnInit', () => {
+    it('should call generateCred only if credentialOfferUri is not null',() => {
+      component.credentialOfferUri = 'testUri';
+      component.ngOnInit();
+      expect(component.generateCred).toHaveBeenCalledTimes(1);
+      expect(component.refresh).toHaveBeenCalled();
+      expect(component.scaned_cred).toBe(false);
+    });
+    it('should not call generateCred only if credentialOfferUri is null',() => {
+      component.credentialOfferUri = '';
+      component.ngOnInit();
+      expect(component.generateCred).not.toHaveBeenCalled();
+      expect(component.refresh).toHaveBeenCalled();
+      expect(component.scaned_cred).toBe(false);
+    });
+  });
+  describe('ionViewerDidEnter', () => {
     it('should call requestPendingSignatures when refreshing or entering endpoint', fakeAsync(() => {
       const requestPendingSignaturesSpy = jest.spyOn(component as any, 'requestPendingSignatures');
 
@@ -73,8 +90,16 @@ describe('CredentialsPage', () => {
     beforeEach(() => {
         component.credList = [];
     });
-    it('should not take any action if there are no outstanding credentials (ISSUED)', () => {
+    it('should not take any action if there are no credentials on the wallet', () => {
       component.credList = []; 
+      (component as any).requestPendingSignatures(); 
+
+      expect(walletServiceMock.requestSignature).not.toHaveBeenCalled();
+    });
+
+    it('should not take any action if there are no outstanding credentials (ISSUED)', () => {
+      const credential: VerifiableCredential = {status: CredentialStatus.REVOKED} as VerifiableCredential;
+      component.credList = [credential]; 
       (component as any).requestPendingSignatures(); 
 
       expect(walletServiceMock.requestSignature).not.toHaveBeenCalled();
