@@ -129,7 +129,8 @@
         "delete-cancel": "Cancel",
         "unsigned": "Unsigned",
         "unsigned-header": "Unsigned Credential",
-        "unsigned-message": "Your credential has not yet been signed and cannot be used. Wait for the issuer to complete the signing process."
+        "unsigned-message": "Your credential has not yet been signed and cannot be used. Wait for the issuer to complete the signing process.",
+        "revoked": "Revoked"
     },
     "errors":{
         "default": "Unexpected error. If the problem persists, contact the <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>support team</a>.",

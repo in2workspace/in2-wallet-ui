@@ -122,7 +122,7 @@
         </ion-card-header>
       </ion-col>
 
-      <ion-col size="12" align-self-end style="margin-left: 12px">
+      <ion-col size="12" align-self-end style="margin-left: 15px; padding: 0% !important;">
         <img
           *ngIf="showChip"
           (click)="qrView()"
@@ -134,16 +134,11 @@
         />
 
         <span
-          *ngIf="
-            isExpired && credentialInput.status !== credentialStatus.ISSUED
-          "
+          *ngIf="isExpired && credentialInput.status !== credentialStatus.ISSUED"
           style="
             color: red;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
-            position: absolute;
-            top: -23px;
-            left: 74px;
           "
         >
           {{ "credentials.expiration" | translate }}
@@ -151,49 +146,28 @@
 
         <!-- todo FIXME add '&& !isExpired', removed only temporarily -->
         <span
-          *ngIf="
-            credentialInput.status === credentialStatus.ISSUED
-          "
+          *ngIf="credentialInput.status === credentialStatus.ISSUED"
           style="
             color: red;
             font-size: 18px;
             font-weight: bold;
-            top: -23px;
-            left: 74px;
           "
         >
           {{ "vc-view.unsigned" | translate }}
         </span>
 
         <span
-          *ngIf="credentialInput.status === credentialStatus.VALID"
-          style="
-            color: green;
-            font-size: 18px;
-            font-weight: bold;
-            position: absolute;
-            top: -23px;
-            left: 74px;
-          "
-        >
-        </span>
-
-        <span
           *ngIf="credentialInput.status === credentialStatus.REVOKED"
           style="
-            color: orange;
+            color: red;
             font-size: 18px;
             font-weight: bold;
-            position: absolute;
-            top: -23px;
-            left: 74px;
           "
         >
+          {{ "vc-view.revoked" | translate }}
         </span>
 
         <ion-row style="justify-content: end; align-items: center; gap:5px" class="button-row">
-          <!-- todo FIXME temporarily isCredentialIssuedAndNotExpired only checks if VC is issued -->
-
           <ion-button
           (click)="deleteVC()"
           (keydown)="handleButtonKeydown($event, 'delete')"

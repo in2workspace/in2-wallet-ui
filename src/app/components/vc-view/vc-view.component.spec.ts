@@ -4,7 +4,6 @@ import { WalletService } from 'src/app/services/wallet.service';
 import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { Observable, of, throwError } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
-import { HttpResponse } from '@angular/common/http';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CallbackPage } from 'src/app/pages/callback/callback.page';
@@ -106,7 +105,7 @@ describe('VcViewComponent', () => {
   it('checkExpirationVC should set isExpired to true if credential is expired', () => {
     component.credentialInput = {
       id: 'testId',
-      validUntil: new Date(Date.now() - 86400000).toISOString(), // Camp corregit
+      validUntil: new Date(Date.now() - 86400000).toISOString(),
       status: CredentialStatus.REVOKED,
     } as VerifiableCredential;
   
@@ -163,6 +162,11 @@ describe('VcViewComponent', () => {
     expect(component.isModalDeleteOpen).toBeTruthy();
   });
 
+  it('unsignedInfo should set isModalUnsignedOpen to true', () => {
+    component.unsignedInfo();
+    expect(component.isModalUnsignedOpen).toBeTruthy();
+  });
+
   it('setOpen should correctly set isModalOpen based on the input', () => {
     component.setOpen(true);
     expect(component.isModalOpen).toBeTruthy();
@@ -200,6 +204,13 @@ describe('VcViewComponent', () => {
     expect(component.showChip).toBeTruthy();
   });
 
+  it('clicking on close button in unsignedButtons  should change isModalUnsignedOpen  accordingly', () => {
+    jest.spyOn(component.vcEmit, 'emit');
+
+    component.unsignedButtons [0].handler();
+    expect(component.isModalUnsignedOpen).toBeFalsy();
+  });
+
   it('should set showChip to false if "cwt_vc" is not in available_formats', () => {
     component.credentialInput.available_formats = ['other_format'];
     component.checkAvailableFormats();
@@ -228,36 +239,6 @@ describe('VcViewComponent', () => {
     expect(component.isAlertOpenNotFound).toBeTruthy();
   })
 
-  /* it('requestSignature should force page reload on successful response with non-204 status', () => {
-    jest.spyOn((component as any).walletService, 'requestSignature').mockReturnValue(of(new HttpResponse({ status: 200 })));
-    jest.spyOn(component, 'forcePageReload');
-
-    component.requestSignature();
-
-    expect(component.forcePageReload).toHaveBeenCalled();
-  });
-  it('should call requestSignature on Enter key', fakeAsync(() => {
-    jest.spyOn(component, 'requestSignature');
-
-    const button = fixture.debugElement.query(By.css('.request-signature-button'));
-    const event = new KeyboardEvent('keydown', { key: 'Enter' });
-    button.nativeElement.dispatchEvent(event);
-    tick();
-
-    expect(component.requestSignature).toHaveBeenCalled();
-  }));
-
-  it('should call requestSignature on Space key', fakeAsync(() => {
-    jest.spyOn(component, 'requestSignature');
-
-    const button = fixture.debugElement.query(By.css('.request-signature-button'));
-    const event = new KeyboardEvent('keydown', { key: ' ' });
-    button.nativeElement.dispatchEvent(event);
-    tick();
-
-    expect(component.requestSignature).toHaveBeenCalled();
-  })); */
-
   it('should call deleteVC on Enter key press on delete button', fakeAsync(() => {
     jest.spyOn(component, 'deleteVC');
     const deleteButton = fixture.debugElement.query(By.css('.vc-view-button'));
@@ -281,6 +262,13 @@ describe('VcViewComponent', () => {
     tick();
     expect(component.setOpen).toHaveBeenCalledWith(false);
   }));
+  it('should call unsignedInfo when keydown event with key "Enter" and action "info"', fakeAsync(() => {
+    jest.spyOn(component, 'unsignedInfo');
+    const event = new KeyboardEvent('keydown', { key: 'Enter' });
+    component.handleButtonKeydown(event, 'info');
+    tick();
+    expect(component.unsignedInfo).toHaveBeenCalled();
+  }));
   it('should prevent default behavior for button keydown event', fakeAsync(() => {
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
     jest.spyOn(event, 'preventDefault');
@@ -289,4 +277,3 @@ describe('VcViewComponent', () => {
     expect(event.preventDefault).toHaveBeenCalled();
   }));
 });
-

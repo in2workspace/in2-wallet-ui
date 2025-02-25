@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v1.6.4](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.6.4)
 ### Changed
 - Unsigned credentials are now automaticly updated if issuer has signed them
-- Changed signature button for an info button when credential is unsigned
+- Added info button when credential is unsigned
+- Minor visual adjustments
 
 ## [v1.6.3](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.6.3)
 ### Fixed
