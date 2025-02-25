@@ -5,3 +5,21 @@ ion-modal.stack-modal {
   .button-row{
     padding-right: 20px;
   }
+
+.request-signature-button{
+  width: 27.3px;
+  height: 27.3px;
+  background: transparent;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  right: 20px;
+  top: 44px;
+}
+
+.request-signature-button img{
+  opacity: 0.5;
+}

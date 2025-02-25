@@ -112,14 +112,4 @@ export class WalletService {
     );
   }
 
-  // Deprecated
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  // public submitCredential(arg0: {}) {
-  //   return this.http.post<string>(
-  //     environment.server_url + environment.server_uri.credentials_uri,
-  //     arg0,
-  //     options
-  //   );
-  // }
-
 }
