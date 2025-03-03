@@ -55,6 +55,7 @@ export class CredentialsPage implements OnInit {
   public credentialOfferUri = '';
   public ebsiFlag = false;
   public did = '';
+  public isLoading = false;
 
   private readonly alertController = inject(AlertController);
   private readonly cdr = inject(ChangeDetectorRef);
@@ -88,6 +89,11 @@ export class CredentialsPage implements OnInit {
   public ngOnInit(): void {
     this.scaned_cred = false;
     this.refresh();
+
+    this.websocket.isLoading$.subscribe((loading) => {
+      this.isLoading = loading;
+      this.cdr.detectChanges();
+    });
     // TODO: Find a better way to handle this
     if (this.credentialOfferUri !== undefined && this.credentialOfferUri !== '') {
       this.generateCred();
@@ -218,7 +224,6 @@ export class CredentialsPage implements OnInit {
           next: (executionResponse) => {
             // TODO: Instead of analyzing the qrCode, we should check the response and decide what object we need to show depending on the response
             if (qrCode.includes('credential_offer_uri')) {
-              console.log("MESSAGE ON QRCODE EMIT");
               this.from = 'credential';
               this.okMessage();
               this.successRefresh();
@@ -262,7 +267,6 @@ export class CredentialsPage implements OnInit {
     this.delay(1000).then(() => {
       this.walletService.requestOpenidCredentialOffer(this.credentialOfferUri).subscribe({
         next: () => {
-          console.log("MESSAGE ON GENERATECRED");
           this.okMessage();
           this.successRefresh();
           this.websocket.closeConnection();
