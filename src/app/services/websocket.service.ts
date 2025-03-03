@@ -13,7 +13,7 @@ export class WebsocketService {
   private socket!: WebSocket;
 
   private loadingTimeout: any;
-  private isLoadingSubject = new BehaviorSubject<boolean>(false);
+  private readonly isLoadingSubject = new BehaviorSubject<boolean>(false);
   public isLoading$ = this.isLoadingSubject.asObservable();
 
   public constructor(
