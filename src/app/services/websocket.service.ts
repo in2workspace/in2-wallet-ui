@@ -88,7 +88,6 @@ export class WebsocketService {
     };
   }
   
-
   public sendMessage(message: string): void {
     if (this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(message);
