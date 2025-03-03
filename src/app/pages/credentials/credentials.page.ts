@@ -55,7 +55,6 @@ export class CredentialsPage implements OnInit {
   public credentialOfferUri = '';
   public ebsiFlag = false;
   public did = '';
-  public isLoading = false;
 
   private readonly alertController = inject(AlertController);
   private readonly cdr = inject(ChangeDetectorRef);
@@ -90,10 +89,6 @@ export class CredentialsPage implements OnInit {
     this.scaned_cred = false;
     this.refresh();
 
-    this.websocket.isLoading$.subscribe((loading) => {
-      this.isLoading = loading;
-      this.cdr.detectChanges();
-    });
     // TODO: Find a better way to handle this
     if (this.credentialOfferUri !== undefined && this.credentialOfferUri !== '') {
       this.generateCred();

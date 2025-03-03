@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule, PopoverController } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -9,6 +9,7 @@ import { StorageService } from './services/storage.service';
 import { Subject, take, takeUntil } from 'rxjs';
 import { CameraService } from './services/camera.service';
 import { environment } from 'src/environments/environment';
+import { WebsocketService } from './services/websocket.service';
 
 @Component({
   selector: 'app-root',
@@ -26,11 +27,14 @@ import { environment } from 'src/environments/environment';
 
 export class AppComponent implements OnInit {
   private readonly authenticationService = inject(AuthenticationService);
+  private readonly websocket = inject(WebsocketService);
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router)
   public userName = this.authenticationService.getName();
   public isCallbackRoute = false;
   public readonly logoSrc = environment.customizations.logo_src;
   private readonly destroy$ = new Subject<void>();
+  public isLoading = false;
 
   public constructor(
     private readonly cameraService: CameraService,
@@ -48,6 +52,10 @@ export class AppComponent implements OnInit {
     this.handleNoCache();
     this.trackRouterEvents();
     this.alertIncompatibleDevice();
+    this.websocket.isLoading$.subscribe((loading) => {
+      this.isLoading = loading;
+      this.cdr.detectChanges();
+    });
   }
 
   private ngOnDestroy(){

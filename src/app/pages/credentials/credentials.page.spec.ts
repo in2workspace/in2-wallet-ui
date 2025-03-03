@@ -46,7 +46,7 @@ describe('CredentialsPage', () => {
         { provide: DataService, useValue: { listenDid: () => of('') } },
         { provide: DestroyRef, useValue: {} },
         { provide: ActivatedRoute, useValue: { queryParams: of({}) } },
-        { provide: WebsocketService, useValue: { connect: jest.fn(), closeConnection: jest.fn(), isLoading$: of(false) } },
+        { provide: WebsocketService, useValue: { connect: jest.fn(), closeConnection: jest.fn() } },
         { provide: CameraLogsService, useValue: {} },
         { provide: TranslateService, useValue: { instant: (key: string) => key } }
       ],
