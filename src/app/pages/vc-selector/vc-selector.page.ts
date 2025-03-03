@@ -102,6 +102,7 @@ export class VcSelectorPage implements OnInit {
       this._VCReply.selectedVcList = this.selCredList;
       this.walletService.executeVC(this._VCReply).subscribe({
         next: () => {
+          console.log("MESSAGE ON SENDCRED EN VC-SELECTOR");
           this.okMessage();
         },
         error: async (err) => {
