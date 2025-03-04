@@ -13,7 +13,7 @@
         "logout":"Logout"
     },
     "barcode":{
-        "initializing": "Initializing barcode... Please wait."
+        "initializing": "Initializing scanner... Please wait."
     },
     "camera-selector":{
         "title":"Selected camera",
