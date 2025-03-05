@@ -37,12 +37,12 @@ describe('WalletService', () => {
   it('should execute content and return a JSON response', (done) => {
     const mockUrl = 'https://example.com/mock-content';
     const mockResponse = { success: true, message: 'Content executed successfully' };
-  
+
     service.executeContent(mockUrl).subscribe((response) => {
       expect(response).toEqual(mockResponse);
       done();
     });
-  
+
     const req = httpTestingController.expectOne(
       `${environment.server_url}${environment.server_uri.execute_content_uri}`
     );
@@ -51,7 +51,7 @@ describe('WalletService', () => {
     expect(req.request.headers.get('Content-Type')).toBe('application/json'); // Opcional: comprovar headers si cal
     req.flush(mockResponse);
   });
-  
+
 
   it('should fetch VC in CBOR format', (done) => {
     const mockCredential: VerifiableCredential = {
@@ -78,25 +78,20 @@ describe('WalletService', () => {
           },
           mandatee: {
             id: 'personId1',
-            first_name: 'John',
-            last_name: 'Doe',
-            gender: 'male',
-            email: 'test@example.com',
-            mobile_phone: '+1234567890',
+            firstName: 'John',
+            lastName: 'Doe',
+            nationality: 'ES',
+            email: 'test@example.com'
           },
           power: [
             {
               id: 'powerId1',
-              tmf_type: 'Domain',
-              tmf_domain: ['DOME'],
-              tmf_function: 'Onboarding',
-              tmf_action: ['Execute'],
+              type: 'Domain',
+              domain: 'DOME',
+              function: 'Onboarding',
+              action: ['Execute'],
             },
-          ],
-          life_span: {
-            start_date_time: '2024-04-02T09:23:22.637345122Z',
-            end_date_time: '2025-01-01T00:00:00Z',
-          },
+          ]
         },
       },
       status: CredentialStatus.ISSUED,
@@ -138,11 +133,11 @@ describe('WalletService', () => {
     const expectedResponse = {
       message: 'Credential request successful',
     };
-  
+
     service.requestOpenidCredentialOffer(mockCredentialOfferUri).subscribe((response) => {
       expect(response).toEqual(expectedResponse);
     });
-  
+
     const req = httpTestingController.expectOne(
       `${environment.server_url}${environment.server_uri.request_credential_uri}?credentialOfferUri=${mockCredentialOfferUri}`
     );
@@ -150,7 +145,7 @@ describe('WalletService', () => {
     expect(req.request.params.get('credentialOfferUri')).toBe(mockCredentialOfferUri);
     req.flush(expectedResponse);
   });
-  
+
 
   it('should execute Verifiable Credential and return response', (done) => {
     const mockVCReply: VCReply = {
@@ -203,25 +198,20 @@ describe('WalletService', () => {
             },
             mandatee: {
               id: 'personId1',
-              first_name: 'Jane',
-              last_name: 'Doe',
-              gender: 'female',
+              firstName: 'Jane',
+              lastName: 'Doe',
               email: 'example@test.com',
-              mobile_phone: '+0987654321',
+              nationality: 'ES',
             },
             power: [
               {
                 id: 'powerId1',
-                tmf_type: 'Domain',
-                tmf_domain: ['SomeDomain'],
-                tmf_function: 'SomeFunction',
-                tmf_action: ['SomeAction'],
+                type: 'Domain',
+                domain: 'SomeDomain',
+                function: 'SomeFunction',
+                action: ['SomeAction'],
               },
             ],
-            life_span: {
-              start_date_time: '2024-04-02T09:23:22.637345122Z',
-              end_date_time: '2030-01-01T00:00:00Z',
-            },
           },
         },
         status: CredentialStatus.ISSUED,
@@ -267,25 +257,20 @@ describe('WalletService', () => {
           },
           mandatee: {
             id: 'personId1',
-            first_name: 'Single',
-            last_name: 'Credential',
-            gender: 'other',
+            firstName: 'Single',
+            lastName: 'Credential',
             email: 'single@test.com',
-            mobile_phone: '+1234567890',
+            nationality: 'ES',
           },
           power: [
             {
               id: 'powerId1',
-              tmf_type: 'Domain',
-              tmf_domain: ['SomeDomain'],
-              tmf_function: 'SomeFunction',
-              tmf_action: ['SomeAction'],
+              type: 'Domain',
+              domain: 'SomeDomain',
+              function: 'SomeFunction',
+              action: ['SomeAction'],
             },
-          ],
-          life_span: {
-            start_date_time: '2024-04-02T09:23:22.637345122Z',
-            end_date_time: '2030-01-01T00:00:00Z',
-          },
+          ]
         },
       },
       status: CredentialStatus.ISSUED,

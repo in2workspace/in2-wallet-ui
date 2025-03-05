@@ -22,26 +22,20 @@ export interface CredentialSubject {
 
 export interface Mandate {
   id: string;
-  life_span: LifeSpan;
   mandatee: Mandatee;
   mandator: Mandator;
-  signer: Signer;
   power: Power[];
 }
 
-export interface LifeSpan {
-  end_date_time: string;
-  start_date_time: string;
-}
-
 export interface Mandatee {
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
   nationality: string;
 }
 
-export interface OrganizationDetails {
+export interface Mandator {
   organizationIdentifier: string;
   organization: string;
   commonName: string;
@@ -50,11 +44,8 @@ export interface OrganizationDetails {
   country: string;
 }
 
-export type Mandator = OrganizationDetails
-
-export type Signer = OrganizationDetails
-
 export interface Power {
+  id: string;
   action: string | string[];
   domain: string;
   function: string;
