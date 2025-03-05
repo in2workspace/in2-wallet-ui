@@ -61,9 +61,8 @@ describe('VcViewComponent', () => {
             id: 'mandateeId',
             firstName: '',
             lastName: '',
-            gender: '',
             email: '',
-            mobile_phone: '',
+            nationality: '',
           },
           power: [
             {
@@ -73,11 +72,7 @@ describe('VcViewComponent', () => {
               function: '',
               action: [''],
             },
-          ],
-          life_span: {
-            start_date_time: '',
-            end_date_time: '',
-          },
+          ]
         },
       },
       status: CredentialStatus.ISSUED
