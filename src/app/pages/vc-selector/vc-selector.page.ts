@@ -9,6 +9,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { VcViewComponent } from '../../components/vc-view/vc-view.component';
 import { VCReply } from 'src/app/interfaces/verifiable-credential-reply';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
+import {VerifiableCredentialSubjectDataNormalizer} from 'src/app/interfaces/verifiable-credential-subject-data-normalizer';
 
 @Component({
   selector: 'app-vc-selector',
@@ -63,6 +64,17 @@ export class VcSelectorPage implements OnInit {
 
   public ngOnInit() {
     this.credList = this.executionResponse['selectableVcList'];
+
+    const normalizer = new VerifiableCredentialSubjectDataNormalizer();
+
+    // Normalize each credential, updating its credentialSubject property
+    this.credList = this.credList.map(cred => {
+      if (cred.credentialSubject) {
+        cred.credentialSubject = normalizer.normalizeLearCredentialSubject(cred.credentialSubject);
+      }
+      return cred;
+    });
+
     this.credList.forEach(() => {
       this.isClick.push(false);
     });
@@ -76,9 +88,9 @@ export class VcSelectorPage implements OnInit {
     this.selCredList.push(cred);
     this.isClick[index] = !this.isClick[index];
   }
-  
+
   public async sendCred(cred: VerifiableCredential) {
-    
+
     const alert = await this.alertController.create({
       header: this.translate.instant('confirmation.header'),
       buttons: [
@@ -116,10 +128,10 @@ export class VcSelectorPage implements OnInit {
       });
     }
   }
-  
+
   private async errorMessage(statusCode: number) {
     let messageText = '';
-  
+
     if (statusCode >= 500) {
       // Handle server errors (50x)
       messageText = 'vc-selector.server-error-message';
@@ -133,7 +145,7 @@ export class VcSelectorPage implements OnInit {
       // Handle other types of errors
       messageText = 'vc-selector.generic-error-message';
     }
-  
+
     const alert = await this.alertController.create({
       message: `
         <div style="display: flex; align-items: center; gap: 50px;">
@@ -150,7 +162,7 @@ export class VcSelectorPage implements OnInit {
       ],
       cssClass: 'custom-alert-error',
     });
-  
+
     await alert.present();
     await alert.onDidDismiss();
   }
@@ -165,9 +177,9 @@ export class VcSelectorPage implements OnInit {
       `,
       cssClass: 'custom-alert-ok',
     });
-  
+
     await alert.present();
-  
+
     setTimeout(async () => {
       await alert.dismiss();
       this.router.navigate(['/tabs/home']);
