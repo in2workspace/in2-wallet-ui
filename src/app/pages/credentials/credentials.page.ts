@@ -12,9 +12,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {WebsocketService} from 'src/app/services/websocket.service';
 import {DataService} from 'src/app/services/data.service';
 import {VerifiableCredential} from 'src/app/interfaces/verifiable-credential';
-import {
-  VerifiableCredentialSubjectDataNormalizer
-} from 'src/app/interfaces/verifiable-credential-subject-data-normalizer';
+import {VerifiableCredentialSubjectDataNormalizer} from 'src/app/interfaces/verifiable-credential-subject-data-normalizer';
 import {CameraLogsService} from 'src/app/services/camera-logs.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
@@ -129,9 +127,9 @@ export class CredentialsPage implements OnInit {
   }
 
   public refresh(): void {
+    const normalizer = new VerifiableCredentialSubjectDataNormalizer();
     this.walletService.getAllVCs().subscribe({
       next: (credentialListResponse: VerifiableCredential[]) => {
-        const normalizer = new VerifiableCredentialSubjectDataNormalizer();
         // Iterate over the list and normalize each credentialSubject
         this.credList = credentialListResponse.slice().reverse().map(cred => {
           if (cred.credentialSubject) {
