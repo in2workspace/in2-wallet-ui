@@ -59,25 +59,20 @@ describe('VcViewComponent', () => {
           },
           mandatee: {
             id: 'mandateeId',
-            first_name: '',
-            last_name: '',
-            gender: '',
+            firstName: '',
+            lastName: '',
             email: '',
-            mobile_phone: '',
+            nationality: '',
           },
           power: [
             {
               id: '',
-              tmf_type: '',
-              tmf_domain: [''],
-              tmf_function: '',
-              tmf_action: [''],
+              type: '',
+              domain: '',
+              function: '',
+              action: [''],
             },
-          ],
-          life_span: {
-            start_date_time: '',
-            end_date_time: '',
-          },
+          ]
         },
       },
       status: CredentialStatus.ISSUED
@@ -109,9 +104,9 @@ describe('VcViewComponent', () => {
       validUntil: new Date(Date.now() - 86400000).toISOString(), // Camp corregit
       status: CredentialStatus.REVOKED,
     } as VerifiableCredential;
-  
+
     component.checkExpirationVC();
-  
+
     expect(component.isExpired).toBeTruthy();
   });
 

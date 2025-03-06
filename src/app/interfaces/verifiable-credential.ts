@@ -22,41 +22,34 @@ export interface CredentialSubject {
 
 export interface Mandate {
   id: string;
-  mandator: Organization;
-  mandatee: Person;
+  mandatee: Mandatee;
+  mandator: Mandator;
   power: Power[];
-  life_span: LifeSpan;
 }
 
-export interface Organization {
+export interface Mandatee {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  nationality: string;
+}
+
+export interface Mandator {
   organizationIdentifier: string;
+  organization: string;
   commonName: string;
   emailAddress: string;
   serialNumber: string;
-  organization: string;
   country: string;
-}
-
-export interface Person {
-  id: string;
-  first_name: string;
-  last_name: string;
-  gender: string;
-  email: string;
-  mobile_phone: string;
 }
 
 export interface Power {
   id: string;
-  tmf_type: string;
-  tmf_domain: string[];
-  tmf_function: string;
-  tmf_action: string[];
-}
-
-export interface LifeSpan {
-  start_date_time: string;
-  end_date_time: string;
+  action: string | string[];
+  domain: string;
+  function: string;
+  type: string;
 }
 
 export enum CredentialStatus {
