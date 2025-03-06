@@ -1,19 +1,22 @@
-import { ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { AlertController, IonicModule } from '@ionic/angular';
-import { StorageService } from 'src/app/services/storage.service';
-import { BarcodeScannerComponent } from 'src/app/components/barcode-scanner/barcode-scanner.component';
-import { QRCodeModule } from 'angularx-qrcode';
-import { WalletService } from 'src/app/services/wallet.service';
-import { VcViewComponent } from '../../components/vc-view/vc-view.component';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { WebsocketService } from 'src/app/services/websocket.service';
-import { DataService } from 'src/app/services/data.service';
-import { VerifiableCredential, CredentialStatus } from 'src/app/interfaces/verifiable-credential';
-import { CameraLogsService } from 'src/app/services/camera-logs.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {AlertController, IonicModule} from '@ionic/angular';
+import {StorageService} from 'src/app/services/storage.service';
+import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
+import {QRCodeModule} from 'angularx-qrcode';
+import {WalletService} from 'src/app/services/wallet.service';
+import {VcViewComponent} from '../../components/vc-view/vc-view.component';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {WebsocketService} from 'src/app/services/websocket.service';
+import {DataService} from 'src/app/services/data.service';
+import {VerifiableCredential, CredentialStatus} from 'src/app/interfaces/verifiable-credential';
+import {
+  VerifiableCredentialSubjectDataNormalizer
+} from 'src/app/interfaces/verifiable-credential-subject-data-normalizer';
+import {CameraLogsService} from 'src/app/services/camera-logs.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
 import { catchError, forkJoin, of } from 'rxjs';
@@ -44,8 +47,6 @@ export class CredentialsPage implements OnInit {
   public userName = '';
   public credList: Array<VerifiableCredential> = [];
   public size = 300;
-  public credDataList: unknown[] = [];
-  public currentDevice: unknown;
   public isAlertOpen = false;
   public toggleScan = false;
   public credOfferEndpoint = '';
@@ -180,23 +181,27 @@ export class CredentialsPage implements OnInit {
   }
 
   public refresh(): void {
-    this.walletService
-      .getAllVCs()
-      .subscribe({
-        next: (credentialListResponse: VerifiableCredential[]) => {
-          this.credList = [...credentialListResponse.slice().reverse()];
-          this.cdr.detectChanges(); // Ensure Angular updates the view
-        },
-        // TODO: migrate to unified errorHandler interceptor
-        error: (error) => {
-          if (error.status === 404) {
-            this.credList = []; // Set the list to empty if no credentials are found
-            this.cdr.detectChanges(); // Ensure view updates with empty list
-          } else {
-            console.error("Error fetching credentials:", error);
+    this.walletService.getAllVCs().subscribe({
+      next: (credentialListResponse: VerifiableCredential[]) => {
+        const normalizer = new VerifiableCredentialSubjectDataNormalizer();
+        // Iterate over the list and normalize each credentialSubject
+        this.credList = credentialListResponse.slice().reverse().map(cred => {
+          if (cred.credentialSubject) {
+            cred.credentialSubject = normalizer.normalizeLearCredentialSubject(cred.credentialSubject);
           }
+          return cred;
+        });
+        this.cdr.detectChanges()
+      },
+      error: (error) => {
+        if (error.status === 404) {
+          this.credList = [];
+          this.cdr.detectChanges();
+        } else {
+          console.error("Error fetching credentials:", error);
         }
-      });
+      }
+    });
   }
 
   public vcDelete(cred: VerifiableCredential): void {
@@ -275,10 +280,6 @@ export class CredentialsPage implements OnInit {
     });
   }
 
-
-  public untoggleScan(): void {
-    this.toggleScan = false;
-  }
   public handleButtonKeydown(event: KeyboardEvent, action: string): void {
     if (event.key === 'Enter' || event.key === ' ') {
       if (action === 'scan') {
@@ -351,11 +352,6 @@ export class CredentialsPage implements OnInit {
       this.scaned_cred = false;
     }, TIME_IN_MS);
     this.refresh();
-  }
-
-  ionViewWillLeave(): void{
-    this.untoggleScan();
-    this.cdr.detectChanges();
   }
 
 }
