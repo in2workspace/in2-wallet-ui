@@ -15,13 +15,11 @@ import {
   VerifiableCredential,
 } from 'src/app/interfaces/verifiable-credential';
 import { IonicModule } from '@ionic/angular';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { ToastServiceHandler } from 'src/app/services/toast.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vc-view',
   templateUrl: './vc-view.component.html',
+  styleUrls: ['./vc-view.component.scss'],
   standalone: true,
   imports: [IonicModule, QRCodeModule, TranslateModule, CommonModule],
 })
@@ -37,6 +35,7 @@ export class VcViewComponent implements OnInit {
   public isExpired = false;
   public isModalOpen = false;
   public isModalDeleteOpen = false;
+  public isModalUnsignedOpen = false;
   public showChip = false;
   public credentialStatus = CredentialStatus;
   public handlerMessage = '';
@@ -68,11 +67,16 @@ export class VcViewComponent implements OnInit {
       },
     },
   ];
+
+  public unsignedButtons = [{
+    text: 'Close',
+    role: 'close',
+    handler: () => {
+      this.isModalUnsignedOpen = false;
+    },
+  },
+  ];
   private walletService = inject(WalletService);
-  public constructor(
-    private toastServiceHandler: ToastServiceHandler,
-    private router: Router
-  ) {}
 
   public ngOnInit(): void {
     this.checkExpirationVC();
@@ -103,6 +107,10 @@ export class VcViewComponent implements OnInit {
 
   public deleteVC(): void {
     this.isModalDeleteOpen = true;
+  }
+
+  public unsignedInfo(): void {
+    this.isModalUnsignedOpen = true;
   }
 
   public setOpen(isOpen: boolean): void {
@@ -140,48 +148,23 @@ export class VcViewComponent implements OnInit {
     );
   }
 
-  public requestSignature(): void {
-    if (this.credentialInput?.id) {
-      this.walletService.requestSignature(this.credentialInput.id).subscribe({
-        next: (response: HttpResponse<string>) => {
-          if (response.status === 204) {
-            console.log(
-              'Credential request completed successfully, no content returned.'
-            );
-
-            this.toastServiceHandler.showErrorAlert('Unsigned').subscribe();
-          } else {
-            this.forcePageReload();
-          }
-        },
-        error: (error: HttpErrorResponse) => {
-          console.error('Error requesting signature:', error.message);
-          this.toastServiceHandler.showErrorAlert('ErrorUnsigned').subscribe();
-        },
-      });
-    }
-  }
-  public forcePageReload(): void {
-    this.router.navigate(['/tabs/credentials']).then(() => {
-      window.location.reload();
-    });
-  }
   public handleKeydown(event: KeyboardEvent, action = 'request') {
     if (event.key === 'Enter' || event.key === ' ') {
       if (action === 'qr') {
         this.qrView();
-      } else {
-        this.requestSignature();
-      }
+      } 
       event.preventDefault();
     }
   }
+
   public handleButtonKeydown(event: KeyboardEvent, action: string): void {
     if (event.key === 'Enter' || event.key === ' ') {
       if (action === 'delete') {
         this.deleteVC();
       } else if (action === 'close') {
         this.setOpen(false);
+      } else if (action === 'info') {
+        this.unsignedInfo();
       }
       event.preventDefault();
     }

@@ -8,8 +8,7 @@ import { of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TranslateModule } from '@ngx-translate/core';
 
-
-
+let alertControllerMock: any;
 let mockWebSocketInstance: any;
 let mockWebSocketConstructor: any;
 let originalWebSocket: any;
@@ -39,12 +38,25 @@ class MockAlertController {
 describe('WebsocketService', () => {
 
   beforeEach(() => {
+
+    alertControllerMock = {
+      create: jest.fn().mockResolvedValue({
+        present: jest.fn(),
+        buttons: [
+          {
+            text: 'Send',
+            handler: jest.fn(),
+          },
+        ],
+      }),
+    };
+
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, TranslateModule.forRoot()],
       providers: [
         WebsocketService,
         AuthenticationService,
-        { provide: AlertController, useClass: MockAlertController },
+        { provide: AlertController, useValue: alertControllerMock },
         { provide: OidcSecurityService, useClass: MockOidcSecurityService },
       ],
     });
@@ -148,9 +160,6 @@ describe('WebsocketService', () => {
     tick();
   }));
 
-
-  
-
   it('should log message on WebSocket close', fakeAsync(() => {
     const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
     service.connect();
@@ -232,6 +241,28 @@ describe('WebsocketService', () => {
     clearIntervalSpy.mockRestore();
   });
   
-  
+  it('should deactivate isLoading when WebSocket closes', fakeAsync(() => {
+    const loadingSpy = jest.spyOn(service['isLoadingSubject'], 'next');
 
+    service.connect();
+    
+    mockWebSocketInstance.onclose(new CloseEvent('close'));
+
+    expect(loadingSpy).toHaveBeenCalledWith(false); 
+  }));
+
+  it('should not activate isLoading if response is received in less than 1 second', fakeAsync(() => {
+    const loadingSpy = jest.spyOn(service['isLoadingSubject'], 'next');
+
+    service.connect();
+    const messageEvent = new MessageEvent('message', {
+      data: JSON.stringify({ tx_code: { description: 'Fast Response' }, timeout: 60 }),
+    });
+
+    mockWebSocketInstance.onmessage(messageEvent);
+
+    jest.advanceTimersByTime(500); 
+
+    expect(loadingSpy).not.toHaveBeenCalledWith(true);
+  }));
 });

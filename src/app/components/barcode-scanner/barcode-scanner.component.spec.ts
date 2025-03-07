@@ -243,9 +243,7 @@ describe('BarcodeScannerComponent', () => {
       component.modifyConsoleErrorToHandleScannerErrors();
   
       console.error('@zxing/ngx-scanner', "Can't get user media, this is not supported.", 'extraData');
-  
-      console.log(mockCameraService.handleCameraErrors.mock.calls); // Depuració
-  
+    
       expect(mockCameraService.handleCameraErrors).toHaveBeenCalledTimes(1);
       expect(mockCameraService.handleCameraErrors).toHaveBeenCalledWith({"name": "extraData"}, "noMediaError");
   
@@ -256,9 +254,7 @@ describe('BarcodeScannerComponent', () => {
       component.modifyConsoleErrorToHandleScannerErrors();
   
       console.error('@zxing/ngx-scanner', 'Some other scanner error', 'extraData');
-  
-      console.log(mockCameraService.handleCameraErrors.mock.calls); // Depuració
-  
+    
       expect(mockCameraService.handleCameraErrors).toHaveBeenCalledTimes(1);
       expect(mockCameraService.handleCameraErrors).toHaveBeenCalledWith({"name": "extraData"}, "undefinedError");
   
