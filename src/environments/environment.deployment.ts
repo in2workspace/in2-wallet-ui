@@ -21,7 +21,7 @@ export const environment = {
     // cbor: window["env"]["cbor_uri"] || '/api/v1/vp/cbor'
   // },
   // websocket_uri: window["env"]["websocket_uri"] || '/api/v1/pin',
-  logs_enabled: window["env"]["logs_enabled"] || false,
+  logs_enabled: window["env"]["logs_enabled"] || false, //opcional amb fallback
   // logs_email: window["env"]["logs_email"] || "domesupport@in2.es",
   customizations:{
     colors:{ 
@@ -31,6 +31,6 @@ export const environment = {
       secondary_contrast: window["env"]["secondary_contrast"] || '#000000'
     },
     logo_src: window["env"]["logo_src"], // s'ha de validar a Helm
-    favicon_src: window["env"]["favicon_src"] || "assets/icon/favicon.png"
+    favicon_src: window["env"]["favicon_src"] || "assets/icon/favicon.png" //opcional amb fallback
   }
 };
