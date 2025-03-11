@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { AlertController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { TranslateService } from '@ngx-translate/core';
+import { websocket_uri } from '../constants/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,7 @@ export class WebsocketService {
 
   public connect(): void {
     this.socket = new WebSocket(
-      environment.websocket_url + environment.websocket_uri
+      environment.websocket_url + websocket_uri
     );
   
     this.socket.onopen = () => {

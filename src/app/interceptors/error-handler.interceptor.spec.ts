@@ -4,6 +4,7 @@ import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { ToastServiceHandler } from '../services/toast.service';
 import { HttpErrorInterceptor } from './error-handler.interceptor';
 import { environment } from 'src/environments/environment';
+import { server_uri } from '../constants/constants';
 
 class MockToastServiceHandler {
   showErrorAlert(message: string) {
@@ -113,18 +114,18 @@ describe('HttpErrorInterceptor with HttpClient', () => {
     const errorMessage = 'There was a problem processing the QR. It might be invalid or already have been used';
     const spy = jest.spyOn(mockToastServiceHandler, 'showErrorAlert');
 
-    httpClient.get('/' + environment.server_uri.execute_content_uri).subscribe({
+    httpClient.get('/' + server_uri.execute_content_uri).subscribe({
       error: (error) => {
         expect(spy).toHaveBeenCalledWith('errorMessage');
       }
     });
 
-    const req = httpMock.expectOne('/' + environment.server_uri.execute_content_uri);
+    const req = httpMock.expectOne('/' + server_uri.execute_content_uri);
     req.flush({message: 'Random error message'}, { status: 500, statusText: 'AnyText' });
   });
 
   it('should handle errors silently for verifiable presentation URI', () => {
-    const testUrl = environment.server_uri.verifiable_presentation_uri;
+    const testUrl = server_uri.verifiable_presentation_uri;
     const spy = jest.spyOn(console, 'error');
 
     httpClient.get(testUrl).subscribe({
@@ -146,13 +147,13 @@ describe('HttpErrorInterceptor with HttpClient', () => {
     const expectedMessage = 'PIN expired';
     const spy = jest.spyOn(mockToastServiceHandler, 'showErrorAlert');
   
-    httpClient.get('/' + environment.server_uri.request_credential_uri).subscribe({
+    httpClient.get('/' + server_uri.request_credential_uri).subscribe({
       error: (error) => {
         expect(spy).toHaveBeenCalledWith(expectedMessage);
       },
     });
   
-    const req = httpMock.expectOne('/' + environment.server_uri.request_credential_uri);
+    const req = httpMock.expectOne('/' + server_uri.request_credential_uri);
     req.flush({ message: 'Request Timeout' }, { status: 408, statusText: 'Request Timeout' });
   });
   
@@ -160,13 +161,13 @@ describe('HttpErrorInterceptor with HttpClient', () => {
     const expectedMessage = 'PIN expired';
     const spy = jest.spyOn(mockToastServiceHandler, 'showErrorAlert');
   
-    httpClient.get('/' + environment.server_uri.request_credential_uri).subscribe({
+    httpClient.get('/' + server_uri.request_credential_uri).subscribe({
       error: (error) => {
         expect(spy).toHaveBeenCalledWith(expectedMessage);
       },
     });
   
-    const req = httpMock.expectOne('/' + environment.server_uri.request_credential_uri);
+    const req = httpMock.expectOne('/' + server_uri.request_credential_uri);
     req.flush({ message: 'Gateway Timeout' }, { status: 504, statusText: 'Gateway Timeout' });
   });
 
@@ -174,13 +175,13 @@ describe('HttpErrorInterceptor with HttpClient', () => {
     const expectedMessage = 'PIN expired';
     const spy = jest.spyOn(mockToastServiceHandler, 'showErrorAlert');
   
-    httpClient.get('/' + environment.server_uri.execute_content_uri).subscribe({
+    httpClient.get('/' + server_uri.execute_content_uri).subscribe({
       error: (error) => {
         expect(spy).toHaveBeenCalledWith(expectedMessage);
       },
     });
   
-    const req = httpMock.expectOne('/' + environment.server_uri.execute_content_uri);
+    const req = httpMock.expectOne('/' + server_uri.execute_content_uri);
     req.flush({ message: 'Request Timeout' }, { status: 408, statusText: 'Request Timeout' });
   });
   
@@ -188,13 +189,13 @@ describe('HttpErrorInterceptor with HttpClient', () => {
     const expectedMessage = 'PIN expired';
     const spy = jest.spyOn(mockToastServiceHandler, 'showErrorAlert');
   
-    httpClient.get('/' + environment.server_uri.execute_content_uri).subscribe({
+    httpClient.get('/' + server_uri.execute_content_uri).subscribe({
       error: (error) => {
         expect(spy).toHaveBeenCalledWith(expectedMessage);
       },
     });
   
-    const req = httpMock.expectOne('/' + environment.server_uri.execute_content_uri);
+    const req = httpMock.expectOne('/' + server_uri.execute_content_uri);
     req.flush({ message: 'Gateway Timeout' }, { status: 504, statusText: 'Gateway Timeout' });
   });
   

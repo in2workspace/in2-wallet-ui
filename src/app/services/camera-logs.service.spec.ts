@@ -4,6 +4,7 @@ import { StorageService } from './storage.service';
 import { of, throwError } from 'rxjs';
 import { CameraLog } from '../interfaces/camera-log';
 import { environment } from 'src/environments/environment';
+import { logs_email } from '../constants/constants';
 
 jest.mock('src/environments/environment', () => ({
   environment: {
@@ -136,7 +137,7 @@ describe('CameraLogsService', () => {
   
       const expectedBody = `${encodeURIComponent(JSON.stringify(mockLogs[0]))}%0A${encodeURIComponent(JSON.stringify(mockLogs[1]))}`;
   
-      const expectedMailto = `mailto:${environment.logs_email}?subject=Camera%20Logs&body=${expectedBody}`;
+      const expectedMailto = `mailto:${logs_email}?subject=Camera%20Logs&body=${expectedBody}`;
   
       expect(openSpy).toHaveBeenCalledWith(expectedMailto, '_blank');
     });

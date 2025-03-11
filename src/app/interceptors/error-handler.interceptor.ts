@@ -10,6 +10,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ToastServiceHandler } from '../services/toast.service';
 import { environment } from 'src/environments/environment';
+import { server_uri } from '../constants/constants';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
@@ -28,12 +29,12 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         //DONT'T SHOW POPUP CASES
         if ( //todo review this handler
           errMessage?.startsWith('The credentials list is empty') &&
-          request.url.endsWith(environment.server_uri.credentials_uri)
+          request.url.endsWith(server_uri.credentials_uri)
         ) {
           console.error('Handled silently:', errMessage);
           return throwError(() => errorResp);
         }
-        if(request.url.endsWith(environment.server_uri.verifiable_presentation_uri))
+        if(request.url.endsWith(server_uri.verifiable_presentation_uri))
         {
           console.error('Handled silently:', errMessage);
           return throwError(() => errorResp);
@@ -42,14 +43,14 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         //SHOW POPUP CASES
         //same-device credential offer request
         if(request.url.endsWith(
-          environment.server_uri.request_credential_uri) 
+          server_uri.request_credential_uri) 
           && (errStatus === 408 || errStatus === 504)
         ){
           console.log('error is detected')
           errMessage = "PIN expired"
         } 
         //cross-device 
-        else if (request.url.endsWith(environment.server_uri.execute_content_uri)){
+        else if (request.url.endsWith(server_uri.execute_content_uri)){
           if(errMessage.startsWith('The credentials list is empty')){
             errMessage = "There are no credentials available to login";
           }
