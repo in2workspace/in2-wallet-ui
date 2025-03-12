@@ -12,8 +12,8 @@
         "settings":"Settings",
         "logout":"Logout"
     },
-    "barcode":{
-        "initializing": "Initializing barcode... Please wait."
+    "scanner":{
+        "initializing": "Initializing scanner... Please wait."
     },
     "camera-selector":{
         "title":"Selected camera",

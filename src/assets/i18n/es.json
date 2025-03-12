@@ -122,7 +122,7 @@
         "delete-cancel": "Cancela",
         "unsigned": "Sin firmar"
     },
-    "barcode":{
+    "scanner":{
         "initializing": "Inicializando escàner..."
     },
     "errors":{

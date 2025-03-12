@@ -125,7 +125,7 @@
         "delete-cancel": "Cancel·la",
         "unsigned": "Sense signatura"
     },
-    "barcode":{
+    "scanner":{
         "initializing": "Inicialitzant escàner..."
     },
     "errors":{
