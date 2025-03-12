@@ -132,7 +132,7 @@ export class AppComponent implements OnInit {
     // load apple-touch icon from environment
     let appleFaviconLink: HTMLLinkElement = this.document.querySelector("link[rel='apple-touch-icon']") || this.document.createElement('link');
     appleFaviconLink.type = 'image/x-icon';
-    appleFaviconLink.rel = 'icon';
+    appleFaviconLink.rel = 'apple-touch-icon';
     appleFaviconLink.href = faviconUrl;
     
     this.document.head.appendChild(appleFaviconLink);
