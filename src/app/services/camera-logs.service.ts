@@ -2,7 +2,7 @@ import { environment } from 'src/environments/environment';
 import { inject, Injectable } from '@angular/core';
 import { CameraLog, CameraLogType, LogsMailContent } from '../interfaces/camera-log';
 import { StorageService } from './storage.service';
-import { logs_email } from '../constants/constants';
+import { LOGS_EMAIL } from '../constants/email.constants';
 
 export const LOGS_PREFIX = 'CAMERA_LOGS';
 
@@ -84,7 +84,7 @@ export class CameraLogsService {
       body: emailBody.trim(),
     };
   
-    const mailtoLink = `mailto:${logs_email}?subject=${encodeURIComponent(msg.subject)}&body=${encodeURIComponent(msg.body)}`;
+    const mailtoLink = `mailto:${LOGS_EMAIL}?subject=${encodeURIComponent(msg.subject)}&body=${encodeURIComponent(msg.body)}`;
     window.open(mailtoLink, '_blank');
   }
 

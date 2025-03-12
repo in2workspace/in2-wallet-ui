@@ -21,7 +21,7 @@ import {
   authInterceptor,
 } from 'angular-auth-oidc-client';
 import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
-import { iam_params } from './app/constants/constants';
+import { IAM_PARAMS } from './app/constants/iam.constants';
 
 if (environment.production) {
   enableProdMode();
@@ -50,9 +50,9 @@ bootstrapApplication(AppComponent, {
         authority: environment.iam_url+environment.iam_params.iam_uri,
         redirectUrl: `${window.location.origin}/callback`,
         postLogoutRedirectUri: `${window.location.origin}?nocache=true`,
-        clientId: iam_params.client_id,
-        scope: iam_params.scope,
-        responseType: iam_params.grant_type,
+        clientId: IAM_PARAMS.CLIENT_ID,
+        scope: IAM_PARAMS.SCOPE,
+        responseType: IAM_PARAMS.GRANT_TYPE,
         silentRenew: true,
         useRefreshToken: true,
         ignoreNonceAfterRefresh: true,
