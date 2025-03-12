@@ -33,6 +33,6 @@ export const environment = {
       secondary_contrast: window["env"]["secondary_contrast"] || '#000000'
     },
     logo_src: window["env"]["logo_src"], // ! s'ha de validar a Helm
-    favicon_src: window["env"]["favicon_src"] || "assets/icons/favicon.png" //opcional amb fallback
+    favicon_src: window["env"]["favicon_src"] || "assets/icons/dome-favicon.png" //opcional amb fallback
   }
 };

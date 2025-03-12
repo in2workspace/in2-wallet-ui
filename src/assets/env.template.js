@@ -6,7 +6,6 @@
   window["env"]["websocket_url"] = "${WALLET_API_WEBSOCKET_EXTERNAL_DOMAIN}";
   window["env"]["iam_url"] = "${IAM_EXTERNAL_DOMAIN}";
   window["env"]["iam_uri"] = "${IAM_REALM_PATH}";
-  // window["env"]["cbor_uri"] = "${WALLET_API_CBOR_PATH}"; //todo
   window["env"]["logs_enabled"] = "${LOGS_ENABLED}";
   window["env"]["primary"] = "${PRIMARY}";
   window["env"]["primary_contrast"] = "${PRIMARY_CONTRAST}";

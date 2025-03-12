@@ -15,7 +15,7 @@ export const environment = {
       secondary:'#50c8ff',
       secondary_contrast:'#000000'
     },
-    logo_src: "assets/logos/dome_white_logo.png",
-    favicon_src: "assets/icons/favicon.png"
+    logo_src: "assets/logos/dome-logo.png",
+    favicon_src: "assets/icons/dome-favicon.png"
   }
 };
