@@ -13,5 +13,5 @@
   window["env"]["secondary"] = "#50c8ff";
   window["env"]["secondary_contrast"] = "#000000";
   window["env"]["logo_src"] =  "assets/logos/dome_white_logo.png"
-  window["env"]["favicon_src"] =  "assets/icon/favicon.png"
+  window["env"]["favicon_src"] =  "assets/icons/favicon.png"
 })(this);
