@@ -9,7 +9,7 @@ import {
   CredentialStatus,
   VerifiableCredential,
 } from '../interfaces/verifiable-credential';
-import { server_uri } from '../constants/constants';
+import { SERVER_URI } from '../constants/api.constants';
 
 interface VCReply {
   selectedVcList: any[];

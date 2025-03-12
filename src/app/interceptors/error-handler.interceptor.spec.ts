@@ -3,8 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { ToastServiceHandler } from '../services/toast.service';
 import { HttpErrorInterceptor } from './error-handler.interceptor';
-import { environment } from 'src/environments/environment';
-import { server_uri } from '../constants/constants';
+import { SERVER_URI } from '../constants/api.constants';
 
 class MockToastServiceHandler {
   showErrorAlert(message: string) {
