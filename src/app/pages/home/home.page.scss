@@ -119,3 +119,10 @@ ion-button {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.no-scroll {
+  overscroll-behavior: none;
+  touch-action: none;
+  overflow: hidden;
+  height: 100%;
+}

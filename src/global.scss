@@ -43,19 +43,4 @@ app-tabs ion-tab-button {
   --color-selected: var(--primary-custom-color);
 }
 
-html, body {
-  overscroll-behavior: none;
-  touch-action: none;
-  height: 100%;
-  overflow: hidden;
-  position: fixed;
-  width: 100%;
-}
-
-ion-content {
-  overscroll-behavior: none;
-  touch-action: none;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: none;
-}
 
