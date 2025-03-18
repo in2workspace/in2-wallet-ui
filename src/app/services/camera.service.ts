@@ -17,18 +17,18 @@ export class CameraService {
   public computedSelectedCameraLabel$ = computed(() => this.selectedCamera$()?.label);
   public availableDevices$ = signal<MediaDeviceInfo[]>([]);
   public isCameraError$ = signal<boolean|undefined>(undefined);
-  public activatingBarcodeListSubj = new BehaviorSubject<string[]>([]);
-  public activatingBarcodeList$ = this.activatingBarcodeListSubj.asObservable();
+  public activatingScannersListSubj = new BehaviorSubject<string[]>([]);
+  public activatingScannersList$ = this.activatingScannersListSubj.asObservable();
 
-  public addActivatingBarcode(barcodeId:string){
-    const destroyingBarcode = this.activatingBarcodeListSubj.getValue();
-    this.activatingBarcodeListSubj.next([...destroyingBarcode, barcodeId]);
+  public addActivatingScanner(scannerId:string){
+    const destroyingScanner = this.activatingScannersListSubj.getValue();
+    this.activatingScannersListSubj.next([...destroyingScanner, scannerId]);
   }
 
-  public removeActivatingBarcode(barcodeId:string){
-    const destroyingBarcode = this.activatingBarcodeListSubj.getValue();
-    const updatedList = destroyingBarcode.filter(id => id !== barcodeId);
-    this.activatingBarcodeListSubj.next([...updatedList]);
+  public removeActivatingScanner(scannerId:string){
+    const destroyingScanner = this.activatingScannersListSubj.getValue();
+    const updatedList = destroyingScanner.filter(id => id !== scannerId);
+    this.activatingScannersListSubj.next([...updatedList]);
   }
 
   public setCamera(camera: MediaDeviceInfo) {

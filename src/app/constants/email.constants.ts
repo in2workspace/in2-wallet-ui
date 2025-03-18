@@ -1,0 +1,1 @@
+export const LOGS_EMAIL = "domesupport@in2.es" as const;
