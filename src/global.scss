@@ -44,6 +44,7 @@ app-tabs ion-tab-button {
 }
 
 ion-content {
-  -webkit-overflow-scrolling: auto !important;
-  overflow-y: auto !important;
+  overscroll-behavior: none;
+  touch-action: none;
+  overflow-y: hidden;
 }
