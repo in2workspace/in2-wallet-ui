@@ -63,6 +63,11 @@ ion-alert.custom-alert {
     width: -webkit-fill-available;
 }
 
+.content {
+    --background: url("../../customAssets/icon/background.png") center/cover fixed no-repeat;
+
+}
+
 .item-trns {
     --ion-item-background: transparent;
 	color: #B0FF2B;

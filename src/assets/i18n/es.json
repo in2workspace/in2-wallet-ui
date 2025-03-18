@@ -125,7 +125,7 @@
         "unsigned-message": "Su credencial aún no ha sido firmada y no puede ser utilizada. Espere a que el emisor complete el proceso de firma.",
         "revoked": "Revocada"
     },
-    "scanner":{
+    "barcode":{
         "initializing": "Inicializando escàner..."
     },
     "errors":{

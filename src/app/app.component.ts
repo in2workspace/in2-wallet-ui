@@ -1,4 +1,4 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule, PopoverController } from '@ionic/angular';
@@ -29,9 +29,7 @@ export class AppComponent implements OnInit {
   private readonly authenticationService = inject(AuthenticationService);
   private readonly websocket = inject(WebsocketService);
   private readonly cdr = inject(ChangeDetectorRef);
-  private document = inject(DOCUMENT);
-  private readonly router = inject(Router);
-  
+  private readonly router = inject(Router)
   public userName = this.authenticationService.getName();
   public isCallbackRoute = false;
   public readonly logoSrc = environment.customizations.logo_src;
@@ -51,7 +49,6 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.setFavicon();
     this.handleNoCache();
     this.trackRouterEvents();
     this.alertIncompatibleDevice();
@@ -124,26 +121,6 @@ export class AppComponent implements OnInit {
       const currentUrl = this.router.url.split('?')[0];
       this.isCallbackRoute = currentUrl.startsWith('/callback');
     });
-  }
-
-  private setFavicon(): void {
-    const faviconUrl = environment.customizations.favicon_src;
-
-    // load favicon from environment
-    let faviconLink: HTMLLinkElement = this.document.querySelector("link[rel='icon']") || this.document.createElement('link');
-    faviconLink.type = 'image/x-icon';
-    faviconLink.rel = 'icon';
-    faviconLink.href = faviconUrl;
-    
-    this.document.head.appendChild(faviconLink);
-
-    // load apple-touch icon from environment
-    let appleFaviconLink: HTMLLinkElement = this.document.querySelector("link[rel='apple-touch-icon']") || this.document.createElement('link');
-    appleFaviconLink.type = 'image/x-icon';
-    appleFaviconLink.rel = 'apple-touch-icon';
-    appleFaviconLink.href = faviconUrl;
-    
-    this.document.head.appendChild(appleFaviconLink);
   }
 
   public logout(): void {

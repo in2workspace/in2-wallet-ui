@@ -23,19 +23,19 @@ export class CameraSelectorPage {
   public readonly cameraService = inject(CameraService);
   private readonly cdr = inject(ChangeDetectorRef);
 
-  public showScanner = true;
+  public showBarcode = true;
   public isChangingDevice = false;
   public availableDevices$ = this.cameraService.availableDevices$;
   public selectedDevice$ = this.cameraService.selectedCamera$;
 
   private ionViewWillEnter(): void{
-    if(this.showScanner !== true){
-      this.createScanner();
+    if(this.showBarcode !== true){
+      this.createBarcode();
     }
   }
 
   private async ionViewWillLeave(): Promise<void>{
-    this.destroyScanner();
+    this.destroyBarcode();
   }
 
   public async onDeviceSelectChange(selectedDeviceId: string): Promise<void> {
@@ -65,13 +65,13 @@ export class CameraSelectorPage {
     }, 2000);
   }
 
-  public createScanner(): void{
-    this.showScanner = true;
+  public createBarcode(): void{
+    this.showBarcode = true;
     this.cdr.detectChanges();
   }
 
-  public destroyScanner(): void{
-    this.showScanner = false;
+  public destroyBarcode(): void{
+    this.showBarcode = false;
     this.cdr.detectChanges();
   }
   

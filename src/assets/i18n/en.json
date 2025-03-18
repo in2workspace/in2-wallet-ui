@@ -12,7 +12,7 @@
         "settings":"Settings",
         "logout":"Logout"
     },
-    "scanner":{
+    "barcode":{
         "initializing": "Initializing scanner... Please wait."
     },
     "camera-selector":{

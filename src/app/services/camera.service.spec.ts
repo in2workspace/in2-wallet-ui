@@ -81,90 +81,93 @@ describe('CameraService', () => {
   });
 
 
-  it('should keep multiple Scanner a activatingScannersListSubj', () => {
-    const scanner1 = '123ABC';
-    const scanner2 = 'XYZ789';
+  it('hauria de mantenir múltiples barcodes a activatingBarcodeListSubj', () => {
+    const barcode1 = '123ABC';
+    const barcode2 = 'XYZ789';
 
-    cameraService.addActivatingScanner(scanner1);
-    cameraService.addActivatingScanner(scanner2);
+    cameraService.addActivatingBarcode(barcode1);
+    cameraService.addActivatingBarcode(barcode2);
 
-    const currentList = cameraService.activatingScannersListSubj.getValue();
+    const currentList = cameraService.activatingBarcodeListSubj.getValue();
     
-    expect(currentList).toContain(scanner1);
-    expect(currentList).toContain(scanner2);
+    expect(currentList).toContain(barcode1);
+    expect(currentList).toContain(barcode2);
   });
 
-  it('should correctly emit scanners list with activatingScannerList$', (done) => {
-    const scanner = 'TEST-SCANNER';
+  it('hauria d’emetre correctament la llista de barcodes a activatingBarcodeList$', (done) => {
+    const barcode = 'TEST-BARCODE';
 
-    cameraService.activatingScannersList$.subscribe((list) => {
+    cameraService.activatingBarcodeList$.subscribe((list) => {
       if (list.length > 0) {
-        expect(list).toContain(scanner);
+        expect(list).toContain(barcode);
         done();
       }
     });
 
-    cameraService.addActivatingScanner(scanner);
+    cameraService.addActivatingBarcode(barcode);
   });
 
-  describe('CameraService - removeActivatingScanner', () => {
+  describe('CameraService - removeActivatingBarcode', () => {
   
-    it('hauria d’eliminar un scanner existent de activatingScannerListSubj', () => {
-      const scanner1 = '123ABC';
-      const scanner2 = 'XYZ789';
+    it('hauria d’eliminar un barcode existent de activatingBarcodeListSubj', () => {
+      const barcode1 = '123ABC';
+      const barcode2 = 'XYZ789';
   
-      cameraService.addActivatingScanner(scanner1);
-      cameraService.addActivatingScanner(scanner2);
+      cameraService.addActivatingBarcode(barcode1);
+      cameraService.addActivatingBarcode(barcode2);
   
-      expect(cameraService.activatingScannersListSubj.getValue()).toEqual([scanner1, scanner2]);
+      // Comprovem que els dos barcodes s'han afegit
+      expect(cameraService.activatingBarcodeListSubj.getValue()).toEqual([barcode1, barcode2]);
   
-      cameraService.removeActivatingScanner(scanner1);
+      // Eliminem el primer barcode
+      cameraService.removeActivatingBarcode(barcode1);
   
-      expect(cameraService.activatingScannersListSubj.getValue()).toEqual([scanner2]);
+      // Comprovem que només queda el segon barcode
+      expect(cameraService.activatingBarcodeListSubj.getValue()).toEqual([barcode2]);
     });
   
-    it('hauria de no canviar la llista si el scanner no existeix', () => {
-      const scanner1 = '123ABC';
+    it('hauria de no canviar la llista si el barcode no existeix', () => {
+      const barcode1 = '123ABC';
   
-      cameraService.addActivatingScanner(scanner1);
+      cameraService.addActivatingBarcode(barcode1);
   
-      // Intentem eliminar un Scanner que no existeix
-      cameraService.removeActivatingScanner('NO-EXISTEIX');
+      // Intentem eliminar un barcode que no existeix
+      cameraService.removeActivatingBarcode('NO-EXISTEIX');
   
       // Comprovem que la llista segueix igual
-      expect(cameraService.activatingScannersListSubj.getValue()).toEqual([scanner1]);
+      expect(cameraService.activatingBarcodeListSubj.getValue()).toEqual([barcode1]);
     });
   
-    it('hauria de deixar la llista buida si s’eliminen tots els scanners', () => {
-      const scanner1 = '123ABC';
-      const scanner2 = 'XYZ789';
+    it('hauria de deixar la llista buida si s’eliminen tots els barcodes', () => {
+      const barcode1 = '123ABC';
+      const barcode2 = 'XYZ789';
   
-      cameraService.addActivatingScanner(scanner1);
-      cameraService.addActivatingScanner(scanner2);
+      cameraService.addActivatingBarcode(barcode1);
+      cameraService.addActivatingBarcode(barcode2);
   
-      // Eliminem els dos Scanners
-      cameraService.removeActivatingScanner(scanner1);
-      cameraService.removeActivatingScanner(scanner2);
+      // Eliminem els dos barcodes
+      cameraService.removeActivatingBarcode(barcode1);
+      cameraService.removeActivatingBarcode(barcode2);
   
       // Comprovem que la llista està buida
-      expect(cameraService.activatingScannersListSubj.getValue()).toEqual([]);
+      expect(cameraService.activatingBarcodeListSubj.getValue()).toEqual([]);
     });
   
-    it('hauria d’emetre correctament els valors actualitzats a activatingScannersList$', (done) => {
-      const scanner1 = '123ABC';
-      const scanner2 = 'XYZ789';
+    it('hauria d’emetre correctament els valors actualitzats a activatingBarcodeList$', (done) => {
+      const barcode1 = '123ABC';
+      const barcode2 = 'XYZ789';
   
-      cameraService.addActivatingScanner(scanner1);
-      cameraService.addActivatingScanner(scanner2);
+      cameraService.addActivatingBarcode(barcode1);
+      cameraService.addActivatingBarcode(barcode2);
   
-      cameraService.activatingScannersList$.subscribe((list) => {
-        if (list.length === 1 && list[0] === scanner2) {
-          expect(list).toEqual([scanner2]);
+      cameraService.activatingBarcodeList$.subscribe((list) => {
+        if (list.length === 1 && list[0] === barcode2) {
+          expect(list).toEqual([barcode2]);
           done();
         }
       });
   
-      cameraService.removeActivatingScanner(scanner1);
+      cameraService.removeActivatingBarcode(barcode1);
     });
   });
   

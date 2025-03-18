@@ -1,7 +1,9 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { CameraSelectorPage } from './camera-selector.page';
 import { IonicModule } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';import { CameraService } from 'src/app/services/camera.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { BarcodeScannerComponent } from 'src/app/components/barcode-scanner/barcode-scanner.component';
+import { CameraService } from 'src/app/services/camera.service';
 import { ChangeDetectorRef, Component, signal } from '@angular/core';
 import { of } from 'rxjs';
 import { CameraLogsService } from 'src/app/services/camera-logs.service';
@@ -25,15 +27,15 @@ describe('CameraSelectorPage', () => {
   beforeEach(async () => {
     cameraServiceMock = {
       availableDevices$: of([]),
-      activatingScannersList$: of([]),
-      addActivatingScanner: jest.fn(),
+      activatingBarcodeList$: of([]),
+      addActivatingBarcode: jest.fn(),
       getCameraFlow: jest.fn(),
       getAvailableCameraById: jest.fn(),
       handleCameraErrors: jest.fn(),
       isCameraAvailableById: jest.fn(),
       isCameraError$: signal(false),
       setCamera: jest.fn(),
-      removeActivatingScanner: jest.fn(),
+      removeActivatingBarcode: jest.fn(),
       selectedCamera$: signal(null),
       updateAvailableCameras: jest.fn()
     } as unknown as jest.Mocked<CameraService>;
@@ -78,30 +80,30 @@ describe('CameraSelectorPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call ionViewWillEnter and createScanner when showScanner is false', () => {
-    component.showScanner = false;
-    jest.spyOn(component as any, 'createScanner');
+  it('should call ionViewWillEnter and createBarcode when showBarcode is false', () => {
+    component.showBarcode = false;
+    jest.spyOn(component as any, 'createBarcode');
 
     (component as any).ionViewWillEnter();
 
-    expect(component['createScanner']).toHaveBeenCalled();
+    expect(component['createBarcode']).toHaveBeenCalled();
   });
 
-  it('should not call createScanner if showScanner is already true', () => {
-    component.showScanner = true;
-    jest.spyOn(component as any, 'createScanner');
+  it('should not call createBarcode if showBarcode is already true', () => {
+    component.showBarcode = true;
+    jest.spyOn(component as any, 'createBarcode');
 
     (component as any).ionViewWillEnter();
 
-    expect(component['createScanner']).not.toHaveBeenCalled();
+    expect(component['createBarcode']).not.toHaveBeenCalled();
   });
 
-  it('should call ionViewWillLeave and destroyScanner', async () => {
-    jest.spyOn(component as any, 'destroyScanner');
+  it('should call ionViewWillLeave and destroyBarcode', async () => {
+    jest.spyOn(component as any, 'destroyBarcode');
 
     await (component as any).ionViewWillLeave();
 
-    expect(component['destroyScanner']).toHaveBeenCalled();
+    expect(component['destroyBarcode']).toHaveBeenCalled();
   });
 
   it('handle camera errors', ()=>{
@@ -117,19 +119,19 @@ describe('CameraSelectorPage', () => {
     expect(component.isChangingDevice).toBe(false);
   }));
 
-  it('should set showScanner to true and call detectChanges', () => {
+  it('should set showBarcode to true and call detectChanges', () => {
 
-    component.createScanner();
+    component.createBarcode();
 
-    expect(component.showScanner).toBe(true);
+    expect(component.showBarcode).toBe(true);
     expect(cdrMock).toHaveBeenCalled();
   });
 
-  it('should set showScanner to false and call detectChanges', () => {
+  it('should set showBarcode to false and call detectChanges', () => {
 
-    component.destroyScanner();
+    component.destroyBarcode();
 
-    expect(component.showScanner).toBe(false);
+    expect(component.showBarcode).toBe(false);
     expect(cdrMock).toHaveBeenCalled();
   });
 

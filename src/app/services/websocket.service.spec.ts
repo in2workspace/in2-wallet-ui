@@ -7,7 +7,6 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TranslateModule } from '@ngx-translate/core';
-import { WEBSOCKET_URI } from '../constants/api.constants';
 
 let alertControllerMock: any;
 let mockWebSocketInstance: any;
@@ -89,7 +88,7 @@ describe('WebsocketService', () => {
 
   it('should create and open a WebSocket connection', fakeAsync(() => {
     service.connect();
-    expect(window.WebSocket).toHaveBeenCalledWith(`${environment.websocket_url}${WEBSOCKET_URI}`);
+    expect(window.WebSocket).toHaveBeenCalledWith(`${environment.websocket_url}${environment.websocket_uri}`);
     expect(service.sendMessage).not.toHaveBeenCalled();
   }));
 

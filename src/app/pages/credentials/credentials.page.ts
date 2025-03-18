@@ -10,6 +10,7 @@ import {VcViewComponent} from '../../components/vc-view/vc-view.component';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {WebsocketService} from 'src/app/services/websocket.service';
+import {DataService} from 'src/app/services/data.service';
 import {VerifiableCredential, CredentialStatus} from 'src/app/interfaces/verifiable-credential';
 import {VerifiableCredentialSubjectDataNormalizer} from 'src/app/interfaces/verifiable-credential-subject-data-normalizer';
 import {CameraLogsService} from 'src/app/services/camera-logs.service';
@@ -51,9 +52,12 @@ export class CredentialsPage implements OnInit {
   public scaned_cred = false;
   public show_qr = false;
   public credentialOfferUri = '';
+  public ebsiFlag = false;
+  public did = '';
 
   private readonly alertController = inject(AlertController);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly dataService = inject(DataService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -71,7 +75,13 @@ export class CredentialsPage implements OnInit {
       this.show_qr = params['show_qr'];
       this.credentialOfferUri = params['credentialOfferUri'];
     });
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.dataService.listenDid().subscribe((data: any) => {
+      if (data != '') {
+        this.ebsiFlag = true;
+        this.did = data;
+      }
+    });
   }
 
   public ngOnInit(): void {
@@ -135,6 +145,37 @@ export class CredentialsPage implements OnInit {
   public scan(): void {
     this.toggleScan = true;
     this.show_qr = true;
+    this.ebsiFlag = false;
+  }
+
+  // TODO: This should be moved to the settings page because this is something recreated to ebsi and this option is enabled in the settings page
+  public async copyToClipboard(textToCopy: string): Promise<void> {
+    let text = '';
+
+    if (textToCopy === 'did-text') {
+      const didTextElement = document.getElementById('did-text');
+      if (didTextElement) {
+        text = didTextElement.innerText.trim();
+        const prefix = 'DID: ';
+        if (text.startsWith(prefix)) {
+          text = text.substring(prefix.length);
+        }
+      } else {
+        console.error('Element with id "did-text" not found.');
+        return;
+      }
+    } else if (textToCopy === 'endpoint-text') {
+      text = this.credOfferEndpoint || '';
+    } else {
+      console.error('Invalid text to copy:', textToCopy);
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (error) {
+      console.error('Error al copiar texto al portapapeles:', error);
+    }
   }
 
   public refresh(): void {
