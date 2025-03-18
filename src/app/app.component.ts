@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule, PopoverController } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
@@ -40,8 +40,8 @@ export class AppComponent implements OnInit {
   ) {
     this.setDefaultLanguages();
     this.setStoredLanguage();
-
     this.setCustomStyles();
+    this.handlePageScroll();
   }
 
   public ngOnInit() {
@@ -54,6 +54,7 @@ export class AppComponent implements OnInit {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
 
   public setCustomStyles(): void{
     const root = document.documentElement;
@@ -104,6 +105,22 @@ export class AppComponent implements OnInit {
       const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
       window.location.href = cleanUrl;
     }
+  }
+
+  public handlePageScroll(): void {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        const noScrollPages = [
+          '/tabs/settings',
+          '/tabs/home'
+        ];
+        if (noScrollPages.includes(new URL(event.url, window.location.origin).pathname)) {
+          document.body.classList.add('no-scroll');
+        } else {
+          document.body.classList.remove('no-scroll');
+        }
+      }
+    });
   }
   
   public trackRouterEvents(): void {
