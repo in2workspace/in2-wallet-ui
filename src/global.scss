@@ -42,3 +42,7 @@ ion-item-divider:last-of-type{
 app-tabs ion-tab-button {
   --color-selected: var(--primary-custom-color);
 }
+
+ion-content {
+  overscroll-behavior: contain;
+}
