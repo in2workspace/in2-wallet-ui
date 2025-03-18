@@ -48,9 +48,14 @@ html, body {
   touch-action: none;
   height: 100%;
   overflow: hidden;
+  position: fixed;
+  width: 100%;
 }
 
-ion-app {
-  height: 100%;
-  overflow: hidden;
+ion-content {
+  overscroll-behavior: none;
+  touch-action: none;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: none;
 }
+

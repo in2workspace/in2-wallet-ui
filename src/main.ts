@@ -22,6 +22,14 @@ import {
 } from 'angular-auth-oidc-client';
 import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
 
+document.addEventListener(
+  'touchmove',
+  function (event) {
+    event.preventDefault();
+  },
+  { passive: false }
+);
+
 if (environment.production) {
   enableProdMode();
 }
