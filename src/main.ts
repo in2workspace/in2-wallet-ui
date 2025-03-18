@@ -22,6 +22,23 @@ import {
 } from 'angular-auth-oidc-client';
 import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
 
+document.addEventListener(
+  'touchmove',
+  function (event) {
+    const noScrollPages = [
+      '/tabs/settings',
+      '/tabs/home'
+    ];
+
+    const currentPath = new URL(window.location.href).pathname;
+
+    if (noScrollPages.includes(currentPath)) {
+      event.preventDefault();
+    }
+  },
+  { passive: false }
+);
+
 if (environment.production) {
   enableProdMode();
 }
