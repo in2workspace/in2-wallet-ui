@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { VerifiableCredential } from '../interfaces/verifiable-credential';
 import { VCReply } from '../interfaces/verifiable-credential-reply';
-import { SERVER_URI } from '../constants/api.constants';
+import { SERVER_PATH } from '../constants/api.constants';
 
 const headers = new HttpHeaders({
   'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export class WalletService {
 
   public executeContent(url: string): Observable<JSON> {
     return this.http.post<JSON>(
-      environment.server_url + SERVER_URI.EXECUTE_CONTENT_URI,
+      environment.server_url + SERVER_PATH.EXECUTE_CONTENT,
       { qr_content: url },
       options
     );
@@ -34,7 +34,7 @@ export class WalletService {
       responseType: 'text' as const,
     };
     return this.http.post(
-      environment.server_url + SERVER_URI.CBOR,
+      environment.server_url + SERVER_PATH.CBOR,
       credential,
       options
     );
@@ -57,7 +57,7 @@ export class WalletService {
   public requestOpenidCredentialOffer(credentialOfferUri: string): Observable<JSON> {
     const params = new HttpParams().set('credentialOfferUri', credentialOfferUri);
     return this.http.get<JSON>(
-      environment.server_url + SERVER_URI.REQUEST_CREDENTIAL_URI,
+      environment.server_url + SERVER_PATH.REQUEST_CREDENTIAL,
       {
         params,
         headers: options.headers
@@ -69,7 +69,7 @@ export class WalletService {
   public executeVC(_VCReply: VCReply): Observable<string> {
     return this.http.post<string>(
       environment.server_url +
-      SERVER_URI.VERIFIABLE_PRESENTATION_URI,
+      SERVER_PATH.VERIFIABLE_PRESENTATION,
       _VCReply,
       {
         headers: headers,
@@ -80,7 +80,7 @@ export class WalletService {
   // Request all Verifiable Credentials of a user from the Wallet Data
   public getAllVCs(): Observable<VerifiableCredential[]> {
     return this.http.get<VerifiableCredential[]>(
-      environment.server_url + SERVER_URI.CREDENTIALS_URI,
+      environment.server_url + SERVER_PATH.CREDENTIALS,
       options
     );
   }
@@ -97,7 +97,7 @@ export class WalletService {
   public deleteVC(VC: string) {
     return this.http.delete<string>(
       environment.server_url +
-      SERVER_URI.CREDENTIALS_BY_ID_URI +
+      SERVER_PATH.CREDENTIALS_BY_ID +
         VC,
       options
     );
@@ -108,7 +108,7 @@ export class WalletService {
     };
 
     return this.http.get<string>(
-      `${environment.server_url + SERVER_URI.CREDENTIALS_SIGNED_BY_ID_URI}?credentialId=${credentialId}`,
+      `${environment.server_url + SERVER_PATH.CREDENTIALS_SIGNED_BY_ID}?credentialId=${credentialId}`,
       options
     );
   }
