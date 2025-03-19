@@ -19,8 +19,10 @@ import {
   AuthModule,
   AuthInterceptor,
   authInterceptor,
+  AbstractSecurityStorage,
 } from 'angular-auth-oidc-client';
 import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
+import { CustomAuthStorage } from './app/services/custom-auth-storage.service';
 
 document.addEventListener(
   'touchmove',
@@ -81,7 +83,8 @@ bootstrapApplication(AppComponent, {
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     provideHttpClient(withInterceptors([authInterceptor()])),
-    provideRouter(routes)
+    provideRouter(routes),
+    { provide: AbstractSecurityStorage, useClass: CustomAuthStorage },
   ],
 });
 export function httpTranslateLoader(http: HttpClient) {
