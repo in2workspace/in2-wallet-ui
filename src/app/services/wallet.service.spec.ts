@@ -9,7 +9,7 @@ import {
   CredentialStatus,
   VerifiableCredential,
 } from '../interfaces/verifiable-credential';
-import { SERVER_URI } from '../constants/api.constants';
+import { SERVER_PATH } from '../constants/api.constants';
 
 interface VCReply {
   selectedVcList: any[];
@@ -45,7 +45,7 @@ describe('WalletService', () => {
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.server_url}${SERVER_URI.EXECUTE_CONTENT_URI}`
+      `${environment.server_url}${SERVER_PATH.EXECUTE_CONTENT}`
     );
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual({ qr_content: mockUrl });
@@ -140,7 +140,7 @@ describe('WalletService', () => {
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.server_url}${SERVER_URI.REQUEST_CREDENTIAL_URI}?credentialOfferUri=${mockCredentialOfferUri}`
+      `${environment.server_url}${SERVER_PATH.REQUEST_CREDENTIAL}?credentialOfferUri=${mockCredentialOfferUri}`
     );
     expect(req.request.method).toBe('GET');
     expect(req.request.params.get('credentialOfferUri')).toBe(mockCredentialOfferUri);
@@ -165,7 +165,7 @@ describe('WalletService', () => {
     const req = httpTestingController.expectOne(
       `${
         environment.server_url +
-        SERVER_URI.VERIFIABLE_PRESENTATION_URI
+        SERVER_PATH.VERIFIABLE_PRESENTATION
       }`
     );
     expect(req.request.method).toBe('POST');
@@ -226,7 +226,7 @@ describe('WalletService', () => {
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.server_url + SERVER_URI.CREDENTIALS_URI}`
+      `${environment.server_url + SERVER_PATH.CREDENTIALS}`
     );
     expect(req.request.method).toBe('GET');
     req.flush(mockResponse);
@@ -301,7 +301,7 @@ describe('WalletService', () => {
     const req = httpTestingController.expectOne(
       `${
         environment.server_url +
-        SERVER_URI.CREDENTIALS_BY_ID_URI +
+        SERVER_PATH.CREDENTIALS_BY_ID +
         VC
       }`
     );
@@ -321,7 +321,7 @@ describe('WalletService', () => {
     const req = httpTestingController.expectOne(
       `${
         environment.server_url +
-        SERVER_URI.CREDENTIALS_SIGNED_BY_ID_URI
+        SERVER_PATH.CREDENTIALS_SIGNED_BY_ID
       }?credentialId=${credentialId}`
     );
     expect(req.request.method).toBe('GET');

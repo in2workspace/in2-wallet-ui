@@ -117,7 +117,7 @@ export class WalletService {
   // eslint-disable-next-line @typescript-eslint/ban-types
   // public submitCredential(arg0: {}) {
   //   return this.http.post<string>(
-  //     environment.server_url + SERVER_URI.CREDENTIALS_URI,
+  //     environment.server_url + SERVER_PATH.CREDENTIALS,
   //     arg0,
   //     options
   //   );
