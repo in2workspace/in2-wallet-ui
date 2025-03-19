@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.7.1](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.7.1)
 ### Fixed
-- Disabled elastic scrolling on iOS devices to prevent scrolling issues.
+- Disabled elastic scrolling on iOS devices to prevent scrolling issues on home and settings pages
+- Fixed navigation bar showing for few seconds before keycloak login screen
+- Minor Fixes
 
 ## [v1.7.0](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.7.0)
 ### Added

@@ -45,7 +45,6 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.handleNoCache();
     this.trackRouterEvents();
     this.alertIncompatibleDevice();
   }
@@ -97,15 +96,6 @@ export class AppComponent implements OnInit {
       alert('This application scanner is probably not supported on this device with this browser. If you have issues, use Safari browser.');
     }
   }
-
-  public handleNoCache(): void {
-    const urlParams = new URLSearchParams(window.location.search);
-  
-    if (urlParams.get('nocache') === 'true') {
-      const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
-      window.location.href = cleanUrl;
-    }
-  }
   
   public trackRouterEvents(): void {
     this.router.events
@@ -123,7 +113,6 @@ export class AppComponent implements OnInit {
       this.router.navigate(['/home'], {});
     });
   }
-
 
   public handleKeydown(event: KeyboardEvent, action = 'request'): void {
     if (event.key === 'Enter' || event.key === ' ') {
