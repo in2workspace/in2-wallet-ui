@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
   private readonly router = inject(Router)
   public userName = this.authenticationService.getName();
   public isCallbackRoute = false;
+  public isBaseRoute = false;
   public readonly logoSrc = environment.customizations.logo_src;
   private readonly destroy$ = new Subject<void>();
 
@@ -42,7 +43,7 @@ export class AppComponent implements OnInit {
     this.setStoredLanguage();
     this.setCustomStyles();
     this.router.events.subscribe(() => {
-      this.isCallbackRoute = this.router.url.includes('/callback');
+      this.isBaseRoute = this.router.url === '/';
     });
   }
 

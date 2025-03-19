@@ -1,9 +1,5 @@
-ion-app {
-  --ion-background-color: #DDE6F6;
-}
-
 .no-header ion-router-outlet {
-  height: 100vh;
+  margin-top: 0;
 }
 
 ion-menu ion-content {

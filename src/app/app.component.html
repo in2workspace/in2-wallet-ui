@@ -1,5 +1,5 @@
-<ion-app [ngClass]="{ 'no-header': isCallbackRoute }">
-  <ion-header [translucent]="false" *ngIf="!isCallbackRoute">
+<ion-app [ngClass]="{ 'no-header': isBaseRoute }">
+  <ion-header [translucent]="false" *ngIf="!isBaseRoute">
     <ion-toolbar class="toolbar" [ngClass]="{ 'blurred': isCallbackRoute }">
       <img alt="DOME Logo" [src]="logoSrc" width="auto" slot="start" height="35px" class="logo"/>
       <ion-button
@@ -19,5 +19,5 @@
       </ion-button>
     </ion-toolbar>
   </ion-header>
-  <ion-router-outlet id="main-content" class="main-content"></ion-router-outlet>
+  <ion-router-outlet id="main-content" class="main-content" ></ion-router-outlet>
 </ion-app>
