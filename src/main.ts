@@ -47,7 +47,7 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom( AuthModule.forRoot({
       config: {
         postLoginRoute: '/tabs/home',
-        authority: environment.iam_url+environment.iam_params.iam_uri,
+        authority: environment.iam_url + environment.iam_realm_path,
         redirectUrl: `${window.location.origin}/callback`,
         postLogoutRedirectUri: `${window.location.origin}?nocache=true`,
         clientId: IAM_PARAMS.CLIENT_ID,

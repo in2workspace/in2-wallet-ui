@@ -5,7 +5,7 @@
   window["env"]["server_url"] = 'http://localhost:8082';
   window["env"]["websocket_url"] = 'ws://localhost:8082';
   window["env"]["iam_url"] ='http://localhost:7002';
-  window["env"]["iam_uri"] = '/realms/wallet';
+  window["env"]["iam_realm_path"] = '/realms/wallet';
   window["env"]["logs_enabled"] = "false";
   window["env"]["primary"] = "#00ADD3";
   window["env"]["primary_contrast"] = "#ffffff";

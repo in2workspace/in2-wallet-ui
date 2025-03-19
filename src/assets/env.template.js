@@ -5,7 +5,7 @@
   window["env"]["server_url"] = "${WALLET_API_INTERNAL_DOMAIN}";
   window["env"]["websocket_url"] = "${WALLET_API_WEBSOCKET_EXTERNAL_DOMAIN}";
   window["env"]["iam_url"] = "${IAM_EXTERNAL_DOMAIN}";
-  window["env"]["iam_uri"] = "${IAM_REALM_PATH}";
+  window["env"]["iam_realm_path"] = "${IAM_REALM_PATH}";
   window["env"]["logs_enabled"] = "${LOGS_ENABLED}";
   window["env"]["primary"] = "${PRIMARY}";
   window["env"]["primary_contrast"] = "${PRIMARY_CONTRAST}";
