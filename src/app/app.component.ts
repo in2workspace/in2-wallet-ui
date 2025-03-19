@@ -26,7 +26,7 @@ import { environment } from 'src/environments/environment';
 
 export class AppComponent implements OnInit {
   private readonly authenticationService = inject(AuthenticationService);
-  private document = inject(DOCUMENT);
+  private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
   
   public userName = this.authenticationService.getName();
