@@ -10,27 +10,20 @@ export class AuthenticationService {
   private token!: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private userData: any;
-  public isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   public constructor(public oidcSecurityService: OidcSecurityService) {
     this.checkAuth().subscribe();
   }
   public checkAuth() {
     return this.oidcSecurityService.checkAuth().pipe(
-      map(({ userData, accessToken, isAuthenticated }) => {
+      map(({ userData, accessToken }) => {
         this.userData = userData;
         this.name.next(this.userData.name);
         this.token = accessToken;
-        this.isAuthenticated$.next(isAuthenticated);
-      }),
-      finalize(() => {
-        this.isLoading$.next(false);
       })
     );
   }
   public logout() {
-    this.isAuthenticated$.next(false);
     return this.oidcSecurityService.logoffAndRevokeTokens();
   }
 
