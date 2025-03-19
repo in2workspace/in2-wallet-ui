@@ -31,12 +31,14 @@ export class AppComponent implements OnInit {
   public isCallbackRoute = false;
   public readonly logoSrc = environment.customizations.logo_src;
   private readonly destroy$ = new Subject<void>();
+  isAuthenticated$ = this.authService.isAuthenticated$;
 
   public constructor(
     private readonly cameraService: CameraService,
     private readonly popoverController: PopoverController,
     private readonly storageService: StorageService,
     public readonly translate: TranslateService,
+    private readonly authService: AuthenticationService
   ) {
     this.setDefaultLanguages();
     this.setStoredLanguage();
