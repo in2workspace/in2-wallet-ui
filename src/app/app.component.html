@@ -1,6 +1,6 @@
 <ion-app>
-  <ion-header [translucent]="false" *ngIf="isAuthenticated$ | async">
-    <ion-toolbar class="toolbar" [ngClass]="{ 'blurred': isCallbackRoute }">
+  <ion-header [translucent]="false" *ngIf="!(isLoading$ | async)">
+    <ion-toolbar class="toolbar" *ngIf="isAuthenticated$ | async" [ngClass]="{ 'blurred': isCallbackRoute }">
       <img alt="DOME Logo" [src]="logoSrc" width="auto" slot="start" height="35px" class="logo"/>
       <ion-button
         slot="end"

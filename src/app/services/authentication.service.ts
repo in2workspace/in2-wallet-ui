@@ -10,7 +10,8 @@ export class AuthenticationService {
   private token!: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private userData: any;
-  public isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  public isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   public constructor(public oidcSecurityService: OidcSecurityService) {
     this.checkAuth().subscribe();
@@ -21,7 +22,10 @@ export class AuthenticationService {
         this.userData = userData;
         this.name.next(this.userData.name);
         this.token = accessToken;
-        this.isAuthenticated$.next(isAuthenticated)
+        this.isAuthenticated$.next(isAuthenticated);
+      }),
+      finalize(() => {
+        this.isLoading$.next(false);
       })
     );
   }

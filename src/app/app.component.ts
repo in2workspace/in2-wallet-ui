@@ -32,6 +32,7 @@ export class AppComponent implements OnInit {
   public readonly logoSrc = environment.customizations.logo_src;
   private readonly destroy$ = new Subject<void>();
   isAuthenticated$ = this.authService.isAuthenticated$;
+  isLoading$ = this.authService.isLoading$;
 
   public constructor(
     private readonly cameraService: CameraService,
