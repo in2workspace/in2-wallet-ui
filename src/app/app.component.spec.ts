@@ -130,13 +130,11 @@ describe('AppComponent', () => {
   });
 
   it('should track router events, handle no cache and show alert for incompatible device', ()=>{
-    jest.spyOn(component, 'handleNoCache');
     jest.spyOn(component, 'trackRouterEvents');
     jest.spyOn(component, 'alertIncompatibleDevice');
 
     component.ngOnInit();
 
-    expect(component.handleNoCache).toHaveBeenCalled();
     expect(component.trackRouterEvents).toHaveBeenCalled();
     expect(component.alertIncompatibleDevice).toHaveBeenCalled();
   });
@@ -252,35 +250,6 @@ describe('AppComponent', () => {
   
     jest.restoreAllMocks();
   });
-  
-
-  it('should redirect to a clean URL if "nocache=true" is in query params', () => {
-    const originalLocation = window.location;
-    delete (window as any).location;
-    (window as any).location = {
-      ...originalLocation,
-      href: '',
-      origin: 'http://example.com',
-      search: '?nocache=true',
-    };
-  
-    component.handleNoCache(); // Crida explícita a la funció
-  
-    expect(window.location.href).toContain('?nocache=');
-  
-    // Restaurar l'objecte original de location
-    window.location = originalLocation;
-  });
-
-  // it('should update isCallbackRoute when the router navigates', () => {
-  //   const event = new NavigationEnd(1, '/callback?code=123', '/callback?code=123');
-  //   routerMock.events.next(event); // Simula l'esdeveniment de navegació
-  
-  //   component.trackRouterEvents(); // Crida explícita a la funció
-  
-  //   expect(component.isCallbackRoute).toBe(true);
-  // });
-  
 
   it('should navigate to /home on logout', () => {
     component.logout();

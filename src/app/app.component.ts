@@ -32,6 +32,7 @@ export class AppComponent implements OnInit {
   private readonly router = inject(Router)
   public userName = this.authenticationService.getName();
   public isCallbackRoute = false;
+  public isBaseRoute = false;
   public readonly logoSrc = environment.customizations.logo_src;
   private readonly destroy$ = new Subject<void>();
   public isLoading = false;
@@ -40,16 +41,17 @@ export class AppComponent implements OnInit {
     private readonly cameraService: CameraService,
     private readonly popoverController: PopoverController,
     private readonly storageService: StorageService,
-    public readonly translate: TranslateService,
+    public readonly translate: TranslateService
   ) {
     this.setDefaultLanguages();
     this.setStoredLanguage();
-
     this.setCustomStyles();
+    this.router.events.subscribe(() => {
+      this.isBaseRoute = this.router.url === '/';
+    });
   }
 
   public ngOnInit() {
-    this.handleNoCache();
     this.trackRouterEvents();
     this.alertIncompatibleDevice();
     this.websocket.isLoading$.subscribe((loading) => {
@@ -62,6 +64,7 @@ export class AppComponent implements OnInit {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
 
   public setCustomStyles(): void{
     const root = document.documentElement;
@@ -104,15 +107,6 @@ export class AppComponent implements OnInit {
       alert('This application scanner is probably not supported on this device with this browser. If you have issues, use Safari browser.');
     }
   }
-
-  public handleNoCache(): void {
-    const urlParams = new URLSearchParams(window.location.search);
-  
-    if (urlParams.get('nocache') === 'true') {
-      const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
-      window.location.href = cleanUrl;
-    }
-  }
   
   public trackRouterEvents(): void {
     this.router.events
@@ -130,7 +124,6 @@ export class AppComponent implements OnInit {
       this.router.navigate(['/home'], {});
     });
   }
-
 
   public handleKeydown(event: KeyboardEvent, action = 'request'): void {
     if (event.key === 'Enter' || event.key === ' ') {

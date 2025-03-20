@@ -19,8 +19,27 @@ import {
   AuthModule,
   AuthInterceptor,
   authInterceptor,
+  AbstractSecurityStorage,
 } from 'angular-auth-oidc-client';
 import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
+import { CustomAuthStorage } from './app/services/custom-auth-storage.service';
+
+document.addEventListener(
+  'touchmove',
+  function (event) {
+    const noScrollPages = [
+      '/tabs/settings',
+      '/tabs/home'
+    ];
+
+    const currentPath = new URL(window.location.href).pathname;
+
+    if (noScrollPages.includes(currentPath)) {
+      event.preventDefault();
+    }
+  },
+  { passive: false }
+);
 
 if (environment.production) {
   enableProdMode();
@@ -48,7 +67,7 @@ bootstrapApplication(AppComponent, {
         postLoginRoute: '/tabs/home',
         authority: environment.iam_url+environment.iam_params.iam_uri,
         redirectUrl: `${window.location.origin}/callback`,
-        postLogoutRedirectUri: `${window.location.origin}?nocache=true`,
+        postLogoutRedirectUri: `${window.location.origin}`,
         clientId: environment.iam_params.client_id,
         scope: environment.iam_params.scope,
         responseType: environment.iam_params.grant_type,
@@ -64,7 +83,8 @@ bootstrapApplication(AppComponent, {
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     provideHttpClient(withInterceptors([authInterceptor()])),
-    provideRouter(routes)
+    provideRouter(routes),
+    { provide: AbstractSecurityStorage, useClass: CustomAuthStorage },
   ],
 });
 export function httpTranslateLoader(http: HttpClient) {
