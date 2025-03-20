@@ -15,6 +15,6 @@ export const environment = {
       secondary_contrast: window["env"]["secondary_contrast"] || '#000000' //OPTIONAL WITH fallback
     },
     logo_src: window["env"]["logo_src"], // REQUIRED
-    favicon_src: window["env"]["favicon_src"] || "assets/icons/dome-favicon.png" // REQUIRED
+    favicon_src: window["env"]["favicon_src"] || "assets/icons/dome-favicon.png" // OPTIONAL (it is automatically set in Helm though)
   }
 };
