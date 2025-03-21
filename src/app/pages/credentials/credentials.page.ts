@@ -87,8 +87,7 @@ export class CredentialsPage implements OnInit {
   public ngOnInit(): void {
     this.scaned_cred = false;
     this.refresh();
-    console.log("credlist", this.credList);
-
+ 
     // TODO: Find a better way to handle this
     if (this.credentialOfferUri !== undefined && this.credentialOfferUri !== '') {
       this.generateCred();
