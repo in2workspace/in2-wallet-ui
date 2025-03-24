@@ -13,6 +13,10 @@ export class WebsocketService {
   private messageSubject = new BehaviorSubject<string>('');
   private socket!: WebSocket;
 
+  private loadingTimeout: any;
+  private readonly isLoadingSubject = new BehaviorSubject<boolean>(false);
+  public isLoading$ = this.isLoadingSubject.asObservable();
+
   public constructor(
     private readonly authenticationService: AuthenticationService,
     private readonly alertController: AlertController,
@@ -64,6 +68,9 @@ export class WebsocketService {
             text: 'Send',
             handler: (alertData) => {
               clearInterval(interval);
+              this.loadingTimeout = setTimeout(() => {
+                this.isLoadingSubject.next(true);
+              }, 1000);
               this.sendMessage(JSON.stringify({ pin: alertData.pin }));
             },
           },
@@ -76,11 +83,12 @@ export class WebsocketService {
     };
   
     this.socket.onclose = () => {
+      clearTimeout(this.loadingTimeout);
+      this.isLoadingSubject.next(false);
       console.log('WebSocket connection closed');
     };
   }
   
-
   public sendMessage(message: string): void {
     if (this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(message);

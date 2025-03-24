@@ -1,4 +1,4 @@
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { TranslateService } from '@ngx-translate/core';
 import { PopoverController, IonicModule, NavController } from '@ionic/angular';
@@ -8,6 +8,8 @@ import { AuthenticationService } from './services/authentication.service';
 import { StorageService } from './services/storage.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from '../environments/environment';
+import { WebsocketService } from './services/websocket.service';
+import { ChangeDetectorRef } from '@angular/core';
 describe('AppComponent', () => {
   let component: AppComponent;
   let translateServiceMock: jest.Mocked<TranslateService>;
@@ -16,6 +18,8 @@ describe('AppComponent', () => {
   let authenticationServiceMock: jest.Mocked<AuthenticationService>;
   let storageServiceMock: jest.Mocked<StorageService>;
   let routerEventsSubject = new Subject<Event>();
+  let websocketServiceMock: Partial<WebsocketService>;
+  let isLoadingSubject: Subject<boolean>;
 
   const activatedRouteMock: Partial<ActivatedRoute> = {
     snapshot: {
@@ -54,6 +58,11 @@ describe('AppComponent', () => {
   } as unknown as jest.Mocked<NavController>;
 
   beforeEach(async () => {
+    isLoadingSubject = new Subject<boolean>();
+    websocketServiceMock = {
+      isLoading$: isLoadingSubject.asObservable(),
+    };
+
     translateServiceMock = {
       addLangs: jest.fn(),
       getLangs: jest.fn(),
@@ -97,6 +106,7 @@ describe('AppComponent', () => {
         { provide: StorageService, useValue: storageServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: NavController, useValue: navControllerMock },
+        { provide: WebsocketService, useValue: websocketServiceMock }
       ],
     }).compileComponents();
 
@@ -120,13 +130,11 @@ describe('AppComponent', () => {
   });
 
   it('should track router events, handle no cache and show alert for incompatible device', ()=>{
-    jest.spyOn(component, 'handleNoCache');
     jest.spyOn(component, 'trackRouterEvents');
     jest.spyOn(component, 'alertIncompatibleDevice');
 
     component.ngOnInit();
 
-    expect(component.handleNoCache).toHaveBeenCalled();
     expect(component.trackRouterEvents).toHaveBeenCalled();
     expect(component.alertIncompatibleDevice).toHaveBeenCalled();
   });
@@ -242,35 +250,6 @@ describe('AppComponent', () => {
   
     jest.restoreAllMocks();
   });
-  
-
-  it('should redirect to a clean URL if "nocache=true" is in query params', () => {
-    const originalLocation = window.location;
-    delete (window as any).location;
-    (window as any).location = {
-      ...originalLocation,
-      href: '',
-      origin: 'http://example.com',
-      search: '?nocache=true',
-    };
-  
-    component.handleNoCache(); // Crida explícita a la funció
-  
-    expect(window.location.href).toContain('?nocache=');
-  
-    // Restaurar l'objecte original de location
-    window.location = originalLocation;
-  });
-
-  // it('should update isCallbackRoute when the router navigates', () => {
-  //   const event = new NavigationEnd(1, '/callback?code=123', '/callback?code=123');
-  //   routerMock.events.next(event); // Simula l'esdeveniment de navegació
-  
-  //   component.trackRouterEvents(); // Crida explícita a la funció
-  
-  //   expect(component.isCallbackRoute).toBe(true);
-  // });
-  
 
   it('should navigate to /home on logout', () => {
     component.logout();
@@ -345,6 +324,71 @@ describe('AppComponent', () => {
     isNotSafariSpy.mockRestore();
     alertSpy.mockRestore();
   });
+    
+  it('should subscribe to isLoading$ and update isLoading', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const spyDetectChanges = jest.spyOn(component['cdr'], 'detectChanges');
 
-  
+    component.ngOnInit(); 
+
+    isLoadingSubject.next(true); 
+    fixture.detectChanges(); 
+
+    expect(component.isLoading).toBe(true);
+    expect(spyDetectChanges).toHaveBeenCalled();
+  });
+
+  it('should not show overlay if isLoading is false', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    component.ngOnInit();
+    isLoadingSubject.next(false); 
+    fixture.detectChanges();
+
+    expect(component.isLoading).toBe(false);
+  });
+
+  it('should update isLoading when WebSocketService emits a new value', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    component.ngOnInit();
+
+    isLoadingSubject.next(false);
+    fixture.detectChanges();
+    expect(component.isLoading).toBe(false);
+
+    isLoadingSubject.next(true);
+    fixture.detectChanges();
+    expect(component.isLoading).toBe(true);
+
+    isLoadingSubject.next(false);
+    fixture.detectChanges();
+    expect(component.isLoading).toBe(false);
+  });
+ 
+  it('should render the overlay when isLoading is true', async () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    component.isLoading = true; 
+    fixture.detectChanges(); 
+    await fixture.whenStable(); 
+
+    setTimeout(() => {
+      fixture.detectChanges(); 
+      const overlayElement = fixture.nativeElement.querySelector('.overlay');
+
+      expect(overlayElement).not.toBeNull(); 
+      expect(getComputedStyle(overlayElement).display).not.toBe('none');
+    }, 0);
+  });
+
+  it('should not render the overlay when isLoading is false', async () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    component.isLoading = false; 
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    setTimeout(() => {
+      fixture.detectChanges();
+      const overlayElement = fixture.nativeElement.querySelector('.overlay');
+      expect(overlayElement).toBeNull(); 
+    }, 0);
+  });
 });

@@ -120,7 +120,10 @@
         "delete-message": "Si eliminas la credencial de la aplicacion y necesitas recuperarla tendrás que pedir una nueva.",
         "delete-confirm": "Sí, eliminala",
         "delete-cancel": "Cancela",
-        "unsigned": "Sin firmar"
+        "unsigned": "Sin firmar",
+        "unsigned-header": "Credencial sin firmar",
+        "unsigned-message": "Su credencial aún no ha sido firmada y no puede ser utilizada. Espere a que el emisor complete el proceso de firma.",
+        "revoked": "Revocada"
     },
     "scanner":{
         "initializing": "Inicializando escàner..."

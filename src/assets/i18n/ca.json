@@ -123,7 +123,10 @@
         "delete-message": "Si elimines la credencial de l'aplicació i necessites recuperar-la hauràs de demanar-ne una de nova.",
         "delete-confirm": "Sí, elimina-la",
         "delete-cancel": "Cancel·la",
-        "unsigned": "Sense signatura"
+        "unsigned": "Sense signar",
+        "unsigned-header": "Credencial sense signar",
+        "unsigned-message": "La seva credencial encara no ha estat signada i no pot ser utilitzada. Espere que l' emissor completi el procés de signatura.",
+        "revoked": "Revocada"
     },
     "scanner":{
         "initializing": "Inicialitzant escàner..."

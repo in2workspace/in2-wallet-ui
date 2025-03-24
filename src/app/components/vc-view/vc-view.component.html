@@ -6,6 +6,18 @@
     border-radius: 20px;
   "
 >
+  <button
+      *ngIf="isCredentialIssuedAndNotExpired()"
+      (click)="unsignedInfo()"
+      (keydown)="handleButtonKeydown($event, 'info')"
+      class="request-signature-button"
+    >
+      <img
+        src="../../../assets/icons/question_mark_black.png"
+        alt="info"
+        style="width: 18px; height: 18px"
+      />
+  </button>
   <div
     style="
       position: absolute;
@@ -109,7 +121,7 @@
         </ion-card-header>
       </ion-col>
 
-      <ion-col size="12" align-self-end style="margin-left: 12px">
+      <ion-col size="12" align-self-end style="margin-left: 15px; padding: 0% !important;">
         <img
           *ngIf="showChip"
           (click)="qrView()"
@@ -121,16 +133,11 @@
         />
 
         <span
-          *ngIf="
-            isExpired && credentialInput.status !== credentialStatus.ISSUED
-          "
+          *ngIf="isExpired && credentialInput.status !== credentialStatus.ISSUED"
           style="
             color: red;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
-            position: absolute;
-            top: -23px;
-            left: 74px;
           "
         >
           {{ "credentials.expiration" | translate }}
@@ -138,64 +145,28 @@
 
         <!-- todo FIXME add '&& !isExpired', removed only temporarily -->
         <span
-          *ngIf="
-            credentialInput.status === credentialStatus.ISSUED
-          "
+          *ngIf="credentialInput.status === credentialStatus.ISSUED"
           style="
             color: red;
             font-size: 18px;
             font-weight: bold;
-            position: absolute;
-            top: -23px;
-            left: 74px;
           "
         >
           {{ "vc-view.unsigned" | translate }}
         </span>
 
         <span
-          *ngIf="credentialInput.status === credentialStatus.VALID"
-          style="
-            color: green;
-            font-size: 18px;
-            font-weight: bold;
-            position: absolute;
-            top: -23px;
-            left: 74px;
-          "
-        >
-        </span>
-
-        <span
           *ngIf="credentialInput.status === credentialStatus.REVOKED"
           style="
-            color: orange;
+            color: red;
             font-size: 18px;
             font-weight: bold;
-            position: absolute;
-            top: -23px;
-            left: 74px;
           "
         >
+          {{ "vc-view.revoked" | translate }}
         </span>
 
-        <ion-row style="justify-content: end" class="button-row">
-          <!-- todo FIXME temporarily isCredentialIssuedAndNotExpired only checks if VC is issued -->
-          <ion-button
-            *ngIf="isCredentialIssuedAndNotExpired()"
-            (click)="requestSignature()"
-            (keydown)="handleKeydown($event)"
-            color="primary"
-            class="request-signature-button"
-            style="width: auto; height: auto"
-          >
-            <img
-              src="../../../assets/icons/firma.png"
-              alt="sign"
-              style="width: 20px; height: 20px"
-            />
-          </ion-button>
-
+        <ion-row style="justify-content: end; align-items: center; gap:5px" class="button-row">
           <ion-button
           (click)="deleteVC()"
           (keydown)="handleButtonKeydown($event, 'delete')"
@@ -271,6 +242,14 @@
     [message]="'vc-view.delete-message' | translate"
     [buttons]="deleteButtons"
     (didDismiss)="setOpenDeleteNotFound(false)"
+  ></ion-alert>
+
+  <ion-alert
+    [isOpen]="isModalUnsignedOpen"
+    class="custom-alert-unsigned"
+    [header]="'vc-view.unsigned-header' | translate"
+    [message]="'vc-view.unsigned-message' | translate"
+    [buttons]="unsignedButtons"
   ></ion-alert>
 
   <ion-row

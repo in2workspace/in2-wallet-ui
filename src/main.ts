@@ -23,6 +23,23 @@ import {
 import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
 import { IAM_PARAMS } from './app/constants/iam.constants';
 
+document.addEventListener(
+  'touchmove',
+  function (event) {
+    const noScrollPages = [
+      '/tabs/settings',
+      '/tabs/home'
+    ];
+
+    const currentPath = new URL(window.location.href).pathname;
+
+    if (noScrollPages.includes(currentPath)) {
+      event.preventDefault();
+    }
+  },
+  { passive: false }
+);
+
 if (environment.production) {
   enableProdMode();
 }
@@ -49,7 +66,7 @@ bootstrapApplication(AppComponent, {
         postLoginRoute: '/tabs/home',
         authority: environment.iam_url + environment.iam_realm_path,
         redirectUrl: `${window.location.origin}/callback`,
-        postLogoutRedirectUri: `${window.location.origin}?nocache=true`,
+        postLogoutRedirectUri: `${window.location.origin}`,
         clientId: IAM_PARAMS.CLIENT_ID,
         scope: IAM_PARAMS.SCOPE,
         responseType: IAM_PARAMS.GRANT_TYPE,
