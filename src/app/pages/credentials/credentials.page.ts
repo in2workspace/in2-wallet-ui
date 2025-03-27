@@ -89,7 +89,7 @@ export class CredentialsPage implements OnInit {
     this.refresh();
  
     // TODO: Find a better way to handle this
-    if (this.credentialOfferUri !== undefined && this.credentialOfferUri !== '') {
+    if (this.credentialOfferUri) {
       this.generateCred();
     }
   }
