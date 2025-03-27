@@ -1,5 +1,5 @@
-<ion-app>
-  <ion-header [translucent]="false">
+<ion-app [ngClass]="{ 'no-header': isBaseRoute }">
+  <ion-header [translucent]="false" *ngIf="!isBaseRoute">
     <ion-toolbar class="toolbar" [ngClass]="{ 'blurred': isCallbackRoute }">
       <img alt="DOME Logo" [src]="logoSrc" width="auto" slot="start" height="35px" class="logo"/>
       <ion-button
@@ -20,4 +20,8 @@
     </ion-toolbar>
   </ion-header>
   <ion-router-outlet id="main-content" class="main-content"></ion-router-outlet>
+  <div *ngIf="isLoading" class="overlay">
+    <div class="spinner"></div>
+  </div>
 </ion-app>
+

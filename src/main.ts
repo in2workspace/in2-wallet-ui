@@ -18,9 +18,26 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 import {
   AuthModule,
   AuthInterceptor,
-  authInterceptor,
+  authInterceptor
 } from 'angular-auth-oidc-client';
 import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
+
+document.addEventListener(
+  'touchmove',
+  function (event) {
+    const noScrollPages = [
+      '/tabs/settings',
+      '/tabs/home'
+    ];
+
+    const currentPath = new URL(window.location.href).pathname;
+
+    if (noScrollPages.includes(currentPath)) {
+      event.preventDefault();
+    }
+  },
+  { passive: false }
+);
 
 if (environment.production) {
   enableProdMode();
@@ -48,7 +65,7 @@ bootstrapApplication(AppComponent, {
         postLoginRoute: '/tabs/home',
         authority: environment.iam_url+environment.iam_params.iam_uri,
         redirectUrl: `${window.location.origin}/callback`,
-        postLogoutRedirectUri: `${window.location.origin}?nocache=true`,
+        postLogoutRedirectUri: `${window.location.origin}`,
         clientId: environment.iam_params.client_id,
         scope: environment.iam_params.scope,
         responseType: environment.iam_params.grant_type,

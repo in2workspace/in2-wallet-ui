@@ -42,3 +42,10 @@ ion-item-divider:last-of-type{
 app-tabs ion-tab-button {
   --color-selected: var(--primary-custom-color);
 }
+
+.no-scroll {
+  overscroll-behavior: none;
+  touch-action: none;
+  overflow: hidden;
+  height: 100%;
+}

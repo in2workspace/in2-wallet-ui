@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule, PopoverController } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -9,6 +9,7 @@ import { StorageService } from './services/storage.service';
 import { Subject, take, takeUntil } from 'rxjs';
 import { CameraService } from './services/camera.service';
 import { environment } from 'src/environments/environment';
+import { WebsocketService } from './services/websocket.service';
 
 @Component({
   selector: 'app-root',
@@ -26,34 +27,44 @@ import { environment } from 'src/environments/environment';
 
 export class AppComponent implements OnInit {
   private readonly authenticationService = inject(AuthenticationService);
+  private readonly websocket = inject(WebsocketService);
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router)
   public userName = this.authenticationService.getName();
   public isCallbackRoute = false;
+  public isBaseRoute = false;
   public readonly logoSrc = environment.customizations.logo_src;
   private readonly destroy$ = new Subject<void>();
+  public isLoading = false;
 
   public constructor(
     private readonly cameraService: CameraService,
     private readonly popoverController: PopoverController,
     private readonly storageService: StorageService,
-    public readonly translate: TranslateService,
+    public readonly translate: TranslateService
   ) {
     this.setDefaultLanguages();
     this.setStoredLanguage();
-
     this.setCustomStyles();
+    this.router.events.subscribe(() => {
+      this.isBaseRoute = this.router.url === '/';
+    });
   }
 
   public ngOnInit() {
-    this.handleNoCache();
     this.trackRouterEvents();
     this.alertIncompatibleDevice();
+    this.websocket.isLoading$.subscribe((loading) => {
+      this.isLoading = loading;
+      this.cdr.detectChanges();
+    });
   }
 
   private ngOnDestroy(){
     this.destroy$.next();
     this.destroy$.complete();
   }
+
 
   public setCustomStyles(): void{
     const root = document.documentElement;
@@ -96,15 +107,6 @@ export class AppComponent implements OnInit {
       alert('This application scanner is probably not supported on this device with this browser. If you have issues, use Safari browser.');
     }
   }
-
-  public handleNoCache(): void {
-    const urlParams = new URLSearchParams(window.location.search);
-  
-    if (urlParams.get('nocache') === 'true') {
-      const cleanUrl = `${window.location.origin}?nocache=${Date.now()}`;
-      window.location.href = cleanUrl;
-    }
-  }
   
   public trackRouterEvents(): void {
     this.router.events
@@ -122,7 +124,6 @@ export class AppComponent implements OnInit {
       this.router.navigate(['/home'], {});
     });
   }
-
 
   public handleKeydown(event: KeyboardEvent, action = 'request'): void {
     if (event.key === 'Enter' || event.key === ' ') {

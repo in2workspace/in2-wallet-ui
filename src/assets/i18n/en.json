@@ -13,7 +13,7 @@
         "logout":"Logout"
     },
     "barcode":{
-        "initializing": "Initializing barcode... Please wait."
+        "initializing": "Initializing scanner... Please wait."
     },
     "camera-selector":{
         "title":"Selected camera",
@@ -127,7 +127,10 @@
         "delete-message": "If you delete the credential from the app and need to recover it, you will need to request a new one.",
         "delete-confirm": "Yes, delete",
         "delete-cancel": "Cancel",
-        "unsigned": "Unsigned"
+        "unsigned": "Unsigned",
+        "unsigned-header": "Unsigned Credential",
+        "unsigned-message": "Your credential has not yet been signed and cannot be used. Wait for the issuer to complete the signing process.",
+        "revoked": "Revoked"
     },
     "errors":{
         "default": "Unexpected error. If the problem persists, contact the <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>support team</a>.",
