@@ -18,7 +18,7 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 import {
   AuthModule,
   AuthInterceptor,
-  authInterceptor,
+  authInterceptor
 } from 'angular-auth-oidc-client';
 import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
 import { IAM_PARAMS } from './app/constants/iam.constants';

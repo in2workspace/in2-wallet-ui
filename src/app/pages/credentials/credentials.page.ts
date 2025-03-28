@@ -18,6 +18,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
 import { catchError, forkJoin, of } from 'rxjs';
 
+
 const TIME_IN_MS = 3000;
 
 //TODO don't show creds while scanning, separate scan in another component
@@ -79,7 +80,7 @@ export class CredentialsPage implements OnInit {
     this.refresh();
 
     // TODO: Find a better way to handle this
-    if (this.credentialOfferUri !== undefined && this.credentialOfferUri !== '') {
+    if (this.credentialOfferUri) {
       this.generateCred();
     }
   }
