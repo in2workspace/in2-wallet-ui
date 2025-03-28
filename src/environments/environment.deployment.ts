@@ -5,7 +5,6 @@ export const environment = {
   server_url: window["env"]["server_url"] || "", // REQUIRED added empty string fallback to avoid error from Auth library when building
   websocket_url: window["env"]["websocket_url"], // REQUIRED
   iam_url: window["env"]["iam_url"] || "", // REQUIRED --added string fallback to avoid error from Auth library when building
-  iam_realm_path: window["env"]["iam_realm_path"] || "", // REQUIRED --added string fallback to avoid error from Auth librarywhen building
   logs_enabled: window["env"]["logs_enabled"] || false, //OPTIONAL WITH fallback
   customizations:{  
     colors:{ 
