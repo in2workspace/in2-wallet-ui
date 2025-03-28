@@ -1,4 +1,4 @@
-const apiV1Path = '/v1';
+const apiV1Path = '/api/v1';
 
 export const WEBSOCKET_PATH = `${apiV1Path}/pin`;
 
