@@ -2,7 +2,6 @@ import { fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { IonicModule, AlertController } from '@ionic/angular';
 import { CredentialsPage } from './credentials.page';
 import { ChangeDetectorRef, DestroyRef } from '@angular/core';
-import { DataService } from 'src/app/services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WalletService } from 'src/app/services/wallet.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
@@ -43,7 +42,6 @@ describe('CredentialsPage', () => {
         { provide: ToastServiceHandler, useValue: toastServiceHandlerMock },
         { provide: AlertController, useValue: { create: jest.fn(() => Promise.resolve({ present: jest.fn(), dismiss: jest.fn() })) } },
         { provide: ChangeDetectorRef, useValue: { detectChanges: jest.fn() } },
-        { provide: DataService, useValue: { listenDid: () => of('') } },
         { provide: DestroyRef, useValue: {} },
         { provide: ActivatedRoute, useValue: { queryParams: of({}) } },
         { provide: WebsocketService, useValue: { connect: jest.fn(), closeConnection: jest.fn() } },

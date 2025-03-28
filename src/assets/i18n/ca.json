@@ -128,7 +128,7 @@
         "unsigned-message": "La seva credencial encara no ha estat signada i no pot ser utilitzada. Espere que l' emissor completi el procés de signatura.",
         "revoked": "Revocada"
     },
-    "barcode":{
+    "scanner":{
         "initializing": "Inicialitzant escàner..."
     },
     "errors":{

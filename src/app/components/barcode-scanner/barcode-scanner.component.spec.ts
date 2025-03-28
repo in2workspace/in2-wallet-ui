@@ -22,10 +22,10 @@ describe('BarcodeScannerComponent', () => {
   let mockCameraService: {
     selectedCamera$: jest.Mock;
     isCameraError$: WritableSignal<boolean>;
-    activatingBarcodeList$: Observable<[]>;
+    activatingScannersList$: Observable<[]>;
     getCameraFlow: jest.Mock;
-    addActivatingBarcode: jest.Mock;
-    removeActivatingBarcode: jest.Mock;
+    addActivatingScanner: jest.Mock;
+    removeActivatingScanner: jest.Mock;
     handleCameraErrors: jest.Mock;
   };
   let mockCameraLogsService: CameraLogsService;
@@ -35,10 +35,10 @@ describe('BarcodeScannerComponent', () => {
     mockCameraService = {
       selectedCamera$: jest.fn().mockReturnValue({deviceid: 'devide-id'}),
       isCameraError$: signal(false),
-      activatingBarcodeList$: of([]),
+      activatingScannersList$: of([]),
       getCameraFlow: jest.fn(),
-      addActivatingBarcode: jest.fn(),
-      removeActivatingBarcode: jest.fn(),
+      addActivatingScanner: jest.fn(),
+      removeActivatingScanner: jest.fn(),
       handleCameraErrors: jest.fn()
     };
     mockCameraLogsService = {
@@ -70,9 +70,9 @@ describe('BarcodeScannerComponent', () => {
       expect(component.allowedFormats).toEqual([BarcodeFormat.QR_CODE]);
     });
   
-    it('should initialize barcodeId as a random string', () => {
-      expect(typeof component['barcodeId']).toBe('string');
-      expect(component['barcodeId'].length).toBeGreaterThan(0);
+    it('should initialize scannerId as a random string', () => {
+      expect(typeof component['scannerId']).toBe('string');
+      expect(component['scannerId'].length).toBeGreaterThan(0);
     });
   
     it('should initialize isError$ as CameraService.isCameraError$', () => {
@@ -113,7 +113,7 @@ describe('BarcodeScannerComponent', () => {
   describe('BarcodeScannerComponent Lifecycle Hooks', () => {
     beforeEach(() => {
       jest.spyOn(component, 'modifyConsoleErrorToHandleScannerErrors').mockImplementation();
-      jest.spyOn(component, 'initCameraIfNoActivateBarcodes').mockImplementation();
+      jest.spyOn(component, 'initCameraIfNoActivateScanners').mockImplementation();
       jest.spyOn(component, 'setActivatingTimeout').mockImplementation();
       jest.spyOn(component, 'restoreOriginalConsoleError').mockImplementation();
       jest.spyOn(mockCameraService.isCameraError$, 'set').mockImplementation();
@@ -124,9 +124,9 @@ describe('BarcodeScannerComponent', () => {
       expect(component.modifyConsoleErrorToHandleScannerErrors).toHaveBeenCalled();
     });
   
-    it('should call initCameraIfNoActivateBarcodes on ngAfterViewInit', async () => {
+    it('should call initCameraIfNoActivateScanners on ngAfterViewInit', async () => {
       await component.ngAfterViewInit();
-      expect(component.initCameraIfNoActivateBarcodes).toHaveBeenCalled();
+      expect(component.initCameraIfNoActivateScanners).toHaveBeenCalled();
     });
   
     it('should call destroy$.next, setActivatingTimeout, restoreOriginalConsoleError and reset camera error on ngOnDestroy', () => {

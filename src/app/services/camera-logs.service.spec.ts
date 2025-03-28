@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { CameraLogsService, LOGS_PREFIX, timestampUntilMinutes } from './camera-logs.service';
 import { StorageService } from './storage.service';
-import { of, throwError } from 'rxjs';
 import { CameraLog } from '../interfaces/camera-log';
-import { environment } from 'src/environments/environment';
+import { LOGS_EMAIL } from '../constants/email.constants';
 
 jest.mock('src/environments/environment', () => ({
   environment: {
@@ -136,7 +135,7 @@ describe('CameraLogsService', () => {
   
       const expectedBody = `${encodeURIComponent(JSON.stringify(mockLogs[0]))}%0A${encodeURIComponent(JSON.stringify(mockLogs[1]))}`;
   
-      const expectedMailto = `mailto:${environment.logs_email}?subject=Camera%20Logs&body=${expectedBody}`;
+      const expectedMailto = `mailto:${LOGS_EMAIL}?subject=Camera%20Logs&body=${expectedBody}`;
   
       expect(openSpy).toHaveBeenCalledWith(expectedMailto, '_blank');
     });
