@@ -3,8 +3,7 @@ export const environment = {
   production: false,
   server_url: 'http://localhost:8082',
   websocket_url: 'ws://localhost:8082',
-  iam_url: 'http://localhost:7002',
-  iam_realm_path: '/realms/wallet',
+  iam_url: 'http://localhost:7002/realms/wallet',
   logs_enabled: false,
   customizations:{
     colors:{ 
