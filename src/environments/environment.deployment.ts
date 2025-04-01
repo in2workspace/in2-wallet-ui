@@ -2,7 +2,7 @@
 // its values will be overwriten by env variables (see env.js & env.template.js)
 export const environment = {
   production: true,
-  server_url: window["env"]["server_url"] || "", // REQUIRED added empty string fallback to avoid error from Auth library when building
+  server_url: window["env"]["server_url"] || "", // REQUIRED --added empty string fallback to avoid error from Auth library when building
   websocket_url: window["env"]["websocket_url"], // REQUIRED
   iam_url: window["env"]["iam_url"] || "", // REQUIRED --added string fallback to avoid error from Auth library when building
   logs_enabled: window["env"]["logs_enabled"] || false, //OPTIONAL WITH fallback
@@ -14,6 +14,6 @@ export const environment = {
       secondary_contrast: window["env"]["secondary_contrast"] || '#000000' //OPTIONAL WITH fallback
     },
     logo_src: window["env"]["logo_src"], // REQUIRED
-    favicon_src: window["env"]["favicon_src"] || "assets/icons/dome-favicon.png" // OPTIONAL (it is automatically set in Helm though)
+    favicon_src: window["env"]["favicon_src"] || "assets/icons/dome-favicon.png" // OPTIONAL with fallback
   }
 };

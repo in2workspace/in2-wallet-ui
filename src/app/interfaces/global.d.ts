@@ -3,10 +3,8 @@
 interface Window {
     env: {
       server_url?: string;
-      iam_url?: string;
       websocket_url?: string;
-      client_id?: string;
-      cbor_uri?: string;
+      iam_url?: string;
       logs_enabled?: boolean;
       primary: string;
       primary_contrast: string;
