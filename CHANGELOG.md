@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.9.0](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.9.0)
 ### Modified
-- Change configurable variables names, make some of them constants.
+- Modify configurable variables names, make some of them constants
+- Remove unused images and ebsi references
 
 ## [v1.8.0](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.8.0)
 ### Changed
