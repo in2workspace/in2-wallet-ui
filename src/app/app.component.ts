@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule, PopoverController } from '@ionic/angular';
@@ -27,6 +27,7 @@ import { WebsocketService } from './services/websocket.service';
 
 export class AppComponent implements OnInit {
   private readonly authenticationService = inject(AuthenticationService);
+  private readonly document = inject(DOCUMENT);
   private readonly websocket = inject(WebsocketService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router)
@@ -46,6 +47,7 @@ export class AppComponent implements OnInit {
     this.setDefaultLanguages();
     this.setStoredLanguage();
     this.setCustomStyles();
+    this.setFavicon();
     this.router.events.subscribe(() => {
       this.isBaseRoute = this.router.url === '/';
     });
@@ -79,6 +81,26 @@ export class AppComponent implements OnInit {
     Object.entries(cssVarMap).forEach(([cssVariable, colorValue]) => {
       root.style.setProperty(cssVariable, colorValue);
     });
+  }
+
+  private setFavicon(): void {
+    const faviconUrl = environment.customizations.favicon_src;
+
+    // load favicon from environment
+    let faviconLink: HTMLLinkElement = this.document.querySelector("link[rel='icon']") || this.document.createElement('link');
+    faviconLink.type = 'image/x-icon';
+    faviconLink.rel = 'icon';
+    faviconLink.href = faviconUrl;
+    
+    this.document.head.appendChild(faviconLink);
+
+    // load apple-touch icon from environment
+    let appleFaviconLink: HTMLLinkElement = this.document.querySelector("link[rel='apple-touch-icon']") || this.document.createElement('link');
+    appleFaviconLink.type = 'image/x-icon';
+    appleFaviconLink.rel = 'apple-touch-icon';
+    appleFaviconLink.href = faviconUrl;
+    
+    this.document.head.appendChild(appleFaviconLink);
   }
 
   public setDefaultLanguages(): void{
