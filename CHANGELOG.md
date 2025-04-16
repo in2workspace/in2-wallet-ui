@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.9.1](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.9.1)
+### Modified
+- Modify API env variables names
+
+### Fixed
+- Don't enable logs if LOGS_ENABLED env var is false
+
 ## [v1.9.0](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.9.0)
 ### Modified
 - Modify configurable variables names, make some of them constants
