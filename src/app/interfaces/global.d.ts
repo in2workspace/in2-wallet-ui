@@ -5,7 +5,7 @@ interface Window {
       server_url?: string;
       websocket_url?: string;
       iam_url?: string;
-      logs_enabled?: boolean;
+      logs_enabled?: string;
       primary: string;
       primary_contrast: string;
       secondary: string;
