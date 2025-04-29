@@ -15,6 +15,10 @@ import { SERVER_PATH } from '../constants/api.constants';
 export class HttpErrorInterceptor implements HttpInterceptor {
   private toastServiceHandler = inject(ToastServiceHandler);
 
+  private logHandledSilentlyErrorMsg(errMsg: string){
+    console.error('Handled silently:', errMsg);
+  }
+
   public intercept(
     request: HttpRequest<unknown>,
     next: HttpHandler
@@ -30,14 +34,18 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           errMessage?.startsWith('The credentials list is empty') &&
           request.url.endsWith(SERVER_PATH.CREDENTIALS)
         ) {
-          console.error('Handled silently:', errMessage);
+          this.logHandledSilentlyErrorMsg(errMessage);
           return throwError(() => errorResp);
         }
         if(request.url.endsWith(SERVER_PATH.VERIFIABLE_PRESENTATION))
         {
-          console.error('Handled silently:', errMessage);
+          this.logHandledSilentlyErrorMsg(errMessage);
           return throwError(() => errorResp);
         } 
+        if(errMessage?.startsWith('No internet connection')){
+          this.logHandledSilentlyErrorMsg(errMessage);
+          return throwError(() => errorResp);
+        }
 
         //SHOW POPUP CASES
         //same-device credential offer request

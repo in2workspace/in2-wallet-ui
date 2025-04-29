@@ -141,6 +141,25 @@ describe('HttpErrorInterceptor with HttpClient', () => {
     );
   });
 
+  it('should handle "No internet connection" errors silently without showing a toast', () => {
+    const spyToast = jest.spyOn(mockToastServiceHandler, 'showErrorAlert');
+    const spyConsole = jest.spyOn(console, 'error').mockImplementation(); // mock console.error
+  
+    httpClient.get('/testNoInternet').subscribe({
+      error: (error) => {
+        expect(spyConsole).toHaveBeenCalledWith('Handled silently:', 'No internet connection - please check your network.');
+        expect(spyToast).not.toHaveBeenCalled();
+      }
+    });
+  
+    const req = httpMock.expectOne('/testNoInternet');
+    req.flush(
+      { message: 'No internet connection - please check your network.' },
+      { status: 0, statusText: 'Unknown Error' }
+    );
+  });
+  
+
 
   it('should show a toast with "PIN expired" on a 408 Request Timeout response', () => {
     const expectedMessage = 'PIN expired';
