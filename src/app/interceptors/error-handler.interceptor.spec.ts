@@ -158,6 +158,27 @@ describe('HttpErrorInterceptor with HttpClient', () => {
       { status: 0, statusText: 'Unknown Error' }
     );
   });
+
+  it('should silently handle status 0 errors for Keycloak requests', () => {
+    const spyToast = jest.spyOn(mockToastServiceHandler, 'showErrorAlert');
+    const spyConsole = jest.spyOn(console, 'error').mockImplementation();
+  
+    const keycloakUrl = 'https://wallet.dome-marketplace-dev2.org/keycloak/realms/wallet/protocol/openid-connect/token';
+  
+    httpClient.get(keycloakUrl).subscribe({
+      error: (error) => {
+        expect(spyConsole).toHaveBeenCalledWith('Handled silently:', 'Http failure response for https://wallet.dome-marketplace-dev2.org/keycloak/realms/wallet/protocol/openid-connect/token: 0 Unknown Error');
+        expect(spyToast).not.toHaveBeenCalled();
+      }
+    });
+  
+    const req = httpMock.expectOne(keycloakUrl);
+    req.flush(
+      null,
+      { status: 0, statusText: 'Unknown Error' }
+    );
+  });
+  
   
 
 

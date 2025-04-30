@@ -42,8 +42,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           this.logHandledSilentlyErrorMsg(errMessage);
           return throwError(() => errorResp);
         } 
-        if(errMessage?.startsWith('No internet connection')){
-          this.logHandledSilentlyErrorMsg(errMessage);
+        if(      
+          errStatus === 0 && request.url.includes('/keycloak/')){
+          this.logHandledSilentlyErrorMsg('No connection to Keycloak' + errMessage);
           return throwError(() => errorResp);
         }
 
@@ -71,8 +72,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           {
             errMessage = 'There was a problem processing the QR. It might be invalid or already have been used';
           }
-        }else if(errStatus === 0){
-          errMessage = 'No internet connection'
         }
         this.toastServiceHandler
           .showErrorAlert(errMessage)
