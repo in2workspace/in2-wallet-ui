@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.9.3](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.9.3)
+### Fixed
+- Don't show error popup when connection to Keycloak fails, but show it when connection fails in other cases
+- Change env var name: WALLET_API_INTERLA_URL > ...EXTERNAL_URL
+
 ## [v1.9.2](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.9.2)
 ### Fixed
 - Don't show popup for "No internet connection" error
