@@ -129,8 +129,8 @@
         "initializing": "Inicializando escàner..."
     },
     "errors":{
-        "default":"Error no reconocido. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>",
-        "failed-qr-process": "Ha habido un error al procesar QR. Puede que sea inválido o que ya haya sido usado antes. Refresque la oferta de credencial, por favor. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>",
+        "default":"Error no reconocido. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace.eu/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>",
+        "failed-qr-process": "Ha habido un error al procesar QR. Puede que sea inválido o que ya haya sido usado antes. Refresque la oferta de credencial, por favor. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace.eu/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>",
         "invalid-qr":"El QR presentado es inválido",
         "no-credentials-available": "No hay ninguna credencial disponible para el login",
         "expired-credentialOffer":"La oferta de credencial está expirada o ya utilizada",
@@ -138,12 +138,12 @@
         "invalid-issuerMetadata":"Los metadatos del Issuer son incorrectos",
         "cannot-get-VC":"No se pudo obtener la credencial del Issuer",
         "cannot-save-VC":"No se pudo guardar correctamente la credencial",
-        "incorrect-pin":"PIN incorrecto. Por favor, renueve la oferta de credencial. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>.",
-        "pin-expired": "No ha introducido el PIN dentro del límite de tiempo. Por favor, renueve la oferta de credencial. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>.",
+        "incorrect-pin":"PIN incorrecto. Por favor, renueve la oferta de credencial. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace.eu/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>.",
+        "pin-expired": "No ha introducido el PIN dentro del límite de tiempo. Por favor, renueve la oferta de credencial. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace.eu/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>.",
         "unsigned": "La credencial firmada aún no esta disponible.",
         "Errunsigned": "No se pudo obtener la credencial",
         "no-connection": "Se perdió la conexión. Comprueve su conexión a internet e inténtelo de nuevo.",
-        "navigation": "Error inesperado al intentar acceder a la página. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace-prd.org/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>", 
+        "navigation": "Error inesperado al intentar acceder a la página. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace.eu/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>", 
         "camera": {
             "not-readable": "No se puede acceder a la cámara. Asegúrate de que ninguna otra aplicación la esté utilizando. Es posible que necesites actualizar la página.",
             "not-allowed": "El acceso a la cámara está denegado. Revisa los permisos de tu navegador. Si el problema persiste, intenta actualizar la página.",
