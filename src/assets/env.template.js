@@ -2,7 +2,7 @@
   window.env = window.env || {};
 
   // Environment variables
-  window["env"]["server_url"] = "${WALLET_API_INTERNAL_URL}";
+  window["env"]["server_url"] = "${WALLET_API_EXTERNAL_URL}";
   window["env"]["websocket_url"] = "${WALLET_API_WEBSOCKET_EXTERNAL_URL}";
   window["env"]["iam_url"] = "${IAM_EXTERNAL_URL}";
   window["env"]["logs_enabled"] = "${LOGS_ENABLED}";
