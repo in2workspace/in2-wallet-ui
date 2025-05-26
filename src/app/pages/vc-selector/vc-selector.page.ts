@@ -61,17 +61,12 @@ export class VcSelectorPage implements OnInit {
       this._VCReply.redirectUri = this.executionResponse['redirectUri'];
       this._VCReply.state = this.executionResponse['state'];
       this._VCReply.nonce = this.executionResponse['nonce'];
-    });
-  }
 
-  public ngOnInit() {
-    console.log('on init vc-selector');
-    this.credList = this.executionResponse['selectableVcList'];
+      const unNormalizedCredList: VerifiableCredential[] = this.executionResponse['selectableVcList'];
 
-    const normalizer = new VerifiableCredentialSubjectDataNormalizer();
-
-    // Normalize each credential, updating its credentialSubject property
-    this.credList = this.credList.map(cred => {
+      // Normalize each credential, updating its credentialSubject property
+      const normalizer = new VerifiableCredentialSubjectDataNormalizer();
+    this.credList = unNormalizedCredList.map(cred => {
       if (cred.credentialSubject) {
         cred.credentialSubject = normalizer.normalizeLearCredentialSubject(cred.credentialSubject);
       }
@@ -81,6 +76,13 @@ export class VcSelectorPage implements OnInit {
     this.credList.forEach(() => {
       this.isClick.push(false);
     });
+    });
+  }
+
+  public ngOnInit() {
+    console.log('on init vc-selector');
+    // this.credList = this.executionResponse['selectableVcList'];
+
   }
 
   public isClicked(index: number) {
