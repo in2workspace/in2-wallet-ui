@@ -81,6 +81,7 @@ export class CredentialsPage implements OnInit {
 
     // TODO: Find a better way to handle this
     if (this.credentialOfferUri) {
+      // SAME-DEVICE CREDENTIAL OFFER FLOW
       this.generateCred();
     }
   }
@@ -181,12 +182,14 @@ export class CredentialsPage implements OnInit {
         .subscribe({
           next: (executionResponse) => {
             // TODO: Instead of analyzing the qrCode, we should check the response and decide what object we need to show depending on the response
+            // CROSS-DEVICE CREDENTIAL OFFER FLOW
             if (qrCode.includes('credential_offer_uri')) {
               this.from = 'credential';
               this.okMessage();
               this.successRefresh();
             } else {
               // login from verifier
+              console.log('navigate to vc-selector after execution response')
               this.show_qr = false;
               this.from = '';
               this.router.navigate(['/tabs/vc-selector/'], {

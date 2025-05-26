@@ -63,6 +63,7 @@ export class VcSelectorPage implements OnInit {
   }
 
   public ngOnInit() {
+    console.log('on init vc-selector');
     this.credList = this.executionResponse['selectableVcList'];
 
     const normalizer = new VerifiableCredentialSubjectDataNormalizer();
