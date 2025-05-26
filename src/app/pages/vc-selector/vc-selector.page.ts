@@ -54,7 +54,9 @@ export class VcSelectorPage implements OnInit {
     public translate: TranslateService,
     private alertController: AlertController
   ) {
+    //todo unsubscribe
     this.route.queryParams.subscribe((params) => {
+      console.log('updating params in vc-selector');
       this.executionResponse = JSON.parse(params['executionResponse']);
       this._VCReply.redirectUri = this.executionResponse['redirectUri'];
       this._VCReply.state = this.executionResponse['state'];
