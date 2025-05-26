@@ -66,7 +66,7 @@ export class VcSelectorPage implements OnInit {
 
       // Normalize each credential, updating its credentialSubject property
       const normalizer = new VerifiableCredentialSubjectDataNormalizer();
-    this.credList = unNormalizedCredList.map(cred => {
+    this.credList = unNormalizedCredList.reverse().map(cred => {
       if (cred.credentialSubject) {
         cred.credentialSubject = normalizer.normalizeLearCredentialSubject(cred.credentialSubject);
       }
