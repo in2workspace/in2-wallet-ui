@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { QRCodeModule } from 'angularx-qrcode';
 import { WalletService } from 'src/app/services/wallet.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { VcViewComponent } from '../../components/vc-view/vc-view.component';
 import { VCReply } from 'src/app/interfaces/verifiable-credential-reply';
@@ -53,36 +53,42 @@ export class VcSelectorPage implements OnInit {
     private route: ActivatedRoute,
     public translate: TranslateService,
     private alertController: AlertController
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     //todo unsubscribe
     this.route.queryParams.subscribe((params) => {
+        this.getExecutionParamsFromQueryParams(params);
+        this.formatCredList();
+        this.resetIsClickList();
+      });
+  }
+  
+  public getExecutionParamsFromQueryParams(params: Params){
       console.log('updating params in vc-selector');
       this.executionResponse = JSON.parse(params['executionResponse']);
       this._VCReply.redirectUri = this.executionResponse['redirectUri'];
       this._VCReply.state = this.executionResponse['state'];
       this._VCReply.nonce = this.executionResponse['nonce'];
+  }
 
-      const unNormalizedCredList: VerifiableCredential[] = this.executionResponse['selectableVcList'];
-
-      // Normalize each credential, updating its credentialSubject property
-      const normalizer = new VerifiableCredentialSubjectDataNormalizer();
+  // Normalize each credential, updating its credentialSubject property
+  public formatCredList(){
+    console.log('[VC-selector: Formatting credentials list...');
+    const unNormalizedCredList: VerifiableCredential[] = this.executionResponse['selectableVcList'];
+    const normalizer = new VerifiableCredentialSubjectDataNormalizer();
     this.credList = unNormalizedCredList.reverse().map(cred => {
       if (cred.credentialSubject) {
         cred.credentialSubject = normalizer.normalizeLearCredentialSubject(cred.credentialSubject);
       }
       return cred;
     });
+  }
 
+  public resetIsClickList(){
     this.credList.forEach(() => {
       this.isClick.push(false);
     });
-    });
-  }
-
-  public ngOnInit() {
-    console.log('on init vc-selector');
-    // this.credList = this.executionResponse['selectableVcList'];
-
   }
 
   public isClicked(index: number) {
