@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
@@ -47,11 +47,11 @@ export class VcSelectorPage {
   };
 
   public constructor(
-    private router: Router,
-    private walletService: WalletService,
-    private route: ActivatedRoute,
-    public translate: TranslateService,
-    private alertController: AlertController  
+    private readonly router: Router,
+    private readonly walletService: WalletService,
+    private readonly route: ActivatedRoute,
+    public readonly translate: TranslateService,
+    private readonly alertController: AlertController  
   ) {
       this.route.queryParams.pipe(takeUntilDestroyed()).subscribe((params) => {
         this.getExecutionParamsFromQueryParams(params);
@@ -73,7 +73,7 @@ export class VcSelectorPage {
     console.log('[VC-selector: Formatting credentials list...');
     const unNormalizedCredList: VerifiableCredential[] = this.executionResponse['selectableVcList'];
     const normalizer = new VerifiableCredentialSubjectDataNormalizer();
-    this.credList = unNormalizedCredList.reverse().map(cred => {
+    this.credList = [...unNormalizedCredList].reverse().map(cred => {
       if (cred.credentialSubject) {
         cred.credentialSubject = normalizer.normalizeLearCredentialSubject(cred.credentialSubject);
       }
