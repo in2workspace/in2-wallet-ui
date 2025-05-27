@@ -432,4 +432,20 @@ it('should process query params on initialization', () => {
       expect(component.isClick[0]).toBe(true);
     });
   });
+
+    describe('handleError', () => {
+    it('should call errorMessage, navigate to /tabs/home, and clear selCredList', async () => {
+      const error = { status: 500 };
+      const errorMessageSpy = jest.spyOn(component, 'errorMessage').mockResolvedValue();
+
+      component.selCredList = [{ id: 'vc1' } as VerifiableCredential];
+
+      await (component as any).handleError(error);
+
+      expect(errorMessageSpy).toHaveBeenCalledWith(500);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/tabs/home']);
+      expect(component.selCredList).toEqual([]);
+    });
+  });
+
 });

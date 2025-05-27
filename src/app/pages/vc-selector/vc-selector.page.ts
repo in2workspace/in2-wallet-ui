@@ -121,11 +121,8 @@ export class VcSelectorPage {
         next: () => {
           this.okMessage();
         },
-        error: async (err) => {
-          console.error(err);
-          await this.errorMessage(err.status);
-          this.router.navigate(['/tabs/home']);
-          this.selCredList = [];
+        error: err => {
+          this.handleError(err);
         },
         complete: () => {
           this.selCredList = [];
@@ -133,6 +130,14 @@ export class VcSelectorPage {
       });
     }
   }
+
+private async handleError(err: any) {
+  console.error(err);
+  await this.errorMessage(err.status);
+  this.router.navigate(['/tabs/home']);
+  this.selCredList = [];
+}
+
 
   public async errorMessage(statusCode: number) {
     let messageText = '';
