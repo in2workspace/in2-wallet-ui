@@ -1,4 +1,3 @@
-<!-- todo use modern syntaxy flow -->
 <ion-card
   style="
     background-color: white;
@@ -7,8 +6,8 @@
     border-radius: 20px;
   "
 >
+@if(isCredentialIssuedAndNotExpired()){
   <button
-      *ngIf="isCredentialIssuedAndNotExpired()"
       (click)="unsignedInfo()"
       (keydown)="handleButtonKeydown($event, 'info')"
       class="request-signature-button"
@@ -19,6 +18,8 @@
         style="width: 18px; height: 18px"
       />
   </button>
+}
+
   <div
     style="
       position: absolute;
@@ -123,8 +124,8 @@
       </ion-col>
 
       <ion-col size="12" align-self-end style="margin-left: 15px; padding: 0% !important;">
+        @if(showChip){
         <img
-          *ngIf="showChip"
           (click)="qrView()"
           (keydown)="handleKeydown($event, 'qr')"
           src="assets/icons/41.png"
@@ -132,9 +133,10 @@
           role="alert"
           style="width: auto; height: 40px; cursor: pointer"
         />
+        }
 
+        @if(isExpired && credentialInput.status !== credentialStatus.ISSUED) {}
         <span
-          *ngIf="isExpired && credentialInput.status !== credentialStatus.ISSUED"
           style="
             color: red;
             font-size: 18px;
@@ -145,27 +147,29 @@
         </span>
 
         <!-- todo FIXME add '&& !isExpired', removed only temporarily -->
-        <span
-          *ngIf="credentialInput.status === credentialStatus.ISSUED"
-          style="
-            color: red;
-            font-size: 18px;
-            font-weight: bold;
-          "
-        >
-          {{ "vc-view.unsigned" | translate }}
-        </span>
+         @if(credentialInput.status === credentialStatus.ISSUED){
+           <span
+             style="
+               color: red;
+               font-size: 18px;
+               font-weight: bold;
+             "
+           >
+             {{ "vc-view.unsigned" | translate }}
+           </span>
+         }
 
-        <span
-          *ngIf="credentialInput.status === credentialStatus.REVOKED"
-          style="
-            color: red;
-            font-size: 18px;
-            font-weight: bold;
-          "
-        >
-          {{ "vc-view.revoked" | translate }}
+         @if(credentialInput.status === credentialStatus.REVOKED){
+          <span
+            style="
+              color: red;
+              font-size: 18px;
+              font-weight: bold;
+            "
+          >
+            {{ "vc-view.revoked" | translate }}
         </span>
+         }
 
         <ion-row style="justify-content: end; align-items: center; gap:5px" class="button-row">
           <ion-button

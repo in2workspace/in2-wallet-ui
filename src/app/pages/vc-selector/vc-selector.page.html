@@ -1,17 +1,12 @@
-<!-- todo use modern syntaxy flow -->
-
 <ion-content [fullscreen]="true" class="vc-selector-content">
   <ion-grid >
-    <ion-row class="ion-justify-content-center"
-    *ngFor="let cred of credList; let i = index">
-    <ion-card (click)="sendCred(cred)" class="vc-selector-card">
-      <app-vc-view [credentialInput]="cred"></app-vc-view>
-    </ion-card>
-    </ion-row>
+  @for (cred of credList; track cred) {
+    <ion-row class="ion-justify-content-center">
+      <ion-card (click)="sendCred(cred)" class="vc-selector-card">
+        <app-vc-view [credentialInput]="cred"></app-vc-view>
+      </ion-card>
+    </ion-row> 
+  }
   </ion-grid>
-
 </ion-content>
-<ion-footer [translucent]="false">
-
-
-</ion-footer>
+<ion-footer [translucent]="false"></ion-footer>

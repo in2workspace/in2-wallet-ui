@@ -1,4 +1,3 @@
-<!-- todo use modern syntaxy flow -->
 <ion-content [fullscreen]="true" class="background-content">
   <ion-grid class="settings-pages-grid language-grid">
     <div class="settings-box">
@@ -6,10 +5,12 @@
       <ion-row class="ion-justify-content-center">
         <ion-list class="list">
             <ion-radio-group class="radio-group" [ngModel]="languageSelected | async" (ionChange)="languageChange($any($event).target?.value)">
-              <ion-item class="item" *ngFor="let language of languageList">
+            @for (language of languageList; track language) {
+              <ion-item class="item">
                 <ion-label>{{ language.name }}</ion-label>
                 <ion-radio [value]="language" mode="md" slot="start"></ion-radio>
               </ion-item>
+            }
             </ion-radio-group>
         </ion-list>
       </ion-row>
