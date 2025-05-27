@@ -135,7 +135,7 @@
         />
         }
 
-        @if(isExpired && credentialInput.status !== credentialStatus.ISSUED) {}
+        @if(isExpired && credentialInput.status !== credentialStatus.ISSUED) {
         <span
           style="
             color: red;
@@ -145,6 +145,7 @@
         >
           {{ "credentials.expiration" | translate }}
         </span>
+      }
 
         <!-- todo FIXME add '&& !isExpired', removed only temporarily -->
          @if(credentialInput.status === credentialStatus.ISSUED){
