@@ -50,7 +50,10 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(
       IonicModule.forRoot({ innerHTMLTemplatesEnabled: true })
     ),
+    //todo: Prefer withInterceptors and functional interceptors instead, as support for DI-provided interceptors may be phased out in a later release. 
     provideHttpClient(withInterceptorsFromDi()),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {
@@ -79,9 +82,6 @@ bootstrapApplication(AppComponent, {
       }
     })
     ),
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
-    provideHttpClient(withInterceptors([authInterceptor()])),
     provideRouter(routes)
   ],
 });
