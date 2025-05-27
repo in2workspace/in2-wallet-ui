@@ -189,7 +189,6 @@ export class CredentialsPage implements OnInit {
               this.successRefresh();
             } else {
               // login from verifier
-              console.log('navigate to vc-selector after execution response')
               this.show_qr = false;
               this.from = '';
               this.router.navigate(['/tabs/vc-selector/'], {

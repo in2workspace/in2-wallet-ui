@@ -10,6 +10,7 @@ import { VcViewComponent } from '../../components/vc-view/vc-view.component';
 import { VCReply } from 'src/app/interfaces/verifiable-credential-reply';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import {VerifiableCredentialSubjectDataNormalizer} from 'src/app/interfaces/verifiable-credential-subject-data-normalizer';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-vc-selector',
@@ -25,14 +26,12 @@ import {VerifiableCredentialSubjectDataNormalizer} from 'src/app/interfaces/veri
     VcViewComponent,
   ],
 })
-// eslint-disable-next-line @angular-eslint/component-class-suffix
-export class VcSelectorPage implements OnInit {
+export class VcSelectorPage {
   public isClick: boolean[] = [];
   public selCredList: VerifiableCredential[] = [];
   public credList: VerifiableCredential[] = [];
   public credDataList: VerifiableCredential[] = [];
   public size = 300;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public executionResponse: any;
   public userName = '';
   public isAlertOpen = false;
@@ -52,16 +51,13 @@ export class VcSelectorPage implements OnInit {
     private walletService: WalletService,
     private route: ActivatedRoute,
     public translate: TranslateService,
-    private alertController: AlertController
-  ) {}
-
-  ngOnInit(): void {
-    //todo unsubscribe
-    this.route.queryParams.subscribe((params) => {
+    private alertController: AlertController  
+  ) {
+      this.route.queryParams.pipe(takeUntilDestroyed()).subscribe((params) => {
         this.getExecutionParamsFromQueryParams(params);
         this.formatCredList();
         this.resetIsClickList();
-      });
+    });
   }
   
   public getExecutionParamsFromQueryParams(params: Params){
@@ -86,9 +82,7 @@ export class VcSelectorPage implements OnInit {
   }
 
   public resetIsClickList(){
-    this.credList.forEach(() => {
-      this.isClick.push(false);
-    });
+    this.isClick = this.credList.map(() => false);
   }
 
   public isClicked(index: number) {
@@ -140,7 +134,7 @@ export class VcSelectorPage implements OnInit {
     }
   }
 
-  private async errorMessage(statusCode: number) {
+  public async errorMessage(statusCode: number) {
     let messageText = '';
 
     if (statusCode >= 500) {
@@ -178,7 +172,7 @@ export class VcSelectorPage implements OnInit {
     await alert.onDidDismiss();
   }
 
-  private async okMessage() {
+  public async okMessage() {
     const alert = await this.alertController.create({
       message: `
         <div style="display: flex; align-items: center; gap: 50px;">
