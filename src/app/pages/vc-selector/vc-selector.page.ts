@@ -12,6 +12,8 @@ import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import {VerifiableCredentialSubjectDataNormalizer} from 'src/app/interfaces/verifiable-credential-subject-data-normalizer';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+// todo: show only VCs with powers to login
+// todo: if user has only one VC, use this directly
 @Component({
   selector: 'app-vc-selector',
   templateUrl: './vc-selector.page.html',
@@ -51,7 +53,7 @@ export class VcSelectorPage {
     private readonly walletService: WalletService,
     private readonly route: ActivatedRoute,
     public readonly translate: TranslateService,
-    private readonly alertController: AlertController  
+    private readonly alertController: AlertController
   ) {
       this.route.queryParams.pipe(takeUntilDestroyed()).subscribe((params) => {
         this.getExecutionParamsFromQueryParams(params);
@@ -59,7 +61,7 @@ export class VcSelectorPage {
         this.resetIsClickList();
     });
   }
-  
+
   public getExecutionParamsFromQueryParams(params: Params){
       console.log('updating params in vc-selector');
       this.executionResponse = JSON.parse(params['executionResponse']);
