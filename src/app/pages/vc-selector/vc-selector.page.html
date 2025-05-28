@@ -1,11 +1,13 @@
 <ion-content [fullscreen]="true" class="vc-selector-content">
+<!--  todo review title -->
+  <h1>Select a credential to log in: </h1>
   <ion-grid >
   @for (cred of credList; track cred) {
     <ion-row class="ion-justify-content-center">
       <ion-card (click)="sendCred(cred)" class="vc-selector-card">
         <app-vc-view [credentialInput]="cred"></app-vc-view>
       </ion-card>
-    </ion-row> 
+    </ion-row>
   }
   </ion-grid>
 </ion-content>
