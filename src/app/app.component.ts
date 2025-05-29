@@ -139,14 +139,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  public logout(): void {
-    this.authenticationService.logout()
-    .pipe(take(1))
-    .subscribe(() => {
-      this.router.navigate(['/home'], {});
-    });
-  }
-
   //todo rename
   public openPopoverByKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter' || event.key === ' ') {
