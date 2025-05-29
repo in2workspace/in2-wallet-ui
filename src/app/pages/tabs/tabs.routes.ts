@@ -51,6 +51,7 @@ const routes: Routes = [
       },
       {
         path: 'logs',
+        canActivate: [logsEnabledGuard],
         loadComponent: () =>
           import('../logs/logs.page').then((m) => m.LogsPage),
         children: [
@@ -72,6 +73,7 @@ const routes: Routes = [
       },
       {
         path: 'vc-selector',
+        canActivate: [AutoLoginPartialRoutesGuard],
         loadComponent: () =>
           import('../vc-selector/vc-selector.page').then((m) => m.VcSelectorPage),
       },

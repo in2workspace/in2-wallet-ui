@@ -15,12 +15,10 @@ export class AuthenticationService {
   public constructor(public oidcSecurityService: OidcSecurityService,
     public events: PublicEventsService
   ) {
-    console.log('auth service')
     this.subscribeToAuthEvents();
     this.checkAuth().subscribe();
   }
     private subscribeToAuthEvents(): void {
-      console.log('subscribe')
       this.events.registerForEvents()
         .pipe(
           filter((e) =>
