@@ -1,25 +1,63 @@
 import { Injectable } from '@angular/core';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { BehaviorSubject, Observable, finalize, map } from 'rxjs';
+import { EventTypes, LoginResponse, OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
+import { BehaviorSubject, Observable, filter, finalize, map, throwError } from 'rxjs';
+import { ToastServiceHandler } from './toast.service';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
   public name: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  public name$: Observable<string> = this.name.asObservable();
   private token!: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private userData: any;
+  private userData: { name:string } | undefined;
 
-  public constructor(public oidcSecurityService: OidcSecurityService) {
+  public constructor(public oidcSecurityService: OidcSecurityService,
+    public events: PublicEventsService,
+    public toastServiceHandler: ToastServiceHandler
+  ) {
+    console.log('auth service')
+    this.subscribeToAuthEvents();
     this.checkAuth().subscribe();
   }
-  public checkAuth() {
+    private subscribeToAuthEvents(): void {
+      console.log('subscribe')
+      this.events.registerForEvents()
+        .pipe(
+          filter((e) =>
+            [EventTypes.SilentRenewFailed, EventTypes.IdTokenExpired, EventTypes.TokenExpired].includes(e.type)
+          )
+        )
+        .subscribe((event) => {
+          switch (event.type) {
+            case EventTypes.SilentRenewFailed:
+              console.warn('Silent renew failed:', event);
+              break;
+
+            case EventTypes.IdTokenExpired:
+            case EventTypes.TokenExpired:
+              console.error('Session expired:', event);
+              this.logout();
+              break;
+          }
+        });
+  }
+  public checkAuth(): Observable<LoginResponse> {
+    console.log('checkAuth')
     return this.oidcSecurityService.checkAuth().pipe(
-      map(({ userData, accessToken }) => {
-        this.userData = userData;
-        this.name.next(this.userData.name);
-        this.token = accessToken;
+      tap(({ isAuthenticated, userData, accessToken }) => {
+        if (isAuthenticated) {
+          this.userData = userData;
+          this.name.next(this.userData?.name || '');
+          this.token = accessToken;
+        } else {
+          console.warn('checkAuth: not authenticated')
+        }
+      }),
+      catchError((err:any)=>{
+        console.error('Error in initial checkAuth');
+        return throwError(()=>err);
       })
     );
   }
@@ -31,6 +69,6 @@ export class AuthenticationService {
     return this.token;
   }
   public getName(): Observable<string> {
-    return this.name;
+    return this.name$;
   }
 }
