@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EventTypes, LoginResponse, OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
-import { BehaviorSubject, Observable, filter, finalize, map, throwError } from 'rxjs';
-import { ToastServiceHandler } from './toast.service';
+import { BehaviorSubject, Observable, filter, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
@@ -14,8 +13,7 @@ export class AuthenticationService {
   private userData: { name:string } | undefined;
 
   public constructor(public oidcSecurityService: OidcSecurityService,
-    public events: PublicEventsService,
-    public toastServiceHandler: ToastServiceHandler
+    public events: PublicEventsService
   ) {
     console.log('auth service')
     this.subscribeToAuthEvents();

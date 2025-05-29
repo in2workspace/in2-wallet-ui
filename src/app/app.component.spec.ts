@@ -261,7 +261,7 @@ describe('AppComponent', () => {
     const mockEvent = new KeyboardEvent('keydown', { key: 'Enter' });
     jest.spyOn(component, 'openPopover').mockImplementation();
 
-    component.handleKeydown(mockEvent);
+    component.openPopoverByKeydown(mockEvent);
     expect(component.openPopover).toHaveBeenCalledWith(mockEvent);
   });
 
