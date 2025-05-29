@@ -84,7 +84,6 @@ describe('AppComponent', () => {
 
     authenticationServiceMock = {
       getName: jest.fn().mockReturnValue(of('John Doe')),
-      logout: jest.fn().mockReturnValue(of(null)),
     } as unknown as jest.Mocked<AuthenticationService>;
 
     storageServiceMock = {
@@ -249,12 +248,6 @@ describe('AppComponent', () => {
     expect(alertSpy).not.toHaveBeenCalled();
   
     jest.restoreAllMocks();
-  });
-
-  it('should navigate to /home on logout', () => {
-    component.logout();
-    expect(authenticationServiceMock.logout).toHaveBeenCalled();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/home'], {});
   });
 
   it('should open a popover on Enter or Space keydown', () => {

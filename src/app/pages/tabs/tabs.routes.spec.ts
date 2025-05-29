@@ -86,22 +86,19 @@ describe('App Routes', () => {
     expect(location.path()).toBe('/home');
   });
 
-  it('should apply AutoLoginPartialRoutesGuard on /home', async () => {
+  it('should apply AutoLoginPartialRoutesGuard on /', async () => {
     const mockGuard = TestBed.inject(AutoLoginPartialRoutesGuard);
     jest.spyOn(mockGuard, 'canActivate');
-    await router.navigate(['/home']);
+    await router.navigate(['/']);
     expect(mockGuard.canActivate).toHaveBeenCalled();
   });
 
-  it('should apply AutoLoginPartialRoutesGuard and logsEnabledGuard on /logs', async () => {
-    const mockAutoLoginGuard = TestBed.inject(AutoLoginPartialRoutesGuard);
+  it('should apply logsEnabledGuard on /logs', async () => {
     const mockLogsGuard = TestBed.inject(logsEnabledGuard);
 
-    jest.spyOn(mockAutoLoginGuard, 'canActivate');
     jest.spyOn(mockLogsGuard, 'canActivate');
 
     await router.navigate(['/logs']);
-    expect(mockAutoLoginGuard.canActivate).toHaveBeenCalled();
     expect(mockLogsGuard.canActivate).toHaveBeenCalled();
   });
 });
