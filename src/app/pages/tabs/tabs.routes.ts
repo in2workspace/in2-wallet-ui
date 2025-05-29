@@ -5,19 +5,18 @@ import { logsEnabledGuard } from '../../guards/logs-enabled.guard';
 const routes: Routes = [
   {
     path: '',
+    canActivate: [AutoLoginPartialRoutesGuard],
     loadComponent: () =>
       import('./tabs.page').then((m) => m.TabsPage),
     children: [
       {
         path: 'home',
-        canActivate: [AutoLoginPartialRoutesGuard],
         data: { credentialOfferUri: 'credentialOfferUri' },
         loadComponent: () =>
           import('../home/home.page').then((m) => m.HomePage),
         children: [
           {
             path: 'openid-credential-offer',
-            canActivate: [AutoLoginPartialRoutesGuard],
             data: { credentialOfferUri: 'credentialOfferUri' },
             loadComponent: () =>
               import('../credentials/credentials.page').then(
@@ -28,19 +27,16 @@ const routes: Routes = [
       },
       {
         path: 'credentials',
-        canActivate: [AutoLoginPartialRoutesGuard],
         loadComponent: () =>
           import('../credentials/credentials.page').then((m) => m.CredentialsPage),
       },
       {
         path: 'settings',
-        canActivate: [AutoLoginPartialRoutesGuard],
         loadComponent: () =>
           import('../settings/settings.page').then((m) => m.SettingsPage),
       },
       {
         path: 'language-selector',
-        canActivate: [AutoLoginPartialRoutesGuard],
         loadComponent: () =>
           import('../language-selector/language-selector.page').then(
             (m) => m.LanguageSelectorPage
@@ -48,7 +44,6 @@ const routes: Routes = [
       },
       {
         path: 'camera-selector',
-        canActivate: [AutoLoginPartialRoutesGuard],
         loadComponent: () =>
           import('../camera-selector/camera-selector.page').then(
             (m) => m.CameraSelectorPage
@@ -56,7 +51,6 @@ const routes: Routes = [
       },
       {
         path: 'logs',
-        canActivate: [AutoLoginPartialRoutesGuard, logsEnabledGuard],
         loadComponent: () =>
           import('../logs/logs.page').then((m) => m.LogsPage),
         children: [
@@ -78,7 +72,6 @@ const routes: Routes = [
       },
       {
         path: 'vc-selector',
-        canActivate: [AutoLoginPartialRoutesGuard],
         loadComponent: () =>
           import('../vc-selector/vc-selector.page').then((m) => m.VcSelectorPage),
       },
