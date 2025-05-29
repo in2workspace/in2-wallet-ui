@@ -6,7 +6,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
 import { MenuComponent } from './components/menu/menu.component';
 import { StorageService } from './services/storage.service';
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { CameraService } from './services/camera.service';
 import { environment } from 'src/environments/environment';
 import { WebsocketService } from './services/websocket.service';
@@ -139,7 +139,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  //todo rename
   public openPopoverByKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter' || event.key === ' ') {
         this.openPopover(event);

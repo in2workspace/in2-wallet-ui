@@ -5,7 +5,6 @@ import { IonicModule, PopoverController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
-// todo This is not a logout page, it is menu component
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'app-menu',
@@ -16,9 +15,9 @@ import { TranslateModule } from '@ngx-translate/core';
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class MenuComponent {
   public constructor(
-    private popOverController: PopoverController,
-    private authenticationService: AuthenticationService,
-    private router: Router
+    private readonly popOverController: PopoverController,
+    private readonly authenticationService: AuthenticationService,
+    private readonly router: Router
   ) {}
   public logoutOnKeydown(event: KeyboardEvent){
     if (event.key === 'Enter' || event.key === ' ') {

@@ -45,7 +45,7 @@ export class AuthenticationService {
       tap(({ isAuthenticated, userData, accessToken }) => {
         if (isAuthenticated) {
           this.userData = userData;
-          this.name.next(this.userData?.name || '');
+          this.name.next(this.userData?.name ?? '');
           this.token = accessToken;
         } else {
           console.warn('checkAuth: not authenticated')
