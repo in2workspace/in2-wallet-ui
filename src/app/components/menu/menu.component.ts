@@ -19,13 +19,13 @@ export class MenuComponent {
     private readonly authenticationService: AuthenticationService,
     private readonly router: Router
   ) {}
-  public logoutOnKeydown(event: KeyboardEvent){
+  public logoutOnKeydown(event: KeyboardEvent): void{
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       this.logout();
     }
   }
-  public logout() {
+  public logout(): void {
     this.authenticationService.logout().subscribe(() => {
       this.router.navigate(['/home'], {});
     });

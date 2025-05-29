@@ -4,6 +4,7 @@ import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { ToastServiceHandler } from '../services/toast.service';
 import { HttpErrorInterceptor } from './error-handler.interceptor';
 import { SERVER_PATH } from '../constants/api.constants';
+import { environment } from 'src/environments/environment';
 
 class MockToastServiceHandler {
   showErrorAlert(message: string) {
@@ -141,25 +142,23 @@ describe('HttpErrorInterceptor with HttpClient', () => {
     );
   });
 
-  it('should handle "No internet connection" errors silently without showing a toast', () => {
-    const spyToast = jest.spyOn(mockToastServiceHandler, 'showErrorAlert');
-    const spyConsole = jest.spyOn(console, 'error').mockImplementation(); // mock console.error
-  
-    httpClient.get('/testNoInternet').subscribe({
+  it('should handle errors silently for IAM URI', () => {
+    const testUrl = environment.iam_url;
+    const spy = jest.spyOn(console, 'error');
+
+    httpClient.get(testUrl).subscribe({
       error: (error) => {
-        expect(spyConsole).toHaveBeenCalledWith('Handled silently:', 'No internet connection - please check your network.');
-        expect(spyToast).not.toHaveBeenCalled();
-      }
+        expect(spy).toHaveBeenCalledWith('Handled silently:', 'Test error message');
+        expect(error).toBeTruthy();
+      },
     });
-  
-    const req = httpMock.expectOne('/testNoInternet');
+
+    const req = httpMock.expectOne(testUrl);
     req.flush(
-      { message: 'No internet connection - please check your network.' },
-      { status: 0, statusText: 'Unknown Error' }
+      { message: 'Test error message' },
+      { status: 400, statusText: 'Bad Request' }
     );
   });
-  
-
 
   it('should show a toast with "PIN expired" on a 408 Request Timeout response', () => {
     const expectedMessage = 'PIN expired';
