@@ -64,7 +64,7 @@ export class AuthenticationService {
   public getToken(): string {
     return this.token;
   }
-  public getName(): Observable<string> {
+  public getName$(): Observable<string> {
     return this.name$;
   }
 }

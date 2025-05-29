@@ -20,6 +20,12 @@ export class MenuComponent {
     private authenticationService: AuthenticationService,
     private router: Router
   ) {}
+  public logoutOnKeydown(event: KeyboardEvent){
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.logout();
+    }
+  }
   public logout() {
     this.authenticationService.logout().subscribe(() => {
       this.router.navigate(['/home'], {});

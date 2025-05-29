@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
   private readonly websocket = inject(WebsocketService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router)
-  public userName = this.authenticationService.getName();
+  public userName = this.authenticationService.getName$();
   public isCallbackRoute = false;
   public isBaseRoute = false;
   public readonly logoSrc = environment.customizations.logo_src;

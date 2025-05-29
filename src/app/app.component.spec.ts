@@ -83,7 +83,7 @@ describe('AppComponent', () => {
     } as unknown as jest.Mocked<Router>;
 
     authenticationServiceMock = {
-      getName: jest.fn().mockReturnValue(of('John Doe')),
+      getName$: jest.fn().mockReturnValue(of('John Doe')),
     } as unknown as jest.Mocked<AuthenticationService>;
 
     storageServiceMock = {
