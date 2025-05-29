@@ -7,7 +7,7 @@
         class="toolbar-but"
         [disabled]="isCallbackRoute"
         (click)="openPopover($event)"
-        (keydown)="handleKeydown($event)"
+        (keydown)="openPopoverByKeydown($event)"
         >
         {{userName | async}} 
         <ion-icon

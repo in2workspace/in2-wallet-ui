@@ -4,7 +4,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule, PopoverController } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
-import { LogoutPage } from './pages/logout/logout.page';
+import { MenuComponent } from './components/menu/menu.component';
 import { StorageService } from './services/storage.service';
 import { Subject, take, takeUntil } from 'rxjs';
 import { CameraService } from './services/camera.service';
@@ -148,11 +148,10 @@ export class AppComponent implements OnInit {
   }
 
   //todo rename
-  public handleKeydown(event: KeyboardEvent, action = 'request'): void {
+  public openPopoverByKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter' || event.key === ' ') {
         this.openPopover(event);
-
-      event.preventDefault();
+        event.preventDefault();
     }
   }
 
@@ -161,7 +160,7 @@ export class AppComponent implements OnInit {
       return; 
     }
     const popover = await this.popoverController.create({
-      component: LogoutPage,
+      component: MenuComponent,
       event: ev,
       translucent: true,
       cssClass: 'custom-popover',

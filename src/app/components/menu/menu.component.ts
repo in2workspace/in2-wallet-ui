@@ -8,13 +8,13 @@ import { TranslateModule } from '@ngx-translate/core';
 // todo This is not a logout page, it is menu component
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'app.logout',
-  templateUrl: './logout.page.html',
+  selector: 'app-menu',
+  templateUrl: './menu.component.html',
   standalone: true,
   imports: [IonicModule, CommonModule, RouterModule, TranslateModule],
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
-export class LogoutPage {
+export class MenuComponent {
   public constructor(
     private popOverController: PopoverController,
     private authenticationService: AuthenticationService,
