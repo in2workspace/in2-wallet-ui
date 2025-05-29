@@ -147,6 +147,7 @@ export class AppComponent implements OnInit {
     });
   }
 
+  //todo rename
   public handleKeydown(event: KeyboardEvent, action = 'request'): void {
     if (event.key === 'Enter' || event.key === ' ') {
         this.openPopover(event);

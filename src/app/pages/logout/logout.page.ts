@@ -5,6 +5,7 @@ import { IonicModule, PopoverController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
+// todo This is not a logout page, it is menu component
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'app.logout',
