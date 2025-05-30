@@ -26,7 +26,7 @@ export class MenuComponent {
     }
   }
   public logout(): void {
-    this.authenticationService.logout().subscribe(() => {
+    this.authenticationService.logout$().subscribe(() => {
       this.router.navigate(['/home'], {});
     });
     this.popOverController.dismiss();

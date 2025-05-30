@@ -15,7 +15,7 @@ describe('MenuComponent', () => {
     }
 
   const mockAuthenticationService = {
-    logout: jest.fn(() => of(undefined)),
+    logout$: jest.fn(() => of(undefined)),
   };
 
   const mockRouter = {
@@ -88,7 +88,7 @@ describe('MenuComponent', () => {
       component.logout();
       tick();
 
-      expect(mockAuthenticationService.logout).toHaveBeenCalled();
+      expect(mockAuthenticationService.logout$).toHaveBeenCalled();
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/home'], {});
       tick();
 

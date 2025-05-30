@@ -46,7 +46,7 @@ export class AuthenticationService {
                       next: ({ isAuthenticated, userData, accessToken }) => {
                         if (!isAuthenticated) {
                           console.warn('User still not authenticated after reconnect, logging out');
-                          this.logout().subscribe();
+                          this.logout$().subscribe();
                         } else {
                           console.log('User reauthenticated successfully after reconnect');
                           this.updateUserData(userData, accessToken);
@@ -54,7 +54,7 @@ export class AuthenticationService {
                       },
                       error: (err) => {
                         console.error('Error while reauthenticating after reconnect:', err);
-                        this.logout().subscribe();
+                        this.logout$().subscribe();
                       },
                       complete: () => {
                         window.removeEventListener('online', onlineHandler);
@@ -67,14 +67,14 @@ export class AuthenticationService {
 
               } else {
                 console.error('Silent token refresh failed: online mode, proceeding to logout', event);
-                this.logout().subscribe();
+                this.logout$().subscribe();
               }
               break;
 
             case EventTypes.IdTokenExpired:
             case EventTypes.TokenExpired:
               console.error('Session expired:', event);
-              this.logout().subscribe();
+              this.logout$().subscribe();
               break;
           }
         });
@@ -107,12 +107,12 @@ export class AuthenticationService {
     this.bc.onmessage = (event) => {
       if (event.data === 'forceWalletLogout') {
         console.warn('Detected logout in other tab, logging out here too');
-        this.logout().subscribe();
+        this.logout$().subscribe();
       }
     };
   }
 
-  public logout(): Observable<any> {
+  public logout$(): Observable<any> {
     // since we store tokens in session storage we need to sync logout between different tabs
     this.bc.postMessage('forceWalletLogout');
     console.log('logout')
