@@ -51,7 +51,6 @@ export class AuthenticationService {
                           this.logout$().subscribe();
                         } else {
                           console.log('User reauthenticated successfully after reconnect');
-                          this.updateUserData(userData, accessToken);
                         }
                       },
                       error: (err) => {
