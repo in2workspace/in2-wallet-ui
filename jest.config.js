@@ -33,13 +33,13 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/', 
     '/dist/',
-    '/src/app/app.routes',
-    '/src/app/app.component',
-    '/src/app/components/', 
-    '/src/app/guards/',
-    '/src/app/interceptors',
-    '/src/app/interfaces',
-    '/src/app/pages/(?!tabs)',
-    '/src/app/services/'
+    // '/src/app/app.routes',
+    // '/src/app/app.component',
+    // '/src/app/components/', 
+    // '/src/app/guards/',
+    // '/src/app/interceptors',
+    // '/src/app/interfaces',
+    // '/src/app/pages/',
+    // '/src/app/services/(?!authentication)'
   ]
 };
