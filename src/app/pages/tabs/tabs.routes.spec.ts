@@ -88,7 +88,7 @@ describe('App Routes', () => {
 
   it('should apply AutoLoginPartialRoutesGuard on /', async () => {
     const mockGuard = TestBed.inject(AutoLoginPartialRoutesGuard);
-    jest.spyOn(mockGuard, 'canActivate');
+    jest.spyOn(mockGuard, 'canActivateChild');
     await router.navigate(['/']);
     expect(mockGuard.canActivate).toHaveBeenCalled();
   });
