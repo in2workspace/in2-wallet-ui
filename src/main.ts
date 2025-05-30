@@ -76,6 +76,7 @@ bootstrapApplication(AppComponent, {
         useRefreshToken: true,
         ignoreNonceAfterRefresh: true,
         triggerRefreshWhenIdTokenExpired: false,
+        renewTimeBeforeTokenExpiresInSeconds: 30,
         autoUserInfo: false,
         //routes to which Authorization Bearer <access_token> is added
         secureRoutes:[environment.server_url]
