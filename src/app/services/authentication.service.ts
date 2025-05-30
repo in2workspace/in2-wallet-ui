@@ -76,6 +76,7 @@ export class AuthenticationService {
   public logout() {
     // since we store tokens in session storage we need to sync logout between different tabs
     localStorage.setItem('forceWalletLogout', Date.now().toString());
+    console.log('logout')
     return this.oidcSecurityService.logoffAndRevokeTokens();
   }
 
