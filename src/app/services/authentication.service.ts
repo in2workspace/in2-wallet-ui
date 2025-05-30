@@ -116,6 +116,7 @@ export class AuthenticationService {
 
 private localLogout(): void {
   console.log('Redirect to origin.');
+  sessionStorage.clear();
   window.location.assign(location.origin);
   //todo checkAuth?.subscribe
 }
