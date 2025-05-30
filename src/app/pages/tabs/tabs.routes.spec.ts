@@ -90,7 +90,7 @@ describe('App Routes', () => {
     const mockGuard = TestBed.inject(AutoLoginPartialRoutesGuard);
     jest.spyOn(mockGuard, 'canActivateChild');
     await router.navigate(['/']);
-    expect(mockGuard.canActivate).toHaveBeenCalled();
+    expect(mockGuard.canActivateChild).toHaveBeenCalled();
   });
 
   it('should call canActivateChild guard when navigating between child routes', async () => {

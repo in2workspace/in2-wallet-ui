@@ -67,7 +67,7 @@ describe('AuthenticationService', () => {
   });
 
   it('should call logout when TokenExpired event is emitted', () => {
-  const logoutSpy = jest.spyOn(service, 'logout');
+  const logoutSpy = jest.spyOn(service, 'logout$');
 
   mockEvents$.next({ type: EventTypes.TokenExpired });
 
@@ -75,7 +75,7 @@ describe('AuthenticationService', () => {
 });
 
 it('should call logout when IdTokenExpired event is emitted', () => {
-  const logoutSpy = jest.spyOn(service, 'logout');
+  const logoutSpy = jest.spyOn(service, 'logout$');
 
   mockEvents$.next({ type: EventTypes.IdTokenExpired });
 
