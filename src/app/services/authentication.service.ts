@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EventTypes, LoginResponse, OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
-import { BehaviorSubject, Observable, filter, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, filter, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
@@ -12,6 +12,7 @@ export class AuthenticationService {
   private token!: string;
   private userData: { name:string } | undefined;
   private bc = new BroadcastChannel('auth');
+  private logoutInProgressKey = 'logoutInProgress';
 
   public constructor(public oidcSecurityService: OidcSecurityService,
     public events: PublicEventsService
@@ -105,18 +106,29 @@ export class AuthenticationService {
 
   public listenToCrossTabLogout(): void{
     this.bc.onmessage = (event) => {
+      console.log('Received Broadcast message: ', event);
       if (event.data === 'forceWalletLogout') {
-        console.warn('Detected logout in other tab, logging out here too');
-        this.logout$().subscribe();
+          console.warn('Detected logout with revoke, logging out locally');
+          this.localLogout();
       }
     };
   }
 
+private localLogout(): void {
+  console.log('Redirect to origin.');
+  window.location.assign(location.origin);
+}
+
+
   public logout$(): Observable<any> {
+    console.log('Logout')
     // since we store tokens in session storage we need to sync logout between different tabs
-    this.bc.postMessage('forceWalletLogout');
-    console.log('logout')
+
     return this.oidcSecurityService.logoffAndRevokeTokens().pipe(
+      tap(() => {
+        console.log('Logout with revoke completed.')
+        this.bc.postMessage('forceWalletLogout');
+      }),
       catchError((err:Error)=>{
         console.error('Error when logging out.');
         console.error(err);
