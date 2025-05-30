@@ -16,7 +16,7 @@ let originalWebSocket: any;
 let service: WebsocketService;
 
 class MockOidcSecurityService {
-  checkAuth() {
+  checkAuth$() {
     return of({ userData: {}, accessToken: 'fake-token' });
   }
 

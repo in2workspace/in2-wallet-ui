@@ -17,12 +17,12 @@ describe('AuthenticationService', () => {
     };
 
     oidcSecurityService = {
-      checkAuth: jest.fn(),
+      checkAuth$: jest.fn(),
       authorizeWithPopUp: jest.fn(),
       logoffAndRevokeTokens: jest.fn()
     };
 
-    oidcSecurityService.checkAuth.mockReturnValue(of({
+    oidcSecurityService.checkAuth$.mockReturnValue(of({
       isAuthenticated: true,
       userData: { name: 'John Doe' },
       accessToken: 'dummy-token',
@@ -45,14 +45,14 @@ describe('AuthenticationService', () => {
   });
 
   it('checkAuth should complete without errors', (done) => {
-    oidcSecurityService.checkAuth.mockReturnValue(of({
+    oidcSecurityService.checkAuth$.mockReturnValue(of({
       isAuthenticated: true,
       userData: {},
       accessToken: '',
       idToken: ''
     }));
 
-    service.checkAuth().subscribe({
+    service.checkAuth$().subscribe({
       next: () => {},
       error: () => {
         fail('checkAuth should not have failed');
@@ -62,7 +62,7 @@ describe('AuthenticationService', () => {
   });
 
   it('logout should call oidcSecurityService.logoffAndRevokeTokens', () => {
-    service.logout();
+    service.logout$();
     expect(oidcSecurityService.logoffAndRevokeTokens).toHaveBeenCalled();
   });
 

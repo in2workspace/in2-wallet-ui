@@ -18,7 +18,7 @@ export class AuthenticationService {
     public events: PublicEventsService
   ) {
     this.subscribeToAuthEvents();
-    this.checkAuth().subscribe();
+    this.checkAuth$().subscribe();
     this.listenToCrossTabLogout();
   }
     private subscribeToAuthEvents(): void {
@@ -42,7 +42,7 @@ export class AuthenticationService {
 
                 const onlineHandler = () => {
                   console.log('Connection restored. Retrying to authenticate...');
-                  this.checkAuth().subscribe(
+                  this.checkAuth$().subscribe(
                     {
                       next: ({ isAuthenticated, userData, accessToken }) => {
                         if (!isAuthenticated) {
@@ -80,7 +80,7 @@ export class AuthenticationService {
           }
         });
   }
-  public checkAuth(): Observable<LoginResponse> {
+  public checkAuth$(): Observable<LoginResponse> {
     console.log('Check auth: Authenticating.')
     return this.oidcSecurityService.checkAuth().pipe(
       tap(({ isAuthenticated, userData, accessToken }) => {
@@ -117,6 +117,7 @@ export class AuthenticationService {
 private localLogout(): void {
   console.log('Redirect to origin.');
   window.location.assign(location.origin);
+  //todo checkAuth?.subscribe
 }
 
 
