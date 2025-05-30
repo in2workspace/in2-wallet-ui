@@ -17,6 +17,7 @@ export class AuthenticationService {
   ) {
     this.subscribeToAuthEvents();
     this.checkAuth().subscribe();
+    this.listenToCrossTabLogout();
   }
     private subscribeToAuthEvents(): void {
       this.events.registerForEvents()
@@ -48,16 +49,29 @@ export class AuthenticationService {
           this.name.next(this.userData?.name ?? '');
           this.token = accessToken;
         } else {
+          //this part can only be reached if accessing the app through a route that has not AutoLoginPartialRoutesGuard
           console.warn('checkAuth: not authenticated')
         }
       }),
       catchError((err:any)=>{
+        //this part can only be reached if accessing the app through a route that has not AutoLoginPartialRoutesGuard
         console.error('Error in initial checkAuth');
         return throwError(()=>err);
       })
     );
   }
+  public listenToCrossTabLogout(){
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'forceWalletLogout') {
+        console.warn('Detected logout in other tab, logging out here too');
+        this.logout();
+      }
+    });
+  }
+
   public logout() {
+    // since we store tokens in session storage we need to sync logout between different tabs
+    localStorage.setItem('forceWalletLogout', Date.now().toString());
     return this.oidcSecurityService.logoffAndRevokeTokens();
   }
 
