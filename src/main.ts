@@ -20,7 +20,7 @@ import {
   authInterceptor
 } from 'angular-auth-oidc-client';
 import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
-import { IAM_PARAMS } from './app/constants/iam.constants';
+import { IAM_PARAMS, IAM_POST_LOGOUT_URI } from './app/constants/iam.constants';
 
 document.addEventListener(
   'touchmove',
@@ -68,7 +68,7 @@ bootstrapApplication(AppComponent, {
         postLoginRoute: '/tabs/home',
         authority: environment.iam_url,
         redirectUrl: `${window.location.origin}/callback`,
-        postLogoutRedirectUri: `${window.location.origin}`,
+        postLogoutRedirectUri: IAM_POST_LOGOUT_URI,
         clientId: IAM_PARAMS.CLIENT_ID,
         scope: IAM_PARAMS.SCOPE,
         responseType: IAM_PARAMS.GRANT_TYPE,

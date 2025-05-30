@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { EventTypes, LoginResponse, OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
 import { BehaviorSubject, Observable, filter, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { IAM_POST_LOGOUT_URI } from '../constants/iam.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -117,8 +118,7 @@ export class AuthenticationService {
 private localLogout(): void {
   console.log('Redirect to origin.');
   sessionStorage.clear();
-  window.location.assign(location.origin);
-  //todo checkAuth?.subscribe
+  window.location.assign(IAM_POST_LOGOUT_URI);
 }
 
 
