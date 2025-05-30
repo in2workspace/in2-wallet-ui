@@ -42,12 +42,13 @@ export class AuthenticationService {
                   console.log('Connection restored. Retrying to authenticate...');
                   this.checkAuth().subscribe(
                     {
-                      next: ({ isAuthenticated }) => {
+                      next: ({ isAuthenticated, userData, accessToken }) => {
                         if (!isAuthenticated) {
                           console.warn('User still not authenticated after reconnect, logging out');
                           this.logout();
                         } else {
                           console.log('User reauthenticated successfully after reconnect');
+                          this.updateUserData(userData, accessToken);
                         }
                       },
                       error: (err) => {
@@ -79,9 +80,7 @@ export class AuthenticationService {
     return this.oidcSecurityService.checkAuth().pipe(
       tap(({ isAuthenticated, userData, accessToken }) => {
         if (isAuthenticated) {
-          this.userData = userData;
-          this.name.next(this.userData?.name ?? '');
-          this.token = accessToken;
+          this.updateUserData(userData, accessToken);
         } else {
           //this part can only be reached if accessing the app through a route that has not AutoLoginPartialRoutesGuard
           console.warn('Check auth: not authenticated')
@@ -94,6 +93,12 @@ export class AuthenticationService {
       })
     );
   }
+  public updateUserData(userData:any, accessToken:string){
+    this.userData = userData;
+    this.name.next(this.userData?.name ?? '');
+    this.token = accessToken;
+  }
+
   public listenToCrossTabLogout(){
     window.addEventListener('storage', (event) => {
       if (event.key === 'forceWalletLogout') {
