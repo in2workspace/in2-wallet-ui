@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { AuthenticationService } from './authentication.service';
 import { EventTypes, OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
-import { of, Subject } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 
 describe('AuthenticationService', () => {
   let service: AuthenticationService;
@@ -17,17 +17,19 @@ describe('AuthenticationService', () => {
     };
 
     oidcSecurityService = {
-      checkAuth$: jest.fn(),
+      checkAuth: jest.fn(),
       authorizeWithPopUp: jest.fn(),
       logoffAndRevokeTokens: jest.fn()
     };
 
-    oidcSecurityService.checkAuth$.mockReturnValue(of({
+    oidcSecurityService.checkAuth.mockReturnValue(of({
       isAuthenticated: true,
       userData: { name: 'John Doe' },
       accessToken: 'dummy-token',
       idToken: 'dummy-id-token'
     }));
+
+    oidcSecurityService.logoffAndRevokeTokens.mockReturnValue(of(undefined));
 
     TestBed.configureTestingModule({
       providers: [
@@ -44,52 +46,106 @@ describe('AuthenticationService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('checkAuth should complete without errors', (done) => {
-    oidcSecurityService.checkAuth$.mockReturnValue(of({
-      isAuthenticated: true,
-      userData: {},
-      accessToken: '',
-      idToken: ''
-    }));
+  it('should call checkAuth$ and update userData and token', (done) => {
+    service.checkAuth$().subscribe((res) => {
+      expect(res.isAuthenticated).toBe(true);
+      expect(service.getToken()).toBe('dummy-token');
 
-    service.checkAuth$().subscribe({
-      next: () => {},
-      error: () => {
-        fail('checkAuth should not have failed');
-      },
-      complete: () => done()
+      service.getName$().subscribe(name => {
+        expect(name).toBe('John Doe');
+        done();
+      });
     });
   });
 
-  it('logout should call oidcSecurityService.logoffAndRevokeTokens', () => {
-    service.logout$();
-    expect(oidcSecurityService.logoffAndRevokeTokens).toHaveBeenCalled();
+  it('should return current name through getName$', (done) => {
+    service['name'].next('Alice');
+    service.getName$().subscribe(name => {
+      expect(name).toBe('Alice');
+      done();
+    });
   });
 
-  it('should call logout when TokenExpired event is emitted', () => {
-  const logoutSpy = jest.spyOn(service, 'logout$');
+  it('should return current token via getToken', () => {
+    service['token'] = 'test-token';
+    expect(service.getToken()).toBe('test-token');
+  });
 
-  mockEvents$.next({ type: EventTypes.TokenExpired });
+  it('should call logoffAndRevokeTokens on logout$', (done) => {
+    const postMessageSpy = jest.spyOn(service['bc'], 'postMessage');
 
-  expect(logoutSpy).toHaveBeenCalled();
-});
+    service.logout$().subscribe(() => {
+      expect(oidcSecurityService.logoffAndRevokeTokens).toHaveBeenCalled();
+      expect(postMessageSpy).toHaveBeenCalledWith('forceWalletLogout');
+      done();
+    });
+  });
 
-it('should call logout when IdTokenExpired event is emitted', () => {
-  const logoutSpy = jest.spyOn(service, 'logout$');
+  it('should handle errors during logout$', (done) => {
+    const error = new Error('logout failed');
+    oidcSecurityService.logoffAndRevokeTokens.mockReturnValueOnce(throwError(() => error));
 
-  mockEvents$.next({ type: EventTypes.IdTokenExpired });
+    service.logout$().subscribe({
+      error: (err) => {
+        expect(err).toBe(error);
+        done();
+      }
+    });
+  });
 
-  expect(logoutSpy).toHaveBeenCalled();
-});
+  it('should handle SilentRenewFailed event when offline and reauthenticate when back online', (done) => {
+    // Prepare to emit SilentRenewFailed
+    Object.defineProperty(navigator, 'onLine', { value: false, configurable: true });
 
-it('should log a warning when SilentRenewFailed is emitted', () => {
-  const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const checkAuthSpy = jest.spyOn(service, 'checkAuth$').mockReturnValue(of({
+      isAuthenticated: true,
+      userData: { name: 'Recovered' },
+      accessToken: 'recovered-token',
+      idToken: ''
+    }));
 
-  mockEvents$.next({ type: EventTypes.SilentRenewFailed });
+    mockEvents$.next({ type: EventTypes.SilentRenewFailed });
 
-  expect(consoleWarnSpy).toHaveBeenCalledWith('Silent renew failed:', { type: EventTypes.SilentRenewFailed });
+    // Simulate going online
+    Object.defineProperty(navigator, 'onLine', { value: true });
+    window.dispatchEvent(new Event('online'));
 
-  consoleWarnSpy.mockRestore();
-});
+    // Espera que s'hagi cridat checkAuth$ de nou
+    setTimeout(() => {
+      expect(checkAuthSpy).toHaveBeenCalled();
+      done();
+    }, 50);
+  });
 
+  it('should logout if SilentRenewFailed while online', (done) => {
+    const logoutSpy = jest.spyOn(service, 'logout$').mockReturnValue(of(undefined));
+
+    Object.defineProperty(navigator, 'onLine', { value: true, configurable: true });
+
+    mockEvents$.next({ type: EventTypes.SilentRenewFailed });
+
+    setTimeout(() => {
+      expect(logoutSpy).toHaveBeenCalled();
+      done();
+    }, 50);
+  });
+
+  it('should logout on TokenExpired or IdTokenExpired', (done) => {
+    const logoutSpy = jest.spyOn(service, 'logout$').mockReturnValue(of(undefined));
+
+    mockEvents$.next({ type: EventTypes.TokenExpired });
+    mockEvents$.next({ type: EventTypes.IdTokenExpired });
+
+    setTimeout(() => {
+      expect(logoutSpy).toHaveBeenCalledTimes(2);
+      done();
+    }, 50);
+  });
+
+  // it('should handle BroadcastChannel logout messages', () => {
+  //   const localLogoutSpy = jest.spyOn<any>(service, 'localLogout').mockImplementation(() => {});
+
+  //   service['bc'].onmessage!({ data: 'forceWalletLogout' } as MessageEvent);
+  //   expect(localLogoutSpy).toHaveBeenCalled();
+  // });
 });

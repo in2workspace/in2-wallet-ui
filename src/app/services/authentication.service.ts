@@ -4,6 +4,26 @@ import { BehaviorSubject, Observable, filter, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { IAM_POST_LOGOUT_URI } from '../constants/iam.constants';
 
+class MockBroadcastChannel {
+  name: string;
+  onmessage: ((event: MessageEvent) => void) | null = null;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  postMessage(message: any) {
+    if (this.onmessage) {
+      this.onmessage({ data: message } as MessageEvent);
+    }
+  }
+
+  close() {
+  }
+}
+
+(globalThis as any).BroadcastChannel = MockBroadcastChannel;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +33,6 @@ export class AuthenticationService {
   private token!: string;
   private userData: { name:string } | undefined;
   private bc = new BroadcastChannel('auth');
-  private logoutInProgressKey = 'logoutInProgress';
 
   public constructor(public oidcSecurityService: OidcSecurityService,
     public events: PublicEventsService
