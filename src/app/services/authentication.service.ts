@@ -11,6 +11,7 @@ export class AuthenticationService {
   public name$: Observable<string> = this.name.asObservable();
   private token!: string;
   private userData: { name:string } | undefined;
+  private bc = new BroadcastChannel('auth');
 
   public constructor(public oidcSecurityService: OidcSecurityService,
     public events: PublicEventsService
@@ -45,7 +46,7 @@ export class AuthenticationService {
                       next: ({ isAuthenticated, userData, accessToken }) => {
                         if (!isAuthenticated) {
                           console.warn('User still not authenticated after reconnect, logging out');
-                          this.logout();
+                          this.logout().subscribe();
                         } else {
                           console.log('User reauthenticated successfully after reconnect');
                           this.updateUserData(userData, accessToken);
@@ -53,7 +54,7 @@ export class AuthenticationService {
                       },
                       error: (err) => {
                         console.error('Error while reauthenticating after reconnect:', err);
-                        this.logout();
+                        this.logout().subscribe();
                       },
                       complete: () => {
                         window.removeEventListener('online', onlineHandler);
@@ -63,14 +64,14 @@ export class AuthenticationService {
                 };
               } else {
                 console.error('Silent token refresh failed: online mode, proceeding to logout', event);
-                this.logout();
+                this.logout().subscribe();
               }
               break;
 
             case EventTypes.IdTokenExpired:
             case EventTypes.TokenExpired:
               console.error('Session expired:', event);
-              this.logout();
+              this.logout().subscribe();
               break;
           }
         });
@@ -93,26 +94,32 @@ export class AuthenticationService {
       })
     );
   }
-  public updateUserData(userData:any, accessToken:string){
+  public updateUserData(userData:any, accessToken:string): void{
     this.userData = userData;
     this.name.next(this.userData?.name ?? '');
     this.token = accessToken;
   }
 
-  public listenToCrossTabLogout(){
-    window.addEventListener('storage', (event) => {
-      if (event.key === 'forceWalletLogout') {
+  public listenToCrossTabLogout(): void{
+    this.bc.onmessage = (event) => {
+      if (event.data === 'forceWalletLogout') {
         console.warn('Detected logout in other tab, logging out here too');
-        this.logout();
+        this.logout().subscribe();
       }
-    });
+    };
   }
 
-  public logout() {
+  public logout(): Observable<any> {
     // since we store tokens in session storage we need to sync logout between different tabs
-    localStorage.setItem('forceWalletLogout', Date.now().toString());
+    this.bc.postMessage('forceWalletLogout');
     console.log('logout')
-    return this.oidcSecurityService.logoffAndRevokeTokens();
+    return this.oidcSecurityService.logoffAndRevokeTokens().pipe(
+      catchError((err:Error)=>{
+        console.error('Error when logging out.');
+        console.error(err);
+        return throwError(()=>err)
+      })
+    );
   }
 
   public getToken(): string {

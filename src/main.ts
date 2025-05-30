@@ -11,7 +11,6 @@ import {
   HTTP_INTERCEPTORS,
   HttpClient,
   provideHttpClient,
-  withInterceptors,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage-angular';
