@@ -23,7 +23,7 @@ export class AuthenticationService {
       this.events.registerForEvents()
         .pipe(
           filter((e) =>
-            [EventTypes.SilentRenewFailed, EventTypes.IdTokenExpired, EventTypes.TokenExpired].includes(e.type)
+            [EventTypes.SilentRenewStarted, EventTypes.SilentRenewFailed, EventTypes.IdTokenExpired, EventTypes.TokenExpired].includes(e.type)
           )
         )
         .subscribe((event) => {
@@ -33,7 +33,37 @@ export class AuthenticationService {
               break;
 
             case EventTypes.SilentRenewFailed:
-              console.warn('Silent renew failed:', event);
+              const isOffline = !navigator.onLine;
+
+              if (isOffline) {
+                console.warn('Silent token refresh failed: offline mode', event);
+
+                const onlineHandler = () => {
+                  console.log('Connection restored. Retrying to authenticate...');
+                  this.checkAuth().subscribe(
+                    {
+                      next: ({ isAuthenticated }) => {
+                        if (!isAuthenticated) {
+                          console.warn('User still not authenticated after reconnect, logging out');
+                          this.logout();
+                        } else {
+                          console.log('User reauthenticated successfully after reconnect');
+                        }
+                      },
+                      error: (err) => {
+                        console.error('Error while reauthenticating after reconnect:', err);
+                        this.logout();
+                      },
+                      complete: () => {
+                        window.removeEventListener('online', onlineHandler);
+                      }
+                    });
+                  
+                };
+              } else {
+                console.error('Silent token refresh failed: online mode, proceeding to logout', event);
+                this.logout();
+              }
               break;
 
             case EventTypes.IdTokenExpired:
@@ -45,7 +75,7 @@ export class AuthenticationService {
         });
   }
   public checkAuth(): Observable<LoginResponse> {
-    console.log('checkAuth')
+    console.log('Check auth: Authenticating.')
     return this.oidcSecurityService.checkAuth().pipe(
       tap(({ isAuthenticated, userData, accessToken }) => {
         if (isAuthenticated) {
@@ -54,12 +84,12 @@ export class AuthenticationService {
           this.token = accessToken;
         } else {
           //this part can only be reached if accessing the app through a route that has not AutoLoginPartialRoutesGuard
-          console.warn('checkAuth: not authenticated')
+          console.warn('Check auth: not authenticated')
         }
       }),
       catchError((err:any)=>{
         //this part can only be reached if accessing the app through a route that has not AutoLoginPartialRoutesGuard
-        console.error('Error in initial checkAuth');
+        console.error('Check auth: error in initial authentication');
         return throwError(()=>err);
       })
     );
