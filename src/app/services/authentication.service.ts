@@ -28,6 +28,10 @@ export class AuthenticationService {
         )
         .subscribe((event) => {
           switch (event.type) {
+            case EventTypes.SilentRenewStarted:
+              console.log('Silent renew started');
+              break;
+
             case EventTypes.SilentRenewFailed:
               console.warn('Silent renew failed:', event);
               break;
