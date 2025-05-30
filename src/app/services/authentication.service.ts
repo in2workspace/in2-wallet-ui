@@ -62,6 +62,9 @@ export class AuthenticationService {
                     });
                   
                 };
+
+                  window.addEventListener('online', onlineHandler);
+
               } else {
                 console.error('Silent token refresh failed: online mode, proceeding to logout', event);
                 this.logout().subscribe();
