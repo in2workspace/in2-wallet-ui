@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable, filter, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
+import { IAM_POST_LOGOUT_URI } from '../constants/iam.constants';
 
 
 @Injectable({
@@ -76,7 +78,10 @@ export class AuthenticationService {
 
             } else {
               console.error('Silent token refresh failed: online mode, proceeding to logout', event);
-              this.localLogout$().subscribe();
+              this.localLogout$().subscribe(()=>{
+                console.log('try manual redirect');
+                window.location.href = IAM_POST_LOGOUT_URI;
+              });
             }
             break;
 
@@ -132,7 +137,9 @@ private localLogout$(): Observable<unknown> {
   console.info(accessToken);
   console.info('state');
   console.info(state);
-  return this.oidcSecurityService.logoff();
+
+
+  return this.oidcSecurityService.logoff().pipe(tap(()=>{console.log('after logoff tap')}));
 }
 
 
