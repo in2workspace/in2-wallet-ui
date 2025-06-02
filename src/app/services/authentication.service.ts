@@ -4,25 +4,6 @@ import { BehaviorSubject, Observable, filter, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { IAM_POST_LOGOUT_URI } from '../constants/iam.constants';
 
-class MockBroadcastChannel {
-  name: string;
-  onmessage: ((event: MessageEvent) => void) | null = null;
-
-  constructor(name: string) {
-    this.name = name;
-  }
-
-  postMessage(message: any) {
-    if (this.onmessage) {
-      this.onmessage({ data: message } as MessageEvent);
-    }
-  }
-
-  close() {
-  }
-}
-
-(globalThis as any).BroadcastChannel = MockBroadcastChannel;
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +32,7 @@ export class AuthenticationService {
         .subscribe((event) => {
           switch (event.type) {
             case EventTypes.SilentRenewStarted:
-              console.log('Silent renew started');
+              console.log('Silent renew started' + Date.now());
               break;
 
             case EventTypes.SilentRenewFailed:
@@ -94,6 +75,7 @@ export class AuthenticationService {
             case EventTypes.IdTokenExpired:
             case EventTypes.TokenExpired:
               console.error('Session expired:', event);
+              console.error('At: ' + Date.now());
               this.logout$().subscribe();
               break;
           }
