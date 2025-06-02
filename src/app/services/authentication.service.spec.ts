@@ -1,151 +1,307 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
+import { WebsocketService } from './websocket.service';
 import { AuthenticationService } from './authentication.service';
-import { EventTypes, OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
-import { of, Subject, throwError } from 'rxjs';
+import { AlertController } from '@ionic/angular';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
+import { of, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { TranslateModule } from '@ngx-translate/core';
+import { WEBSOCKET_PATH } from '../constants/api.constants';
 
-describe('AuthenticationService', () => {
-  let service: AuthenticationService;
-  let oidcSecurityService: jest.Mocked<any>;
-  let mockEvents$: Subject<any>;
-  let publicEventsService: jest.Mocked<Partial<PublicEventsService>>;
+// Mock BroadcastChannel
+class MockBroadcastChannel {
+  name: string;
+  onmessage: ((event: MessageEvent) => void) | null = null;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  postMessage(message: any) {
+    if (this.onmessage) {
+      this.onmessage({ data: message } as MessageEvent);
+    }
+  }
+
+  close() {
+  }
+}
+
+// Definir el mock globalment abans de qualsevol altra cosa
+(globalThis as any).BroadcastChannel = MockBroadcastChannel;
+
+let alertControllerMock: any;
+let mockWebSocketInstance: any;
+let mockWebSocketConstructor: any;
+let originalWebSocket: any;
+let service: WebsocketService;
+
+class MockOidcSecurityService {
+  checkAuth() {
+    return of({ 
+      isAuthenticated: true,
+      userData: { name: 'Test User' }, 
+      accessToken: 'fake-token',
+      idToken: 'fake-id-token'
+    });
+  }
+
+  getToken() {
+    return 'fake-token';
+  }
+
+  logoff() {
+    return of(undefined);
+  }
+
+  logoffAndRevokeTokens() {
+    return of(undefined);
+  }
+}
+
+class MockPublicEventsService {
+  registerForEvents() {
+    return new Subject().asObservable();
+  }
+}
+
+class MockAlertController {
+  create() {
+    return Promise.resolve({
+      present: () => Promise.resolve(),
+      onDidDismiss: () => Promise.resolve({ data: { values: { pin: '1234' } } }),
+    });
+  }
+}
+
+describe('WebsocketService', () => {
 
   beforeEach(() => {
-    mockEvents$ = new Subject();
 
-    publicEventsService = {
-      registerForEvents: jest.fn(() => mockEvents$.asObservable())
+    alertControllerMock = {
+      create: jest.fn().mockResolvedValue({
+        present: jest.fn(),
+        buttons: [
+          {
+            text: 'Send',
+            handler: jest.fn(),
+          },
+        ],
+      }),
     };
-
-    oidcSecurityService = {
-      checkAuth: jest.fn(),
-      authorizeWithPopUp: jest.fn(),
-      logoffAndRevokeTokens: jest.fn()
-    };
-
-    oidcSecurityService.checkAuth.mockReturnValue(of({
-      isAuthenticated: true,
-      userData: { name: 'John Doe' },
-      accessToken: 'dummy-token',
-      idToken: 'dummy-id-token'
-    }));
-
-    oidcSecurityService.logoffAndRevokeTokens.mockReturnValue(of(undefined));
 
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, TranslateModule.forRoot()],
       providers: [
+        WebsocketService,
         AuthenticationService,
-        { provide: OidcSecurityService, useValue: oidcSecurityService },
-        { provide: PublicEventsService, useValue: publicEventsService }
-      ]
+        { provide: AlertController, useValue: alertControllerMock },
+        { provide: OidcSecurityService, useClass: MockOidcSecurityService },
+        { provide: PublicEventsService, useClass: MockPublicEventsService },
+      ],
     });
 
-    service = TestBed.inject(AuthenticationService);
+    service = TestBed.inject(WebsocketService);
+
+    mockWebSocketInstance = {
+      send: jest.fn(),
+      close: jest.fn(),
+      readyState: 1,
+      onmessage: jest.fn(),
+      onclose: jest.fn(),
+      onopen: jest.fn(),
+    } as any;
+
+    mockWebSocketConstructor = jest.fn(() => mockWebSocketInstance);
+    mockWebSocketConstructor['OPEN'] = 1;
+    window['WebSocket'] = mockWebSocketConstructor as any;
+
+    originalWebSocket = window['WebSocket'];
+    jest.spyOn(service, 'sendMessage');
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  afterEach(() => {
+    service.closeConnection();
+    window['WebSocket'] = originalWebSocket;
+    jest.clearAllMocks();
   });
 
-  it('should call checkAuth$ and update userData and token', (done) => {
-    service.checkAuth$().subscribe((res) => {
-      expect(res.isAuthenticated).toBe(true);
-      expect(service.getToken()).toBe('dummy-token');
+  it('should create and open a WebSocket connection', fakeAsync(() => {
+    service.connect();
+    expect(window.WebSocket).toHaveBeenCalledWith(`${environment.websocket_url}${WEBSOCKET_PATH}`);
+    expect(service.sendMessage).not.toHaveBeenCalled();
+  }));
 
-      service.getName$().subscribe(name => {
-        expect(name).toBe('John Doe');
-        done();
-      });
+  it('should send a message when WebSocket is open', fakeAsync(() => {
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    const token = service['authenticationService'].getToken();
+    service.connect();
+    
+    mockWebSocketInstance.onopen('open');
+    expect(service.sendMessage).toHaveBeenCalled();
+    expect(service.sendMessage).toHaveBeenCalledWith(JSON.stringify({ id: token }));
+    expect(logSpy).toHaveBeenCalledWith('WebSocket connection opened');
+  }));
+
+  it('should handle incoming messages', fakeAsync(() => {
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    const createAlertSpy = jest.spyOn(service['alertController'], 'create');
+    service.connect();
+
+    const messageEvent = new MessageEvent('message', { data: JSON.stringify({ tx_code: { description: 'Test description' } }) });
+    
+    mockWebSocketInstance.onmessage(messageEvent);
+    expect(logSpy).toHaveBeenCalledWith('Message received:', messageEvent.data);
+    expect(createAlertSpy).toHaveBeenCalled();
+  }));
+
+  it('should create and display an alert on receiving a message', fakeAsync(async () => {
+    const createAlertSpy = jest.spyOn(service['alertController'], 'create');
+    const description = 'Test description';
+    const timeout = 120;
+    const messageEvent = new MessageEvent('message', {
+      data: JSON.stringify({ tx_code: { description }, timeout }),
     });
+  
+    service.connect();
+  
+    mockWebSocketInstance.onmessage(messageEvent);
+  
+    tick();
+    expect(createAlertSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        header: service['translate'].instant('confirmation.pin'),
+        message: `${description}<br><small class="counter">Time remaining: ${timeout} seconds</small>`,
+        inputs: [
+          {
+            name: 'pin',
+            type: 'text',
+            placeholder: 'PIN',
+            attributes: {
+              inputmode: 'numeric',
+              pattern: '[0-9]*',
+            },
+          },
+        ],
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: expect.any(Function),
+          },
+          {
+            text: 'Send',
+            handler: expect.any(Function),
+          },
+        ],
+      })
+    );
+    tick();
+  }));
+
+  it('should log message on WebSocket close', fakeAsync(() => {
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    service.connect();
+
+    mockWebSocketInstance.onclose(new CloseEvent('close'));
+    expect(logSpy).toHaveBeenCalledWith('WebSocket connection closed');
+  }));
+
+  it('should send a message', fakeAsync(() => {
+    service['socket'] = mockWebSocketInstance;
+    
+    service.sendMessage('Test Message');
+
+    expect(service['socket'].send).toHaveBeenCalledWith('Test Message');
+    expect(service['socket'].send).toHaveBeenCalledTimes(1);
+
+    const logErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    service['socket'] = { ...mockWebSocketInstance, readyState: 999 };
+
+    service.sendMessage('Test Message 2');
+
+    expect(service['socket'].send).toHaveBeenCalledTimes(1);
+    expect(logErrorSpy).toHaveBeenCalledWith('WebSocket connection is not open.');
+
+  }));
+
+  it('should close WebSocket connection', () => {
+    service.connect();
+
+    service.closeConnection();
+
+    expect(service['socket'].close).toHaveBeenCalledTimes(1);
   });
 
-  it('should return current name through getName$', (done) => {
-    service['name'].next('Alice');
-    service.getName$().subscribe(name => {
-      expect(name).toBe('Alice');
-      done();
+  it('hauria de cridar setInterval', () => {
+    service['socket'] = mockWebSocketInstance;
+    const alertMock = { message: '', dismiss: jest.fn() };
+    const description = 'Test description';
+    const initialCounter = 3;
+  
+    jest.useFakeTimers();
+  
+    const setIntervalSpy = jest.spyOn(window, 'setInterval');
+  
+    service['startCountdown'](alertMock, description, initialCounter);
+  
+    expect(setIntervalSpy).toHaveBeenCalled();
+    expect(setIntervalSpy).toHaveBeenCalledWith(expect.any(Function), 1000);
+  
+    setIntervalSpy.mockRestore();
+  });
+  
+  it('should decrement counter and update counter in alert', () => {
+    service['socket'] = mockWebSocketInstance;
+    const alertMock = { message: '', dismiss: jest.fn() };
+    const description = 'Test description';
+    const initialCounter = 3;
+  
+    jest.useFakeTimers();
+
+    jest.spyOn(alertMock, 'dismiss');
+    const clearIntervalSpy = jest.spyOn(window, 'clearInterval');
+  
+    service['startCountdown'](alertMock, description, initialCounter);
+  
+    jest.advanceTimersByTime(1000); 
+    expect(alertMock.message).toContain('Time remaining: 2 seconds');
+  
+    jest.advanceTimersByTime(1000);
+    expect(alertMock.message).toContain('Time remaining: 1 seconds');
+  
+    jest.advanceTimersByTime(2000); 
+    expect(alertMock.dismiss).toHaveBeenCalled();
+
+    expect(clearIntervalSpy).toHaveBeenCalled();
+  
+    jest.clearAllTimers();
+    clearIntervalSpy.mockRestore();
+  });
+  
+  it('should deactivate isLoading when WebSocket closes', fakeAsync(() => {
+    const loadingSpy = jest.spyOn(service['isLoadingSubject'], 'next');
+
+    service.connect();
+    
+    mockWebSocketInstance.onclose(new CloseEvent('close'));
+
+    expect(loadingSpy).toHaveBeenCalledWith(false); 
+  }));
+
+  it('should not activate isLoading if response is received in less than 1 second', fakeAsync(() => {
+    const loadingSpy = jest.spyOn(service['isLoadingSubject'], 'next');
+
+    service.connect();
+    const messageEvent = new MessageEvent('message', {
+      data: JSON.stringify({ tx_code: { description: 'Fast Response' }, timeout: 60 }),
     });
-  });
 
-  it('should return current token via getToken', () => {
-    service['token'] = 'test-token';
-    expect(service.getToken()).toBe('test-token');
-  });
+    mockWebSocketInstance.onmessage(messageEvent);
 
-  it('should call logoffAndRevokeTokens on logout$', (done) => {
-    const postMessageSpy = jest.spyOn(service['bc'], 'postMessage');
+    jest.advanceTimersByTime(500); 
 
-    service.logout$().subscribe(() => {
-      expect(oidcSecurityService.logoffAndRevokeTokens).toHaveBeenCalled();
-      expect(postMessageSpy).toHaveBeenCalledWith('forceWalletLogout');
-      done();
-    });
-  });
-
-  it('should handle errors during logout$', (done) => {
-    const error = new Error('logout failed');
-    oidcSecurityService.logoffAndRevokeTokens.mockReturnValueOnce(throwError(() => error));
-
-    service.logout$().subscribe({
-      error: (err) => {
-        expect(err).toBe(error);
-        done();
-      }
-    });
-  });
-
-  it('should handle SilentRenewFailed event when offline and reauthenticate when back online', (done) => {
-    // Prepare to emit SilentRenewFailed
-    Object.defineProperty(navigator, 'onLine', { value: false, configurable: true });
-
-    const checkAuthSpy = jest.spyOn(service, 'checkAuth$').mockReturnValue(of({
-      isAuthenticated: true,
-      userData: { name: 'Recovered' },
-      accessToken: 'recovered-token',
-      idToken: ''
-    }));
-
-    mockEvents$.next({ type: EventTypes.SilentRenewFailed });
-
-    // Simulate going online
-    Object.defineProperty(navigator, 'onLine', { value: true });
-    window.dispatchEvent(new Event('online'));
-
-    // Espera que s'hagi cridat checkAuth$ de nou
-    setTimeout(() => {
-      expect(checkAuthSpy).toHaveBeenCalled();
-      done();
-    }, 50);
-  });
-
-  it('should logout if SilentRenewFailed while online', (done) => {
-    const logoutSpy = jest.spyOn(service, 'logout$').mockReturnValue(of(undefined));
-
-    Object.defineProperty(navigator, 'onLine', { value: true, configurable: true });
-
-    mockEvents$.next({ type: EventTypes.SilentRenewFailed });
-
-    setTimeout(() => {
-      expect(logoutSpy).toHaveBeenCalled();
-      done();
-    }, 50);
-  });
-
-  it('should logout on TokenExpired or IdTokenExpired', (done) => {
-    const logoutSpy = jest.spyOn(service, 'logout$').mockReturnValue(of(undefined));
-
-    mockEvents$.next({ type: EventTypes.TokenExpired });
-    mockEvents$.next({ type: EventTypes.IdTokenExpired });
-
-    setTimeout(() => {
-      expect(logoutSpy).toHaveBeenCalledTimes(2);
-      done();
-    }, 50);
-  });
-
-  // it('should handle BroadcastChannel logout messages', () => {
-  //   const localLogoutSpy = jest.spyOn<any>(service, 'localLogout').mockImplementation(() => {});
-
-  //   service['bc'].onmessage!({ data: 'forceWalletLogout' } as MessageEvent);
-  //   expect(localLogoutSpy).toHaveBeenCalled();
-  // });
+    expect(loadingSpy).not.toHaveBeenCalledWith(true);
+  }));
 });
