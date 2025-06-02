@@ -20,7 +20,7 @@ import {
   authInterceptor
 } from 'angular-auth-oidc-client';
 import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
-import { IAM_PARAMS, IAM_POST_LOGOUT_URI } from './app/constants/iam.constants';
+import { IAM_PARAMS, IAM_POST_LOGIN_URI, IAM_POST_LOGOUT_URI, IAM_REDIRECT_URI } from './app/constants/iam.constants';
 
 document.addEventListener(
   'touchmove',
@@ -65,10 +65,10 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(IonicStorageModule.forRoot()),
     importProvidersFrom( AuthModule.forRoot({
       config: {
-        logLevel: 1,
-        postLoginRoute: '/tabs/home',
+        logLevel: 1, //todo remove
+        postLoginRoute: IAM_POST_LOGIN_URI,
         authority: environment.iam_url,
-        redirectUrl: `${window.location.origin}/callback`,
+        redirectUrl: IAM_REDIRECT_URI,
         postLogoutRedirectUri: IAM_POST_LOGOUT_URI,
         clientId: IAM_PARAMS.CLIENT_ID,
         scope: IAM_PARAMS.SCOPE,
@@ -77,6 +77,7 @@ bootstrapApplication(AppComponent, {
         useRefreshToken: true,
         ignoreNonceAfterRefresh: true,
         triggerRefreshWhenIdTokenExpired: false,
+        // not working; seems a library bug
         renewTimeBeforeTokenExpiresInSeconds: 30,
         autoUserInfo: false,
         //routes to which Authorization Bearer <access_token> is added
