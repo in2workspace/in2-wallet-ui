@@ -56,14 +56,14 @@ export class AuthenticationService {
                     next: ({ isAuthenticated }) => {
                       if (!isAuthenticated) {
                         console.warn('User still not authenticated after reconnect, logging out');
-                        this.logout$().subscribe();
+                        this.localLogout$().subscribe();
                       } else {
                         console.info('User reauthenticated successfully after reconnect');
                       }
                     },
                     error: (err) => {
                       console.error('Error while reauthenticating after reconnect:', err);
-                      this.logout$().subscribe();
+                      this.localLogout$().subscribe();
                     },
                     complete: () => {
                       window.removeEventListener('online', onlineHandler);
@@ -76,7 +76,7 @@ export class AuthenticationService {
 
             } else {
               console.error('Silent token refresh failed: online mode, proceeding to logout', event);
-              this.logout$().subscribe(()=>{this.router.navigate(['/home'], {});});
+              this.localLogout$().subscribe();
             }
             break;
 
