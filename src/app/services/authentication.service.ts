@@ -18,71 +18,74 @@ export class AuthenticationService {
   public constructor(public oidcSecurityService: OidcSecurityService,
     public events: PublicEventsService
   ) {
+    // mainly, handle silent renew errors and log when certain events occur
     this.subscribeToAuthEvents();
+    // checks if the user is authenticated and gets related data; doesn't redirect to login page; this is done by the auto login guards
     this.checkAuth$().subscribe();
+    // synchronize
     this.listenToCrossTabLogout();
   }
-    private subscribeToAuthEvents(): void {
-      this.events.registerForEvents()
-        .pipe(
-          filter((e) =>
-            [EventTypes.SilentRenewStarted, EventTypes.SilentRenewFailed, EventTypes.IdTokenExpired, EventTypes.TokenExpired].includes(e.type)
-          )
+
+  private subscribeToAuthEvents(): void {
+    this.events.registerForEvents()
+      .pipe(
+        filter((e) =>
+          [EventTypes.SilentRenewStarted, EventTypes.SilentRenewFailed, EventTypes.IdTokenExpired, EventTypes.TokenExpired].includes(e.type)
         )
-        .subscribe((event) => {
-          switch (event.type) {
-            case EventTypes.SilentRenewStarted:
-              console.log('Silent renew started' + Date.now());
-              break;
+      )
+      .subscribe((event) => {
+        switch (event.type) {
+          case EventTypes.SilentRenewStarted:
+            console.log('Silent renew started' + Date.now());
+            break;
 
-            case EventTypes.SilentRenewFailed:
-              const isOffline = !navigator.onLine;
+          case EventTypes.SilentRenewFailed:
+            const isOffline = !navigator.onLine;
 
-              if (isOffline) {
-                console.warn('Silent token refresh failed: offline mode', event);
+            if (isOffline) {
+              console.warn('Silent token refresh failed: offline mode', event);
 
-                const onlineHandler = () => {
-                  console.log('Connection restored. Retrying to authenticate...');
-                  this.checkAuth$().subscribe(
-                    {
-                      next: ({ isAuthenticated, userData, accessToken }) => {
-                        if (!isAuthenticated) {
-                          console.warn('User still not authenticated after reconnect, logging out');
-                          this.logout$().subscribe();
-                        } else {
-                          console.log('User reauthenticated successfully after reconnect');
-                        }
-                      },
-                      error: (err) => {
-                        console.error('Error while reauthenticating after reconnect:', err);
+              const onlineHandler = () => {
+                console.log('Connection restored. Retrying to authenticate...');
+                this.checkAuth$().subscribe(
+                  {
+                    next: ({ isAuthenticated, userData, accessToken }) => {
+                      if (!isAuthenticated) {
+                        console.warn('User still not authenticated after reconnect, logging out');
                         this.logout$().subscribe();
-                      },
-                      complete: () => {
-                        window.removeEventListener('online', onlineHandler);
+                      } else {
+                        console.log('User reauthenticated successfully after reconnect');
                       }
-                    });
-                  
-                };
+                    },
+                    error: (err) => {
+                      console.error('Error while reauthenticating after reconnect:', err);
+                      this.logout$().subscribe();
+                    },
+                    complete: () => {
+                      window.removeEventListener('online', onlineHandler);
+                    }
+                  });
+                
+              };
 
-                  window.addEventListener('online', onlineHandler);
+                window.addEventListener('online', onlineHandler);
 
-              } else {
-                console.error('Silent token refresh failed: online mode, proceeding to logout', event);
-                this.logout$().subscribe();
-              }
-              break;
-
-            case EventTypes.IdTokenExpired:
-            case EventTypes.TokenExpired:
-              console.error('Session expired:', event);
-              console.error('At: ' + Date.now());
+            } else {
+              console.error('Silent token refresh failed: online mode, proceeding to logout', event);
               this.logout$().subscribe();
-              break;
-          }
-        });
+            }
+            break;
+
+          case EventTypes.IdTokenExpired:
+          case EventTypes.TokenExpired:
+            console.error('Session expired:', event);
+            console.error('At: ' + Date.now());
+            break;
+        }
+      });
   }
   public checkAuth$(): Observable<LoginResponse> {
-    console.log('Check auth: Authenticating.')
+    console.log('Check auth: Authenticating.');
     return this.oidcSecurityService.checkAuth().pipe(
       tap(({ isAuthenticated, userData, accessToken }) => {
         if (isAuthenticated) {
