@@ -122,6 +122,16 @@ export class AuthenticationService {
 
 private localLogout$(): Observable<unknown> {
   console.info('Local logout.');
+  const idToken = this.oidcSecurityService.getIdToken();
+  const accessToken = this.oidcSecurityService.getAccessToken();
+  const state = this.oidcSecurityService.getState();
+  console.info('Before logout:');
+  console.info('ID token: ');
+  console.info(idToken);
+  console.info('Access token: ');
+  console.info(accessToken);
+  console.info('state');
+  console.info(state);
   return this.oidcSecurityService.logoff();
 }
 
