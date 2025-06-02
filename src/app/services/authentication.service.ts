@@ -1,6 +1,6 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { EventTypes, LoginResponse, OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
-import { BehaviorSubject, Observable, filter, throwError } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, filter, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
@@ -78,10 +78,27 @@ export class AuthenticationService {
 
             } else {
               console.error('Silent token refresh failed: online mode, proceeding to logout', event);
-              this.localLogout$().subscribe(()=>{
-                console.log('try manual redirect');
+              
+              const idToken = this.oidcSecurityService.getIdToken();
+              const accessToken = this.oidcSecurityService.getAccessToken();
+              const state = this.oidcSecurityService.getState();
+              console.info('Before logout:');
+              console.info('ID token: ');
+              console.info(idToken);
+              console.info('Access token: ');
+              console.info(accessToken);
+              console.info('state');
+              console.info(state);
+
+              // if(idToken && accessToken && state){
+              //   this.logout$().subscribe();
+              // }else{
+                console.log('manual logout: clear and authorize');
+                //todo clear only 
+                sessionStorage.removeItem('0-auth-client');
                 window.location.href = IAM_POST_LOGOUT_URI;
-              });
+                //todo broadcast
+              // }
             }
             break;
 
@@ -127,18 +144,6 @@ export class AuthenticationService {
 
 private localLogout$(): Observable<unknown> {
   console.info('Local logout.');
-  const idToken = this.oidcSecurityService.getIdToken();
-  const accessToken = this.oidcSecurityService.getAccessToken();
-  const state = this.oidcSecurityService.getState();
-  console.info('Before logout:');
-  console.info('ID token: ');
-  console.info(idToken);
-  console.info('Access token: ');
-  console.info(accessToken);
-  console.info('state');
-  console.info(state);
-
-
   return this.oidcSecurityService.logoff().pipe(tap(()=>{console.log('after logoff tap')}));
 }
 
