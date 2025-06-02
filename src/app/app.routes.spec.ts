@@ -4,26 +4,19 @@ import { Router } from '@angular/router';
 import { routes } from './app.routes';
 import { HttpClientModule } from '@angular/common/http';
 import { AutoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
-import * as Guards from './guards/logs-enabled.guard';
+import { logsEnabledGuard } from './guards/logs-enabled.guard';
 import { of } from 'rxjs';
 import { StsConfigLoader } from 'angular-auth-oidc-client';
-
-   jest.spyOn(Guards, 'logsEnabledGuard').mockImplementation(() => of(true));
 
 describe('App Routing', () => {
   let router: Router;
 
-  // Mocks
+  const mockLogsEnabledGuard = jest.fn().mockReturnValue(true);
+  
+  const mockAutoLoginPartialRoutesGuard = jest.fn().mockReturnValue(of(true));
+
   const mockStsConfigLoader = {
     getConfig: jest.fn().mockReturnValue(Promise.resolve({})),
-  };
-
-  const mockAutoLoginPartialRoutesGuard = {
-    canActivate: jest.fn().mockReturnValue(of(true)),
-  };
-
-  const mockLogsEnabledGuard = {
-    canActivate: jest.fn().mockReturnValue(of(true)),
   };
 
   beforeEach(async () => {
@@ -32,10 +25,9 @@ describe('App Routing', () => {
       providers: [
         { provide: StsConfigLoader, useValue: mockStsConfigLoader },
         { provide: AutoLoginPartialRoutesGuard, useValue: mockAutoLoginPartialRoutesGuard },
-        // { provide: logsEnabledGuard, useValue: mockLogsEnabledGuard },
+        { provide: logsEnabledGuard, useValue: mockLogsEnabledGuard },
       ],
     }).compileComponents();
-
 
     router = TestBed.inject(Router);
   });
