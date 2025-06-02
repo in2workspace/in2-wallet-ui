@@ -16,8 +16,7 @@ import {
 import { IonicStorageModule } from '@ionic/storage-angular';
 import {
   AuthModule,
-  AuthInterceptor,
-  authInterceptor
+  AuthInterceptor
 } from 'angular-auth-oidc-client';
 import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
 import { IAM_PARAMS, IAM_POST_LOGIN_URI, IAM_POST_LOGOUT_URI, IAM_REDIRECT_URI } from './app/constants/iam.constants';
@@ -65,7 +64,8 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(IonicStorageModule.forRoot()),
     importProvidersFrom( AuthModule.forRoot({
       config: {
-        logLevel: 1, //todo remove
+        // Uncomment to see library logs
+        // logLevel: 1,
         postLoginRoute: IAM_POST_LOGIN_URI,
         authority: environment.iam_url,
         redirectUrl: IAM_REDIRECT_URI,

@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { DestroyRef, inject, Injectable } from '@angular/core';
 import { EventTypes, LoginResponse, OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
-import { BehaviorSubject, Observable, filter, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, filter, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { IAM_POST_LOGOUT_URI } from '../constants/iam.constants';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 @Injectable({
@@ -14,21 +14,23 @@ export class AuthenticationService {
   private token!: string;
   private userData: { name:string } | undefined;
   private bc = new BroadcastChannel('auth');
+  private readonly destroy$ = inject(DestroyRef);
 
-  public constructor(public oidcSecurityService: OidcSecurityService,
-    public events: PublicEventsService
+  public constructor(public readonly oidcSecurityService: OidcSecurityService,
+    public readonly authEvents: PublicEventsService
   ) {
     // mainly, handle silent renew errors and log when certain events occur
     this.subscribeToAuthEvents();
     // checks if the user is authenticated and gets related data; doesn't redirect to login page; this is done by the auto login guards
     this.checkAuth$().subscribe();
-    // synchronize
+    // synchronize tabs when logging out
     this.listenToCrossTabLogout();
   }
 
   private subscribeToAuthEvents(): void {
-    this.events.registerForEvents()
+    this.authEvents.registerForEvents()
       .pipe(
+        takeUntilDestroyed(this.destroy$),
         filter((e) =>
           [EventTypes.SilentRenewStarted, EventTypes.SilentRenewFailed, EventTypes.IdTokenExpired, EventTypes.TokenExpired].includes(e.type)
         )
@@ -46,15 +48,15 @@ export class AuthenticationService {
               console.warn('Silent token refresh failed: offline mode', event);
 
               const onlineHandler = () => {
-                console.log('Connection restored. Retrying to authenticate...');
+                console.info('Connection restored. Retrying to authenticate...');
                 this.checkAuth$().subscribe(
                   {
-                    next: ({ isAuthenticated, userData, accessToken }) => {
+                    next: ({ isAuthenticated }) => {
                       if (!isAuthenticated) {
                         console.warn('User still not authenticated after reconnect, logging out');
                         this.logout$().subscribe();
                       } else {
-                        console.log('User reauthenticated successfully after reconnect');
+                        console.info('User reauthenticated successfully after reconnect');
                       }
                     },
                     error: (err) => {
@@ -68,7 +70,7 @@ export class AuthenticationService {
                 
               };
 
-                window.addEventListener('online', onlineHandler);
+              window.addEventListener('online', onlineHandler);
 
             } else {
               console.error('Silent token refresh failed: online mode, proceeding to logout', event);
@@ -85,19 +87,17 @@ export class AuthenticationService {
       });
   }
   public checkAuth$(): Observable<LoginResponse> {
-    console.log('Check auth: Authenticating.');
+    console.info('Checking authentication.');
     return this.oidcSecurityService.checkAuth().pipe(
       tap(({ isAuthenticated, userData, accessToken }) => {
         if (isAuthenticated) {
           this.updateUserData(userData, accessToken);
         } else {
-          //this part can only be reached if accessing the app through a route that has not AutoLoginPartialRoutesGuard
-          console.warn('Check auth: not authenticated')
+          console.warn('Checking authentication: not authenticated.')
         }
       }),
       catchError((err:any)=>{
-        //this part can only be reached if accessing the app through a route that has not AutoLoginPartialRoutesGuard
-        console.error('Check auth: error in initial authentication');
+        console.error('Checking authentication: error in initial authentication.');
         return throwError(()=>err);
       })
     );
@@ -113,25 +113,23 @@ export class AuthenticationService {
       console.log('Received Broadcast message: ', event);
       if (event.data === 'forceWalletLogout') {
           console.warn('Detected logout with revoke, logging out locally');
-          this.localLogout();
+          this.localLogout$().subscribe();
       }
     };
   }
 
-private localLogout(): void {
-  console.log('Redirect to origin.');
-  sessionStorage.clear();
-  window.location.assign(IAM_POST_LOGOUT_URI);
+private localLogout$(): Observable<unknown> {
+  console.info('Local logout.');
+  return this.oidcSecurityService.logoff();
 }
 
 
   public logout$(): Observable<any> {
-    console.log('Logout')
-    // since we store tokens in session storage we need to sync logout between different tabs
+    console.info('Logout: revoking tokens.')
 
     return this.oidcSecurityService.logoffAndRevokeTokens().pipe(
       tap(() => {
-        console.log('Logout with revoke completed.')
+        console.info('Logout with revoke completed.')
         this.bc.postMessage('forceWalletLogout');
       }),
       catchError((err:Error)=>{
