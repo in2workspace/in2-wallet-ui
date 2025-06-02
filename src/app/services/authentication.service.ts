@@ -3,6 +3,7 @@ import { EventTypes, LoginResponse, OidcSecurityService, PublicEventsService } f
 import { BehaviorSubject, Observable, filter, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -15,6 +16,7 @@ export class AuthenticationService {
   private userData: { name:string } | undefined;
   private bc = new BroadcastChannel('auth');
   private readonly destroy$ = inject(DestroyRef);
+  private readonly router = inject(Router);
 
   public constructor(public readonly oidcSecurityService: OidcSecurityService,
     public readonly authEvents: PublicEventsService
@@ -74,7 +76,7 @@ export class AuthenticationService {
 
             } else {
               console.error('Silent token refresh failed: online mode, proceeding to logout', event);
-              this.logout$().subscribe();
+              this.logout$().subscribe(()=>{this.router.navigate(['/home'], {});});
             }
             break;
 
