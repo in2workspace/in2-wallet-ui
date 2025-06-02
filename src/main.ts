@@ -64,8 +64,8 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(IonicStorageModule.forRoot()),
     importProvidersFrom( AuthModule.forRoot({
       config: {
-        // Uncomment to see library logs
-        // logLevel: 1,
+        // todo Uncomment to see library logs
+        logLevel: 1,
         postLoginRoute: IAM_POST_LOGIN_URI,
         authority: environment.iam_url,
         redirectUrl: IAM_REDIRECT_URI,
