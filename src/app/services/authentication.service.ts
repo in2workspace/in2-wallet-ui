@@ -13,8 +13,8 @@ export class AuthenticationService implements OnDestroy {
   public name$: Observable<string> = this.name.asObservable();
   private token: string = "";
   private userData: { name:string } | undefined;
-  private bc = new BroadcastChannel('auth');
-
+  private readonly broadcastChannel = new BroadcastChannel('auth');
+  private static readonly BROADCAST_FORCE_LOGOUT = 'forceWalletLogout'; 
   private readonly destroy$ = inject(DestroyRef);
   private readonly oidcSecurityService = inject(OidcSecurityService);
   private readonly authEvents = inject(PublicEventsService);
@@ -37,16 +37,17 @@ export class AuthenticationService implements OnDestroy {
         )
       )
       .subscribe((event) => {
+        const isOffline = !navigator.onLine;
+
         switch (event.type) {
           case EventTypes.SilentRenewStarted:
             console.log('Silent renew started' + Date.now());
             break;
 
-          // when this happens, the library cleans up the local auth data
+          // before this happens, the library cleans up the local auth data
           case EventTypes.SilentRenewFailed:
+            
             // the library generally doesn't throw/emit error when there is not internet connection, but the backup is needed in case the error is thrown
-            const isOffline = !navigator.onLine;
-
             if (isOffline) {
               console.warn('Silent token refresh failed: offline mode', event);
 
@@ -89,6 +90,9 @@ export class AuthenticationService implements OnDestroy {
         }
       });
   }
+
+  // don't logout in case user is not authenticated, since this will be executed also in non protected routes
+  // login auto guards are responsible for authentication, this method is mainly to get data
   public checkAuth$(): Observable<LoginResponse> {
     console.info('Checking authentication.');
     return this.oidcSecurityService.checkAuth().pipe(
@@ -96,11 +100,10 @@ export class AuthenticationService implements OnDestroy {
         if (isAuthenticated) {
           this.updateUserData(userData, accessToken);
         } else {
-          // don't logout here, since this will be executed also in non protected routes;
           console.warn('Checking authentication: not authenticated.');
         }
       }),
-      catchError((err:any)=>{
+      catchError((err:Error)=>{
         console.error('Checking authentication: error in initial authentication.');
         return throwError(()=>err);
       })
@@ -113,9 +116,9 @@ export class AuthenticationService implements OnDestroy {
   }
 
   public listenToCrossTabLogout(): void{
-    this.bc.onmessage = (event) => {
+    this.broadcastChannel.onmessage = (event) => {
       console.log('Received Broadcast message: ', event);
-      if (event.data === 'forceWalletLogout') {
+      if (event.data === AuthenticationService.BROADCAST_FORCE_LOGOUT) {
           console.warn('Detected logout with revoke, logging out locally');
           this.localLogout$().subscribe();
       }
@@ -128,13 +131,13 @@ private localLogout$(): Observable<unknown> {
 }
 
 
-  public logout$(): Observable<any> {
+  public logout$(): Observable<{}> {
     console.info('Logout: revoking tokens.')
 
     return this.oidcSecurityService.logoffAndRevokeTokens().pipe(
       tap(() => {
         console.info('Logout with revoke completed.');
-        this.bc.postMessage('forceWalletLogout');
+        this.broadcastChannel.postMessage(AuthenticationService.BROADCAST_FORCE_LOGOUT);
       }),
       catchError((err:Error)=>{
         console.error('Error when logging out with revoke.');
@@ -147,7 +150,7 @@ private localLogout$(): Observable<unknown> {
   public authorizeAndForceCrossTabLogout(){
     console.info('Authorize and broadcast logout.');
     this.oidcSecurityService.authorize();
-    this.bc.postMessage('forceWalletLogout');
+    this.broadcastChannel.postMessage(AuthenticationService.BROADCAST_FORCE_LOGOUT);
   }
 
   public getToken(): string {
@@ -158,6 +161,6 @@ private localLogout$(): Observable<unknown> {
   }
 
   ngOnDestroy(){
-    this.bc.close();
+    this.broadcastChannel.close();
   }
 }

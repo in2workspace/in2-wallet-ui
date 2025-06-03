@@ -149,7 +149,7 @@ describe('AuthenticationService', () => {
 
     // Espiar mètodes utilitzats en els switch
     jest.spyOn(service, 'checkAuth$').mockReturnValue(of({ isAuthenticated: false } as any));
-    jest.spyOn(service, 'logout$').mockReturnValue(of(null));
+    jest.spyOn(service, 'logout$').mockReturnValue(of({}));
     jest.spyOn(service, 'authorizeAndForceCrossTabLogout').mockImplementation();
 
     // Mock de registerForEvents
@@ -230,7 +230,7 @@ describe('listenToCrossTabLogout', () => {
 
   beforeEach(() => {
     logoutSpy = jest.spyOn(service, 'localLogout$' as any).mockReturnValue(of(undefined));
-    service['bc'] = new BroadcastChannel('wallet-channel') as any;
+
     service.listenToCrossTabLogout();
   });
 
@@ -242,8 +242,8 @@ describe('listenToCrossTabLogout', () => {
     const event = new MessageEvent('message', { data: 'forceWalletLogout' });
 
     // Simulem que el canal rep un missatge
-    if (service['bc'].onmessage) {
-      service['bc'].onmessage(event);
+    if (service['broadcastChannel'].onmessage) {
+      service['broadcastChannel'].onmessage(event);
     }
 
     expect(logoutSpy).toHaveBeenCalled();
@@ -252,8 +252,8 @@ describe('listenToCrossTabLogout', () => {
   it('should NOT call localLogout$ when message is not forceWalletLogout', () => {
     const event = new MessageEvent('message', { data: 'somethingElse' });
 
-    if (service['bc'].onmessage) {
-      service['bc'].onmessage(event);
+    if (service['broadcastChannel'].onmessage) {
+      service['broadcastChannel'].onmessage(event);
     }
 
     expect(logoutSpy).not.toHaveBeenCalled();
@@ -319,11 +319,6 @@ describe('localLogout$', () => {
     });
   });
 
-  // public authorizeAndForceCrossTabLogout(){
-  //   console.info('Authorize and broadcast logout.');
-  //   this.oidcSecurityService.authorize();
-  //   this.bc.postMessage('forceWalletLogout');
-  // }
   describe('authorizeAndForceCrossTabLogout', () => {
     it('should call authorize and post message', () => {
       const logSpy = jest.spyOn(console, 'info');
@@ -340,7 +335,7 @@ describe('localLogout$', () => {
   });
 
   it('should close the broadcast channel on destroy', () => {
-    const closeSpy = jest.spyOn(service['bc'], 'close');
+    const closeSpy = jest.spyOn(service['broadcastChannel'], 'close');
     service.ngOnDestroy();
     expect(closeSpy).toHaveBeenCalled();
   });
