@@ -1,11 +1,8 @@
 import { DestroyRef, inject, Injectable, OnDestroy } from '@angular/core';
 import { EventTypes, LoginResponse, OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
-import { BehaviorSubject, EMPTY, Observable, filter, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, filter, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
-import { IAM_POST_LOGOUT_URI } from '../constants/iam.constants';
 
 
 @Injectable({
@@ -79,9 +76,6 @@ export class AuthenticationService implements OnDestroy {
 
             } else {
               console.error('Silent token refresh failed: online mode, proceeding to logout', event);
-
-              //todo restore?
-              // sessionStorage.removeItem('0-auth-client');
               this.authorizeAndForceCrossTabLogout();
             }
             break;
