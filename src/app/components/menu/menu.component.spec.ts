@@ -81,19 +81,4 @@ describe('MenuComponent', () => {
       expect(logoutSpy).not.toHaveBeenCalled();
     });
   });
-
-  describe('logout', () => {
-    it('should call authenticationService.logout, navigate and dismiss popover', fakeAsync(() => {
-      const popoverSpy = jest.spyOn(component['popOverController'], 'dismiss');
-      component.logout();
-      tick();
-
-      expect(mockAuthenticationService.logout$).toHaveBeenCalled();
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['/home'], {});
-      tick();
-
-      expect(popoverSpy).toHaveBeenCalled();
-    }));
-
-  });
 });

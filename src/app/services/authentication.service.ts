@@ -1,4 +1,4 @@
-import { DestroyRef, inject, Injectable } from '@angular/core';
+import { DestroyRef, inject, Injectable, OnDestroy } from '@angular/core';
 import { EventTypes, LoginResponse, OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
 import { BehaviorSubject, EMPTY, Observable, filter, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
@@ -11,7 +11,7 @@ import { IAM_POST_LOGOUT_URI } from '../constants/iam.constants';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService {
+export class AuthenticationService implements OnDestroy {
   public name: BehaviorSubject<string> = new BehaviorSubject<string>('');
   public name$: Observable<string> = this.name.asObservable();
   private token: string = "";
@@ -101,7 +101,8 @@ export class AuthenticationService {
         if (isAuthenticated) {
           this.updateUserData(userData, accessToken);
         } else {
-          console.warn('Checking authentication: not authenticated.')
+          // don't logout here, since this will be executed also in non protected routes;
+          console.warn('Checking authentication: not authenticated.');
         }
       }),
       catchError((err:any)=>{
@@ -137,13 +138,13 @@ private localLogout$(): Observable<unknown> {
 
     return this.oidcSecurityService.logoffAndRevokeTokens().pipe(
       tap(() => {
-        console.info('Logout with revoke completed.')
+        console.info('Logout with revoke completed.');
         this.bc.postMessage('forceWalletLogout');
       }),
       catchError((err:Error)=>{
-        console.error('Error when logging out.');
+        console.error('Error when logging out with revoke.');
         console.error(err);
-        return throwError(()=>err)
+        return throwError(()=>err);
       })
     );
   }
@@ -151,7 +152,7 @@ private localLogout$(): Observable<unknown> {
   public authorizeAndForceCrossTabLogout(){
     console.info('Authorize and broadcast logout.');
     this.oidcSecurityService.authorize();
-    // todo broadcast?
+    this.bc.postMessage('forceWalletLogout');
   }
 
   public getToken(): string {
@@ -159,5 +160,9 @@ private localLogout$(): Observable<unknown> {
   }
   public getName$(): Observable<string> {
     return this.name$;
+  }
+
+  ngOnDestroy(){
+    this.bc.close();
   }
 }

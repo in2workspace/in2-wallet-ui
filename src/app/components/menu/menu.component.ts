@@ -17,7 +17,6 @@ export class MenuComponent {
   public constructor(
     private readonly popOverController: PopoverController,
     private readonly authenticationService: AuthenticationService,
-    private readonly router: Router
   ) {}
   public logoutOnKeydown(event: KeyboardEvent): void{
     if (event.key === 'Enter' || event.key === ' ') {
@@ -26,10 +25,7 @@ export class MenuComponent {
     }
   }
   public logout(): void {
-    this.authenticationService.logout$().subscribe(() => {
-      //todo restore
-      // this.router.navigate(['/home'], {});
-    });
+    this.authenticationService.logout$().subscribe();
     this.popOverController.dismiss();
   }
 }
