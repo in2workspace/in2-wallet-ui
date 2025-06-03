@@ -14,16 +14,16 @@ import { IAM_POST_LOGOUT_URI } from '../constants/iam.constants';
 export class AuthenticationService {
   public name: BehaviorSubject<string> = new BehaviorSubject<string>('');
   public name$: Observable<string> = this.name.asObservable();
-  private token!: string;
+  private token: string = "";
   private userData: { name:string } | undefined;
   private bc = new BroadcastChannel('auth');
-  private readonly destroy$ = inject(DestroyRef);
-  private readonly router = inject(Router);
 
-  public constructor(public readonly oidcSecurityService: OidcSecurityService,
-    public readonly authEvents: PublicEventsService
-  ) {
-    // mainly, handle silent renew errors and log when certain events occur
+  private readonly destroy$ = inject(DestroyRef);
+  private readonly oidcSecurityService = inject(OidcSecurityService);
+  private readonly authEvents = inject(PublicEventsService);
+
+  public constructor() {
+    // handle silent renew errors and log when certain events occur
     this.subscribeToAuthEvents();
     // checks if the user is authenticated and gets related data; doesn't redirect to login page; this is done by the auto login guards
     this.checkAuth$().subscribe();
@@ -45,6 +45,7 @@ export class AuthenticationService {
             console.log('Silent renew started' + Date.now());
             break;
 
+          // when this happens, the library cleans up the local auth data
           case EventTypes.SilentRenewFailed:
             const isOffline = !navigator.onLine;
 
@@ -58,14 +59,14 @@ export class AuthenticationService {
                     next: ({ isAuthenticated }) => {
                       if (!isAuthenticated) {
                         console.warn('User still not authenticated after reconnect, logging out');
-                        this.localLogout$().subscribe();
+                        this.logout$().subscribe();
                       } else {
                         console.info('User reauthenticated successfully after reconnect');
                       }
                     },
                     error: (err) => {
                       console.error('Error while reauthenticating after reconnect:', err);
-                      this.localLogout$().subscribe();
+                      this.authorizeAndForceCrossTabLogout();
                     },
                     complete: () => {
                       window.removeEventListener('online', onlineHandler);
@@ -78,32 +79,10 @@ export class AuthenticationService {
 
             } else {
               console.error('Silent token refresh failed: online mode, proceeding to logout', event);
-              
-              console.info('Before logout:');
-              const idToken = this.oidcSecurityService.getIdToken().subscribe(()=>{
-                console.info('ID token: ');
-                console.info(idToken);
-              });
-              const accessToken = this.oidcSecurityService.getAccessToken().subscribe(()=>{
-                console.info('Access token: ');
-                console.info(accessToken);
-              });
-              const state = this.oidcSecurityService.getState().subscribe(()=>{
 
-                console.info('state');
-                console.info(state);
-              });
-
-              // if(idToken && accessToken && state){
-              //   this.logout$().subscribe();
-              // }else{
-                console.log('manual logout: clear and authorize');
-                //todo clear only 
-                sessionStorage.removeItem('0-auth-client');
-                // window.location.href = IAM_POST_LOGOUT_URI;
-                this.oidcSecurityService.authorize();
-                //todo broadcast
-              // }
+              //todo restore?
+              // sessionStorage.removeItem('0-auth-client');
+              this.authorizeAndForceCrossTabLogout();
             }
             break;
 
@@ -167,6 +146,12 @@ private localLogout$(): Observable<unknown> {
         return throwError(()=>err)
       })
     );
+  }
+
+  public authorizeAndForceCrossTabLogout(){
+    console.info('Authorize and broadcast logout.');
+    this.oidcSecurityService.authorize();
+    // todo broadcast?
   }
 
   public getToken(): string {
