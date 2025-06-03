@@ -28,7 +28,7 @@ export class AuthenticationService implements OnDestroy {
     this.listenToCrossTabLogout();
   }
 
-  private subscribeToAuthEvents(): void {
+  public subscribeToAuthEvents(): void {
     this.authEvents.registerForEvents()
       .pipe(
         takeUntilDestroyed(this.destroy$),
@@ -44,6 +44,7 @@ export class AuthenticationService implements OnDestroy {
 
           // when this happens, the library cleans up the local auth data
           case EventTypes.SilentRenewFailed:
+            // the library generally doesn't throw/emit error when there is not internet connection, but the backup is needed in case the error is thrown
             const isOffline = !navigator.onLine;
 
             if (isOffline) {
