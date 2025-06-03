@@ -79,16 +79,20 @@ export class AuthenticationService {
             } else {
               console.error('Silent token refresh failed: online mode, proceeding to logout', event);
               
-              const idToken = this.oidcSecurityService.getIdToken();
-              const accessToken = this.oidcSecurityService.getAccessToken();
-              const state = this.oidcSecurityService.getState();
               console.info('Before logout:');
-              console.info('ID token: ');
-              console.info(idToken);
-              console.info('Access token: ');
-              console.info(accessToken);
-              console.info('state');
-              console.info(state);
+              const idToken = this.oidcSecurityService.getIdToken().subscribe(()=>{
+                console.info('ID token: ');
+                console.info(idToken);
+              });
+              const accessToken = this.oidcSecurityService.getAccessToken().subscribe(()=>{
+                console.info('Access token: ');
+                console.info(accessToken);
+              });
+              const state = this.oidcSecurityService.getState().subscribe(()=>{
+
+                console.info('state');
+                console.info(state);
+              });
 
               // if(idToken && accessToken && state){
               //   this.logout$().subscribe();
@@ -96,7 +100,8 @@ export class AuthenticationService {
                 console.log('manual logout: clear and authorize');
                 //todo clear only 
                 sessionStorage.removeItem('0-auth-client');
-                window.location.href = IAM_POST_LOGOUT_URI;
+                // window.location.href = IAM_POST_LOGOUT_URI;
+                this.oidcSecurityService.authorize();
                 //todo broadcast
               // }
             }
