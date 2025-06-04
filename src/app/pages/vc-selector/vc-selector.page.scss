@@ -4,6 +4,19 @@
   padding-left: 12px;
 }
 
+ion-button:focus {
+  --background: #067856;
+  --color: white;
+}
+ion-alert.custom-alert {   
+    --ion-text-color:black;
+    --backdrop-opacity: 0.7;
+  }
+
+.custom-close-button {
+  color: #000000;
+}
+
 .vc-selector-content {
   --ion-background-color: #DDE6F6 !important;
   box-shadow: none;
@@ -13,4 +26,9 @@
   --ion-background-color: #DDE6F6;
   background-color: #DDE6F6;
   box-shadow: none;
+}
+
+.vc-selector-alert {
+  border-radius: 2px;
+  max-width: 60%;
 }

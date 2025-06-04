@@ -106,7 +106,7 @@
     },
     "vc-selector":{
         "title":"Vc Selector",
-        "select-cred":"Select Credential",
+        "select-cred":"Select a Credential",
         "send-cred":"Send Credential",
         "ok-header": "Credential sent successfully",
         "ok-message":"Log in completed",
