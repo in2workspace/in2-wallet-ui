@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { QRCodeModule } from 'angularx-qrcode';
 import { WalletService } from 'src/app/services/wallet.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { VcViewComponent } from '../../components/vc-view/vc-view.component';
 import { VCReply } from 'src/app/interfaces/verifiable-credential-reply';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import {VerifiableCredentialSubjectDataNormalizer} from 'src/app/interfaces/verifiable-credential-subject-data-normalizer';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+// todo: show only VCs with powers to login
+// todo: if user has only one VC, use this directly
 @Component({
   selector: 'app-vc-selector',
   templateUrl: './vc-selector.page.html',
@@ -25,14 +28,12 @@ import {VerifiableCredentialSubjectDataNormalizer} from 'src/app/interfaces/veri
     VcViewComponent,
   ],
 })
-// eslint-disable-next-line @angular-eslint/component-class-suffix
-export class VcSelectorPage implements OnInit {
+export class VcSelectorPage {
   public isClick: boolean[] = [];
   public selCredList: VerifiableCredential[] = [];
   public credList: VerifiableCredential[] = [];
   public credDataList: VerifiableCredential[] = [];
   public size = 300;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public executionResponse: any;
   public userName = '';
   public isAlertOpen = false;
@@ -48,36 +49,42 @@ export class VcSelectorPage implements OnInit {
   };
 
   public constructor(
-    private router: Router,
-    private walletService: WalletService,
-    private route: ActivatedRoute,
-    public translate: TranslateService,
-    private alertController: AlertController
+    private readonly router: Router,
+    private readonly walletService: WalletService,
+    private readonly route: ActivatedRoute,
+    public readonly translate: TranslateService,
+    private readonly alertController: AlertController
   ) {
-    this.route.queryParams.subscribe((params) => {
+      this.route.queryParams.pipe(takeUntilDestroyed()).subscribe((params) => {
+        this.getExecutionParamsFromQueryParams(params);
+        this.formatCredList();
+        this.resetIsClickList();
+    });
+  }
+
+  public getExecutionParamsFromQueryParams(params: Params){
+      console.log('updating params in vc-selector');
       this.executionResponse = JSON.parse(params['executionResponse']);
       this._VCReply.redirectUri = this.executionResponse['redirectUri'];
       this._VCReply.state = this.executionResponse['state'];
       this._VCReply.nonce = this.executionResponse['nonce'];
-    });
   }
 
-  public ngOnInit() {
-    this.credList = this.executionResponse['selectableVcList'];
-
+  // Normalize each credential, updating its credentialSubject property
+  public formatCredList(){
+    console.log('[VC-selector: Formatting credentials list...');
+    const unNormalizedCredList: VerifiableCredential[] = this.executionResponse['selectableVcList'];
     const normalizer = new VerifiableCredentialSubjectDataNormalizer();
-
-    // Normalize each credential, updating its credentialSubject property
-    this.credList = this.credList.map(cred => {
+    this.credList = [...unNormalizedCredList].reverse().map(cred => {
       if (cred.credentialSubject) {
         cred.credentialSubject = normalizer.normalizeLearCredentialSubject(cred.credentialSubject);
       }
       return cred;
     });
+  }
 
-    this.credList.forEach(() => {
-      this.isClick.push(false);
-    });
+  public resetIsClickList(){
+    this.isClick = this.credList.map(() => false);
   }
 
   public isClicked(index: number) {
@@ -116,11 +123,8 @@ export class VcSelectorPage implements OnInit {
         next: () => {
           this.okMessage();
         },
-        error: async (err) => {
-          console.error(err);
-          await this.errorMessage(err.status);
-          this.router.navigate(['/tabs/home']);
-          this.selCredList = [];
+        error: err => {
+          this.handleError(err);
         },
         complete: () => {
           this.selCredList = [];
@@ -129,7 +133,15 @@ export class VcSelectorPage implements OnInit {
     }
   }
 
-  private async errorMessage(statusCode: number) {
+private async handleError(err: any) {
+  console.error(err);
+  await this.errorMessage(err.status);
+  this.router.navigate(['/tabs/home']);
+  this.selCredList = [];
+}
+
+
+  public async errorMessage(statusCode: number) {
     let messageText = '';
 
     if (statusCode >= 500) {
@@ -167,7 +179,7 @@ export class VcSelectorPage implements OnInit {
     await alert.onDidDismiss();
   }
 
-  private async okMessage() {
+  public async okMessage() {
     const alert = await this.alertController.create({
       message: `
         <div style="display: flex; align-items: center; gap: 50px;">

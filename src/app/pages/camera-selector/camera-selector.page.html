@@ -9,9 +9,11 @@
             @if(availableDevices$().length < 1){
               <ion-select-option value="">{{"camera-selector.no-device" | translate}}</ion-select-option>
             }
-            <ion-select-option *ngFor="let camera of availableDevices$()" [value]="camera.deviceId">
+            @for(camera of availableDevices$(); track camera){
+            <ion-select-option [value]="camera.deviceId">
               {{ camera.label}}
             </ion-select-option>
+            }
           </ion-select>
           @if(isChangingDevice){
             <div class="switching">

@@ -106,7 +106,7 @@
     },
     "vc-selector":{
         "title":"Selector de VC",
-        "select-cred":"Selecciona Credencial",
+        "select-cred":"Selecciona una Credencial",
         "send-cred":"Envia Credencial",
         "ok-header": "Enhorabona",
         "ok-message":"Login correcte",
