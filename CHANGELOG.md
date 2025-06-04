@@ -9,8 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In the credentials selector page, show the updated credentials list
 
 ### Changed
-- In the credentials selector page, show a text indicating to select a credential
-- In the credentials selector page, order the list in the same order than in credentials page
+- Enhance credentials selector page: show a text indicating to select a credential and show the list in the same order than in credentials page
 
 ## [v1.9.4](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.9.4)
 ### Changed
