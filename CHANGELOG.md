@@ -5,8 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [v1.9.5](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.9.5)
+### Fixed
+- In the credentials selector page, show the updated credentials list
+
 ### Changed
-- Update the credentials list that is displayed in credentials selector page when logging in
+- In the credentials selector page, show a text indicating to select a credential
+- In the credentials selector page, order the list in the same order than in credentials page
 
 ## [v1.9.4](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.9.4)
 ### Changed
