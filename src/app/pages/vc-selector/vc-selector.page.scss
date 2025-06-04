@@ -1,20 +1,7 @@
-.boton-fijo {
-  position: fixed;
-  left: 0;
-  bottom: 10px;
-  right: 0;
-}
-ion-button:focus {
-  --background: #067856;
-  --color: white;
-}
-ion-alert.custom-alert {   
-    --ion-text-color:black;
-    --backdrop-opacity: 0.7;
-  }
-
-.custom-close-button {
-  color: #000000;
+.select-text{
+  font-weight: 700;
+  padding-top: 12px;
+  padding-left: 12px;
 }
 
 .vc-selector-content {
@@ -26,9 +13,4 @@ ion-alert.custom-alert {
   --ion-background-color: #DDE6F6;
   background-color: #DDE6F6;
   box-shadow: none;
-}
-
-.vc-selector-alert {
-  border-radius: 2px;
-  max-width: 60%;
 }
