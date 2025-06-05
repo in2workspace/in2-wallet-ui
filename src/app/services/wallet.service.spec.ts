@@ -301,7 +301,7 @@ describe('WalletService', () => {
     const req = httpTestingController.expectOne(
       `${
         environment.server_url +
-        SERVER_PATH.CREDENTIALS_BY_ID +
+        SERVER_PATH.CREDENTIALS + '/' +
         VC
       }`
     );

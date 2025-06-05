@@ -1,9 +1,9 @@
-.boton-fijo {
-  position: fixed;
-  left: 0;
-  bottom: 10px;
-  right: 0;
+.select-text{
+  font-weight: 700;
+  padding-top: 12px;
+  padding-left: 12px;
 }
+
 ion-button:focus {
   --background: #067856;
   --color: white;
