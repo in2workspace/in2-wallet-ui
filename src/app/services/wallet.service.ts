@@ -97,11 +97,12 @@ export class WalletService {
   public deleteVC(VC: string) {
     return this.http.delete<string>(
       environment.server_url +
-      SERVER_PATH.CREDENTIALS_BY_ID +
+      SERVER_PATH.CREDENTIALS + '/' +
         VC,
       options
     );
   }
+  
   public requestSignature(credentialId: string): Observable<HttpResponse<string>> {
     const options = {
       observe: 'response' as const,
