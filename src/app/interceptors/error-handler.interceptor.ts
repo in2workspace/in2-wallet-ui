@@ -10,6 +10,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ToastServiceHandler } from '../services/toast.service';
 import { SERVER_PATH } from '../constants/api.constants';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
@@ -27,26 +28,27 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((errorResp: HttpErrorResponse) => {
         let errMessage = errorResp.error?.message || errorResp.message || 'Unknown Http error';
-        let errStatus = errorResp.status ?? errorResp.error?.status;
+        const errStatus = errorResp.status ?? errorResp.error?.status;
 
         //DONT'T SHOW POPUP CASES
+        // get credentials endpoint
         if ( //todo review this handler
-          errMessage?.startsWith('The credentials list is empty') &&
-          request.url.endsWith(SERVER_PATH.CREDENTIALS)
+          request.url.endsWith(SERVER_PATH.CREDENTIALS) && errMessage?.startsWith('The credentials list is empty')
         ) {
           this.logHandledSilentlyErrorMsg(errMessage);
           return throwError(() => errorResp);
         }
+        // presentation endpoint (login with VC)
         if(request.url.endsWith(SERVER_PATH.VERIFIABLE_PRESENTATION))
         {
           this.logHandledSilentlyErrorMsg(errMessage);
           return throwError(() => errorResp);
         } 
-        if(errMessage?.startsWith('No internet connection')){
+        // IAM endpoint
+        if (request.url.startsWith(environment.iam_url)) {
           this.logHandledSilentlyErrorMsg(errMessage);
           return throwError(() => errorResp);
         }
-
         //SHOW POPUP CASES
         //same-device credential offer request
         if(request.url.endsWith(
@@ -71,8 +73,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           {
             errMessage = 'There was a problem processing the QR. It might be invalid or already have been used';
           }
-        }else if(errStatus === 0){
-          errMessage = 'No internet connection'
         }
         this.toastServiceHandler
           .showErrorAlert(errMessage)

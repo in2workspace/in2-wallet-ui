@@ -11,17 +11,12 @@ import { StsConfigLoader } from 'angular-auth-oidc-client';
 describe('App Routing', () => {
   let router: Router;
 
-  // Mocks
+  const mockLogsEnabledGuard = jest.fn().mockReturnValue(true);
+  
+  const mockAutoLoginPartialRoutesGuard = jest.fn().mockReturnValue(of(true));
+
   const mockStsConfigLoader = {
     getConfig: jest.fn().mockReturnValue(Promise.resolve({})),
-  };
-
-  const mockAutoLoginPartialRoutesGuard = {
-    canActivate: jest.fn().mockReturnValue(of(true)),
-  };
-
-  const mockLogsEnabledGuard = {
-    canActivate: jest.fn().mockReturnValue(of(true)),
   };
 
   beforeEach(async () => {

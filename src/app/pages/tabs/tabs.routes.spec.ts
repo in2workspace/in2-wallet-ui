@@ -13,7 +13,7 @@ describe('App Routes', () => {
   beforeEach(async () => {
 
     const mockAutoLoginPartialRoutesGuard = {
-      canActivate: jest.fn().mockReturnValue(true),
+      canActivateChild: jest.fn().mockReturnValue(true),
     };
 
     const mockLogsEnabledGuard = {
@@ -86,22 +86,30 @@ describe('App Routes', () => {
     expect(location.path()).toBe('/home');
   });
 
-  it('should apply AutoLoginPartialRoutesGuard on /home', async () => {
+  it('should apply AutoLoginPartialRoutesGuard on /', async () => {
     const mockGuard = TestBed.inject(AutoLoginPartialRoutesGuard);
-    jest.spyOn(mockGuard, 'canActivate');
-    await router.navigate(['/home']);
-    expect(mockGuard.canActivate).toHaveBeenCalled();
+    jest.spyOn(mockGuard, 'canActivateChild');
+    await router.navigate(['/']);
+    expect(mockGuard.canActivateChild).toHaveBeenCalled();
   });
 
-  it('should apply AutoLoginPartialRoutesGuard and logsEnabledGuard on /logs', async () => {
-    const mockAutoLoginGuard = TestBed.inject(AutoLoginPartialRoutesGuard);
+  it('should call canActivateChild guard when navigating between child routes', async () => {
+  const mockGuard = TestBed.inject(AutoLoginPartialRoutesGuard);
+  jest.spyOn(mockGuard, 'canActivateChild');
+
+  await router.navigate(['/home']);
+  expect(mockGuard.canActivateChild).toHaveBeenCalledTimes(1);
+
+  await router.navigate(['/credentials']);
+  expect(mockGuard.canActivateChild).toHaveBeenCalledTimes(2);
+});
+
+  it('should apply logsEnabledGuard on /logs', async () => {
     const mockLogsGuard = TestBed.inject(logsEnabledGuard);
 
-    jest.spyOn(mockAutoLoginGuard, 'canActivate');
     jest.spyOn(mockLogsGuard, 'canActivate');
 
     await router.navigate(['/logs']);
-    expect(mockAutoLoginGuard.canActivate).toHaveBeenCalled();
     expect(mockLogsGuard.canActivate).toHaveBeenCalled();
   });
 });

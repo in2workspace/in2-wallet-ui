@@ -1,5 +1,5 @@
 <ion-list class="logout-list">
-    <ion-item button (click)="logout()">
+    <ion-item button (click)="logout()" (keydown)="logoutOnKeydown($event)">
       {{"menu.logout"|translate}}
     </ion-item>
   </ion-list>

@@ -83,8 +83,7 @@ describe('AppComponent', () => {
     } as unknown as jest.Mocked<Router>;
 
     authenticationServiceMock = {
-      getName: jest.fn().mockReturnValue(of('John Doe')),
-      logout: jest.fn().mockReturnValue(of(null)),
+      getName$: jest.fn().mockReturnValue(of('John Doe')),
     } as unknown as jest.Mocked<AuthenticationService>;
 
     storageServiceMock = {
@@ -251,17 +250,11 @@ describe('AppComponent', () => {
     jest.restoreAllMocks();
   });
 
-  it('should navigate to /home on logout', () => {
-    component.logout();
-    expect(authenticationServiceMock.logout).toHaveBeenCalled();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/home'], {});
-  });
-
   it('should open a popover on Enter or Space keydown', () => {
     const mockEvent = new KeyboardEvent('keydown', { key: 'Enter' });
     jest.spyOn(component, 'openPopover').mockImplementation();
 
-    component.handleKeydown(mockEvent);
+    component.openPopoverByKeydown(mockEvent);
     expect(component.openPopover).toHaveBeenCalledWith(mockEvent);
   });
 

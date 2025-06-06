@@ -3,29 +3,18 @@ import { WebsocketService } from './websocket.service';
 import { AuthenticationService } from './authentication.service';
 import { AlertController } from '@ionic/angular';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TranslateModule } from '@ngx-translate/core';
 import { WEBSOCKET_PATH } from '../constants/api.constants';
+
+
+//todo mock broadcast channel
 
 let alertControllerMock: any;
 let mockWebSocketInstance: any;
 let mockWebSocketConstructor: any;
 let originalWebSocket: any;
 let service: WebsocketService;
-
-class MockOidcSecurityService {
-  checkAuth() {
-    return of({ userData: {}, accessToken: 'fake-token' });
-  }
-
-  getToken() {
-    return 'fake-token';
-  }
-
-  logoff() {}
-}
 
 class MockAlertController {
   create() {
@@ -37,8 +26,12 @@ class MockAlertController {
 }
 
 describe('WebsocketService', () => {
+  let mockAuthService: any;
 
   beforeEach(() => {
+    mockAuthService = {
+      getToken: jest.fn().mockReturnValue('fake-token')
+    }
 
     alertControllerMock = {
       create: jest.fn().mockResolvedValue({
@@ -56,9 +49,8 @@ describe('WebsocketService', () => {
       imports: [HttpClientTestingModule, TranslateModule.forRoot()],
       providers: [
         WebsocketService,
-        AuthenticationService,
-        { provide: AlertController, useValue: alertControllerMock },
-        { provide: OidcSecurityService, useClass: MockOidcSecurityService },
+        { provide: AuthenticationService, useValue: mockAuthService },
+        { provide: AlertController, useValue: alertControllerMock }
       ],
     });
 

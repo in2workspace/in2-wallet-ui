@@ -35,11 +35,11 @@ module.exports = {
     '/dist/',
     // '/src/app/app.routes',
     // '/src/app/app.component',
-    // '/src/app/components/(?!barcode)', 
+    // '/src/app/components/', 
     // '/src/app/guards/',
     // '/src/app/interceptors',
     // '/src/app/interfaces',
     // '/src/app/pages/',
-    // '/src/app/services/(?!camera.service)'
+    // '/src/app/services/(?!authentication)'
   ]
 };

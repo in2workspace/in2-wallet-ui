@@ -4,9 +4,9 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule, PopoverController } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
-import { LogoutPage } from './pages/logout/logout.page';
+import { MenuComponent } from './components/menu/menu.component';
 import { StorageService } from './services/storage.service';
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { CameraService } from './services/camera.service';
 import { environment } from 'src/environments/environment';
 import { WebsocketService } from './services/websocket.service';
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
   private readonly websocket = inject(WebsocketService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router)
-  public userName = this.authenticationService.getName();
+  public userName = this.authenticationService.getName$();
   public isCallbackRoute = false;
   public isBaseRoute = false;
   public readonly logoSrc = environment.customizations.logo_src;
@@ -139,19 +139,10 @@ export class AppComponent implements OnInit {
     });
   }
 
-  public logout(): void {
-    this.authenticationService.logout()
-    .pipe(take(1))
-    .subscribe(() => {
-      this.router.navigate(['/home'], {});
-    });
-  }
-
-  public handleKeydown(event: KeyboardEvent, action = 'request'): void {
+  public openPopoverByKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter' || event.key === ' ') {
         this.openPopover(event);
-
-      event.preventDefault();
+        event.preventDefault();
     }
   }
 
@@ -160,7 +151,7 @@ export class AppComponent implements OnInit {
       return; 
     }
     const popover = await this.popoverController.create({
-      component: LogoutPage,
+      component: MenuComponent,
       event: ev,
       translucent: true,
       cssClass: 'custom-popover',

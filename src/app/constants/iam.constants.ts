@@ -3,3 +3,7 @@ export const IAM_PARAMS = Object.freeze({
     SCOPE: 'openid profile email offline_access',
     GRANT_TYPE: 'code'
   });
+
+export const IAM_POST_LOGOUT_URI = `${window.location.origin}`;
+export const IAM_POST_LOGIN_ROUTE = '/tabs/home';
+export const IAM_REDIRECT_URI = `${window.location.origin}/callback`;
