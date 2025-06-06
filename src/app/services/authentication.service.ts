@@ -33,7 +33,12 @@ export class AuthenticationService implements OnDestroy {
       .pipe(
         takeUntilDestroyed(this.destroy$),
         filter((e) =>
-          [EventTypes.SilentRenewStarted, EventTypes.SilentRenewFailed, EventTypes.IdTokenExpired, EventTypes.TokenExpired].includes(e.type)
+          [
+            EventTypes.SilentRenewStarted, 
+            EventTypes.SilentRenewFailed, 
+            EventTypes.IdTokenExpired, 
+            EventTypes.TokenExpired
+          ].includes(e.type)
         )
       )
       .subscribe((event) => {
@@ -41,13 +46,12 @@ export class AuthenticationService implements OnDestroy {
 
         switch (event.type) {
           case EventTypes.SilentRenewStarted:
-            console.log('Silent renew started' + Date.now());
+            console.info('Silent renew started' + Date.now());
             break;
 
           // before this happens, the library cleans up the local auth data
           case EventTypes.SilentRenewFailed:
             
-            // the library generally doesn't throw/emit error when there is not internet connection, but the backup is needed in case the error is thrown
             if (isOffline) {
               console.warn('Silent token refresh failed: offline mode', event);
 
@@ -58,7 +62,7 @@ export class AuthenticationService implements OnDestroy {
                     next: ({ isAuthenticated }) => {
                       if (!isAuthenticated) {
                         console.warn('User still not authenticated after reconnect, logging out');
-                        this.logout$().subscribe();
+                        this.authorizeAndForceCrossTabLogout();
                       } else {
                         console.info('User reauthenticated successfully after reconnect');
                       }
@@ -91,8 +95,6 @@ export class AuthenticationService implements OnDestroy {
       });
   }
 
-  // don't logout in case user is not authenticated, since this will be executed also in non protected routes
-  // login auto guards are responsible for authentication, this method is mainly to get data
   public checkAuth$(): Observable<LoginResponse> {
     console.info('Checking authentication.');
     return this.oidcSecurityService.checkAuth().pipe(
@@ -117,7 +119,7 @@ export class AuthenticationService implements OnDestroy {
 
   public listenToCrossTabLogout(): void{
     this.broadcastChannel.onmessage = (event) => {
-      console.log('Received Broadcast message: ', event);
+      console.info('Received Broadcast message: ', event);
       if (event.data === AuthenticationService.BROADCAST_FORCE_LOGOUT) {
           console.warn('Detected logout with revoke, logging out locally');
           this.localLogout$().subscribe();
@@ -125,11 +127,10 @@ export class AuthenticationService implements OnDestroy {
     };
   }
 
-private localLogout$(): Observable<unknown> {
-  console.info('Local logout.');
-  return this.oidcSecurityService.logoff().pipe(tap(()=>{console.log('after logoff tap')}));
-}
-
+  private localLogout$(): Observable<unknown> {
+    console.info('Local logout.');
+    return this.oidcSecurityService.logoff();
+  }
 
   public logout$(): Observable<{}> {
     console.info('Logout: revoking tokens.')

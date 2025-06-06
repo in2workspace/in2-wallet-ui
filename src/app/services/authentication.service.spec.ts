@@ -157,7 +157,7 @@ describe('AuthenticationService', () => {
   });
 
   it('should handle SilentRenewStarted', () => {
-    const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+    const consoleSpy = jest.spyOn(console, 'info').mockImplementation();
 
     service.subscribeToAuthEvents();
 

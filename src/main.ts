@@ -64,8 +64,7 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(IonicStorageModule.forRoot()),
     importProvidersFrom( AuthModule.forRoot({
       config: {
-        // todo Uncomment to see library logs
-        logLevel: 1,
+        // You can add "logLevel: 1" to see library logs
         postLoginRoute: IAM_POST_LOGIN_ROUTE,
         authority: environment.iam_url,
         redirectUrl: IAM_REDIRECT_URI,
@@ -77,10 +76,7 @@ bootstrapApplication(AppComponent, {
         useRefreshToken: true,
         ignoreNonceAfterRefresh: true,
         triggerRefreshWhenIdTokenExpired: false,
-        // not working; seems a library bug
-        renewTimeBeforeTokenExpiresInSeconds: 30,
         autoUserInfo: false,
-        //routes to which Authorization Bearer <access_token> is added
         secureRoutes:[environment.server_url]
       }
     })
