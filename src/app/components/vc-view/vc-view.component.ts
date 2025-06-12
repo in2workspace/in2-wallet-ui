@@ -186,16 +186,18 @@ export class VcViewComponent implements OnInit {
       event.preventDefault();
     }
   }
+
+  //TODO: revisar
   get isEmployeeCredential(): boolean {
-    return this.credentialType === 'EmployeeCredentialSubject';
+    return this.credentialType.includes('Employee');
   }
 
   get isMachineCredential(): boolean {
-    return this.credentialType === 'MachineCredentialSubject';
+    return this.credentialType.includes('Machine');
   }
 
   get isLabelCredential(): boolean {
-    return this.credentialType === 'LabelCredentialSubject';
+    return this.credentialType.includes('Label');
   }
 
   get employeeSubject(): EmployeeCredentialSubject {
