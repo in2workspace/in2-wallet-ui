@@ -173,10 +173,14 @@ export class VcViewComponent implements OnInit {
     }
   }
   get isEmployeeCredential(): boolean {
+    console.log(this.credentialInput.credentialSubject.constructor.name);
+
     return this.credentialInput.credentialSubject.constructor.name === 'EmployeeCredentialSubject';
   }
 
   get isMachineCredential(): boolean {
+    
+    console.log(this.credentialInput.credentialSubject.constructor.name);
     return this.credentialInput.credentialSubject.constructor.name === 'MachineCredentialSubject';
   }
 
