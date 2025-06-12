@@ -31,6 +31,8 @@ export class VcViewComponent implements OnInit {
   @Output() public vcEmit: EventEmitter<VerifiableCredential> =
     new EventEmitter();
 
+  credentialType!: string;
+
   public cred_cbor = '';
   public isAlertOpenNotFound = false;
   public isAlertExpirationOpenNotFound = false;
@@ -84,6 +86,18 @@ export class VcViewComponent implements OnInit {
   public ngOnInit(): void {
     this.checkExpirationVC();
     this.checkAvailableFormats();
+    this.credentialType = this.getSpecificType(this.credentialInput);
+  }
+
+  public getSpecificType(vc: VerifiableCredential): string {
+    const [a, b] = vc.type ?? [];
+    if (a === 'VerifiableCredential') {
+      return b;
+    } else if (b === 'VerifiableCredential') {
+      return a;
+    } else {
+      return 'VerifiableCredential';
+    }
   }
 
   public checkAvailableFormats(): void {
@@ -173,19 +187,15 @@ export class VcViewComponent implements OnInit {
     }
   }
   get isEmployeeCredential(): boolean {
-    console.log(this.credentialInput.credentialSubject.constructor.name);
-
-    return this.credentialInput.credentialSubject.constructor.name === 'EmployeeCredentialSubject';
+    return this.credentialType === 'EmployeeCredentialSubject';
   }
 
   get isMachineCredential(): boolean {
-    
-    console.log(this.credentialInput.credentialSubject.constructor.name);
-    return this.credentialInput.credentialSubject.constructor.name === 'MachineCredentialSubject';
+    return this.credentialType === 'MachineCredentialSubject';
   }
 
   get isLabelCredential(): boolean {
-    return this.credentialInput.credentialSubject.constructor.name === 'LabelCredentialSubject';
+    return this.credentialType === 'LabelCredentialSubject';
   }
 
   get employeeSubject(): EmployeeCredentialSubject {
