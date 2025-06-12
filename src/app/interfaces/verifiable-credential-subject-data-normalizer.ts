@@ -31,7 +31,7 @@ export class VerifiableCredentialSubjectDataNormalizer {
     // Create a copy to avoid modifying the original object
     const normalizedData = { ...data };
 
-    if (normalizedData.mandate) {
+    if ('mandate' in normalizedData && normalizedData.mandate) {
 
       const mandate = normalizedData.mandate;
 
@@ -42,7 +42,7 @@ export class VerifiableCredentialSubjectDataNormalizer {
 
       if (mandate.power && Array.isArray(mandate.power)) {
         // Normalize each power object in the array
-        mandate.power = mandate.power.map(p => this.normalizePower(p));
+        mandate.power = mandate.power.map((p: RawPower) => this.normalizePower(p));
       }
     }
     return normalizedData;

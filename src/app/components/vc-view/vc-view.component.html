@@ -40,13 +40,36 @@
   <div style="height: 2%"></div>
   <ion-col>
     <ion-col style="margin-inline: 20px">
-      <img
-        width="70"
-        height="70"
-        margin-left="20px"
-        alt
-        src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg"
-      />
+      @if(isEmployeeCredential){
+
+      }
+      <div *ngIf="isEmployeeCredential">
+        <img
+          width="70"
+          height="70"
+          margin-left="20px"
+          alt
+          src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg"
+        />
+      </div>
+      <div *ngIf="isMachineCredential">
+        <img
+          width="70"
+          height="70"
+          margin-left="20px"
+          alt
+          src="https://www.freeiconspng.com/uploads/basic-server-icon-18.png"
+        />        
+      </div>
+      <div *ngIf="isLabelCredential">
+        <img
+          width="70"
+          height="70"
+          margin-left="20px"
+          alt
+          src="https://www.freestock.com/450/freestock_572864440.jpg"
+        />
+      </div>
     </ion-col>
     <ion-col>
       <ion-col size="12">
@@ -71,55 +94,111 @@
               }}
             </ion-card-title>
           </ion-row>
-          <ion-row>
-            <ion-card-title
-              style="
-                color: grey;
-                font-size: 12px;
-                font-weight: bold;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-              "
-            >
-              {{
-                credentialInput.credentialSubject.mandate.mandator
-                  .organization
-              }}
-            </ion-card-title>
-          </ion-row>
-          <ion-row>
-            <ion-card-title
-              style="
-                color: black;
-                font-size: 12px;
-                font-weight: bold;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-              "
-            >
-              {{
-                credentialInput.credentialSubject.mandate.mandatee.firstName
-              }}
-            </ion-card-title>
-          </ion-row>
-          <ion-row>
-            <ion-card-title
-              style="
-                color: black;
-                font-size: 12px;
-                font-weight: bold;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-              "
-            >
-              {{
-                credentialInput.credentialSubject.mandate.mandatee.lastName
-              }}
-            </ion-card-title>
-          </ion-row>
+          <div *ngIf="isEmployeeCredential">
+            <ion-row>
+              <ion-card-title style="
+                  color: grey;
+                  font-size: 12px;
+                  font-weight: bold;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                ">
+                {{ employeeSubject.mandate.mandatee.firstName }}
+              </ion-card-title>
+            </ion-row>
+            <ion-row>
+              <ion-card-title style="
+                  color: grey;
+                  font-size: 12px;
+                  font-weight: bold;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                ">
+                {{ employeeSubject.mandate.mandatee.lastName }}
+              </ion-card-title>
+            </ion-row>
+            <ion-row>
+              <ion-card-title style="
+                  color: grey;
+                  font-size: 12px;
+                  font-weight: bold;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                ">
+                {{ employeeSubject.mandate.mandator.organization }}
+              </ion-card-title>
+            </ion-row>
+          </div>
+
+          <div *ngIf="isMachineCredential">
+            
+            <ion-row>
+              <ion-card-title style="
+                  color: grey;
+                  font-size: 12px;
+                  font-weight: bold;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                ">
+                {{ machineSubject.mandate.mandatee.ipAddress }}
+              </ion-card-title>
+            </ion-row>
+            <ion-row>
+              <ion-card-title style="
+                  color: grey;
+                  font-size: 12px;
+                  font-weight: bold;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                ">
+                {{ machineSubject.mandate.mandatee.domain }}
+              </ion-card-title>
+            </ion-row>
+            <ion-row>
+              <ion-card-title style="
+                  color: grey;
+                  font-size: 12px;
+                  font-weight: bold;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                ">
+                {{ machineSubject.mandate.mandator.organization }}
+              </ion-card-title>
+            </ion-row>
+          </div>
+
+          <div *ngIf="isLabelCredential">
+            <ion-row>
+              <ion-card-title style="
+                  color: grey;
+                  font-size: 12px;
+                  font-weight: bold;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                ">
+                {{ labelSubject.id }}
+              </ion-card-title>
+            </ion-row>
+            <ion-row>
+              <ion-card-title style="
+                  color: grey;
+                  font-size: 12px;
+                  font-weight: bold;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                ">
+                {{ labelSubject.gx_labelLevel }}
+              </ion-card-title>
+            </ion-row>
+          </div>          
         </ion-card-header>
       </ion-col>
 
@@ -181,7 +260,7 @@
           size="small"
           style="padding: 0%"
         >
-          <ion-icon name="trash-outline"></ion-icon>
+          <ion-icon name="trash"></ion-icon>
         </ion-button>
 
         </ion-row>

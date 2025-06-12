@@ -1,4 +1,4 @@
-export interface VerifiableCredential {
+export interface VerifiableCredential { //TODO: REVISAR
   '@context': string[];
   id: string;
   type?: string[];
@@ -16,7 +16,22 @@ export interface Issuer {
   id: string;
 }
 
-export interface CredentialSubject {
+export type CredentialSubject =
+  | EmployeeCredentialSubject
+  | LabelCredentialSubject
+  | MachineCredentialSubject;
+
+
+export interface LabelCredentialSubject {
+  id: string;
+  gx_labelLevel: string;
+}
+
+export interface MachineCredentialSubject {
+  mandate: Mandate;
+}
+
+export interface EmployeeCredentialSubject  {
   mandate: Mandate;
 }
 
@@ -29,27 +44,29 @@ export interface Mandate {
 
 export interface Mandatee {
   id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  nationality: string;
+  firstName: string; //Employee
+  lastName: string; //Employee
+  email: string; //Employee
+  nationality: string; //Employee
+  domain?: string; //Machine
+  ipAddress?: string; //Machine
 }
 
 export interface Mandator {
-  organizationIdentifier: string;
+  organizationIdentifier?: string;
   organization: string;
   commonName: string;
-  emailAddress: string;
+  emailAddress?: string;
   serialNumber: string;
   country: string;
 }
 
 export interface Power {
   id: string;
-  action: string | string[];
+  type: string;
   domain: string;
   function: string;
-  type: string;
+  action: string | string[];
 }
 
 export enum CredentialStatus {

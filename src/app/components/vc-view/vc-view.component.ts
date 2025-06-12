@@ -12,6 +12,9 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import {
   CredentialStatus,
+  EmployeeCredentialSubject,
+  LabelCredentialSubject,
+  MachineCredentialSubject,
   VerifiableCredential,
 } from 'src/app/interfaces/verifiable-credential';
 import { IonicModule } from '@ionic/angular';
@@ -169,4 +172,28 @@ export class VcViewComponent implements OnInit {
       event.preventDefault();
     }
   }
+  get isEmployeeCredential(): boolean {
+    return this.credentialInput.credentialSubject.constructor.name === 'EmployeeCredentialSubject';
+  }
+
+  get isMachineCredential(): boolean {
+    return this.credentialInput.credentialSubject.constructor.name === 'MachineCredentialSubject';
+  }
+
+  get isLabelCredential(): boolean {
+    return this.credentialInput.credentialSubject.constructor.name === 'LabelCredentialSubject';
+  }
+
+  get employeeSubject(): EmployeeCredentialSubject {
+    return this.credentialInput.credentialSubject as EmployeeCredentialSubject;
+  }
+
+  get machineSubject(): MachineCredentialSubject {
+    return this.credentialInput.credentialSubject as MachineCredentialSubject;
+  }
+
+  get labelSubject(): LabelCredentialSubject {
+    return this.credentialInput.credentialSubject as LabelCredentialSubject;
+  }
+
 }
