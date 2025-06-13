@@ -39,9 +39,7 @@
   </ion-card-header>
   <div style="height: 2%"></div>
   <ion-col>
-    <ion-col style="margin-inline: 20px"
-          margin-bottom="10px !important"
-          margin-top="10px !important">
+    <ion-col class="ion-margin-top ion-margin-bottom" style="margin-inline: 20px">
       @if(isEmployeeCredential){
         <img
           width="50"
@@ -252,7 +250,11 @@
           color="secondary"
           class="vc-view-button"
           size="small"
-          style="padding: 0%"
+          style="padding: 0%;
+          box-shadow: none !important;
+          border: none !important;
+          --box-shadow: none !important;
+          --background: transparent !important;"
         >
           <ion-icon name="trash"></ion-icon>
         </ion-button>
