@@ -86,6 +86,7 @@ export class VcViewComponent implements OnInit {
   public ngOnInit(): void {
     this.checkExpirationVC();
     this.checkAvailableFormats();
+    console.log(this.credentialInput);
     this.credentialType = this.getSpecificType(this.credentialInput);
   }
 
@@ -205,6 +206,8 @@ export class VcViewComponent implements OnInit {
   }
 
   get machineSubject(): MachineCredentialSubject {
+    let machineSubject = this.credentialInput.credentialSubject as MachineCredentialSubject;
+    console.log(machineSubject);
     return this.credentialInput.credentialSubject as MachineCredentialSubject;
   }
 
