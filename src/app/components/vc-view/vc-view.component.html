@@ -1,4 +1,7 @@
 <ion-card
+  (click)="openDetailModal()"
+  tabindex="0"
+  (keydown)="handleButtonKeydown($event, 'detail')"
   style="
     background-color: white;
     width: 200px;
@@ -227,3 +230,38 @@
     <ion-col></ion-col>
   </ion-row>
 </ion-card>
+
+<ion-modal
+  [isOpen]="isDetailModalOpen"
+  (didDismiss)="closeDetailModal()"
+  class="credential-detail-modal"
+>
+  <ng-template>
+    <div class="wrapper" style="padding: 16px;">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{ credentialType }}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeDetailModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <div style="text-align: center; margin-bottom: 16px;" *ngIf="iconUrl">
+          <img [src]="iconUrl" style="width: 50px; height: auto;" />
+        </div>
+
+        <ion-list>
+          <ion-item *ngFor="let field of mappedFields">
+            <ion-label>
+              <strong>{{ field.label }}:</strong> {{ field.value }}
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </div>
+  </ng-template>
+</ion-modal>

@@ -80,7 +80,17 @@ export class VcViewComponent implements OnInit {
     },
   },
   ];
-  private walletService = inject(WalletService);
+  private readonly walletService = inject(WalletService);
+
+  public isDetailModalOpen = false;
+
+  public openDetailModal(): void {
+    this.isDetailModalOpen = true;
+  }
+
+  public closeDetailModal(): void {
+    this.isDetailModalOpen = false;
+  }
 
   public ngOnInit(): void {
     this.checkExpirationVC();
@@ -182,6 +192,8 @@ export class VcViewComponent implements OnInit {
         this.setOpen(false);
       } else if (action === 'info') {
         this.unsignedInfo();
+      } else if (action === 'detail') {
+        this.openDetailModal();
       }
       event.preventDefault();
     }
