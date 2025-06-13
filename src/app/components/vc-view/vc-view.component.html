@@ -237,27 +237,33 @@
   class="credential-detail-modal"
 >
   <ng-template>
-    <div class="wrapper" style="padding: 16px;">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>{{ credentialType }}</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="closeDetailModal()">
-              <ion-icon name="close-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title style="font-size: 16px; font-weight: bold">
+          {{ credentialType }}
+        </ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeDetailModal()" fill="clear">
+            <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
 
-      <ion-content>
-        <ion-list>
-          <ion-item *ngFor="let field of mappedFields"> 
-            <ion-label>
+    <ion-content class="ion-padding">
+      <div class="modal-content">
+        <div class="modal-icon" *ngIf="iconUrl">
+          <img [src]="iconUrl" width="60" height="60" />
+        </div>
+
+        <ion-list lines="none">
+          <ion-item *ngFor="let field of mappedFields">
+            <ion-label class="field-label">
               <strong>{{ field.label }}:</strong> {{ field.value }}
             </ion-label>
           </ion-item>
         </ion-list>
-      </ion-content>
-    </div>
+      </div>
+    </ion-content>
   </ng-template>
 </ion-modal>

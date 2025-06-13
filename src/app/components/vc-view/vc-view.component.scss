@@ -23,3 +23,20 @@ ion-modal.stack-modal {
 .request-signature-button img{
   opacity: 0.5;
 }
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-icon {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.field-label {
+  font-size: 14px;
+  color: #222;
+}
