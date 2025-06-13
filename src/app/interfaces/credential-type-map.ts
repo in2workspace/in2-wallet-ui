@@ -9,7 +9,7 @@ export interface CredentialMapConfig {
 }
 
 export const CredentialTypeMap: Record<string, CredentialMapConfig> = {
-  EmployeeCredential: {
+  LearCredentialEmployee: {
     icon: 'assets/icons/LearCredentialEmployee.png',
     fields: [
       { label: 'First Name', valueGetter: (s) => s.mandate.mandatee.firstName },
@@ -17,7 +17,7 @@ export const CredentialTypeMap: Record<string, CredentialMapConfig> = {
       { label: 'Organization', valueGetter: (s) => s.mandate.mandator.organization },
     ],
   },
-  MachineCredential: {
+  LearCredentialMachine: {
     icon: 'assets/icons/LearCredentialMachine.png',
     fields: [
       { label: 'IP Address', valueGetter: (s) => s.mandate.mandatee.ipAddress ?? '' },
