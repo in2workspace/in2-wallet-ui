@@ -40,34 +40,7 @@
   <div style="height: 2%"></div>
   <ion-col>
     <ion-col style="margin-inline: 20px">
-      @if(isEmployeeCredential){
-        <img
-          width="50"
-          height="50"
-          margin-left="20px"
-          style="display: block; margin: 10px auto"
-          alt
-          src="../../../assets/icons/LearCredentialEmployee.png"
-        />
-      }
-      @if(isMachineCredential){
-        <img
-          width="30"
-          height="50"
-          margin-left="20px"
-          alt
-          src="../../../assets/icons/LearCredentialMachine.png"
-        />
-      }
-      @if(isLabelCredential){
-        <img
-          width="50"
-          height="50"
-          margin-left="20px"
-          alt
-          src="../../../assets/icons/LabelCredential.png"
-        />
-      }
+      <img [src]="iconUrl" alt width="50" height="50" style="margin: 10px auto" />
     </ion-col>
     <ion-col>
       <ion-col size="12">
@@ -90,108 +63,14 @@
               }}
             </ion-card-title>
           </ion-row>
-          @if(isEmployeeCredential){
-              <ion-row>
-              <ion-card-title style="
-                  color: grey;
-                  font-size: 12px;
-                  font-weight: bold;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                ">
-                {{ employeeSubject.mandate.mandatee.firstName }}
-              </ion-card-title>
-            </ion-row>
+          @for(field of mappedFields; track field) {
             <ion-row>
-              <ion-card-title style="
-                  color: grey;
-                  font-size: 12px;
-                  font-weight: bold;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                ">
-                {{ employeeSubject.mandate.mandatee.lastName }}
+              <ion-card-title style="color: grey; font-size: 12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                {{ field.value }}
               </ion-card-title>
-            </ion-row>
-            <ion-row>
-              <ion-card-title style="
-                  color: grey;
-                  font-size: 12px;
-                  font-weight: bold;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                ">
-                {{ employeeSubject.mandate.mandator.organization }}
-              </ion-card-title>
-            </ion-row>
+            </ion-row>       
           }
-          @if(isMachineCredential){            
-            <ion-row>
-              <ion-card-title style="
-                  color: grey;
-                  font-size: 12px;
-                  font-weight: bold;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                ">
-                {{ machineSubject.mandate.mandatee.ipAddress }}
-              </ion-card-title>
-            </ion-row>
-            <ion-row>
-              <ion-card-title style="
-                  color: grey;
-                  font-size: 12px;
-                  font-weight: bold;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                ">
-                {{ machineSubject.mandate.mandatee.domain }}
-              </ion-card-title>
-            </ion-row>
-            <ion-row>
-              <ion-card-title style="
-                  color: grey;
-                  font-size: 12px;
-                  font-weight: bold;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                ">
-                {{ machineSubject.mandate.mandator.organization }}
-              </ion-card-title>
-            </ion-row>
-          }
-          @if(isLabelCredential){
-            <ion-row>
-              <ion-card-title style="
-                  color: grey;
-                  font-size: 12px;
-                  font-weight: bold;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                ">
-                {{ labelSubject.id }}
-              </ion-card-title>
-            </ion-row>
-            <ion-row>
-              <ion-card-title style="
-                  color: grey;
-                  font-size: 12px;
-                  font-weight: bold;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                ">
-                {{ labelSubject.gx_labelLevel }}
-              </ion-card-title>
-            </ion-row>
-          }         
+             
         </ion-card-header>
       </ion-col>
 

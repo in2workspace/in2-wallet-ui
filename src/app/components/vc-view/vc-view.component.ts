@@ -18,6 +18,8 @@ import {
   VerifiableCredential,
 } from 'src/app/interfaces/verifiable-credential';
 import { IonicModule } from '@ionic/angular';
+import { CredentialTypeMap } from 'src/app/interfaces/credential-type-map';
+
 
 @Component({
   selector: 'app-vc-view',
@@ -188,31 +190,21 @@ export class VcViewComponent implements OnInit {
     }
   }
 
-  //TODO: revisar
-  get isEmployeeCredential(): boolean {
-    return this.credentialType.includes('Employee');
+  get typeConfig() {
+    return CredentialTypeMap[this.credentialType];
   }
 
-  get isMachineCredential(): boolean {
-    return this.credentialType.includes('Machine');
+  get iconUrl(): string | undefined {
+    return this.typeConfig?.icon;
   }
 
-  get isLabelCredential(): boolean {
-    return this.credentialType.includes('Label');
+  get mappedFields(): { label: string; value: string }[] {
+    const subject = this.credentialInput.credentialSubject;
+    return this.typeConfig?.fields.map(f => ({
+      label: f.label,
+      value: f.valueGetter(subject),
+    })) ?? [];
   }
 
-  get employeeSubject(): EmployeeCredentialSubject {
-    return this.credentialInput.credentialSubject as EmployeeCredentialSubject;
-  }
-
-  get machineSubject(): MachineCredentialSubject {
-    let machineSubject = this.credentialInput.credentialSubject as MachineCredentialSubject;
-    console.log(machineSubject);
-    return this.credentialInput.credentialSubject as MachineCredentialSubject;
-  }
-
-  get labelSubject(): LabelCredentialSubject {
-    return this.credentialInput.credentialSubject as LabelCredentialSubject;
-  }
 
 }

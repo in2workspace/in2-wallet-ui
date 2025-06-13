@@ -1,0 +1,35 @@
+export interface FieldConfig {
+  label: string;
+  valueGetter: (subject: any) => string;
+}
+
+export interface CredentialMapConfig {
+  icon: string;
+  fields: FieldConfig[];
+}
+
+export const CredentialTypeMap: Record<string, CredentialMapConfig> = {
+  EmployeeCredential: {
+    icon: 'assets/icons/LearCredentialEmployee.png',
+    fields: [
+      { label: 'First Name', valueGetter: (s) => s.mandate.mandatee.firstName },
+      { label: 'Last Name', valueGetter: (s) => s.mandate.mandatee.lastName },
+      { label: 'Organization', valueGetter: (s) => s.mandate.mandator.organization },
+    ],
+  },
+  MachineCredential: {
+    icon: 'assets/icons/LearCredentialMachine.png',
+    fields: [
+      { label: 'IP Address', valueGetter: (s) => s.mandate.mandatee.ipAddress ?? '' },
+      { label: 'Domain', valueGetter: (s) => s.mandate.mandatee.domain ?? '' },
+      { label: 'Organization', valueGetter: (s) => s.mandate.mandator.organization },
+    ],
+  },
+  LabelCredential: {
+    icon: 'assets/icons/LabelCredential.png',
+    fields: [
+      { label: 'Label ID', valueGetter: (s) => s.id },
+      { label: 'Label Level', valueGetter: (s) => s.gx_labelLevel },
+    ],
+  },
+};
