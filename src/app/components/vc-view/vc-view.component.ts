@@ -15,6 +15,8 @@ import {
   VerifiableCredential,
 } from 'src/app/interfaces/verifiable-credential';
 import { IonicModule } from '@ionic/angular';
+import { CredentialTypeMap } from 'src/app/interfaces/credential-type-map';
+
 
 @Component({
   selector: 'app-vc-view',
@@ -27,6 +29,8 @@ export class VcViewComponent implements OnInit {
   @Input() public credentialInput!: VerifiableCredential;
   @Output() public vcEmit: EventEmitter<VerifiableCredential> =
     new EventEmitter();
+
+  credentialType!: string;
 
   public cred_cbor = '';
   public isAlertOpenNotFound = false;
@@ -76,11 +80,34 @@ export class VcViewComponent implements OnInit {
     },
   },
   ];
-  private walletService = inject(WalletService);
+  private readonly walletService = inject(WalletService);
+
+  public isDetailModalOpen = false;
+
+  public openDetailModal(): void {
+    this.isDetailModalOpen = true;
+  }
+
+  public closeDetailModal(): void {
+    this.isDetailModalOpen = false;
+  }
 
   public ngOnInit(): void {
     this.checkExpirationVC();
     this.checkAvailableFormats();
+    console.log(this.credentialInput);
+    this.credentialType = this.getSpecificType(this.credentialInput);
+  }
+
+  public getSpecificType(vc: VerifiableCredential): string {
+    const [a, b] = vc.type ?? [];
+    if (a === 'VerifiableCredential') {
+      return b;
+    } else if (b === 'VerifiableCredential') {
+      return a;
+    } else {
+      return 'VerifiableCredential';
+    }
   }
 
   public checkAvailableFormats(): void {
@@ -165,8 +192,28 @@ export class VcViewComponent implements OnInit {
         this.setOpen(false);
       } else if (action === 'info') {
         this.unsignedInfo();
+      } else if (action === 'detail') {
+        this.openDetailModal();
       }
       event.preventDefault();
     }
   }
+
+  get typeConfig() {
+    return CredentialTypeMap[this.credentialType];
+  }
+
+  get iconUrl(): string | undefined {
+    return this.typeConfig?.icon;
+  }
+
+  get mappedFields(): { label: string; value: string }[] {
+    const subject = this.credentialInput.credentialSubject;
+    return this.typeConfig?.fields.map(f => ({
+      label: f.label,
+      value: f.valueGetter(subject),
+    })) ?? [];
+  }
+
+
 }

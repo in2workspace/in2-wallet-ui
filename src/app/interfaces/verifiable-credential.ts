@@ -16,7 +16,22 @@ export interface Issuer {
   id: string;
 }
 
-export interface CredentialSubject {
+export type CredentialSubject =
+  | EmployeeCredentialSubject
+  | LabelCredentialSubject
+  | MachineCredentialSubject;
+
+
+export interface LabelCredentialSubject {
+  id: string;
+  gx_labelLevel: string;
+}
+
+export interface MachineCredentialSubject {
+  mandate: Mandate;
+}
+
+export interface EmployeeCredentialSubject  {
   mandate: Mandate;
 }
 
@@ -33,23 +48,25 @@ export interface Mandatee {
   lastName: string;
   email: string;
   nationality: string;
+  domain: string;
+  ipAddress: string;
 }
 
 export interface Mandator {
-  organizationIdentifier: string;
+  organizationIdentifier?: string;
   organization: string;
   commonName: string;
-  emailAddress: string;
+  emailAddress?: string;
   serialNumber: string;
   country: string;
 }
 
 export interface Power {
   id: string;
-  action: string | string[];
+  type: string;
   domain: string;
   function: string;
-  type: string;
+  action: string | string[];
 }
 
 export enum CredentialStatus {
