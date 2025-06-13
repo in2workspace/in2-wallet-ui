@@ -1,4 +1,4 @@
-export interface VerifiableCredential { //TODO: REVISAR
+export interface VerifiableCredential {
   '@context': string[];
   id: string;
   type?: string[];
@@ -44,12 +44,12 @@ export interface Mandate {
 
 export interface Mandatee {
   id: string;
-  firstName: string; //Employee
-  lastName: string; //Employee
-  email: string; //Employee
-  nationality: string; //Employee
-  domain?: string; //Machine
-  ipAddress?: string; //Machine
+  firstName: string;
+  lastName: string;
+  email: string;
+  nationality: string;
+  domain: string;
+  ipAddress: string;
 }
 
 export interface Mandator {

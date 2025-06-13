@@ -12,9 +12,6 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import {
   CredentialStatus,
-  EmployeeCredentialSubject,
-  LabelCredentialSubject,
-  MachineCredentialSubject,
   VerifiableCredential,
 } from 'src/app/interfaces/verifiable-credential';
 import { IonicModule } from '@ionic/angular';
