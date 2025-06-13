@@ -250,12 +250,8 @@
       </ion-header>
 
       <ion-content>
-        <div style="text-align: center; margin-bottom: 16px;" *ngIf="iconUrl">
-          <img [src]="iconUrl" style="width: 50px; height: auto;" />
-        </div>
-
         <ion-list>
-          <ion-item *ngFor="let field of mappedFields">
+          <ion-item *ngFor="let field of mappedFields"> 
             <ion-label>
               <strong>{{ field.label }}:</strong> {{ field.value }}
             </ion-label>
