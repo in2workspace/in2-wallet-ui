@@ -16,7 +16,7 @@ import {
 } from 'src/app/interfaces/verifiable-credential';
 import { IonicModule } from '@ionic/angular';
 import { CredentialTypeMap } from 'src/app/interfaces/credential-type-map';
-import { CredentialDetailMap } from 'src/app/interfaces/credential-detail-map';
+import { CredentialDetailMap, EvaluatedSection } from 'src/app/interfaces/credential-detail-map';
 
 
 @Component({
@@ -216,32 +216,36 @@ export class VcViewComponent implements OnInit {
     })) ?? [];
   }
 
-  public getStructuredFields(): {section: string; fields: { label: string; value: string }[];}[] {
+  public getStructuredFields(): EvaluatedSection[] {
     const cs = this.credentialInput.credentialSubject;
     const vc = this.credentialInput;
 
-    const credentialInfo = [
-      { label: 'Type', value: vc.type?.join(', ') ?? '' },
-      { label: 'Status', value: vc.status },
-      {
-        label: 'Available Formats',
-        value: vc.available_formats?.join(', ') ?? '',
-      },
-      { label: 'Valid Until', value: vc.validUntil },
-    ];
+    const credentialInfo: EvaluatedSection = {
+      section: 'Credential Info',
+      fields: [
+        { label: 'Id', value: vc.id },
+        { label: 'Type', value: vc.type?.join(', ') ?? '' },
+        { label: 'Status', value: vc.status },
+        { label: 'Available Formats', value: vc.available_formats?.join(', ') ?? '' },
+        { label: 'Valid Until', value: vc.validUntil },
+      ],
+    };
 
-    const detailedSections = CredentialDetailMap[this.credentialType]?.map(section => ({
+    const entry = CredentialDetailMap[this.credentialType];
+    const detailedSections: EvaluatedSection[] = typeof entry === 'function' ? entry(cs, vc).map(section => ({
       section: section.section,
-      fields: section.fields.map(field => ({
-        label: field.label,
-        value: field.valueGetter(cs, vc),
+      fields: section.fields.map(f => ({
+        label: f.label,
+        value: f.valueGetter(cs, vc),
       })),
-    })) ?? [];
-
-    return [
-      { section: 'Credential Info', fields: credentialInfo },
-      ...detailedSections,
-    ];
+    })): (entry ?? []).map(section => ({
+      section: section.section,
+      fields: section.fields.map(f => ({
+        label: f.label,
+        value: f.valueGetter(cs, vc),
+      })),
+    }));
+    return [credentialInfo, ...detailedSections];
   }
 
   
