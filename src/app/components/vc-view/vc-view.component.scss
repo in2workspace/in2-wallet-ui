@@ -39,3 +39,15 @@ ion-modal.stack-modal {
   font-size: 14px;
   color: #222;
 }
+
+.section-title {
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #444;
+}
+
+ion-item {
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+}

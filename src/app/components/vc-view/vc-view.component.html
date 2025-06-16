@@ -251,19 +251,18 @@
     </ion-header>
 
     <ion-content class="ion-padding">
-      <div class="modal-content">
-        <div class="modal-icon" *ngIf="iconUrl">
-          <img [src]="iconUrl" alt width="60" height="60"/>
-        </div>
-
-        <ion-list lines="none">
-          <ion-item *ngFor="let field of flattenObject(credentialInput)">
-            <ion-label class="field-label">
+      <ion-list>
+        <ng-container *ngFor="let section of getStructuredFields()">
+          <ion-item-divider color="light">
+            <ion-label class="section-title">{{ section.section }}</ion-label>
+          </ion-item-divider>
+          <ion-item *ngFor="let field of section.fields">
+            <ion-label>
               <strong>{{ field.label }}:</strong> {{ field.value }}
             </ion-label>
           </ion-item>
-        </ion-list>
-      </div>
+        </ng-container>
+      </ion-list>
     </ion-content>
   </ng-template>
 </ion-modal>
