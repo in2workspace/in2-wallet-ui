@@ -16,6 +16,7 @@ import {
 } from 'src/app/interfaces/verifiable-credential';
 import { IonicModule } from '@ionic/angular';
 import { CredentialTypeMap } from 'src/app/interfaces/credential-type-map';
+import { CredentialDetailMap } from 'src/app/interfaces/credential-detail-map';
 
 
 @Component({
@@ -215,86 +216,36 @@ export class VcViewComponent implements OnInit {
     })) ?? [];
   }
 
-  public flattenObject(obj: any,parentKey: string = '',result: { label: string; value: string }[] = []): { label: string; value: string }[] {
-    for (const key of Object.keys(obj)) {
-      const value = obj[key];
-      const label = parentKey ? `${parentKey} ${this.toLabel(key)}` : this.toLabel(key);
+  public getStructuredFields(): {section: string; fields: { label: string; value: string }[];}[] {
+    const cs = this.credentialInput.credentialSubject;
+    const vc = this.credentialInput;
 
-      if (Array.isArray(value)) {
-        if (value.every(v => typeof v === 'object')) {
-          value.forEach((v, i) => this.flattenObject(v, `${label} [${i}]`, result));
-        } else {
-          result.push({ label, value: value.join(', ') });
-        }
-      } else if (typeof value === 'object' && value !== null) {
-        this.flattenObject(value, label, result);
-      } else {
-        result.push({ label, value: String(value) });
-      }
-    }
-    return result;
-  }
+    const credentialInfo = [
+      { label: 'Type', value: vc.type?.join(', ') ?? '' },
+      { label: 'Status', value: vc.status },
+      {
+        label: 'Available Formats',
+        value: vc.available_formats?.join(', ') ?? '',
+      },
+      { label: 'Valid Until', value: vc.validUntil },
+    ];
 
-  private toLabel(key: string): string {
-    return key
-      .replace(/([A-Z])/g, ' $1')
-      .replace(/^./, str => str.toUpperCase());
-  }
-
-  public getStructuredFields(): {
-    section: string;
-    fields: { label: string; value: string }[];
-  }[] {
-    const cs = this.credentialInput.credentialSubject as any;
+    const detailedSections = CredentialDetailMap[this.credentialType]?.map(section => ({
+      section: section.section,
+      fields: section.fields.map(field => ({
+        label: field.label,
+        value: field.valueGetter(cs, vc),
+      })),
+    })) ?? [];
 
     return [
-      {
-        section: 'Credential Info',
-        fields: [
-          { label: 'Id', value: this.credentialInput.id },
-          { label: 'Type', value: this.credentialInput.type?.join(', ') ?? '' },
-          { label: 'Status', value: this.credentialInput.status },
-          {
-            label: 'Available Formats',
-            value: this.credentialInput.available_formats?.join(', ') ?? '',
-          },
-          { label: 'Valid Until', value: this.credentialInput.validUntil },
-        ],
-      },
-      {
-        section: 'Mandatee',
-        fields: [
-          { label: 'First Name', value: cs.mandate?.mandatee?.firstName ?? '' },
-          { label: 'Last Name', value: cs.mandate?.mandatee?.lastName ?? '' },
-          { label: 'Email', value: cs.mandate?.mandatee?.email ?? '' },
-          { label: 'Nationality', value: cs.mandate?.mandatee?.nationality ?? '' },
-          { label: 'Domain', value: cs.mandate?.mandatee?.domain ?? '' },
-          { label: 'IP Address', value: cs.mandate?.mandatee?.ipAddress ?? '' },
-        ],
-      },
-      {
-        section: 'Mandator',
-        fields: [
-          { label: 'Organization', value: cs.mandate?.mandator?.organization ?? '' },
-          { label: 'Common Name', value: cs.mandate?.mandator?.commonName ?? '' },
-          { label: 'Serial Number', value: cs.mandate?.mandator?.serialNumber ?? '' },
-          { label: 'Country', value: cs.mandate?.mandator?.country ?? '' },
-          { label: 'Email Address', value: cs.mandate?.mandator?.emailAddress ?? '' },
-          { label: 'Identifier', value: cs.mandate?.mandator?.organizationIdentifier ?? '' },
-        ],
-      },
-      {
-        section: 'Powers',
-        fields: (cs.mandate?.power ?? []).flatMap((p: any, i: number) => [
-          { label: `Power ${i + 1} ID`, value: p.id },
-          { label: `Function`, value: p.function },
-          { label: `Domain`, value: p.domain },
-          { label: `Type`, value: p.type },
-          { label: `Action`, value: Array.isArray(p.action) ? p.action.join(', ') : p.action },
-        ]),
-      },
+      { section: 'Credential Info', fields: credentialInfo },
+      ...detailedSections,
     ];
   }
+
+  
+
 
 
 }

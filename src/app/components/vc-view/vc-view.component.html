@@ -127,24 +127,6 @@
             {{ "vc-view.revoked" | translate }}
         </span>
          }
-
-        <ion-row style="justify-content: end; align-items: center; gap:5px" class="button-row">
-          <ion-button
-          (click)="deleteVC()"
-          (keydown)="handleButtonKeydown($event, 'delete')"
-          color="secondary"
-          class="vc-view-button"
-          size="small"
-          style="padding: 0%;
-          box-shadow: none !important;
-          border: none !important;
-          --box-shadow: none !important;
-          --background: transparent !important;"
-        >
-          <ion-icon name="trash"></ion-icon>
-        </ion-button>
-
-        </ion-row>
       </ion-col>
     </ion-col>
   </ion-col>
@@ -243,9 +225,24 @@
           {{ credentialType }}
         </ion-title>
         <ion-buttons slot="end">
+          <ion-button
+            (click)="deleteVC()"
+            (keydown)="handleButtonKeydown($event, 'delete')"
+            color="secondary"
+            class="vc-view-button"
+            size="small"
+            style="padding: 0%;
+            box-shadow: none !important;
+            border: none !important;
+            --box-shadow: none !important;
+            --background: transparent !important;"
+          >
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
           <ion-button (click)="closeDetailModal()" (keydown)="closeDetailModal()" fill="clear">
             <ion-icon name="close-outline" slot="icon-only"></ion-icon>
           </ion-button>
+
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
