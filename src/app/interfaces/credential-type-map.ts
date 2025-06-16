@@ -14,7 +14,7 @@ export const CredentialTypeMap: Record<string, CredentialMapConfig> = {
     fields: [
       { label: 'First Name', valueGetter: (s) => s.mandate.mandatee.firstName },
       { label: 'Last Name', valueGetter: (s) => s.mandate.mandatee.lastName },
-      { label: 'Organization', valueGetter: (s) => s.mandate.mandator.organization },
+      { label: 'Organization', valueGetter: (s) => s.mandate.mandator.organization }      
     ],
   },
   LEARCredentialMachine: {

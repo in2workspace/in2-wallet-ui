@@ -215,5 +215,30 @@ export class VcViewComponent implements OnInit {
     })) ?? [];
   }
 
+  public flattenObject(obj: any,parentKey: string = '',result: { label: string; value: string }[] = []): { label: string; value: string }[] {
+    for (const key of Object.keys(obj)) {
+      const value = obj[key];
+      const label = parentKey ? `${parentKey} ${this.toLabel(key)}` : this.toLabel(key);
+
+      if (Array.isArray(value)) {
+        if (value.every(v => typeof v === 'object')) {
+          value.forEach((v, i) => this.flattenObject(v, `${label} [${i}]`, result));
+        } else {
+          result.push({ label, value: value.join(', ') });
+        }
+      } else if (typeof value === 'object' && value !== null) {
+        this.flattenObject(value, label, result);
+      } else {
+        result.push({ label, value: String(value) });
+      }
+    }
+    return result;
+  }
+
+  private toLabel(key: string): string {
+    return key
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, str => str.toUpperCase());
+  }
 
 }
