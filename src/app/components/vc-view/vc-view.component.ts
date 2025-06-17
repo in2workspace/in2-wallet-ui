@@ -84,9 +84,11 @@ export class VcViewComponent implements OnInit {
   private readonly walletService = inject(WalletService);
 
   public isDetailModalOpen = false;
+  public evaluatedSections!: EvaluatedSection[];
 
   public openDetailModal(): void {
     this.isDetailModalOpen = true;
+    this.getStructuredFields();
   }
 
   public closeDetailModal(): void {
@@ -216,7 +218,7 @@ export class VcViewComponent implements OnInit {
     })) ?? [];
   }
 
-  public getStructuredFields(): EvaluatedSection[] {
+  public getStructuredFields(): void {
     const cs = this.credentialInput.credentialSubject;
     const vc = this.credentialInput;
 
@@ -245,12 +247,8 @@ export class VcViewComponent implements OnInit {
         value: f.valueGetter(cs, vc),
       })),
     }));
-    console.log(detailedSections);
-    return [credentialInfo, ...detailedSections];
+    console.log('Detailed sections:', detailedSections);
+    this.evaluatedSections =  [credentialInfo, ...detailedSections];
   }
-
-  
-
-
 
 }

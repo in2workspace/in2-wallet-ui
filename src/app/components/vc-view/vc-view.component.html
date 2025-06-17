@@ -249,7 +249,7 @@
 
     <ion-content class="ion-padding">
       <ion-list>
-        <ng-container *ngFor="let section of getStructuredFields()">
+        <ng-container *ngFor="let section of evaluatedSections">
           <ion-item-divider color="light">
             <ion-label class="section-title">{{ section.section }}</ion-label>
           </ion-item-divider>
