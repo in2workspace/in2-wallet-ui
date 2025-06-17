@@ -138,6 +138,7 @@ export class VcViewComponent implements OnInit {
 
   public deleteVC(): void {
     this.isModalDeleteOpen = true;
+    this.isDetailModalOpen = false;
   }
 
   public unsignedInfo(): void {
