@@ -219,14 +219,12 @@
   class="credential-detail-modal"
 >
   <ng-template>
-    <ion-header>
-      <ion-toolbar>        
-        <ion-buttons slot="end">          
-          <ion-button (click)="closeDetailModal()" (keydown)="closeDetailModal()" fill="clear">
-            <ion-icon name="close-outline" slot="icon-only"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
+    <ion-header>       
+      <ion-buttons slot="end">          
+        <ion-button (click)="closeDetailModal()" (keydown)="closeDetailModal()" fill="clear">
+          <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-header>
 
     <ion-content class="ion-padding">
@@ -245,21 +243,19 @@
     </ion-content>
 
     <ion-footer>
-      <ion-toolbar>
-        <ion-button
-            (click)="deleteVC()"
-            (keydown)="handleButtonKeydown($event, 'delete')"
-            color="primary"
-            class="vc-view-button"
-            size="small"
-            style="padding: 0%;
-            box-shadow: none !important;
-            border: none !important;
-            --box-shadow: none !important;
-            --background: transparent !important;">
-            Delete
-          </ion-button>
-      </ion-toolbar>
+      <ion-button
+          (click)="deleteVC()"
+          (keydown)="handleButtonKeydown($event, 'delete')"
+          color="primary"
+          class="vc-view-button"
+          size="small"
+          style="padding: 0%;
+          box-shadow: none !important;
+          border: none !important;
+          --box-shadow: none !important;
+          --background: transparent !important;">
+          Delete
+        </ion-button>
     </ion-footer>
   </ng-template>
 </ion-modal>
