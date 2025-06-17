@@ -220,29 +220,11 @@
 >
   <ng-template>
     <ion-header>
-      <ion-toolbar color="primary">
-        <ion-title style="font-size: 16px; font-weight: bold">
-          {{ credentialType }}
-        </ion-title>
-        <ion-buttons slot="end">
-          <ion-button
-            (click)="deleteVC()"
-            (keydown)="handleButtonKeydown($event, 'delete')"
-            color="secondary"
-            class="vc-view-button"
-            size="small"
-            style="padding: 0%;
-            box-shadow: none !important;
-            border: none !important;
-            --box-shadow: none !important;
-            --background: transparent !important;"
-          >
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
+      <ion-toolbar>        
+        <ion-buttons slot="end">          
           <ion-button (click)="closeDetailModal()" (keydown)="closeDetailModal()" fill="clear">
             <ion-icon name="close-outline" slot="icon-only"></ion-icon>
           </ion-button>
-
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
@@ -261,5 +243,23 @@
         </ng-container>
       </ion-list>
     </ion-content>
+
+    <ion-footer>
+      <ion-toolbar>
+        <ion-button
+            (click)="deleteVC()"
+            (keydown)="handleButtonKeydown($event, 'delete')"
+            color="primary"
+            class="vc-view-button"
+            size="small"
+            style="padding: 0%;
+            box-shadow: none !important;
+            border: none !important;
+            --box-shadow: none !important;
+            --background: transparent !important;">
+            Delete
+          </ion-button>
+      </ion-toolbar>
+    </ion-footer>
   </ng-template>
 </ion-modal>

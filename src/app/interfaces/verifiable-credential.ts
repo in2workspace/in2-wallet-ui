@@ -2,13 +2,12 @@ export interface VerifiableCredential {
   '@context': string[];
   id: string;
   type?: string[];
+  name?: string;
+  description?: string;
   issuer: Issuer;
-  issuanceDate: string;
   validFrom: string;
-  expirationDate: string;
   validUntil: string;
   credentialSubject: CredentialSubject;
-  available_formats?: string[];
   status: CredentialStatus;
 }
 
@@ -69,6 +68,7 @@ export interface Power {
   action: string | string[];
 }
 
+//TODO: REVISAR NEW FORMAT
 export enum CredentialStatus {
   VALID = 'VALID',
   ISSUED = 'ISSUED',

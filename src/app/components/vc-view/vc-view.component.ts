@@ -113,9 +113,10 @@ export class VcViewComponent implements OnInit {
     }
   }
 
+  // TO DO: funcion antigua, revisar si se puede eliminar
   public checkAvailableFormats(): void {
-    this.showChip =
-      this.credentialInput.available_formats?.includes('cwt_vc') ?? false;
+    /*this.showChip =
+      this.credentialInput.available_formats?.includes('cwt_vc') ?? false;*/
   }
 
   public qrView(): void {
@@ -228,7 +229,7 @@ export class VcViewComponent implements OnInit {
         { label: 'Id', value: vc.id },
         { label: 'Type', value: vc.type?.join(', ') ?? '' },
         { label: 'Status', value: vc.status },
-        { label: 'Available Formats', value: vc.available_formats?.join(', ') ?? '' },
+        { label: 'Valid From', value: vc.validFrom },
         { label: 'Valid Until', value: vc.validUntil },
       ],
     };
