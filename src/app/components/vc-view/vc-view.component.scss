@@ -24,38 +24,48 @@ ion-modal.stack-modal {
   opacity: 0.5;
 }
 
-.modal-content {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.modal-title {
+  font-weight: 600;
+  font-size: 18px;
 }
 
-.modal-icon {
+.section-divider {
   margin-top: 16px;
-  margin-bottom: 16px;
+  border-radius: 6px;
+}
+
+.section-title {
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #2f2f2f;
+}
+
+.field-item {
+  margin-bottom: 4px;
 }
 
 .field-label {
   font-size: 14px;
-  color: #222;
+  color: #333;
 }
 
-.section-title {
-  font-weight: bold;
-  font-size: 14px;
-  text-transform: uppercase;
-  color: #444;
+ion-footer {
+  border-top: 1px solid #ddd;
+  background: #fff;
 }
 
+ion-button[color="primary"] {
+  font-weight: 500;
+  padding: 0%;
+}
 
 ion-toolbar {
   --ion-toolbar-background: white !important;
 }
-
-ion-button {
-  padding: 0% !important;
+ion-item-divider:last-of-type {
+  display: flex !important;
 }
-
 ion-label {
   margin: 0 !important;
 }

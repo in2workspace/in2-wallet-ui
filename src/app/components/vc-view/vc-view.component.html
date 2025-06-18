@@ -212,35 +212,29 @@
     <ion-col></ion-col>
   </ion-row>
 </ion-card>
-<ion-modal
-  [isOpen]="isDetailModalOpen"
-  (didDismiss)="closeDetailModal()"
-  class="credential-detail-modal"
->
+
+<ion-modal [isOpen]="isDetailModalOpen" (didDismiss)="closeDetailModal()" class="credential-detail-modal">
   <ng-template>
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar color="light">
+        <ion-title class="modal-title">Credential Details</ion-title>
         <ion-buttons slot="end">
-          <ion-button 
-            (click)="closeDetailModal()" 
-            (keydown)="closeDetailModal()" 
-            fill="clear"
-          >
-            <ion-icon name="close-outline" slot="icon-only" color="dark"></ion-icon>
+          <ion-button fill="clear" (click)="closeDetailModal()">
+            <ion-icon name="close-outline"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding-horizontal">
+    <ion-content class="ion-padding">
       <ion-list>
         <ng-container *ngFor="let section of evaluatedSections">
-          <ion-item-divider *ngIf="section.section" color="light">
+          <ion-item-divider color="light" class="section-divider">
             <ion-label class="section-title">{{ section.section }}</ion-label>
           </ion-item-divider>
 
-          <ion-item *ngFor="let field of section.fields">
-            <ion-label>
+          <ion-item *ngFor="let field of section.fields" lines="none" class="field-item">
+            <ion-label class="field-label">
               <strong>{{ field.label }}:</strong> {{ field.value }}
             </ion-label>
           </ion-item>
@@ -249,23 +243,9 @@
     </ion-content>
 
     <ion-footer class="ion-padding">
-      <ion-button
-        (click)="deleteVC()"
-        (keydown)="handleButtonKeydown($event, 'delete')"
-        color="primary"
-        class="vc-view-button"
-        size="small"
-        style="
-          padding: 0%;
-          box-shadow: none !important;
-          border: none !important;
-          --box-shadow: none !important;
-          --background: transparent !important;
-        "
-      >
+      <ion-button expand="block" color="primary" (click)="deleteVC()">
         Delete
       </ion-button>
     </ion-footer>
   </ng-template>
 </ion-modal>
-
