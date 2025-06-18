@@ -67,8 +67,7 @@ ion-modal.stack-modal {
   color: #666;
   margin-bottom: 8px;
   text-transform: uppercase;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 4px;
+  padding: 10px;
 }
 
 .field {
@@ -82,3 +81,14 @@ ion-modal.stack-modal {
   background: #ffffff;
   border-top: 1px solid #e0e0e0;
 }
+
+.delete-button {
+  float: rigth;
+}
+
+.compact-item {
+  --inner-padding-end: 0px;
+  --min-height: 36px;
+  margin-bottom: 4px;
+}
+

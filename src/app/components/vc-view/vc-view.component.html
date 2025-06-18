@@ -231,7 +231,7 @@
         <ng-container *ngFor="let section of evaluatedSections">
           <div class="section">
             <div class="section-header">{{ section.section }}</div>
-            <ion-item *ngFor="let field of section.fields" lines="none" class="field-item">
+            <ion-item *ngFor="let field of section.fields" lines="none" class="field-item compact-item">
               <ion-label class="field-label">
                 <strong>{{ field.label }}:</strong> {{ field.value }}
               </ion-label>
@@ -242,7 +242,7 @@
     </ion-content>
 
     <ion-footer class="modal-footer">
-      <ion-button color="primary" (click)="deleteVC()">
+      <ion-button color="primary" class="delete-button" (click)="deleteVC()">
         Delete
       </ion-button>
     </ion-footer>

@@ -48,9 +48,9 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
     {
     section: 'Powers',
       fields: (s.mandate?.power ?? []).map((p: any, i: number) => ({
-        label: `#${i + 1}`,
+        label: `${p.function} (${p.domain})`,
         valueGetter: () =>
-          `${p.function} (${p.domain}) → ${Array.isArray(p.action) ? p.action.join(', ') : p.action}`,
+          `${Array.isArray(p.action) ? p.action.join(', ') : p.action}`,
       })),
     },
   ],

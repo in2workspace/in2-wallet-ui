@@ -98,7 +98,6 @@ export class VcViewComponent implements OnInit {
   public ngOnInit(): void {
     this.checkExpirationVC();
     this.checkAvailableFormats();
-    console.log(this.credentialInput);
     this.credentialType = this.getSpecificType(this.credentialInput);
   }
 
@@ -251,7 +250,6 @@ export class VcViewComponent implements OnInit {
     }));
     
     this.evaluatedSections =  [credentialInfo, ...detailedSections];
-    console.log('Evaluated sections:', this.evaluatedSections);
   }
 
 }
