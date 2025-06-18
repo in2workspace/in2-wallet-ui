@@ -231,18 +231,18 @@
         <ng-container *ngFor="let section of evaluatedSections">
           <div class="section">
             <div class="section-header">{{ section.section }}</div>
-
-            <div *ngFor="let field of section.fields" class="field">
-              <span class="field-label">{{ field.label }}:</span>
-              <span class="field-value">{{ field.value }}</span>
-            </div>
+            <ion-item *ngFor="let field of section.fields" lines="none" class="field-item">
+              <ion-label class="field-label">
+                <strong>{{ field.label }}:</strong> {{ field.value }}
+              </ion-label>
+            </ion-item>
           </div>
         </ng-container>
       </ion-list>
     </ion-content>
 
     <ion-footer class="modal-footer">
-      <ion-button expand="block" color="primary" (click)="deleteVC()">
+      <ion-button color="primary" (click)="deleteVC()">
         Delete
       </ion-button>
     </ion-footer>

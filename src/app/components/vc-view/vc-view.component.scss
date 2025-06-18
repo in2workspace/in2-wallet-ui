@@ -42,7 +42,7 @@ ion-modal.stack-modal {
 
 .modal-content {
   --padding-bottom: 16px;
-  scrollbar-width: thin; /* Firefox */
+  scrollbar-width: thin;
   scrollbar-color: transparent transparent;
 }
 
@@ -64,8 +64,6 @@ ion-modal.stack-modal {
 }
 
 .section-header {
-  font-size: 13px;
-  font-weight: 600;
   color: #666;
   margin-bottom: 8px;
   text-transform: uppercase;
@@ -77,17 +75,6 @@ ion-modal.stack-modal {
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
-}
-
-.field-label {
-  font-weight: 500;
-  color: #444;
-  font-size: 14px;
-}
-
-.field-value {
-  color: #000;
-  font-size: 14px;
 }
 
 .modal-footer {
