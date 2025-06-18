@@ -1,7 +1,7 @@
-import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, DestroyRef, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {AlertController, IonicModule} from '@ionic/angular';
+import {AlertController, IonicModule, Platform} from '@ionic/angular';
 import {StorageService} from 'src/app/services/storage.service';
 import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
 import {QRCodeModule} from 'angularx-qrcode';
@@ -36,8 +36,9 @@ const TIME_IN_MS = 3000;
     QRCodeModule,
     VcViewComponent,
     TranslateModule,
-    BarcodeScannerComponent,
+    BarcodeScannerComponent
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CredentialsPage implements OnInit {
@@ -52,6 +53,7 @@ export class CredentialsPage implements OnInit {
   public scaned_cred = false;
   public show_qr = false;
   public credentialOfferUri = '';
+  public isMobile = false;
 
   private readonly alertController = inject(AlertController);
   private readonly cdr = inject(ChangeDetectorRef);
@@ -63,9 +65,10 @@ export class CredentialsPage implements OnInit {
   private readonly websocket = inject(WebsocketService);
   private readonly cameraLogsService = inject(CameraLogsService);
 
-  public constructor(private readonly toastServiceHandler: ToastServiceHandler)
+  public constructor(private readonly platform: Platform, private readonly toastServiceHandler: ToastServiceHandler)
     {
     this.credOfferEndpoint = window.location.origin + '/tabs/home';
+    this.isMobile = this.platform.is('mobile') || this.platform.is('mobileweb');
     this.route.queryParams.subscribe((params) => {
       this.toggleScan = params['toggleScan'];
       this.from = params['from'];
