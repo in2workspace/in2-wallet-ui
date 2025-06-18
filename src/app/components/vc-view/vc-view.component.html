@@ -219,7 +219,7 @@
       <ion-toolbar class="modal-toolbar">
         <ion-title class="modal-title">Credential Details</ion-title>
         <ion-buttons slot="end">
-          <ion-button fill="clear" (click)="closeDetailModal()">
+          <ion-button fill="clear" (keydown)="closeDetailModal()" (click)="closeDetailModal()">
             <ion-icon name="close-outline" class="close-icon"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -242,7 +242,7 @@
     </ion-content>
 
     <ion-footer class="modal-footer">
-      <ion-button color="primary" class="delete-button" (click)="deleteVC()">
+      <ion-button color="primary" class="delete-button" (keydown)="deleteVC()" (click)="deleteVC()">
         Delete
       </ion-button>
     </ion-footer>

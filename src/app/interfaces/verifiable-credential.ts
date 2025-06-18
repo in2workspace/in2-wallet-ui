@@ -13,6 +13,10 @@ export interface VerifiableCredential {
 
 export interface Issuer {
   id: string;
+  organization?: string;
+  country?: string;
+  commonName?: string;
+  serialNumber?: string;
 }
 
 export type CredentialSubject =
@@ -23,7 +27,17 @@ export type CredentialSubject =
 
 export interface LabelCredentialSubject {
   id: string;
-  gx_labelLevel: string;
+  'gx:labelLevel': string;
+  'gx:engineVersion': string;
+  'gx:rulesVersion': string;
+  'gx:compliantCredentials': CompliantCredentials[];
+  'gx:validatedCriteria': string[];
+}
+
+export interface CompliantCredentials {
+  id: string;
+  type: string;
+  'gx:digestSRI': string;
 }
 
 export interface MachineCredentialSubject {
@@ -43,19 +57,18 @@ export interface Mandate {
 
 export interface Mandatee {
   id: string;
+  employeId: string;
   firstName: string;
   lastName: string;
   email: string;
-  nationality: string;
   domain: string;
   ipAddress: string;
 }
 
 export interface Mandator {
-  organizationIdentifier?: string;
+  id: string;
   organization: string;
   commonName: string;
-  emailAddress?: string;
   serialNumber: string;
   country: string;
 }

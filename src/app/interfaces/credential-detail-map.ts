@@ -28,6 +28,7 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
     {
       section: 'Mandatee',
       fields: [
+        { label: 'ID', valueGetter: () => s.mandate?.mandatee?.id ?? '' },
         { label: 'First Name', valueGetter: () => s.mandate?.mandatee?.firstName ?? '' },
         { label: 'Last Name', valueGetter: () => s.mandate?.mandatee?.lastName ?? '' },
         { label: 'Email', valueGetter: () => s.mandate?.mandatee?.email ?? '' },
@@ -37,6 +38,7 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
     {
       section: 'Mandator',
       fields: [
+        { label: 'ID', valueGetter: () => s.mandate?.mandator?.id ?? '' },
         { label: 'Organization', valueGetter: () => s.mandate?.mandator?.organization ?? '' },
         { label: 'Common Name', valueGetter: () => s.mandate?.mandator?.commonName ?? '' },
         { label: 'Serial Number', valueGetter: () => s.mandate?.mandator?.serialNumber ?? '' },
@@ -76,8 +78,9 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
     {
       section: 'Powers',
       fields: (s.mandate?.power ?? []).map((p: any, i: number) => ({
-        label: `#${i + 1}`,
-        valueGetter: () => `${p.function} (${p.domain}) → ${Array.isArray(p.action) ? p.action.join(', ') : p.action}`,
+        label: `${p.function} (${p.domain})`,
+        valueGetter: () =>
+          `${Array.isArray(p.action) ? p.action.join(', ') : p.action}`,
       })),
     },
   ],

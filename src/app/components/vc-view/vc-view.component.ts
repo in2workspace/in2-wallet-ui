@@ -226,30 +226,45 @@ export class VcViewComponent implements OnInit {
     const credentialInfo: EvaluatedSection = {
       section: 'Credential Info',
       fields: [
+        { label: 'Context', value: Array.isArray(vc['@context']) ? vc['@context'].join(', ') : (vc['@context'] ?? '') },
         { label: 'Id', value: vc.id },
-        { label: 'Type', value: vc.type?.join(', ') ?? '' },
-        { label: 'Status', value: vc.status },
+        { label: 'Type', value: Array.isArray(vc.type) ? vc.type.join(', ') : (vc.type ?? '') },
+        { label: 'Name', value: vc.name ?? '' },
+        { label: 'Description', value: vc.description ?? '' },
+        { label: 'Issuer ID', value: vc.issuer.id },
+        { label: 'Issuer Organization', value: vc.issuer.organization ?? '' },
+        { label: 'Issuer Country', value: vc.issuer.country ?? '' },
+        { label: 'Issuer Common Name', value: vc.issuer.commonName ?? '' },
+        { label: 'Issuer Serial Number', value: vc.issuer?.serialNumber ?? '' },
         { label: 'Valid From', value: vc.validFrom },
-        { label: 'Valid Until', value: vc.validUntil },
-      ],
+        { label: 'Valid Until', value: vc.validUntil }
+      ].filter(field => !!field.value && field.value !== ''),
     };
 
     const entry = CredentialDetailMap[this.credentialType];
-    const detailedSections: EvaluatedSection[] = typeof entry === 'function' ? entry(cs, vc).map(section => ({
-      section: section.section,
-      fields: section.fields.map(f => ({
-        label: f.label,
-        value: f.valueGetter(cs, vc),
-      })),
-    })): (entry ?? []).map(section => ({
-      section: section.section,
-      fields: section.fields.map(f => ({
-        label: f.label,
-        value: f.valueGetter(cs, vc),
-      })),
-    }));
-    
-    this.evaluatedSections =  [credentialInfo, ...detailedSections];
-  }
+    const detailedSections: EvaluatedSection[] = typeof entry === 'function'
+      ? entry(cs, vc).map(section => ({
+          section: section.section,
+          fields: section.fields
+            .map(f => ({
+              label: f.label,
+              value: f.valueGetter(cs, vc),
+            }))
+            .filter(f => !!f.value && f.value !== ''),
+        }))
+      : (entry ?? []).map(section => ({
+          section: section.section,
+          fields: section.fields
+            .map(f => ({
+              label: f.label,
+              value: f.valueGetter(cs, vc),
+            }))
+            .filter(f => !!f.value && f.value !== ''),
+        }));
+
+
+    this.evaluatedSections = [credentialInfo, ...detailedSections].filter(section => section.fields.length > 0);
+    }
+
 
 }
