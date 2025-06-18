@@ -235,9 +235,10 @@
     <ion-content class="ion-padding-horizontal">
       <ion-list>
         <ng-container *ngFor="let section of evaluatedSections">
-          <ion-item-divider color="light">
+          <ion-item-divider *ngIf="section.section" color="light">
             <ion-label class="section-title">{{ section.section }}</ion-label>
           </ion-item-divider>
+
           <ion-item *ngFor="let field of section.fields">
             <ion-label>
               <strong>{{ field.label }}:</strong> {{ field.value }}
