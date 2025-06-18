@@ -216,7 +216,7 @@
 <ion-modal [isOpen]="isDetailModalOpen" (didDismiss)="closeDetailModal()" class="credential-detail-modal">
   <ng-template>
     <ion-header>
-      <ion-toolbar color="light">
+      <ion-toolbar color="light" class="white-header">
         <ion-title class="modal-title">Credential Details</ion-title>
         <ion-buttons slot="end">
           <ion-button fill="clear" (click)="closeDetailModal()">
@@ -226,7 +226,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding">
+    <ion-content>
       <ion-list>
         <ng-container *ngFor="let section of evaluatedSections">
           <ion-item-divider color="light" class="section-divider">
@@ -243,9 +243,11 @@
     </ion-content>
 
     <ion-footer class="ion-padding">
-      <ion-button expand="block" color="primary" (click)="deleteVC()">
-        Delete
-      </ion-button>
+      <ion-toolbar color="light" class="white-header">
+        <ion-button expand="block" color="primary" (click)="deleteVC()">
+          Delete
+        </ion-button>
+      </ion-toolbar>
     </ion-footer>
   </ng-template>
 </ion-modal>

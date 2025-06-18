@@ -25,8 +25,7 @@ ion-modal.stack-modal {
 }
 
 .modal-title {
-  font-weight: 600;
-  font-size: 18px;
+  font-size: 23px;
 }
 
 .section-divider {
@@ -58,11 +57,14 @@ ion-footer {
 ion-button[color="primary"] {
   font-weight: 500;
   padding: 0%;
+  float: right;
 }
 
-ion-toolbar {
-  --ion-toolbar-background: white !important;
+.white-header {
+  --background: #ffffff !important;
+  --color: #000000 !important;
 }
+
 ion-item-divider:last-of-type {
   display: flex !important;
 }
