@@ -249,8 +249,9 @@ export class VcViewComponent implements OnInit {
         value: f.valueGetter(cs, vc),
       })),
     }));
-    console.log('Detailed sections:', detailedSections);
+    
     this.evaluatedSections =  [credentialInfo, ...detailedSections];
+    console.log('Evaluated sections:', this.evaluatedSections);
   }
 
 }
