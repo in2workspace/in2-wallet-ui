@@ -55,8 +55,7 @@ private normalizeMandatee(data: RawMandatee): Mandatee {
   return <Mandatee>{
     firstName: data.firstName ?? data.first_name,
     lastName: data.lastName ?? data.last_name,
-    email: data.email,
-    nationality: data.nationality
+    email: data.email
   };
 }
 
