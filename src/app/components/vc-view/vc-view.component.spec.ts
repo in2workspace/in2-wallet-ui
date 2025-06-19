@@ -331,6 +331,83 @@ describe('VcViewComponent', () => {
       expect(() => component.getStructuredFields()).not.toThrow();
       expect(component.evaluatedSections.length).toBeGreaterThan(0);
     });
+    it('should handle CredentialDetailMap entry as a function', () => {
+      const mockSection = {
+      section: 'Mock Section',
+      fields: [
+        {
+        label: 'Mock Label',
+        valueGetter: jest.fn().mockReturnValue('Mock Value')
+        }
+      ]
+      };
+      const mockFn = jest.fn().mockReturnValue([mockSection]);
+      const originalMap = { ...require('src/app/interfaces/credential-detail-map').CredentialDetailMap };
+      require('src/app/interfaces/credential-detail-map').CredentialDetailMap[component.credentialType] = mockFn;
+
+      component.getStructuredFields();
+
+      expect(mockFn).toHaveBeenCalled();
+      const foundSection = component.evaluatedSections.find(s => s.section === 'Mock Section');
+      expect(foundSection).toBeTruthy();
+      expect(foundSection?.fields[0].label).toBe('Mock Label');
+      expect(foundSection?.fields[0].value).toBe('Mock Value');
+
+      require('src/app/interfaces/credential-detail-map').CredentialDetailMap = originalMap;
+    });
+
+    it('should handle CredentialDetailMap entry as an array', () => {
+      const mockSection = {
+      section: 'Array Section',
+      fields: [
+        {
+        label: 'Array Label',
+        valueGetter: jest.fn().mockReturnValue('Array Value')
+        }
+      ]
+      };
+      const originalMap = { ...require('src/app/interfaces/credential-detail-map').CredentialDetailMap };
+      require('src/app/interfaces/credential-detail-map').CredentialDetailMap[component.credentialType] = [mockSection];
+
+      component.getStructuredFields();
+
+      const foundSection = component.evaluatedSections.find(s => s.section === 'Array Section');
+      expect(foundSection).toBeTruthy();
+      expect(foundSection?.fields[0].label).toBe('Array Label');
+      expect(foundSection?.fields[0].value).toBe('Array Value');
+      require('src/app/interfaces/credential-detail-map').CredentialDetailMap = originalMap;
+    });
+
+    it('should filter out empty fields in detailed sections', () => {
+      const mockSection = {
+      section: 'Empty Section',
+      fields: [
+        {
+        label: 'Empty Label',
+        valueGetter: jest.fn().mockReturnValue('')
+        }
+      ]
+      };
+      const originalMap = { ...require('src/app/interfaces/credential-detail-map').CredentialDetailMap };
+      require('src/app/interfaces/credential-detail-map').CredentialDetailMap[component.credentialType] = [mockSection];
+
+      component.getStructuredFields();
+
+      const foundSection = component.evaluatedSections.find(s => s.section === 'Empty Section');
+      expect(foundSection).toBeUndefined();
+
+      require('src/app/interfaces/credential-detail-map').CredentialDetailMap = originalMap;
+    });
+
+    it('should not throw if CredentialDetailMap entry is undefined', () => {
+      const originalMap = { ...require('src/app/interfaces/credential-detail-map').CredentialDetailMap };
+      delete require('src/app/interfaces/credential-detail-map').CredentialDetailMap[component.credentialType];
+
+      expect(() => component.getStructuredFields()).not.toThrow();
+      expect(component.evaluatedSections.length).toBeGreaterThan(0);
+
+      require('src/app/interfaces/credential-detail-map').CredentialDetailMap = originalMap;
+    });
   });
 
 });
