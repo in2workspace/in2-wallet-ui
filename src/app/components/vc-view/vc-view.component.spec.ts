@@ -251,4 +251,86 @@ describe('VcViewComponent', () => {
     tick();
     expect(event.preventDefault).toHaveBeenCalled();
   }));
+
+  it('openDetailModal should set isDetailModalOpen to true and call getStructuredFields', () => {
+    jest.spyOn(component, 'getStructuredFields');
+    component.isDetailModalOpen = false;
+
+    component.openDetailModal();
+
+    expect(component.isDetailModalOpen).toBeTruthy();
+    expect(component.getStructuredFields).toHaveBeenCalled();
+  });
+
+  it('closeDetailModal should set isDetailModalOpen to false', () => {
+    component.isDetailModalOpen = true;
+
+    component.closeDetailModal();
+
+    expect(component.isDetailModalOpen).toBeFalsy();
+  }); 
+
+  describe('getSpecificType', () => {
+    it('should return the second type if first is "VerifiableCredential"', () => {
+      const vc = { type: ['VerifiableCredential', 'MyType'] } as VerifiableCredential;
+      const result = component.getSpecificType(vc);
+      expect(result).toBe('MyType');
+    });
+
+    it('should return the first type if second is "VerifiableCredential"', () => {
+      const vc = { type: ['MyType', 'VerifiableCredential'] } as VerifiableCredential;
+      const result = component.getSpecificType(vc);
+      expect(result).toBe('MyType');
+    });
+
+    it('should return "VerifiableCredential" if neither type is "VerifiableCredential"', () => {
+      const vc = { type: ['TypeA', 'TypeB'] } as VerifiableCredential;
+      const result = component.getSpecificType(vc);
+      expect(result).toBe('VerifiableCredential');
+    });
+
+    it('should return "VerifiableCredential" if type is undefined', () => {
+      const vc = { } as VerifiableCredential;
+      const result = component.getSpecificType(vc);
+      expect(result).toBe('VerifiableCredential');
+    });
+
+    it('should return "VerifiableCredential" if type is empty array', () => {
+      const vc = { type: [] } as unknown as VerifiableCredential;
+      const result = component.getSpecificType(vc);
+      expect(result).toBe('VerifiableCredential');
+    });
+  });
+
+  describe('getStructuredFields', () => {
+    it('should filter out fields with empty values', () => {
+      component.credentialInput = {
+        ...component.credentialInput,
+        name: '',
+        description: '',
+        issuer: {
+          ...component.credentialInput.issuer,
+          organization: '',
+          country: '',
+          commonName: '',
+          serialNumber: ''
+        }
+      } as VerifiableCredential;
+
+      component.getStructuredFields();
+      const credentialInfoSection = component.evaluatedSections.find(
+        s => s.section === 'Credential Info'
+      );
+      expect(credentialInfoSection).toBeTruthy();
+      expect(credentialInfoSection?.fields.some(f => f.label === 'Name')).toBe(false);
+      expect(credentialInfoSection?.fields.some(f => f.label === 'Issuer Organization')).toBe(false);
+    });
+   
+    it('should not fail if credentialType is not in CredentialDetailMap', () => {
+      component.credentialType = 'UnknownType';
+      expect(() => component.getStructuredFields()).not.toThrow();
+      expect(component.evaluatedSections.length).toBeGreaterThan(0);
+    });
+  });
+
 });
