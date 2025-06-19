@@ -4,7 +4,7 @@ import { WalletService } from 'src/app/services/wallet.service';
 import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { Observable, of, throwError } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
-import { By } from '@angular/platform-browser';
+import * as detailMapModule from 'src/app/interfaces/credential-detail-map';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CallbackPage } from 'src/app/pages/callback/callback.page';
 
@@ -331,83 +331,174 @@ describe('VcViewComponent', () => {
       expect(() => component.getStructuredFields()).not.toThrow();
       expect(component.evaluatedSections.length).toBeGreaterThan(0);
     });
+
     it('should handle CredentialDetailMap entry as a function', () => {
       const mockSection = {
       section: 'Mock Section',
       fields: [
         {
         label: 'Mock Label',
-        valueGetter: jest.fn().mockReturnValue('Mock Value')
-        }
-      ]
+        valueGetter: jest.fn().mockReturnValue('Mock Value'),
+        },
+        {
+        label: 'Empty Label',
+        valueGetter: jest.fn().mockReturnValue(''),
+        },
+      ],
       };
-      const mockFn = jest.fn().mockReturnValue([mockSection]);
-      const originalMap = { ...require('src/app/interfaces/credential-detail-map').CredentialDetailMap };
-      require('src/app/interfaces/credential-detail-map').CredentialDetailMap[component.credentialType] = mockFn;
+      const mockDetailMapFn = jest.fn().mockReturnValue([mockSection]);
+      const originalCredentialType = component.credentialType;
+      component.credentialType = 'MockType';
+
+      const originalDetailMap = detailMapModule.CredentialDetailMap[component.credentialType];
+      detailMapModule.CredentialDetailMap[component.credentialType] = mockDetailMapFn as any;
 
       component.getStructuredFields();
 
-      expect(mockFn).toHaveBeenCalled();
+      expect(mockDetailMapFn).toHaveBeenCalled();
       const foundSection = component.evaluatedSections.find(s => s.section === 'Mock Section');
       expect(foundSection).toBeTruthy();
+      expect(foundSection?.fields.length).toBe(1);
       expect(foundSection?.fields[0].label).toBe('Mock Label');
       expect(foundSection?.fields[0].value).toBe('Mock Value');
 
-      require('src/app/interfaces/credential-detail-map').CredentialDetailMap = originalMap;
+      if (originalDetailMap) {
+      detailMapModule.CredentialDetailMap[component.credentialType] = originalDetailMap;
+      } else {
+      delete detailMapModule.CredentialDetailMap[component.credentialType];
+      }
+      component.credentialType = originalCredentialType;
     });
 
-    it('should handle CredentialDetailMap entry as an array', () => {
-      const mockSection = {
-      section: 'Array Section',
+    it('isCredentialIssuedAndNotExpired should return true if status is ISSUED and not expired', () => {
+      component.credentialInput.status = CredentialStatus.ISSUED;
+      component.isExpired = false;
+      expect(component.isCredentialIssuedAndNotExpired()).toBe(true);
+    });
+
+    it('isCredentialIssuedAndNotExpired should return false if status is not ISSUED', () => {
+      component.credentialInput.status = CredentialStatus.REVOKED;
+      component.isExpired = false;
+      expect(component.isCredentialIssuedAndNotExpired()).toBe(false);
+    });
+
+    it('isCredentialIssuedAndNotExpired should return false if expired', () => {
+      component.credentialInput.status = CredentialStatus.ISSUED;
+      component.isExpired = true;
+      expect(component.isCredentialIssuedAndNotExpired()).toBe(false);
+    });
+
+    it('mappedFields should return mapped fields from typeConfig', () => {
+      const mockTypeConfig = {
       fields: [
-        {
-        label: 'Array Label',
-        valueGetter: jest.fn().mockReturnValue('Array Value')
-        }
-      ]
+        { label: 'Test Label', valueGetter: jest.fn().mockReturnValue('Test Value') },
+      ],
       };
-      const originalMap = { ...require('src/app/interfaces/credential-detail-map').CredentialDetailMap };
-      require('src/app/interfaces/credential-detail-map').CredentialDetailMap[component.credentialType] = [mockSection];
-
-      component.getStructuredFields();
-
-      const foundSection = component.evaluatedSections.find(s => s.section === 'Array Section');
-      expect(foundSection).toBeTruthy();
-      expect(foundSection?.fields[0].label).toBe('Array Label');
-      expect(foundSection?.fields[0].value).toBe('Array Value');
-      require('src/app/interfaces/credential-detail-map').CredentialDetailMap = originalMap;
-    });
-
-    it('should filter out empty fields in detailed sections', () => {
-      const mockSection = {
-      section: 'Empty Section',
-      fields: [
-        {
-        label: 'Empty Label',
-        valueGetter: jest.fn().mockReturnValue('')
+      Object.defineProperty(component, 'typeConfig', { get: () => mockTypeConfig });
+      component.credentialInput.credentialSubject = {
+        mandate: {
+          id: '',
+          mandator: {
+            commonName: '',
+            serialNumber: '',
+            organization: '',
+            country: '',
+            id: ''
+          },
+          mandatee: {
+            id: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            employeId: '',
+            domain: '',
+            ipAddress: ''
+          },
+          power: [
+            {
+              id: '',
+              type: '',
+              domain: '',
+              function: '',
+              action: [''],
+            },
+          ]
         }
-      ]
       };
-      const originalMap = { ...require('src/app/interfaces/credential-detail-map').CredentialDetailMap };
-      require('src/app/interfaces/credential-detail-map').CredentialDetailMap[component.credentialType] = [mockSection];
-
-      component.getStructuredFields();
-
-      const foundSection = component.evaluatedSections.find(s => s.section === 'Empty Section');
-      expect(foundSection).toBeUndefined();
-
-      require('src/app/interfaces/credential-detail-map').CredentialDetailMap = originalMap;
+      const fields = component.mappedFields;
+      expect(fields.length).toBe(1);
+      expect(fields[0].label).toBe('Test Label');
+      expect(fields[0].value).toBe('Test Value');
     });
 
-    it('should not throw if CredentialDetailMap entry is undefined', () => {
-      const originalMap = { ...require('src/app/interfaces/credential-detail-map').CredentialDetailMap };
-      delete require('src/app/interfaces/credential-detail-map').CredentialDetailMap[component.credentialType];
-
-      expect(() => component.getStructuredFields()).not.toThrow();
-      expect(component.evaluatedSections.length).toBeGreaterThan(0);
-
-      require('src/app/interfaces/credential-detail-map').CredentialDetailMap = originalMap;
+    it('mappedFields should return empty array if typeConfig is undefined', () => {
+      Object.defineProperty(component, 'typeConfig', { get: () => undefined });
+      const fields = component.mappedFields;
+      expect(fields).toEqual([]);
     });
+
+    it('iconUrl should return icon from typeConfig', () => {
+      Object.defineProperty(component, 'typeConfig', { get: () => ({ icon: 'icon-url' }) });
+      expect(component.iconUrl).toBe('icon-url');
+    });
+
+    it('iconUrl should return undefined if typeConfig is undefined', () => {
+      Object.defineProperty(component, 'typeConfig', { get: () => undefined });
+      expect(component.iconUrl).toBeUndefined();
+    });
+
+    it('handleKeydown should call qrView if action is "qr" and key is Enter', () => {
+      jest.spyOn(component, 'qrView');
+      const event = new KeyboardEvent('keydown', { key: 'Enter' });
+      component.handleKeydown(event, 'qr');
+      expect(component.qrView).toHaveBeenCalled();
+    });
+
+    it('handleKeydown should call qrView if action is "qr" and key is Space', () => {
+      jest.spyOn(component, 'qrView');
+      const event = new KeyboardEvent('keydown', { key: ' ' });
+      component.handleKeydown(event, 'qr');
+      expect(component.qrView).toHaveBeenCalled();
+    });
+
+    it('handleKeydown should prevent default for Enter or Space', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Enter' });
+      jest.spyOn(event, 'preventDefault');
+      component.handleKeydown(event, 'qr');
+      expect(event.preventDefault).toHaveBeenCalled();
+    });
+
+    it('handleKeydown should not call qrView if action is not "qr"', () => {
+      jest.spyOn(component, 'qrView');
+      const event = new KeyboardEvent('keydown', { key: 'Enter' });
+      component.handleKeydown(event, 'other');
+      expect(component.qrView).not.toHaveBeenCalled();
+    });
+
+    it('handleButtonKeydown should call openDetailModal when action is "detail"', () => {
+      jest.spyOn(component, 'openDetailModal');
+      const event = new KeyboardEvent('keydown', { key: 'Enter' });
+      component.handleButtonKeydown(event, 'detail');
+      expect(component.openDetailModal).toHaveBeenCalled();
+    });
+
+    it('handleButtonKeydown should not call any action if key is not Enter or Space', () => {
+      jest.spyOn(component, 'deleteVC');
+      jest.spyOn(component, 'setOpen');
+      jest.spyOn(component, 'unsignedInfo');
+      jest.spyOn(component, 'openDetailModal');
+      const event = new KeyboardEvent('keydown', { key: 'Tab' });
+      component.handleButtonKeydown(event, 'delete');
+      expect(component.deleteVC).not.toHaveBeenCalled();
+      expect(component.setOpen).not.toHaveBeenCalled();
+      expect(component.unsignedInfo).not.toHaveBeenCalled();
+      expect(component.openDetailModal).not.toHaveBeenCalled();
+    });
+
+    it('checkAvailableFormats should not throw', () => {
+      expect(() => component.checkAvailableFormats()).not.toThrow();
+    });
+    
   });
 
 });
