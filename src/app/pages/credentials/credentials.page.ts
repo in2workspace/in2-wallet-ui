@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, DestroyRef, inject, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {AlertController, IonicModule, Platform} from '@ionic/angular';
@@ -18,6 +18,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
 import { catchError, forkJoin, of } from 'rxjs';
 import { SwiperModule } from 'swiper/angular';
+import SwiperCore from 'swiper';
 
 const TIME_IN_MS = 3000;
 
@@ -54,6 +55,9 @@ export class CredentialsPage implements OnInit {
   public show_qr = false;
   public credentialOfferUri = '';
   public isMobile = false;
+  public swiperInstance!: SwiperCore;
+  public activeCardIndex = 0;
+
 
   private readonly alertController = inject(AlertController);
   private readonly cdr = inject(ChangeDetectorRef);
@@ -316,5 +320,16 @@ export class CredentialsPage implements OnInit {
     }, TIME_IN_MS);
     this.refresh();
   }
+
+  public onSwiper(swiper: SwiperCore) {
+    this.swiperInstance = swiper;
+  }
+
+  public onSlideChange() {
+    if (this.swiperInstance) {
+      this.activeCardIndex = this.swiperInstance.realIndex;
+    }
+  }
+
 
 }
