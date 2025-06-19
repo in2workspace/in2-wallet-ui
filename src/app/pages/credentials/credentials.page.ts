@@ -17,7 +17,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
 import { catchError, forkJoin, of } from 'rxjs';
-
+import { SwiperModule } from 'swiper/angular';
 
 const TIME_IN_MS = 3000;
 
@@ -36,9 +36,9 @@ const TIME_IN_MS = 3000;
     QRCodeModule,
     VcViewComponent,
     TranslateModule,
-    BarcodeScannerComponent
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    BarcodeScannerComponent,
+    SwiperModule
+  ]
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CredentialsPage implements OnInit {
