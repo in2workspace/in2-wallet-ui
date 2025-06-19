@@ -256,6 +256,7 @@ describe('VcViewComponent', () => {
     jest.spyOn(component, 'getStructuredFields');
     component.isDetailModalOpen = false;
 
+    component.isDetailViewActive = true;
     component.openDetailModal();
 
     expect(component.isDetailModalOpen).toBeTruthy();
