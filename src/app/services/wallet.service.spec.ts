@@ -62,27 +62,26 @@ describe('WalletService', () => {
       issuer: {
         id: 'did:web:provider.dome.fiware.dev',
       },
-      issuanceDate: '2024-04-02T09:23:22.637345122Z',
       validFrom: '2024-04-02T09:23:22.637345122Z',
-      expirationDate: '2025-01-01T00:00:00Z',
       validUntil: '2025-01-01T00:00:00Z',
       credentialSubject: {
         mandate: {
           id: 'mandateId1',
           mandator: {
-            organizationIdentifier: 'orgId1',
             commonName: 'Common Name',
-            emailAddress: 'email@example.com',
             serialNumber: 'serialNumber1',
             organization: 'Organization Name',
             country: 'Country',
+            id: 'mandatorId1'
           },
           mandatee: {
             id: 'personId1',
             firstName: 'John',
             lastName: 'Doe',
-            nationality: 'ES',
-            email: 'test@example.com'
+            email: 'test@example.com',
+            employeId: '',
+            domain: '',
+            ipAddress: ''
           },
           power: [
             {
@@ -182,27 +181,26 @@ describe('WalletService', () => {
         issuer: {
           id: 'did:web:provider.dome.fiware.dev',
         },
-        issuanceDate: '2024-04-02T09:23:22.637345122Z',
         validFrom: '2024-04-02T09:23:22.637345122Z',
-        expirationDate: '2030-01-01T00:00:00Z',
         validUntil: '2030-01-01T00:00:00Z',
         credentialSubject: {
           mandate: {
             id: 'mandateId1',
             mandator: {
-              organizationIdentifier: 'orgId1',
               commonName: 'Example Unit',
-              emailAddress: 'example@test.com',
               serialNumber: 'serialNumber1',
               organization: 'Organization Name',
               country: 'Country',
+              id: ''
             },
             mandatee: {
               id: 'personId1',
               firstName: 'Jane',
               lastName: 'Doe',
               email: 'example@test.com',
-              nationality: 'ES',
+              employeId: '',
+              domain: '',
+              ipAddress: ''
             },
             power: [
               {
@@ -241,27 +239,26 @@ describe('WalletService', () => {
       issuer: {
         id: 'did:web:provider.dome.fiware.dev',
       },
-      issuanceDate: '2024-04-02T09:23:22.637345122Z',
       validFrom: '2024-04-02T09:23:22.637345122Z',
-      expirationDate: '2030-01-01T00:00:00Z',
       validUntil: '2030-01-01T00:00:00Z',
       credentialSubject: {
         mandate: {
           id: 'mandateId1',
           mandator: {
-            organizationIdentifier: 'orgId1',
             commonName: 'Test Unit',
-            emailAddress: 'single@test.com',
             serialNumber: 'serialNumber1',
             organization: 'Organization Name',
             country: 'Country',
+            id: ''
           },
           mandatee: {
             id: 'personId1',
             firstName: 'Single',
             lastName: 'Credential',
             email: 'single@test.com',
-            nationality: 'ES',
+            employeId: '',
+            domain: '',
+            ipAddress: ''
           },
           power: [
             {

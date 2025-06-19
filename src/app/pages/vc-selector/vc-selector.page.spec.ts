@@ -7,7 +7,6 @@ import { of, throwError } from 'rxjs';
 import { VcSelectorPage } from './vc-selector.page';
 import { WalletService } from 'src/app/services/wallet.service';
 import { VerifiableCredential, CredentialStatus, Issuer, CredentialSubject, Mandate, Mandatee, Mandator, Power } from 'src/app/interfaces/verifiable-credential';
-import { VCReply } from 'src/app/interfaces/verifiable-credential-reply';
 
 describe('VcSelectorPage', () => {
   let component: VcSelectorPage;
@@ -24,16 +23,17 @@ describe('VcSelectorPage', () => {
     firstName: 'John',
     lastName: 'Doe',
     email: 'john.doe@example.com',
-    nationality: 'Spanish'
+    employeId: '',
+    domain: '',
+    ipAddress: ''
   };
 
   const mockMandator: Mandator = {
-    organizationIdentifier: 'ORG123',
     organization: 'Test Organization',
     commonName: 'Test Org',
-    emailAddress: 'org@example.com',
     serialNumber: 'SN123',
-    country: 'ES'
+    country: 'ES',
+    id: ''
   };
 
   const mockPower: Power = {
@@ -79,9 +79,7 @@ describe('VcSelectorPage', () => {
         id: 'vc2',
         type: ['VerifiableCredential'],
         issuer: mockIssuer,
-        issuanceDate: '2024-02-01T00:00:00Z',
         validFrom: '2024-02-01T00:00:00Z',
-        expirationDate: '2025-02-01T00:00:00Z',
         validUntil: '2025-02-01T00:00:00Z',
         credentialSubject: {
           mandate: {
@@ -91,13 +89,11 @@ describe('VcSelectorPage', () => {
               firstName: 'Jane',
               lastName: 'Smith',
               email: 'jane.smith@example.com',
-              nationality: 'Spanish'
             },
             mandator: mockMandator,
             power: [mockPower]
           }
         },
-        available_formats: ['jwt'],
         status: CredentialStatus.ISSUED
       }
     ] as VerifiableCredential[],
@@ -201,9 +197,10 @@ describe('VcSelectorPage', () => {
       expect(component.credList[1].id).toBe('vc1');
       
       // Verify mandate structure is preserved
-      expect(component.credList[1].credentialSubject.mandate.mandatee.firstName).toBe('John');
-      expect(component.credList[1].credentialSubject.mandate.mandator.organization).toBe('Test Organization');
-      expect(component.credList[1].credentialSubject.mandate.power[0].action).toBe('sign');
+      const credSubject = component.credList[1].credentialSubject as { mandate: Mandate };
+      expect(credSubject.mandate.mandatee.firstName).toBe('John');
+      expect(credSubject.mandate.mandator.organization).toBe('Test Organization');
+      expect(credSubject.mandate.power[0].action).toBe('sign');
     });
 
     it('should handle credentials without credentialSubject', () => {
@@ -214,9 +211,7 @@ describe('VcSelectorPage', () => {
             id: 'vc1', 
             type: ['VerifiableCredential'],
             issuer: mockIssuer,
-            issuanceDate: '2024-01-01T00:00:00Z',
             validFrom: '2024-01-01T00:00:00Z',
-            expirationDate: '2025-01-01T00:00:00Z',
             validUntil: '2025-01-01T00:00:00Z',
             status: CredentialStatus.VALID
           } as VerifiableCredential
