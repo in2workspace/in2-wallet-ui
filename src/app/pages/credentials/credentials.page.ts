@@ -321,14 +321,12 @@ export class CredentialsPage implements OnInit {
     this.refresh();
   }
 
-  public onSwiper(swiper: SwiperCore) {
-    this.swiperInstance = swiper;
+  public onSlideChange(swiper: any): void {
+    this.activeCardIndex = swiper.realIndex ?? swiper.activeIndex;
   }
 
-  public onSlideChange() {
-    if (this.swiperInstance) {
-      this.activeCardIndex = this.swiperInstance.realIndex;
-    }
+  public onSwiper(swiper: any): void {
+    this.activeCardIndex = swiper.realIndex ?? swiper.activeIndex;
   }
 
 
