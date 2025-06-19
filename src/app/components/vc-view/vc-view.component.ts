@@ -28,6 +28,7 @@ import { CredentialDetailMap, EvaluatedSection } from 'src/app/interfaces/creden
 })
 export class VcViewComponent implements OnInit {
   @Input() public credentialInput!: VerifiableCredential;
+  @Input() public isDetailViewActive = false;
   @Output() public vcEmit: EventEmitter<VerifiableCredential> =
     new EventEmitter();
 
@@ -87,8 +88,10 @@ export class VcViewComponent implements OnInit {
   public evaluatedSections!: EvaluatedSection[];
 
   public openDetailModal(): void {
-    this.isDetailModalOpen = true;
-    this.getStructuredFields();
+    if(this.isDetailViewActive){
+      this.isDetailModalOpen = true;
+      this.getStructuredFields();
+    }
   }
 
   public closeDetailModal(): void {
