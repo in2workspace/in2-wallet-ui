@@ -17,8 +17,6 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
 import { catchError, forkJoin, of } from 'rxjs';
-import { SwiperModule } from 'swiper/angular';
-import SwiperCore from 'swiper';
 
 const TIME_IN_MS = 3000;
 
@@ -37,10 +35,10 @@ const TIME_IN_MS = 3000;
     QRCodeModule,
     VcViewComponent,
     TranslateModule,
-    BarcodeScannerComponent,
-    SwiperModule
+    BarcodeScannerComponent
   ]
 })
+
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CredentialsPage implements OnInit {
   public alertButtons = ['OK'];
@@ -54,9 +52,6 @@ export class CredentialsPage implements OnInit {
   public scaned_cred = false;
   public show_qr = false;
   public credentialOfferUri = '';
-  public isMobile = false;
-  public swiperInstance!: SwiperCore;
-  public activeCardIndex = 0;
 
 
   private readonly alertController = inject(AlertController);
@@ -69,10 +64,9 @@ export class CredentialsPage implements OnInit {
   private readonly websocket = inject(WebsocketService);
   private readonly cameraLogsService = inject(CameraLogsService);
 
-  public constructor(private readonly platform: Platform, private readonly toastServiceHandler: ToastServiceHandler)
+  public constructor(private readonly toastServiceHandler: ToastServiceHandler)
     {
     this.credOfferEndpoint = window.location.origin + '/tabs/home';
-    this.isMobile = this.platform.is('mobile') || this.platform.is('mobileweb');
     this.route.queryParams.subscribe((params) => {
       this.toggleScan = params['toggleScan'];
       this.from = params['from'];
@@ -320,14 +314,5 @@ export class CredentialsPage implements OnInit {
     }, TIME_IN_MS);
     this.refresh();
   }
-
-  public onSlideChange(swiper: any): void {
-    this.activeCardIndex = swiper.realIndex ?? swiper.activeIndex;
-  }
-
-  public onSwiper(swiper: any): void {
-    this.activeCardIndex = swiper.realIndex ?? swiper.activeIndex;
-  }
-
 
 }

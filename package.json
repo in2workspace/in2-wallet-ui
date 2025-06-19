@@ -40,7 +40,6 @@
     "ionicons": "^7.4.0",
     "ngx-indexed-db": "^19.0.0",
     "rxjs": "~7.8.1",
-    "swiper": "^8.0.0",
     "tslib": "^2.7.0",
     "uuid": "^11.0.5",
     "wallet-ui": "file:",
