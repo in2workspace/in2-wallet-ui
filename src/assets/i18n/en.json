@@ -132,6 +132,73 @@
         "unsigned-message": "Your credential has not yet been signed and cannot be used. Wait for the issuer to complete the signing process.",
         "revoked": "Revoked"
     },
+    "vc-fields":{
+        "title": "Credential Info",
+        "credentialInfo": {
+            "context": "Context",
+            "type": "Type",
+            "id": "ID",
+            "name": "Name",
+            "description": "Description",
+            "issuerId": "Issuer ID",
+            "issuerOrganization": "Issuer Organization",
+            "issuerCountry": "Issuer Country",
+            "issuerCommonName": "Issuer Common Name",
+            "issuerSerialNumber": "Issuer Serial Number",
+            "validFrom": "Valid From",
+            "validUntil": "Valid Until"
+        },
+        "learCredentialEmployee":{
+            "mantadatee": {
+                "title": "Mandatee",
+                "id": "ID",
+                "firstName": "First Name",
+                "lastName": "Last Name",
+                "email": "Email",
+                "nationality": "Nationality"
+            },
+            "mandator": {
+                "title": "Mandator",
+                "id": "ID",
+                "organization": "Organization",
+                "commonName": "Common Name",
+                "serialNumber": "Serial Number",
+                "country": "Country",
+                "emailAddress": "Email Address",
+                "identifier": "Identifier"
+            },
+            "powers": "Powers"
+        },
+        "lear-credential-machine":{
+            "mantadatee": {
+                "title": "Machine Info",
+                "id": "ID",
+                "domain": "Domain",
+                "ipAddress": "IP Address"
+            },
+            "mandator": {
+                "title": "Mandator",
+                "id": "ID",
+                "organization": "Organization",
+                "commonName": "Common Name",
+                "serialNumber": "Serial Number",
+                "country": "Country"
+            },
+            "powers": "Powers"
+        },
+        "gaia-x-label-credential":{
+            "label-info": {
+                "title": "Label Info",
+                "id": "Label ID",
+                "lableLevel": "Label Level",
+                "engineVersion": "Engine Version",
+                "rulesVersion": "Rules Version"
+            },
+            "compliantCredentials": "Compliant Credentials",
+            "validatedCriteria": "Validated Criteria"
+        }
+
+    },
     "errors":{
         "default": "Unexpected error. If the problem persists, contact the <a href='https://ticketing.dome-marketplace.eu/' target='_blank' rel='noopener noreferrer'>support team</a>.",
         "failed-qr-process": "We couldn't process the QR code.<br>It might be invalid or already used. Please refresh the credential offer. If the problem persists, report it to the <a href='https://ticketing.dome-marketplace.eu/' target='_blank' rel='noopener noreferrer'>support team</a>.",

@@ -131,6 +131,72 @@
     "scanner":{
         "initializing": "Inicialitzant escàner..."
     },
+    "vc-fields": {
+        "title": "Informació de credencials",
+        "credentialInfo": {
+            "context": "Context",
+            "type": "Tipus",
+            "id": "ID",
+            "name": "Nom",
+            "description": "Descripció",
+            "issuerId": "ID de l'emissor",
+            "issuerOrganization": "Organització de l'emissor",
+            "issuerCountry": "País de l'emissor",
+            "issuerCommonName": "Nom comú de l'emissor",
+            "issuerSerialNumber": "Número de sèrie de l'emissor",
+            "validFrom": "Vàlid des de",
+            "validUntil": "Vàlid fins a"
+        },
+        "learCredentialEmployee": {
+            "mantadatee": {
+                "title": "Persona delegada",
+                "id": "ID",
+                "firstName": "Nom",
+                "lastName": "Cognom",
+                "email": "Correu electrònic",
+                "nationality": "Nacionalitat"
+            },
+            "mandator": {
+                "title": "Mandant",
+                "id": "ID",
+                "organization": "Organització",
+                "commonName": "Nom comú",
+                "serialNumber": "Número de sèrie",
+                "country": "País",
+                "emailAddress": "Adreça de correu electrònic",
+                "identifier": "Identificador"
+            },
+            "powers": "Poders"
+        },
+        "lear-credential-machine": {
+            "mantadatee": {
+                "title": "Informació de la màquina",
+                "id": "ID",
+                "domain": "Domini",
+                "ipAddress": "Adreça IP"
+            },
+            "mandator": {
+                "title": "Mandant",
+                "id": "ID",
+                "organization": "Organització",
+                "commonName": "Nom comú",
+                "serialNumber": "Número de sèrie",
+                "country": "País"
+            },
+            "powers": "Poders"
+        },
+        "gaia-x-label-credential": {
+            "label-info": {
+                "title": "Informació de l'etiqueta",
+                "id": "ID de l'etiqueta",
+                "lableLevel": "Nivell de l'etiqueta",
+                "engineVersion": "Versió del motor",
+                "rulesVersion": "Versió de les regles"
+            },
+            "compliantCredentials": "Credencials compatibles",
+            "validatedCriteria": "Criteris validats"
+        }
+    },
     "errors":{
         "default":"Error inesperat. Si el problema persisteix, contacteu <a href='https://ticketing.dome-marketplace.eu/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>",
         "failed-qr-process": "Hi ha hagut un problema en processar el QR. Pot ser que sigui invàlid o que ja hagi estat utilitzat abans. Refresqueu l'oferta de credencial. Si el problema persisteix, contacteu <a href='https://ticketing.dome-marketplace.eu/' target='_blank' rel='noopener noreferrer'>l'equip de suport</a>",

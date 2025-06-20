@@ -128,6 +128,72 @@
     "scanner":{
         "initializing": "Inicializando escàner..."
     },
+    "vc-fields": {
+        "title": "Información de credenciales",
+        "credentialInfo": {
+            "context": "Contexto",
+            "type": "Tipo",
+            "id": "ID",
+            "name": "Nombre",
+            "description": "Descripción",
+            "issuerId": "ID del emisor",
+            "issuerOrganization": "Organización del emisor",
+            "issuerCountry": "País del emisor",
+            "issuerCommonName": "Nombre común del emisor",
+            "issuerSerialNumber": "Número de serie del emisor",
+            "validFrom": "Válido desde",
+            "validUntil": "Válido hasta"
+        },
+        "learCredentialEmployee": {
+            "mantadatee": {
+                "title": "Persona mandatada",
+                "id": "ID",
+                "firstName": "Nombre",
+                "lastName": "Apellido",
+                "email": "Correo electrónico",
+                "nationality": "Nacionalidad"
+            },
+            "mandator": {
+                "title": "Mandante",
+                "id": "ID",
+                "organization": "Organización",
+                "commonName": "Nombre común",
+                "serialNumber": "Número de serie",
+                "country": "País",
+                "emailAddress": "Dirección de correo electrónico",
+                "identifier": "Identificador"
+            },
+            "powers": "Poderes"
+        },
+        "lear-credential-machine": {
+            "mantadatee": {
+                "title": "Información de la máquina",
+                "id": "ID",
+                "domain": "Dominio",
+                "ipAddress": "Dirección IP"
+            },
+            "mandator": {
+                "title": "Mandante",
+                "id": "ID",
+                "organization": "Organización",
+                "commonName": "Nombre común",
+                "serialNumber": "Número de serie",
+                "country": "País"
+            },
+            "powers": "Poderes"
+        },
+        "gaia-x-label-credential": {
+            "label-info": {
+                "title": "Información de la etiqueta",
+                "id": "ID de la etiqueta",
+                "lableLevel": "Nivel de la etiqueta",
+                "engineVersion": "Versión del motor",
+                "rulesVersion": "Versión de las reglas"
+            },
+            "compliantCredentials": "Credenciales compatibles",
+            "validatedCriteria": "Criterios validados"
+        }
+    },
     "errors":{
         "default":"Error no reconocido. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace.eu/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>",
         "failed-qr-process": "Ha habido un error al procesar QR. Puede que sea inválido o que ya haya sido usado antes. Refresque la oferta de credencial, por favor. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace.eu/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>",

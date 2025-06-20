@@ -69,6 +69,7 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
     {
       section: 'Mandator',
       fields: [
+        { label: 'ID', valueGetter: () => s.mandate?.mandator?.id ?? '' },
         { label: 'Organization', valueGetter: () => s.mandate?.mandator?.organization ?? '' },
         { label: 'Common Name', valueGetter: () => s.mandate?.mandator?.commonName ?? '' },
         { label: 'Serial Number', valueGetter: () => s.mandate?.mandator?.serialNumber ?? '' },
