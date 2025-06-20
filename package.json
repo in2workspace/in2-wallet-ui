@@ -37,7 +37,7 @@
     "@zxing/ngx-scanner": "^18.0.1",
     "angular-auth-oidc-client": "^18.0.1",
     "angularx-qrcode": "^18.0.1",
-    "date-fns": "^4.1.0",
+    "dayjs": "^1.11.13",
     "ionicons": "^7.4.0",
     "ngx-indexed-db": "^19.0.0",
     "rxjs": "~7.8.1",

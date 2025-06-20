@@ -17,7 +17,8 @@ import {
 import { IonicModule } from '@ionic/angular';
 import { CredentialTypeMap } from 'src/app/interfaces/credential-type-map';
 import { CredentialDetailMap, EvaluatedSection } from 'src/app/interfaces/credential-detail-map';
-import { format } from 'date-fns';
+import * as dayjs from 'dayjs';
+
 
 @Component({
   selector: 'app-vc-view',
@@ -273,7 +274,7 @@ export class VcViewComponent implements OnInit {
     if (!date) {
       return ''; 
     }
-    return format(date, "dd '/' MMMM '/' yyyy");
+    return dayjs(date).format('DD / MMMM / YYYY');
   }
 
 
