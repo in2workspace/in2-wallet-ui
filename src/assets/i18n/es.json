@@ -129,6 +129,8 @@
         "initializing": "Inicializando escàner..."
     },
     "vc-fields": {
+        "delete": "Eliminar",
+        "modal-title": "Detalles de credencial",
         "title": "Información de credenciales",
         "credentialInfo": {
             "context": "Contexto",

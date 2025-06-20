@@ -133,6 +133,8 @@
         "revoked": "Revoked"
     },
     "vc-fields":{
+        "delete": "Delete",
+        "modal-title": "Credential Details",
         "title": "Credential Info",
         "credentialInfo": {
             "context": "Context",
