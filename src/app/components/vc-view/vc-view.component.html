@@ -204,7 +204,7 @@
   <ng-template>
     <ion-header>
       <ion-toolbar class="modal-toolbar">
-        <ion-title class="modal-title">{{ vc-fields.modal-title | translate }}</ion-title>
+        <ion-title class="modal-title">{{ "vc-fields.modal-title" | translate }}</ion-title>
         <ion-buttons slot="end">
           <ion-button fill="clear" (keydown)="closeDetailModal()" (click)="closeDetailModal()">
             <ion-icon name="close-outline" class="close-icon"></ion-icon>
@@ -230,7 +230,7 @@
 
     <ion-footer class="modal-footer">
       <ion-button color="primary" class="delete-button" (keydown)="deleteVC()" (click)="deleteVC()">
-        {{ vc-fields.delete | translate }}
+        {{ "vc-fields.delete" | translate }}
       </ion-button>
     </ion-footer>
   </ng-template>
