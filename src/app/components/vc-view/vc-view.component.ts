@@ -116,7 +116,8 @@ export class VcViewComponent implements OnInit {
           "gx:digestSRI": "sha256-c482dc40dbb262467...ad8578a0466992e82f1d580b"
         }
       ],
-      "gx:validatedCriteria": []
+      "gx:validatedCriteria": ["https://w3id.org/gaia-x/specs/cd24.06/criterion/P1.2.5",
+        "https://w3id.org/gaia-x/specs/cd24.06/criterion/P1.1.1"]
     },
     status: CredentialStatus.VALID
   };

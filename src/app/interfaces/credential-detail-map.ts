@@ -84,7 +84,7 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
     },
   ],
 
-  'gx:LabelCredential': [
+  'gx:LabelCredential': (s) => [
     {
       section: 'vc-fields.gaia-x-label-credential.label-info.title',
       fields: [
@@ -96,15 +96,11 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
     },
     {
       section: 'vc-fields.gaia-x-label-credential.compliantCredentials',
-      fields: [
-        {
-          label: 'gx:compliantCredentials',
-          valueGetter: (s) =>
-            (s['gx:compliantCredentials'] ?? [])
-              .map((c: any, i: number) => `#${i + 1}: ${c.id} - ${c['gx:digestSRI']}`)
-              .join('\n'),
-        },
-      ],
+      fields: (s['gx:compliantCredentials'] ?? []).map((c: any, i: number) => ({
+        label: `${c.type} (${c.id})`,
+       valueGetter: () =>
+        `${c['gx:digestSRI']}`,
+      })),
     },
     {
       section: 'vc-fields.gaia-x-label-credential.validatedCriteria',
