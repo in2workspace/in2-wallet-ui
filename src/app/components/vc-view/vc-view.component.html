@@ -30,16 +30,12 @@
       right: 10;
       width: 50%;
       height: 50%;
-      background-color: #ffffff;
+      background-color: whitesmoke;
       border-radius: 0% 0% 75% 75%;
       transform: translateX(85%) translateY(-90%);
       z-index: 1;
     "
   ></div>
-  <ion-card-header
-    style="background-color: var(--ion-color-primary); padding: 12px"
-  >
-  </ion-card-header>
   <div style="height: 2%"></div>
   <ion-col>
     <ion-col style="margin-inline: 20px">
@@ -200,17 +196,6 @@
     [buttons]="unsignedButtons"
   ></ion-alert>
 
-  <ion-row
-    style="
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      background-color: var(--ion-color-primary);
-      padding: 4px;
-    "
-  >
-    <ion-col></ion-col>
-  </ion-row>
 </ion-card>
 
 <ion-modal [isOpen]="isDetailModalOpen" (didDismiss)="closeDetailModal()" class="credential-detail-modal">
