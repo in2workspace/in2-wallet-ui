@@ -17,7 +17,7 @@ import {
 import { IonicModule } from '@ionic/angular';
 import { CredentialTypeMap } from 'src/app/interfaces/credential-type-map';
 import { CredentialDetailMap, EvaluatedSection } from 'src/app/interfaces/credential-detail-map';
-
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-vc-view',
@@ -239,8 +239,8 @@ export class VcViewComponent implements OnInit {
         { label: 'Issuer Country', value: vc.issuer.country ?? '' },
         { label: 'Issuer Common Name', value: vc.issuer.commonName ?? '' },
         { label: 'Issuer Serial Number', value: vc.issuer?.serialNumber ?? '' },
-        { label: 'Valid From', value: vc.validFrom },
-        { label: 'Valid Until', value: vc.validUntil }
+        { label: 'Valid From', value: this.formatDate(vc.validFrom) },
+        { label: 'Valid Until', value: this.formatDate(vc.validUntil) }
       ].filter(field => !!field.value && field.value !== ''),
     };
 
@@ -267,7 +267,14 @@ export class VcViewComponent implements OnInit {
 
 
     this.evaluatedSections = [credentialInfo, ...detailedSections].filter(section => section.fields.length > 0);
+  }
+
+  private formatDate(date: string | undefined): string {
+    if (!date) {
+      return ''; 
     }
+    return format(date, "dd '/' MMMM '/' yyyy");
+  }
 
 
 }
