@@ -163,9 +163,7 @@
                 "organization": "Organization",
                 "commonName": "Common Name",
                 "serialNumber": "Serial Number",
-                "country": "Country",
-                "emailAddress": "Email Address",
-                "identifier": "Identifier"
+                "country": "Country"
             },
             "powers": "Powers"
         },

@@ -26,29 +26,27 @@ export type CredentialDetailMapEntry =
 export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
   LEARCredentialEmployee: (s) => [
     {
-      section: 'Mandatee',
+      section: 'vc-fields.learCredentialEmployee.mantadatee.title',
       fields: [
-        { label: 'ID', valueGetter: () => s.mandate?.mandatee?.id ?? '' },
-        { label: 'First Name', valueGetter: () => s.mandate?.mandatee?.firstName ?? '' },
-        { label: 'Last Name', valueGetter: () => s.mandate?.mandatee?.lastName ?? '' },
-        { label: 'Email', valueGetter: () => s.mandate?.mandatee?.email ?? '' },
-        { label: 'Nationality', valueGetter: () => s.mandate?.mandatee?.nationality ?? '' },
+        { label: 'vc-fields.learCredentialEmployee.mantadatee.id', valueGetter: () => s.mandate?.mandatee?.id ?? '' },
+        { label: 'vc-fields.learCredentialEmployee.mantadatee.firstName', valueGetter: () => s.mandate?.mandatee?.firstName ?? '' },
+        { label: 'vc-fields.learCredentialEmployee.mantadatee.lastName', valueGetter: () => s.mandate?.mandatee?.lastName ?? '' },
+        { label: 'vc-fields.learCredentialEmployee.mantadatee.email', valueGetter: () => s.mandate?.mandatee?.email ?? '' },
+        { label: 'vc-fields.learCredentialEmployee.mantadatee.nationality', valueGetter: () => s.mandate?.mandatee?.nationality ?? '' },
       ],
     },
     {
-      section: 'Mandator',
+      section: 'vc-fields.learCredentialEmployee.mandator.title',
       fields: [
-        { label: 'ID', valueGetter: () => s.mandate?.mandator?.id ?? '' },
-        { label: 'Organization', valueGetter: () => s.mandate?.mandator?.organization ?? '' },
-        { label: 'Common Name', valueGetter: () => s.mandate?.mandator?.commonName ?? '' },
-        { label: 'Serial Number', valueGetter: () => s.mandate?.mandator?.serialNumber ?? '' },
-        { label: 'Country', valueGetter: () => s.mandate?.mandator?.country ?? '' },
-        { label: 'Email Address', valueGetter: () => s.mandate?.mandator?.emailAddress ?? '' },
-        { label: 'Identifier', valueGetter: () => s.mandate?.mandator?.organizationIdentifier ?? '' },
+        { label: 'vc-fields.learCredentialEmployee.mandator.id', valueGetter: () => s.mandate?.mandator?.id ?? '' },
+        { label: 'vc-fields.learCredentialEmployee.mandator.organization', valueGetter: () => s.mandate?.mandator?.organization ?? '' },
+        { label: 'vc-fields.learCredentialEmployee.mandator.commonName', valueGetter: () => s.mandate?.mandator?.commonName ?? '' },
+        { label: 'vc-fields.learCredentialEmployee.mandator.serialNumber', valueGetter: () => s.mandate?.mandator?.serialNumber ?? '' },
+        { label: 'vc-fields.learCredentialEmployee.mandator.country', valueGetter: () => s.mandate?.mandator?.country ?? '' }
       ],
     },
     {
-    section: 'Powers',
+    section: 'vc-fields.learCredentialEmployee.powers',
       fields: (s.mandate?.power ?? []).map((p: any, i: number) => ({
         label: `${p.function} (${p.domain})`,
         valueGetter: () =>
@@ -59,25 +57,25 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
 
   LEARCredentialMachine: (s) => [
     {
-      section: 'Machine Info',
+      section: 'vc-fields.lear-credential-machine.mantadatee.title',
       fields: [
-        { label: 'IP Address', valueGetter: () => s.mandate?.mandatee?.ipAddress ?? '' },
-        { label: 'Domain', valueGetter: () => s.mandate?.mandatee?.domain ?? '' },
-        { label: 'ID', valueGetter: () => s.mandate?.mandatee?.id ?? '' },
+        { label: 'vc-fields.lear-credential-machine.mantadatee.id', valueGetter: () => s.mandate?.mandatee?.id ?? '' },
+        { label: 'vc-fields.lear-credential-machine.mantadatee.domain', valueGetter: () => s.mandate?.mandatee?.domain ?? '' },
+        { label: 'vc-fields.lear-credential-machine.mantadatee.ipAddress', valueGetter: () => s.mandate?.mandatee?.ipAddress ?? '' },
       ],
     },
     {
-      section: 'Mandator',
+      section: 'vc-fields.lear-credential-machine.mandator.title',
       fields: [
-        { label: 'ID', valueGetter: () => s.mandate?.mandator?.id ?? '' },
-        { label: 'Organization', valueGetter: () => s.mandate?.mandator?.organization ?? '' },
-        { label: 'Common Name', valueGetter: () => s.mandate?.mandator?.commonName ?? '' },
-        { label: 'Serial Number', valueGetter: () => s.mandate?.mandator?.serialNumber ?? '' },
-        { label: 'Country', valueGetter: () => s.mandate?.mandator?.country ?? '' },
+        { label: 'vc-fields.lear-credential-machine.mandator.id', valueGetter: () => s.mandate?.mandator?.id ?? '' },
+        { label: 'vc-fields.lear-credential-machine.mandator.organization', valueGetter: () => s.mandate?.mandator?.organization ?? '' },
+        { label: 'vc-fields.lear-credential-machine.mandator.commonName', valueGetter: () => s.mandate?.mandator?.commonName ?? '' },
+        { label: 'vc-fields.lear-credential-machine.mandator.serialNumber', valueGetter: () => s.mandate?.mandator?.serialNumber ?? '' },
+        { label: 'vc-fields.lear-credential-machine.mandator.country', valueGetter: () => s.mandate?.mandator?.country ?? '' },
       ],
     },
     {
-      section: 'Powers',
+      section: 'vc-fields.lear-credential-machine.powers',
       fields: (s.mandate?.power ?? []).map((p: any, i: number) => ({
         label: `${p.function} (${p.domain})`,
         valueGetter: () =>
@@ -88,16 +86,16 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
 
   'gx:LabelCredential': [
     {
-      section: 'Label Info',
+      section: 'vc-fields.gaia-x-label-credential.label-info.title',
       fields: [
-        { label: 'Label ID', valueGetter: (s) => s.id },
-        { label: 'Label Level', valueGetter: (s) => s['gx:labelLevel'] },
-        { label: 'Engine Version', valueGetter: (s) => s['gx:engineVersion'] },
-        { label: 'Rules Version', valueGetter: (s) => s['gx:rulesVersion'] },
+        { label: 'vc-fields.gaia-x-label-credential.label-info.id', valueGetter: (s) => s.id },
+        { label: 'vc-fields.gaia-x-label-credential.label-info.lableLevel', valueGetter: (s) => s['gx:labelLevel'] },
+        { label: 'vc-fields.gaia-x-label-credential.label-info.engineVersion', valueGetter: (s) => s['gx:engineVersion'] },
+        { label: 'vc-fields.gaia-x-label-credential.label-info.rulesVersion', valueGetter: (s) => s['gx:rulesVersion'] },
       ],
     },
     {
-      section: 'Compliant Credentials',
+      section: 'vc-fields.gaia-x-label-credential.compliantCredentials',
       fields: [
         {
           label: 'gx:compliantCredentials',
@@ -109,7 +107,7 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
       ],
     },
     {
-      section: 'Validated Criteria',
+      section: 'vc-fields.gaia-x-label-credential.validatedCriteria',
       fields: [
         {
           label: 'gx:validatedCriteria',

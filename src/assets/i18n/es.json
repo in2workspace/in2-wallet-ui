@@ -159,9 +159,7 @@
                 "organization": "Organización",
                 "commonName": "Nombre común",
                 "serialNumber": "Número de serie",
-                "country": "País",
-                "emailAddress": "Dirección de correo electrónico",
-                "identifier": "Identificador"
+                "country": "País"
             },
             "powers": "Poderes"
         },

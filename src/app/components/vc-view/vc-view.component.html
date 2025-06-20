@@ -220,7 +220,7 @@
             <div class="section-header">{{ section.section }}</div>
             <ion-item *ngFor="let field of section.fields" lines="none" class="field-item compact-item">
               <ion-label class="field-label">
-                <strong>{{ field.label }}:</strong> {{ field.value }}
+                <strong>{{ field.label | translate }}:</strong> {{ field.value }}
               </ion-label>
             </ion-item>
           </div>

@@ -162,9 +162,7 @@
                 "organization": "Organització",
                 "commonName": "Nom comú",
                 "serialNumber": "Número de sèrie",
-                "country": "País",
-                "emailAddress": "Adreça de correu electrònic",
-                "identifier": "Identificador"
+                "country": "País"
             },
             "powers": "Poders"
         },

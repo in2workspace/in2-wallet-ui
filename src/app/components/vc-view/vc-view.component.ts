@@ -227,20 +227,20 @@ export class VcViewComponent implements OnInit {
     const vc = this.credentialInput;
 
     const credentialInfo: EvaluatedSection = {
-      section: 'Credential Info',
+      section: 'vc-fields.title',
       fields: [
-        { label: 'Context', value: Array.isArray(vc['@context']) ? vc['@context'].join(', ') : (vc['@context'] ?? '') },
-        { label: 'Id', value: vc.id },
-        { label: 'Type', value: Array.isArray(vc.type) ? vc.type.join(', ') : (vc.type ?? '') },
-        { label: 'Name', value: vc.name ?? '' },
-        { label: 'Description', value: vc.description ?? '' },
-        { label: 'Issuer ID', value: vc.issuer.id },
-        { label: 'Issuer Organization', value: vc.issuer.organization ?? '' },
-        { label: 'Issuer Country', value: vc.issuer.country ?? '' },
-        { label: 'Issuer Common Name', value: vc.issuer.commonName ?? '' },
-        { label: 'Issuer Serial Number', value: vc.issuer?.serialNumber ?? '' },
-        { label: 'Valid From', value: this.formatDate(vc.validFrom) },
-        { label: 'Valid Until', value: this.formatDate(vc.validUntil) }
+        { label: 'vc-fields.credentialInfo.context', value: Array.isArray(vc['@context']) ? vc['@context'].join(', ') : (vc['@context'] ?? '') },
+        { label: 'vc-fields.credentialInfo.id', value: vc.id },
+        { label: 'vc-fields.credentialInfo.type', value: Array.isArray(vc.type) ? vc.type.join(', ') : (vc.type ?? '') },
+        { label: 'vc-fields.credentialInfo.name', value: vc.name ?? '' },
+        { label: 'vc-fields.credentialInfo.description', value: vc.description ?? '' },
+        { label: 'vc-fields.credentialInfo.issuerId', value: vc.issuer.id },
+        { label: 'vc-fields.credentialInfo.issuerOrganization', value: vc.issuer.organization ?? '' },
+        { label: 'vc-fields.credentialInfo.issuerCountry', value: vc.issuer.country ?? '' },
+        { label: 'vc-fields.credentialInfo.issuerCommonName', value: vc.issuer.commonName ?? '' },
+        { label: 'vc-fields.credentialInfo.issuerSerialNumber', value: vc.issuer?.serialNumber ?? '' },
+        { label: 'vc-fields.credentialInfo.validFrom', value: this.formatDate(vc.validFrom) },
+        { label: 'vc-fields.credentialInfo.validUntil', value: this.formatDate(vc.validUntil) }
       ].filter(field => !!field.value && field.value !== ''),
     };
 
