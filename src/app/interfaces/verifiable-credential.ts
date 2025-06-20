@@ -9,7 +9,7 @@ export interface VerifiableCredential {
   validUntil: string;
   credentialSubject: CredentialSubject;
   credentialStatus: CredentialStatus;
-  status: CredentialStatus;
+  status: CredentialStatus; //TODO: Remove this field in the future
 }
 
 export interface Issuer {
