@@ -28,8 +28,15 @@ export const CredentialTypeMap: Record<string, CredentialMapConfig> = {
   'gx:LabelCredential': { //TODO: Revisar que funcionamiento es ok para label
     icon: 'assets/icons/LabelCredential.png',
     fields: [
-      { label: 'Label ID', valueGetter: (s) => s.id }, //Revisar
-      { label: 'Label Level', valueGetter: (s) => s.gx_labelLevel }
+      { label: 'Label ID', valueGetter: (s) => {
+        const id = s.id
+        if (id) {
+          const match = id.match(/^urn:ngsi-ld:([^:]+):/);
+          return match ? match[1] : id;
+        }
+        return '';
+      }}, 
+      { label: 'Label Level', valueGetter: (s) => s['gx:labelLevel']}
     ],
   },
 };

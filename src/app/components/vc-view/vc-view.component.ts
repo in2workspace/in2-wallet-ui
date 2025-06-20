@@ -28,7 +28,7 @@ import * as dayjs from 'dayjs';
   imports: [IonicModule, QRCodeModule, TranslateModule, CommonModule],
 })
 export class VcViewComponent implements OnInit {
-  @Input() public credentialInput!: VerifiableCredential;
+  //@Input() public credentialInput!: VerifiableCredential;
   @Input() public isDetailViewActive = false;
   @Output() public vcEmit: EventEmitter<VerifiableCredential> =
     new EventEmitter();
@@ -87,6 +87,39 @@ export class VcViewComponent implements OnInit {
 
   public isDetailModalOpen = false;
   public evaluatedSections!: EvaluatedSection[];
+
+  public credentialInput: VerifiableCredential = {
+    "@context": [
+      "https://www.w3.org/ns/credentials/v2",
+      "https://w3id.org/gaia-x/development#"
+    ],
+    "id": "urn:uuid:75a1cf83-397f-463c-a486-9bafc90e217d",
+    "type": ["VerifiableCredential", "gx:LabelCredential"],
+    "issuer": {
+      id: "did:elsi:VATES-B60645900",
+      organization: "",
+      country: "",
+      commonName: "",
+      serialNumber: ""
+    },
+    "validFrom": "2025-05-19T09:36:24.038Z",
+    "validUntil": "2025-08-19T09:36:24.038Z",
+    "credentialSubject": {
+      "id": "urn:ngsi-ld:product-specification:1c826cd0-...-b5f0-14bd095ddd8a",
+      "gx:labelLevel": "BL",
+      "gx:engineVersion": "1.3.0",
+      "gx:rulesVersion": "CD25.03",
+      "gx:compliantCredentials": [
+        {
+          "id": "urn:criteria:dp-1",
+          "type": "gx:DataProtection",
+          "gx:digestSRI": "sha256-c482dc40dbb262467...ad8578a0466992e82f1d580b"
+        }
+      ],
+      "gx:validatedCriteria": []
+    },
+    status: CredentialStatus.VALID
+  };
 
   public openDetailModal(): void {
     if(this.isDetailViewActive){
@@ -274,7 +307,7 @@ export class VcViewComponent implements OnInit {
     if (!date) {
       return ''; 
     }
-    return dayjs(date).format('DD / MMMM / YYYY');
+    return dayjs(date).format('DD/MM/YYYY');
   }
 
 
