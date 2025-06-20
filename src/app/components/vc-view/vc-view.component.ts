@@ -91,34 +91,48 @@ export class VcViewComponent implements OnInit {
   public credentialInput: VerifiableCredential = {
     "@context": [
       "https://www.w3.org/ns/credentials/v2",
-      "https://w3id.org/gaia-x/development#"
+      "https://www.dome-marketplace.eu/.well-know/credentials/learcredentialmachine/v2"
     ],
-    "id": "urn:uuid:75a1cf83-397f-463c-a486-9bafc90e217d",
-    "type": ["VerifiableCredential", "gx:LabelCredential"],
+    "id": "urn:uuid:68422e47-5d69-4e0b-8a49-34990f2f76a2",
+    "type": ["VerifiableCredential", "LEARCredentialMachine"],
+    "name": "Agent Machine Credential",
+    "description": "Machine credential acting as an authorized agent on behalf of a legal entity",
     "issuer": {
-      id: "did:elsi:VATES-B60645900",
-      organization: "",
-      country: "",
-      commonName: "",
-      serialNumber: ""
+      "id": "did:elsi:VATES-A12345678",
+      "organization": "TRUST SERVICES, S.L.",
+      "country": "ES",
+      "commonName": "TRUST SERVICE ELECTRONIC SEAL FOR VERIFIABLE CREDENTIALS",
+      "serialNumber": "610dde5a0000000003"
     },
-    "validFrom": "2025-05-19T09:36:24.038Z",
-    "validUntil": "2025-08-19T09:36:24.038Z",
+    "validFrom": "2025-04-17T14:30:00.000000000Z",
+    "validUntil": "2026-04-17T14:30:00.000000000Z",
     "credentialSubject": {
-      "id": "urn:ngsi-ld:product-specification:1c826cd0-...-b5f0-14bd095ddd8a",
-      "gx:labelLevel": "BL",
-      "gx:engineVersion": "1.3.0",
-      "gx:rulesVersion": "CD25.03",
-      "gx:compliantCredentials": [
-        {
-          "id": "urn:criteria:dp-1",
-          "type": "gx:DataProtection",
-          "gx:digestSRI": "sha256-c482dc40dbb262467...ad8578a0466992e82f1d580b"
-        }
-      ],
-      "gx:validatedCriteria": ["https://w3id.org/gaia-x/specs/cd24.06/criterion/P1.2.5",
-        "https://w3id.org/gaia-x/specs/cd24.06/criterion/P1.1.1"]
+      "mandate": {
+        "id": "urn:uuid:a2ece539-e199-4be9-a781-3a11f4a25ad9",
+        "mandator": {
+          "id": "did:elsi:VATFR-B12345678",
+          "organization": "GOOD AIR, S.L.",
+          "country": "FR",
+          "commonName": "JEAN MARTIN - CNI 880692310285",
+          "serialNumber": "880692310285"
+        },
+        "mandatee": {
+          "id": "did:key:zDnaexS1hEocz1R51ZXakcUPXWZSzkVEBJAEz9fHtxjfqZRhN",
+          "domain": "dpas.goodair.fr",
+          "ipAddress": "195.70.63.244"
+        },
+        "power": [
+          {
+            "id": "eb02efa8-193d-43a2-8ddd-3a124c6aee83",
+            "type": "domain",
+            "domain": "DOME",
+            "function": "Onboarding",
+            "action": ["execute"]
+          }
+        ]
+      }
     },
+    credentialStatus: CredentialStatus.VALID,
     status: CredentialStatus.VALID
   };
 

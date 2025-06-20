@@ -8,6 +8,7 @@ export interface VerifiableCredential {
   validFrom: string;
   validUntil: string;
   credentialSubject: CredentialSubject;
+  credentialStatus: CredentialStatus;
   status: CredentialStatus;
 }
 
@@ -57,12 +58,12 @@ export interface Mandate {
 
 export interface Mandatee {
   id: string;
-  employeId: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  domain: string;
-  ipAddress: string;
+  employeId?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  domain?: string;
+  ipAddress?: string;
 }
 
 export interface Mandator {

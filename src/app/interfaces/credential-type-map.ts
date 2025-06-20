@@ -25,7 +25,7 @@ export const CredentialTypeMap: Record<string, CredentialMapConfig> = {
       { label: 'Organization', valueGetter: (s) => s.mandate.mandator.organization }
     ],
   },
-  'gx:LabelCredential': { //TODO: Revisar que funcionamiento es ok para label
+  'gx:LabelCredential': {
     icon: 'assets/icons/LabelCredential.png',
     fields: [
       { label: 'Label ID', valueGetter: (s) => {

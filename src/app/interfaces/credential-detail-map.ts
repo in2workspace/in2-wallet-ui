@@ -108,9 +108,7 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
         {
           label: 'gx:validatedCriteria',
           valueGetter: (s) =>
-            (s['gx:validatedCriteria'] ?? [])
-              .map((v: string) => `- ${v}`)
-              .join('\n'),
+            `${Array.isArray(s['gx:validatedCriteria']) ?s['gx:validatedCriteria'].join(', ') : s['gx:validatedCriteria']}`,
         },
       ],
     },
