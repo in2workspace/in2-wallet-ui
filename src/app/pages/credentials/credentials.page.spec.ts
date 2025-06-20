@@ -9,9 +9,8 @@ import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
 import { of, throwError } from 'rxjs';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { CredentialStatus, Mandate } from 'src/app/interfaces/verifiable-credential';
+import { CredentialStatus, Mandate, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { TranslateService } from '@ngx-translate/core';
-import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 
 describe('CredentialsPage', () => {
   let component: CredentialsPage;
@@ -118,6 +117,7 @@ describe('CredentialsPage', () => {
         credentialSubject: { mandate:  mockMandate},
         expirationDate: new Date().toISOString(),
         validUntil: new Date().toISOString(),
+        credentialStatus: CredentialStatus.ISSUED,
       };
       component.credList = [pendingCredential];
 
@@ -148,6 +148,8 @@ describe('CredentialsPage', () => {
             credentialSubject: { mandate:  mockMandate},
             expirationDate: new Date().toISOString(),
             validUntil: new Date().toISOString(),
+            credentialStatus: CredentialStatus.ISSUED,
+
           };
       component.credList = [pendingCredential];
 
@@ -188,7 +190,7 @@ describe('CredentialsPage', () => {
       expect(routerMock.navigate).toHaveBeenCalledWith(['/tabs/credentials']);
       expect(reloadSpy).toHaveBeenCalled();
 
-      window.location = originalLocation;
+      window.location = originalLocation as any;
     });
   });
 });

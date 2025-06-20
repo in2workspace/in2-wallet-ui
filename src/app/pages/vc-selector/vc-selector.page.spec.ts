@@ -234,7 +234,8 @@ describe('VcSelectorPage', () => {
         expirationDate: '2025-01-01T00:00:00Z',
         validUntil: '2025-01-01T00:00:00Z',
         credentialSubject: mockCredentialSubject,
-        status: CredentialStatus.REVOKED
+        status: CredentialStatus.REVOKED,
+        credentialStatus: CredentialStatus.ISSUED,
       };
 
       const executionResponseWithRevoked = {
@@ -260,7 +261,8 @@ describe('VcSelectorPage', () => {
           expirationDate: '2025-01-01T00:00:00Z',
           validUntil: '2025-01-01T00:00:00Z',
           credentialSubject: mockCredentialSubject,
-          status: CredentialStatus.VALID
+          status: CredentialStatus.VALID,
+          credentialStatus: CredentialStatus.ISSUED,
         } as VerifiableCredential,
         { 
           '@context': ['https://www.w3.org/2018/credentials/v1'],
@@ -271,7 +273,8 @@ describe('VcSelectorPage', () => {
           expirationDate: '2025-01-01T00:00:00Z',
           validUntil: '2025-01-01T00:00:00Z',
           credentialSubject: mockCredentialSubject,
-          status: CredentialStatus.VALID
+          status: CredentialStatus.VALID,
+          credentialStatus: CredentialStatus.ISSUED,
         } as VerifiableCredential
       ];
       component.resetIsClickList();
@@ -301,7 +304,8 @@ describe('VcSelectorPage', () => {
         expirationDate: '2025-01-01T00:00:00Z',
         validUntil: '2025-01-01T00:00:00Z',
         credentialSubject: mockCredentialSubject,
-        status: CredentialStatus.VALID
+        status: CredentialStatus.VALID,
+        credentialStatus: CredentialStatus.ISSUED,
       } as VerifiableCredential;
       component.isClick = [false, false];
       
@@ -325,7 +329,8 @@ describe('VcSelectorPage', () => {
         expirationDate: '2025-01-01T00:00:00Z',
         validUntil: '2025-01-01T00:00:00Z',
         credentialSubject: mockCredentialSubject,
-        status: CredentialStatus.VALID
+        status: CredentialStatus.VALID,
+        credentialStatus: CredentialStatus.ISSUED,
       } as VerifiableCredential;
     });
 

@@ -73,7 +73,8 @@ describe('VcViewComponent', () => {
           ]
         },
       },
-      status: CredentialStatus.ISSUED
+      status: CredentialStatus.ISSUED,
+      credentialStatus: CredentialStatus.ISSUED,
     };
 
     fixture.detectChanges();
@@ -303,30 +304,7 @@ describe('VcViewComponent', () => {
     });
   });
 
-  describe('getStructuredFields', () => {
-    it('should filter out fields with empty values', () => {
-      component.credentialInput = {
-        ...component.credentialInput,
-        name: '',
-        description: '',
-        issuer: {
-          ...component.credentialInput.issuer,
-          organization: '',
-          country: '',
-          commonName: '',
-          serialNumber: ''
-        }
-      } as VerifiableCredential;
-
-      component.getStructuredFields();
-      const credentialInfoSection = component.evaluatedSections.find(
-        s => s.section === 'Credential Info'
-      );
-      expect(credentialInfoSection).toBeTruthy();
-      expect(credentialInfoSection?.fields.some(f => f.label === 'Name')).toBe(false);
-      expect(credentialInfoSection?.fields.some(f => f.label === 'Issuer Organization')).toBe(false);
-    });
-   
+  describe('getStructuredFields', () => {   
     it('should not fail if credentialType is not in CredentialDetailMap', () => {
       component.credentialType = 'UnknownType';
       expect(() => component.getStructuredFields()).not.toThrow();

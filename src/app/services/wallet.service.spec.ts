@@ -95,6 +95,7 @@ describe('WalletService', () => {
         },
       },
       status: CredentialStatus.ISSUED,
+      credentialStatus: CredentialStatus.ISSUED,
     };
     const mockResponse = 'mock-cbor-data';
 
@@ -214,6 +215,7 @@ describe('WalletService', () => {
           },
         },
         status: CredentialStatus.ISSUED,
+        credentialStatus: CredentialStatus.VALID
       },
     ];
 
@@ -272,6 +274,7 @@ describe('WalletService', () => {
         },
       },
       status: CredentialStatus.ISSUED,
+      credentialStatus: CredentialStatus.VALID
     };
 
     service.getOne(data).subscribe((credential) => {
