@@ -17,6 +17,7 @@ export class CallbackPage{
     constructor(private readonly router: Router) {}
     ngAfterViewInit(): void {
       setTimeout(() => {
+        console.log('navigate to home from callback page')
         this.router.navigate(['/tabs/home']);
       }, 2000);
     }
