@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
-import { Router } from '@angular/router';
 
+// The redirect is done by the Auth library, don't need to do it manually
 @Component({
   selector: 'app-callback',
   templateUrl: './callback.page.html',
@@ -14,11 +14,4 @@ import { Router } from '@angular/router';
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CallbackPage{
-    constructor(private readonly router: Router) {}
-    ngAfterViewInit(): void {
-      setTimeout(() => {
-        console.log('navigate to home from callback page')
-        this.router.navigate(['/tabs/home']);
-      }, 2000);
-    }
 }
