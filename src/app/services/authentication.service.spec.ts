@@ -201,7 +201,7 @@ describe('AuthenticationService', () => {
   });
 
   it('should handle IdTokenExpired', () => {
-    const consoleError = jest.spyOn(console, 'error').mockImplementation();
+    const consoleError = jest.spyOn(console, 'warn').mockImplementation();
 
     service.subscribeToAuthEvents();
 
@@ -213,7 +213,7 @@ describe('AuthenticationService', () => {
   });
 
   it('should handle TokenExpired', () => {
-    const consoleError = jest.spyOn(console, 'error').mockImplementation();
+    const consoleError = jest.spyOn(console, 'warn').mockImplementation();
 
     service.subscribeToAuthEvents();
 

@@ -88,8 +88,8 @@ export class AuthenticationService implements OnDestroy {
 
           case EventTypes.IdTokenExpired:
           case EventTypes.TokenExpired:
-            console.error('Session expired:', event);
-            console.error('At: ' + Date.now());
+            console.warn('Session expired:', event);
+            console.warn('At: ' + Date.now());
             break;
         }
       });
