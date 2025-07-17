@@ -11,7 +11,7 @@
     align-content: center;
   "
 >
-@if(isCredentialIssuedAndNotExpired()){
+@if(credentialInput.lifeCycleStatus == credentialStatus.ISSUED){
   <button
       (click)="unsignedInfo()"
       (keydown)="handleButtonKeydown($event, 'info')"
@@ -89,7 +89,7 @@
         />
         }
 
-        @if(isExpired && credentialInput.status !== credentialStatus.ISSUED) {
+        @if(credentialInput.lifeCycleStatus == credentialStatus.EXPIRED) {
         <span
           style="
             color: red;
@@ -99,10 +99,22 @@
         >
           {{ "credentials.expiration" | translate }}
         </span>
-      }
+        }
+
+        @if(credentialInput.lifeCycleStatus !== credentialStatus.REVOKED) {
+        <span
+          style="
+            color: red;
+            font-size: 18px;
+            font-weight: bold;
+          "
+        >
+          {{ "vc-view.revoked" | translate }}
+        </span>
+        }
 
         <!-- todo FIXME add '&& !isExpired', removed only temporarily -->
-         @if(credentialInput.status === credentialStatus.ISSUED){
+         @if(credentialInput.lifeCycleStatus === credentialStatus.ISSUED){
            <span
              style="
                color: red;
@@ -114,7 +126,7 @@
            </span>
          }
 
-         @if(credentialInput.status === credentialStatus.REVOKED){
+         @if(credentialInput.lifeCycleStatus === credentialStatus.REVOKED){
           <span
             style="
               color: red;
