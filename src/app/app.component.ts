@@ -1,5 +1,5 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule, PopoverController } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -25,7 +25,7 @@ import { WebsocketService } from './services/websocket.service';
   ],
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   private readonly authenticationService = inject(AuthenticationService);
   private readonly document = inject(DOCUMENT);
   private readonly websocket = inject(WebsocketService);
@@ -54,6 +54,7 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit() {
+    // if the route is "/callback", don't allow menu popover --do declarative
     this.trackRouterEvents();
     this.alertIncompatibleDevice();
     this.websocket.isLoading$.subscribe((loading) => {
@@ -62,7 +63,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  private ngOnDestroy(){
+  public ngOnDestroy(){
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -103,13 +104,13 @@ export class AppComponent implements OnInit {
     this.document.head.appendChild(appleFaviconLink);
   }
 
-  public setDefaultLanguages(): void{
+  private setDefaultLanguages(): void{
     this.translate.addLangs(['en', 'es', 'ca']);
     this.translate.setDefaultLang('en');
     this.translate.use('en');
   }
 
-  public setStoredLanguage(): void {
+  private setStoredLanguage(): void {
     this.storageService.get('language').then((res: string) => {
       const availableLangs = this.translate.getLangs();
       
@@ -122,7 +123,7 @@ export class AppComponent implements OnInit {
   }
 
   //alert for IOs below 14.3
-  public alertIncompatibleDevice(): void{
+  private alertIncompatibleDevice(): void{
     const problematicIosVersion = this.cameraService.isIOSVersionLowerThan(14.3);
     const isNotSafari = this.cameraService.isNotSafari();
     if (problematicIosVersion && isNotSafari) {
@@ -130,7 +131,7 @@ export class AppComponent implements OnInit {
     }
   }
   
-  public trackRouterEvents(): void {
+  private trackRouterEvents(): void {
     this.router.events
     .pipe(takeUntil(this.destroy$))
     .subscribe(() => {

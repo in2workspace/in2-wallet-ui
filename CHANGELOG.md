@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Changed VC
 
+## [v1.9.8](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.9.8)
+### Fixed
+- Don't redirect to home when navigating right after login.
+
 ## [v1.9.7](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.9.7)
 ### Fixed
 - Fix error handling for auth errors
