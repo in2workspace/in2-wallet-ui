@@ -136,7 +136,6 @@ export class VcSelectorPage {
 private async handleError(err: any) {
   console.error(err);
   await this.errorMessage(err.status);
-  console.log('navigate to home from vc-selector page: handleError')
   this.router.navigate(['/tabs/home']);
   this.selCredList = [];
 }

@@ -212,7 +212,6 @@ export class CredentialsPage implements OnInit {
 
             console.error(httpErrorResponse);
             setTimeout(()=>{
-              console.log('navigate to home from credentials page -qrCodeEmit')
               this.router.navigate(['/tabs/home'])
             }, 1000);
 
