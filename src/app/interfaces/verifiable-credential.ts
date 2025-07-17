@@ -2,21 +2,50 @@ export interface VerifiableCredential {
   '@context': string[];
   id: string;
   type?: string[];
+  name?: string;
+  description?: string;
   issuer: Issuer;
-  issuanceDate: string;
   validFrom: string;
-  expirationDate: string;
   validUntil: string;
   credentialSubject: CredentialSubject;
-  available_formats?: string[];
-  status: CredentialStatus;
+  credentialStatus: CredentialStatus;
+  status: CredentialStatus; //TODO: Remove this field in the future
 }
 
 export interface Issuer {
   id: string;
+  organization?: string;
+  country?: string;
+  commonName?: string;
+  serialNumber?: string;
 }
 
-export interface CredentialSubject {
+export type CredentialSubject =
+  | EmployeeCredentialSubject
+  | LabelCredentialSubject
+  | MachineCredentialSubject;
+
+
+export interface LabelCredentialSubject {
+  id: string;
+  'gx:labelLevel': string;
+  'gx:engineVersion': string;
+  'gx:rulesVersion': string;
+  'gx:compliantCredentials': CompliantCredentials[];
+  'gx:validatedCriteria': string[];
+}
+
+export interface CompliantCredentials {
+  id: string;
+  type: string;
+  'gx:digestSRI': string;
+}
+
+export interface MachineCredentialSubject {
+  mandate: Mandate;
+}
+
+export interface EmployeeCredentialSubject  {
   mandate: Mandate;
 }
 
@@ -29,29 +58,31 @@ export interface Mandate {
 
 export interface Mandatee {
   id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  nationality: string;
+  employeId?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  domain?: string;
+  ipAddress?: string;
 }
 
 export interface Mandator {
-  organizationIdentifier: string;
+  id: string;
   organization: string;
   commonName: string;
-  emailAddress: string;
   serialNumber: string;
   country: string;
 }
 
 export interface Power {
   id: string;
-  action: string | string[];
+  type: string;
   domain: string;
   function: string;
-  type: string;
+  action: string | string[];
 }
 
+//TODO: REVISAR NEW FORMAT
 export enum CredentialStatus {
   VALID = 'VALID',
   ISSUED = 'ISSUED',
