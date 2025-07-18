@@ -155,6 +155,7 @@ export class CredentialsPage implements OnInit {
       },
       error: (error) => {
         if (error.status === 404) {
+          console.log("No credentials found, initializing empty list.");
           this.credList = [];
           this.cdr.detectChanges();
         } else {
