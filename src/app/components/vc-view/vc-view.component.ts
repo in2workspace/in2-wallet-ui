@@ -99,6 +99,7 @@ export class VcViewComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    console.log(this.credentialInput);
     this.checkAvailableFormats();
     this.credentialType = this.getSpecificType(this.credentialInput);
   }

@@ -1,7 +1,8 @@
 export interface VerifiableCredential {
   '@context': string[];
   id: string;
-  type?: string[];
+  type?: string[];  
+  lifeCycleStatus: CredentialStatusType; 
   name?: string;
   description?: string;
   issuer: Issuer;
@@ -9,7 +10,6 @@ export interface VerifiableCredential {
   validUntil: string;
   credentialSubject: CredentialSubject;
   credentialStatus: CredentialStatus;
-  lifeCycleStatus: CredentialStatusType; 
 }
 
 export interface Issuer {
