@@ -44,6 +44,21 @@
       @if(iconUrl){
         <img [src]="iconUrl" alt width="50" height="50" style="margin: 10px auto" />
       }
+      @if(credentialInput.lifeCycleStatus == credentialStatus.EXPIRED) {
+        <span
+          style="
+            color: red;
+            font-size: 18px;
+            font-weight: bold;
+          "
+        >
+          {{ "credentials.expiration" | translate }}
+        </span>
+      }
+
+      @if(credentialInput.lifeCycleStatus !== credentialStatus.REVOKED) {
+        <span class="status-ellipse status-expired">{{ "vc-view.revoked" | translate }}</span>
+      }
       </ion-col>
     <ion-col>
       <ion-col size="12">
@@ -89,54 +104,6 @@
         />
         }
 
-        @if(credentialInput.lifeCycleStatus == credentialStatus.EXPIRED) {
-        <span
-          style="
-            color: red;
-            font-size: 18px;
-            font-weight: bold;
-          "
-        >
-          {{ "credentials.expiration" | translate }}
-        </span>
-        }
-
-        @if(credentialInput.lifeCycleStatus !== credentialStatus.REVOKED) {
-        <span
-          style="
-            color: red;
-            font-size: 18px;
-            font-weight: bold;
-          "
-        >
-          {{ "vc-view.revoked" | translate }}
-        </span>
-        }
-
-        <!-- todo FIXME add '&& !isExpired', removed only temporarily -->
-         @if(credentialInput.lifeCycleStatus === credentialStatus.ISSUED){
-           <span
-             style="
-               color: red;
-               font-size: 18px;
-               font-weight: bold;
-             "
-           >
-             {{ "vc-view.unsigned" | translate }}
-           </span>
-         }
-
-         @if(credentialInput.lifeCycleStatus === credentialStatus.REVOKED){
-          <span
-            style="
-              color: red;
-              font-size: 18px;
-              font-weight: bold;
-            "
-          >
-            {{ "vc-view.revoked" | translate }}
-        </span>
-         }
       </ion-col>
     </ion-col>
   </ion-col>
