@@ -1,7 +1,8 @@
 export interface VerifiableCredential {
   '@context': string[];
   id: string;
-  type?: string[];
+  type?: string[];  
+  lifeCycleStatus: CredentialStatusType; 
   name?: string;
   description?: string;
   issuer: Issuer;
@@ -9,7 +10,6 @@ export interface VerifiableCredential {
   validUntil: string;
   credentialSubject: CredentialSubject;
   credentialStatus: CredentialStatus;
-  status: CredentialStatus; //TODO: Remove this field in the future
 }
 
 export interface Issuer {
@@ -82,9 +82,18 @@ export interface Power {
   action: string | string[];
 }
 
+export interface CredentialStatus {
+  id: string;
+  type: string;
+  statusPurpose: string;
+  statusListIndex: string;
+  statusListCredential: string;
+}
+
 //TODO: REVISAR NEW FORMAT
-export enum CredentialStatus {
+export enum CredentialStatusType {
   VALID = 'VALID',
   ISSUED = 'ISSUED',
-  REVOKED = 'REVOKED'
+  REVOKED = 'REVOKED',
+  EXPIRED = 'EXPIRED',
 }
