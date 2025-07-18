@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {AlertController, IonicModule, Platform} from '@ionic/angular';
+import {AlertController, IonicModule} from '@ionic/angular';
 import {StorageService} from 'src/app/services/storage.service';
 import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
 import {QRCodeModule} from 'angularx-qrcode';
@@ -124,7 +124,7 @@ export class CredentialsPage implements OnInit {
       },
       error: (error: HttpErrorResponse) => {
         console.error('Unexpected error in signature requests:', error.message);
-        this.toastServiceHandler.showErrorAlert('ErrorUnsigned').subscribe();
+        //this.toastServiceHandler.showErrorAlert('ErrorUnsigned').subscribe();
       },
     });
   }
