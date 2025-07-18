@@ -45,18 +45,9 @@
         <img [src]="iconUrl" alt width="50" height="50" style="margin: 10px auto" />
       }
       @if(credentialInput.lifeCycleStatus == credentialStatus.EXPIRED) {
-        <span
-          style="
-            color: red;
-            font-size: 18px;
-            font-weight: bold;
-          "
-        >
-          {{ "credentials.expiration" | translate }}
-        </span>
+        <span class="status-ellipse status-expired">{{ "credentials.expiration" | translate }}</span>
       }
-
-      @if(credentialInput.lifeCycleStatus !== credentialStatus.REVOKED) {
+      @if(credentialInput.lifeCycleStatus == credentialStatus.REVOKED) {
         <span class="status-ellipse status-expired">{{ "vc-view.revoked" | translate }}</span>
       }
       </ion-col>
