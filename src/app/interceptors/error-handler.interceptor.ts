@@ -27,9 +27,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     //todo refactor this handler (conditional structure)
     return next.handle(request).pipe(
       catchError((errorResp: HttpErrorResponse) => {
+        
         let errMessage = errorResp.error?.message || errorResp.message || 'Unknown Http error';
         const errStatus = errorResp.status ?? errorResp.error?.status;
-
+        console.log('Error status:', errStatus);
+        console.log('Error message:', errMessage);
         //DONT'T SHOW POPUP CASES
         // get credentials endpoint
         if ( //todo review this handler

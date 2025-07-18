@@ -124,7 +124,7 @@ export class CredentialsPage implements OnInit {
       },
       error: (error: HttpErrorResponse) => {
         console.error('Unexpected error in signature requests:', error.message);
-        //this.toastServiceHandler.showErrorAlert('ErrorUnsigned').subscribe();
+        this.toastServiceHandler.showErrorAlert('ErrorUnsigned').subscribe();
       },
     });
   }
