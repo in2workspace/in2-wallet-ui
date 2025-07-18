@@ -176,9 +176,11 @@ describe('VcViewComponent', () => {
   });
 
   it('qrView should set isAlertExpirationOpenNotFound when credential is expired', () => {
+    component.credentialInput.lifeCycleStatus = CredentialStatusType.EXPIRED;
     component.qrView();
     expect(component.isAlertExpirationOpenNotFound).toBeTruthy();
   });
+  
   it('qrView should handle HTTP errors correctly', () => {
     const mockError = new Error('Network issue');
     jest.spyOn(walletService, 'getVCinCBOR').mockReturnValue(throwError(() => mockError));

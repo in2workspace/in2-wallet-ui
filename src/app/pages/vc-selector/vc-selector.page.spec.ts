@@ -1,12 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 import { VcSelectorPage } from './vc-selector.page';
 import { WalletService } from 'src/app/services/wallet.service';
-import { VerifiableCredential, CredentialStatus, Issuer, CredentialSubject, Mandate, Mandatee, Mandator, Power } from 'src/app/interfaces/verifiable-credential';
+import { VerifiableCredential, CredentialStatus, Issuer, CredentialSubject, Mandate, Mandatee, Mandator, Power, CredentialStatusType } from 'src/app/interfaces/verifiable-credential';
 
 describe('VcSelectorPage', () => {
   let component: VcSelectorPage;
@@ -72,7 +71,7 @@ describe('VcSelectorPage', () => {
         validUntil: '2025-01-01T00:00:00Z',
         credentialSubject: mockCredentialSubject,
         available_formats: ['jwt'],
-        status: CredentialStatus.VALID
+        lifeCycleStatus: CredentialStatusType.VALID
       },
       {
         '@context': ['https://www.w3.org/2018/credentials/v1'],
@@ -94,7 +93,7 @@ describe('VcSelectorPage', () => {
             power: [mockPower]
           }
         },
-        status: CredentialStatus.ISSUED
+        lifeCycleStatus: CredentialStatusType.ISSUED
       }
     ] as VerifiableCredential[],
     redirectUri: 'http://example.com/callback',
@@ -213,7 +212,7 @@ describe('VcSelectorPage', () => {
             issuer: mockIssuer,
             validFrom: '2024-01-01T00:00:00Z',
             validUntil: '2025-01-01T00:00:00Z',
-            status: CredentialStatus.VALID
+            lifeCycleStatus: CredentialStatusType.VALID
           } as VerifiableCredential
         ]
       };
@@ -234,8 +233,8 @@ describe('VcSelectorPage', () => {
         expirationDate: '2025-01-01T00:00:00Z',
         validUntil: '2025-01-01T00:00:00Z',
         credentialSubject: mockCredentialSubject,
-        status: CredentialStatus.REVOKED,
-        credentialStatus: CredentialStatus.ISSUED,
+        lifeCycleStatus: CredentialStatusType.REVOKED,
+        credentialStatus: {} as CredentialStatus,
       };
 
       const executionResponseWithRevoked = {
@@ -245,7 +244,7 @@ describe('VcSelectorPage', () => {
       component.executionResponse = executionResponseWithRevoked;
       component.formatCredList();
 
-      expect(component.credList[0].status).toBe(CredentialStatus.REVOKED);
+      expect(component.credList[0].lifeCycleStatus).toBe(CredentialStatusType.REVOKED);
     });
   });
 
@@ -261,8 +260,8 @@ describe('VcSelectorPage', () => {
           expirationDate: '2025-01-01T00:00:00Z',
           validUntil: '2025-01-01T00:00:00Z',
           credentialSubject: mockCredentialSubject,
-          status: CredentialStatus.VALID,
-          credentialStatus: CredentialStatus.ISSUED,
+          lifeCycleStatus: CredentialStatusType.VALID,
+          credentialStatus: {} as CredentialStatus,
         } as VerifiableCredential,
         { 
           '@context': ['https://www.w3.org/2018/credentials/v1'],
@@ -273,8 +272,8 @@ describe('VcSelectorPage', () => {
           expirationDate: '2025-01-01T00:00:00Z',
           validUntil: '2025-01-01T00:00:00Z',
           credentialSubject: mockCredentialSubject,
-          status: CredentialStatus.VALID,
-          credentialStatus: CredentialStatus.ISSUED,
+          lifeCycleStatus: CredentialStatusType.VALID,
+          credentialStatus: {} as CredentialStatus,
         } as VerifiableCredential
       ];
       component.resetIsClickList();
@@ -304,8 +303,8 @@ describe('VcSelectorPage', () => {
         expirationDate: '2025-01-01T00:00:00Z',
         validUntil: '2025-01-01T00:00:00Z',
         credentialSubject: mockCredentialSubject,
-        status: CredentialStatus.VALID,
-        credentialStatus: CredentialStatus.ISSUED,
+        lifeCycleStatus: CredentialStatusType.VALID,
+        credentialStatus: {} as CredentialStatus,
       } as VerifiableCredential;
       component.isClick = [false, false];
       
@@ -329,8 +328,8 @@ describe('VcSelectorPage', () => {
         expirationDate: '2025-01-01T00:00:00Z',
         validUntil: '2025-01-01T00:00:00Z',
         credentialSubject: mockCredentialSubject,
-        status: CredentialStatus.VALID,
-        credentialStatus: CredentialStatus.ISSUED,
+        lifeCycleStatus: CredentialStatusType.VALID,
+        credentialStatus: {} as CredentialStatus,
       } as VerifiableCredential;
     });
 
