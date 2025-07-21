@@ -129,7 +129,8 @@
         "initializing": "Inicializando escàner..."
     },
     "vc-fields": {
-        "delete": "Eliminar",
+        "delete": "Eliminar",        
+        "copy-success": "Copiado al portapapeles",
         "modal-title": "Detalles de credencial",
         "title": "Información de credenciales",
         "credentialInfo": {

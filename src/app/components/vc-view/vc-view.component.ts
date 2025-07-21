@@ -18,6 +18,7 @@ import { IonicModule } from '@ionic/angular';
 import { CredentialTypeMap } from 'src/app/interfaces/credential-type-map';
 import { CredentialDetailMap, EvaluatedSection } from 'src/app/interfaces/credential-detail-map';
 import * as dayjs from 'dayjs';
+import { ToastServiceHandler } from 'src/app/services/toast.service';
 
 
 @Component({
@@ -25,7 +26,7 @@ import * as dayjs from 'dayjs';
   templateUrl: './vc-view.component.html',
   styleUrls: ['./vc-view.component.scss'],
   standalone: true,
-  imports: [IonicModule, QRCodeModule, TranslateModule, CommonModule],
+  imports: [IonicModule, QRCodeModule, TranslateModule, CommonModule, ToastServiceHandler],
 })
 export class VcViewComponent implements OnInit {
   @Input() public credential!: VerifiableCredential;
@@ -133,6 +134,7 @@ export class VcViewComponent implements OnInit {
   },
   ];
   private readonly walletService = inject(WalletService);
+  private readonly toastService = inject(ToastServiceHandler);
 
   public isDetailModalOpen = false;
   public evaluatedSections!: EvaluatedSection[];
@@ -167,7 +169,7 @@ export class VcViewComponent implements OnInit {
 
   copyToClipboard(text: string): void {
     navigator.clipboard.writeText(text).then(() => {
-      console.log('Token copiado');
+      this.toastService.showToast('toasts.copy-success');
     }).catch(err => {
       console.error('Error al copiar', err);
     });

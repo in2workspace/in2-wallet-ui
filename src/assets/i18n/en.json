@@ -134,6 +134,7 @@
     },
     "vc-fields":{
         "delete": "Delete",
+        "copy-success": "Copied to clipboard",
         "modal-title": "Credential Details",
         "title": "Credential Info",
         "credentialInfo": {

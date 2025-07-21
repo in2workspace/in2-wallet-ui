@@ -224,14 +224,17 @@
               </ion-label>
 
               <div *ngIf="field.label === 'vc-fields.lear-credential-machine.credentialDid'" class="field-label no-label">
-                <span>{{ showToken ? field.value : '************' }}</span>
-                <ion-button fill="clear" size="small" (click)="showToken = !showToken" (keydown)="handleButtonKeydown($event, 'toggleToken')">
+                <span class="fixed-token-width">
+                  {{ showToken ? field.value : '***************' }}
+                </span>
+                <ion-button fill="clear" size="small" (click)="showToken = !showToken">
                   <ion-icon [name]="showToken ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
                 </ion-button>
-                <ion-button fill="clear" size="small" (click)="copyToClipboard(field.value)" (keydown)="handleButtonKeydown($event, 'copy')">
+                <ion-button fill="clear" size="small" (click)="copyToClipboard(field.value)">
                   <ion-icon name="copy-outline"></ion-icon>
                 </ion-button>
               </div>
+
             </ion-item>
 
           </div>

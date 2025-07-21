@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { map, Observable } from 'rxjs';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,8 @@ import { AlertController } from '@ionic/angular';
 export class ToastServiceHandler {
   public constructor(
     private readonly translate: TranslateService,
-    private readonly alertController: AlertController
+    private readonly alertController: AlertController,
+    private readonly toastController: ToastController
   ) {}
 
   //todo use title instead of message
@@ -77,5 +78,25 @@ export class ToastServiceHandler {
       })
     );
   }
+
+  public async showToast(messageKey: string, duration: number = 2000): Promise<void> {
+    const message = await this.translate.get(messageKey).toPromise();
+
+    const toast = await this.toastController.create({
+      message,
+      duration,
+      position: 'bottom',
+      color: 'success',
+      buttons: [
+        {
+          icon: 'checkmark',
+          role: 'cancel',
+        },
+      ],
+    });
+
+    await toast.present();
+  }
+
 
 }

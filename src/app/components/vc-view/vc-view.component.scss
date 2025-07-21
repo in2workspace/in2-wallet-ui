@@ -99,3 +99,19 @@ ion-modal.stack-modal {
   gap: 8px;
   flex-wrap: wrap;
 }
+
+.fixed-token-width {
+  display: inline-block;
+  width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: monospace;
+}
+
+.field-label.no-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 8px;
+}
