@@ -93,25 +93,25 @@ ion-modal.stack-modal {
   margin-bottom: 4px;
 }
 
-.field-label {
+.token-container {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  width: 100%;
+  gap: 12px;
 }
 
-.fixed-token-width {
-  display: inline-block;
-  width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.token-value {
+  flex: 1;
+  word-break: break-word;
+  white-space: normal;
   font-family: monospace;
+  font-size: 14px;
 }
 
-.field-label.no-label {
+.token-actions {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-left: 8px;
+  gap: 4px;
+  flex-shrink: 0;
 }

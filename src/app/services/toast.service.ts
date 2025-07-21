@@ -91,6 +91,9 @@ export class ToastServiceHandler {
     });
 
     await alert.present();
+    setTimeout(() => {
+      alert.dismiss();
+    }, duration);
   }
 
 

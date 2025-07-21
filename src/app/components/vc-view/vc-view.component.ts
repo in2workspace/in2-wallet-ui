@@ -169,7 +169,7 @@ export class VcViewComponent implements OnInit {
 
   copyToClipboard(text: string): void {
     navigator.clipboard.writeText(text).then(() => {
-      this.toastService.showToast('toasts.copy-success');
+      this.toastService.showToast('vc-fields.copy-success');
     }).catch(err => {
       console.error('Error al copiar', err);
     });
