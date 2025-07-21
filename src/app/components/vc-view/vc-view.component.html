@@ -219,10 +219,22 @@
           <div class="section">
             <div class="section-header">{{ section.section | translate }}</div>
             <ion-item *ngFor="let field of section.fields" lines="none" class="field-item compact-item">
-              <ion-label class="field-label">
+              <ion-label class="field-label" *ngIf="field.label !== 'vc-fields.lear-credential-machine.credentialDid'">
                 <strong>{{ field.label | translate }}:</strong> {{ field.value }}
               </ion-label>
+
+              <div *ngIf="field.label === 'vc-fields.lear-credential-machine.credentialDid'" class="field-label">
+                <strong>{{ field.label | translate }}:</strong>
+                <span>{{ showToken ? field.value : '***************' }}</span>
+                <ion-button fill="clear" size="small" (click)="showToken = !showToken">
+                  {{ showToken ? 'Ocultar' : 'Mostrar' }}
+                </ion-button>
+                <ion-button fill="clear" size="small" (click)="copyToClipboard(field.value)">
+                  Copiar
+                </ion-button>
+              </div>
             </ion-item>
+
           </div>
         </ng-container>
       </ion-list>

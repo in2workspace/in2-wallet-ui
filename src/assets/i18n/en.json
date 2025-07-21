@@ -184,7 +184,8 @@
                 "serialNumber": "Serial Number",
                 "country": "Country"
             },
-            "powers": "Powers"
+            "powers": "Powers",
+            "credentialDid": "Credential"
         },
         "gaia-x-label-credential":{
             "label-info": {

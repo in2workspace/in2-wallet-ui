@@ -183,7 +183,8 @@
                 "serialNumber": "Número de sèrie",
                 "country": "País"
             },
-            "powers": "Poders"
+            "powers": "Poders",
+            "credentialDid": "Credencial"
         },
         "gaia-x-label-credential": {
             "label-info": {

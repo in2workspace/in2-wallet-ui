@@ -28,7 +28,55 @@ import * as dayjs from 'dayjs';
   imports: [IonicModule, QRCodeModule, TranslateModule, CommonModule],
 })
 export class VcViewComponent implements OnInit {
-  @Input() public credentialInput!: VerifiableCredential;
+  //@Input() public credentialInput!: VerifiableCredential;
+  public credentialInput: VerifiableCredential = 
+  {
+    "@context": [
+      "https://www.w3.org/ns/credentials/v2",
+      "https://www.dome-marketplace.eu/.well-know/credentials/learcredentialmachine/v2"
+    ],
+    "id": "urn:uuid:68422e47-5d69-4e0b-8a49-34990f2f76a2",
+    "type": ["VerifiableCredential", "LEARCredentialMachine"],
+    "name": "Agent Machine Credential",
+    "description": "Machine credential acting as an authorized agent on behalf of a legal entity",
+    "issuer": {
+      "id": "did:elsi:VATES-A12345678",
+      "organization": "TRUST SERVICES, S.L.",
+      "country": "ES",
+      "commonName": "TRUST SERVICE ELECTRONIC SEAL FOR VERIFIABLE CREDENTIALS",
+      "serialNumber": "610dde5a0000000003"
+    },
+    "validFrom": "2025-04-17T14:30:00.000000000Z",
+    "validUntil": "2026-04-17T14:30:00.000000000Z",
+    "credentialSubject": {
+      "mandate": {
+        "id": "urn:uuid:a2ece539-e199-4be9-a781-3a11f4a25ad9",
+        "mandator": {
+          "id": "did:elsi:VATFR-B12345678",
+          "organization": "GOOD AIR, S.L.",
+          "country": "FR",
+          "commonName": "JEAN MARTIN - CNI 880692310285",
+          "serialNumber": "880692310285"
+        },
+        "mandatee": {
+          "id": "did:key:zDnaexS1hEocz1R51ZXakcUPXWZSzkVEBJAEz9fHtxjfqZRhN",
+          "domain": "dpas.goodair.fr",
+          "ipAddress": "195.70.63.244"
+        },
+        "power": [
+          {
+            "id": "eb02efa8-193d-43a2-8ddd-3a124c6aee83",
+            "type": "domain",
+            "domain": "DOME",
+            "function": "Onboarding",
+            "action": ["execute"]
+          }
+        ]
+      }
+    },
+    credentialStatus: CredentialStatus.VALID,
+    status: CredentialStatus.VALID
+  }
   @Input() public isDetailViewActive = false;
   @Output() public vcEmit: EventEmitter<VerifiableCredential> =
     new EventEmitter();
@@ -46,6 +94,7 @@ export class VcViewComponent implements OnInit {
   public showChip = false;
   public credentialStatus = CredentialStatus;
   public handlerMessage = '';
+  public showToken = false;
   public alertButtons = [
     {
       text: 'OK',
@@ -114,6 +163,14 @@ export class VcViewComponent implements OnInit {
     } else {
       return 'VerifiableCredential';
     }
+  }
+
+  copyToClipboard(text: string): void {
+    navigator.clipboard.writeText(text).then(() => {
+      console.log('Token copiado');
+    }).catch(err => {
+      console.error('Error al copiar', err);
+    });
   }
 
   // TO DO: funcion antigua, revisar si se puede eliminar

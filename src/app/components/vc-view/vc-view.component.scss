@@ -93,3 +93,9 @@ ion-modal.stack-modal {
   margin-bottom: 4px;
 }
 
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
