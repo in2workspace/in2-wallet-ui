@@ -26,7 +26,7 @@ import { ToastServiceHandler } from 'src/app/services/toast.service';
   templateUrl: './vc-view.component.html',
   styleUrls: ['./vc-view.component.scss'],
   standalone: true,
-  imports: [IonicModule, QRCodeModule, TranslateModule, CommonModule, ToastServiceHandler],
+  imports: [IonicModule, QRCodeModule, TranslateModule, CommonModule],
 })
 export class VcViewComponent implements OnInit {
   @Input() public credential!: VerifiableCredential;
