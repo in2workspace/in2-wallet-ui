@@ -28,7 +28,7 @@ import * as dayjs from 'dayjs';
   imports: [IonicModule, QRCodeModule, TranslateModule, CommonModule],
 })
 export class VcViewComponent implements OnInit {
-  //@Input() public credentialInput!: VerifiableCredential;
+  @Input() public credential!: VerifiableCredential;
   public credentialInput: VerifiableCredential = 
   {
     "@context": [
