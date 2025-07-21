@@ -80,22 +80,17 @@ export class ToastServiceHandler {
   }
 
   public async showToast(messageKey: string, duration: number = 2000): Promise<void> {
-    const message = await this.translate.get(messageKey).toPromise();
-
-    const toast = await this.toastController.create({
-      message,
-      duration,
-      position: 'bottom',
-      color: 'success',
-      buttons: [
-        {
-          icon: 'checkmark',
-          role: 'cancel',
-        },
-      ],
+    const alert = await this.alertController.create({
+      message: `
+        <div style="display: flex; align-items: center; gap: 50px;">
+          <ion-icon name="checkmark-circle-outline" ></ion-icon>
+          <span>${this.translate.instant(messageKey)}</span>
+        </div>
+      `,
+      cssClass: 'custom-alert-ok',
     });
 
-    await toast.present();
+    await alert.present();
   }
 
 
