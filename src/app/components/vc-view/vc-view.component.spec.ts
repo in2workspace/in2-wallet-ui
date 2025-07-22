@@ -480,4 +480,29 @@ describe('VcViewComponent', () => {
     
   });
 
+  describe('copyToClipboard', () => {
+    let originalClipboard: typeof navigator.clipboard;
+    let showToastSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      originalClipboard = navigator.clipboard;
+      (navigator as any).clipboard = {
+        writeText: jest.fn().mockResolvedValue(undefined),
+      };
+      showToastSpy = jest.spyOn((component as any).toastService, 'showToast').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      (navigator as any).clipboard = originalClipboard;
+      showToastSpy.mockRestore();
+    });
+
+    it('should copy text to clipboard and show toast on success', async () => {
+      const text = 'test text';
+      await component.copyToClipboard(text);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(text);
+      expect(showToastSpy).toHaveBeenCalledWith('vc-fields.copy-success');
+    });
+  });
+
 });

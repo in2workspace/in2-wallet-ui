@@ -228,10 +228,10 @@
                   {{ showToken ? field.value : '***************' }}
                 </div>
                 <div class="token-actions">
-                  <ion-button fill="clear" size="small" (click)="showToken = !showToken">
+                  <ion-button fill="clear" size="small" (click)="showToken = !showToken" (keydown)="showToken = !showToken">
                     <ion-icon [name]="showToken ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
                   </ion-button>
-                  <ion-button fill="clear" size="small" (click)="copyToClipboard(field.value)">
+                  <ion-button fill="clear" size="small" (click)="copyToClipboard(field.value)" (keydown)="copyToClipboard(field.value)">
                     <ion-icon name="copy-outline"></ion-icon>
                   </ion-button>
                 </div>

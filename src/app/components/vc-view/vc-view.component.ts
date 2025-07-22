@@ -167,13 +167,15 @@ export class VcViewComponent implements OnInit {
     }
   }
 
-  copyToClipboard(text: string): void {
-    navigator.clipboard.writeText(text).then(() => {
+  public async copyToClipboard(text: string): Promise<void> {
+    try {
+      await navigator.clipboard.writeText(text);
       this.toastService.showToast('vc-fields.copy-success');
-    }).catch(err => {
+    } catch (err) {
       console.error('Error al copiar', err);
-    });
+    }
   }
+
 
   // TO DO: funcion antigua, revisar si se puede eliminar
   public checkAvailableFormats(): void {
