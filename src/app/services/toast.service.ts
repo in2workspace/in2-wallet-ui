@@ -79,22 +79,24 @@ export class ToastServiceHandler {
     );
   }
 
-  public async showToast(messageKey: string, duration: number = 2000): Promise<void> {
-    const alert = await this.alertController.create({
+  public showToast(messageKey: string, duration: number = 2000): void {
+    this.alertController.create({
       message: `
         <div style="display: flex; align-items: center; gap: 50px;">
-          <ion-icon name="checkmark-circle-outline" ></ion-icon>
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
           <span>${this.translate.instant(messageKey)}</span>
         </div>
       `,
       cssClass: 'custom-alert-ok',
+    }).then(alert => {
+      alert.present().then(() => {
+        setTimeout(() => {
+          alert.dismiss();
+        }, duration);
+      });
     });
-
-    await alert.present();
-    setTimeout(() => {
-      alert.dismiss();
-    }, duration);
   }
+
 
 
 }

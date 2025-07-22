@@ -289,22 +289,11 @@ export class CredentialsPage implements OnInit {
   }
 
   private async okMessage(): Promise<void> {
-    const alert = await this.alertController.create({
-      message: `
-        <div style="display: flex; align-items: center; gap: 50px;">
-          <ion-icon name="checkmark-circle-outline" ></ion-icon>
-          <span>${this.translate.instant('home.ok-msg')}</span>
-        </div>
-      `,
-      cssClass: 'custom-alert-ok',
-    });
-
-    await alert.present();
+    this.toastServiceHandler.showToast('home.ok-msg', 2000);
 
     setTimeout(async () => {
-      await alert.dismiss();
       this.refresh();
-    }, 2000);
+    }, 500);
   }
 
   private successRefresh(): void {
