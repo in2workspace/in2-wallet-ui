@@ -80,13 +80,7 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
         valueGetter: () =>
           `${Array.isArray(p.action) ? p.action.join(', ') : p.action}`,
       })),
-    },
-    {
-      section: 'vc-fields.lear-credential-machine.credentialEncoded',
-      fields: [
-        { label: 'vc-fields.lear-credential-machine.credentialEncoded', valueGetter: () => s.credentialEncoded ?? '' }
-      ],
-    },
+    }
   ],
 
   'gx:LabelCredential': (s) => [
