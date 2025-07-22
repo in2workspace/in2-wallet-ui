@@ -8,7 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - New Machine Field
 
-## [v1.10.0](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v1.10.0)
+## [v2.0.1](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v2.0.1)
+### Added
+- Credential Status
+
+## [v2.0.0](https://github.com/in2workspace/in2-wallet-ui/releases/tag/v2.0.0)
 ### Changed
 - Changed VC
 
