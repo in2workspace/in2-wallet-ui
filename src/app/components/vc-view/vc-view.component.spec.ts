@@ -438,4 +438,69 @@ describe('VcViewComponent', () => {
     
   });
 
+  describe('copyToClipboard', () => {
+    let originalClipboard: typeof navigator.clipboard;
+    let showToastSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      originalClipboard = navigator.clipboard;
+      (navigator as any).clipboard = {
+        writeText: jest.fn().mockResolvedValue(undefined),
+      };
+      showToastSpy = jest.spyOn((component as any).toastService, 'showToast').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      (navigator as any).clipboard = originalClipboard;
+      showToastSpy.mockRestore();
+    });
+
+    it('should copy text to clipboard and show toast on success', async () => {
+      const text = 'test text';
+      await component.copyToClipboard(text);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(text);
+      expect(showToastSpy).toHaveBeenCalledWith('vc-fields.copy-success');
+    });
+  });
+
+  it('getStructuredFields should add credentialEncoded section for LEARCredentialMachine type', () => {
+    component.credentialType = 'LEARCredentialMachine';
+    component.credentialInput.credentialEncoded = 'encoded_value';
+    const originalDetailMap = detailMapModule.CredentialDetailMap[component.credentialType];
+    detailMapModule.CredentialDetailMap[component.credentialType] = [];
+    component.getStructuredFields();
+    const encodedSection = component.evaluatedSections.find(
+      s => s.section === 'vc-fields.lear-credential-machine.credentialEncoded'
+    );
+    expect(encodedSection).toBeTruthy();
+    expect(encodedSection?.fields.length).toBe(1);
+    expect(encodedSection?.fields[0].label).toBe('vc-fields.lear-credential-machine.credentialEncoded');
+    expect(encodedSection?.fields[0].value).toBe('encoded_value');
+    if (originalDetailMap) {
+      detailMapModule.CredentialDetailMap[component.credentialType] = originalDetailMap;
+    } else {
+      delete detailMapModule.CredentialDetailMap[component.credentialType];
+    }
+  });
+
+  it('getStructuredFields should add credentialEncoded section with empty value if credentialEncoded is undefined', () => {
+    component.credentialType = 'LEARCredentialMachine';
+    component.credentialInput.credentialEncoded = undefined;
+    const originalDetailMap = detailMapModule.CredentialDetailMap[component.credentialType];
+    detailMapModule.CredentialDetailMap[component.credentialType] = [];
+    component.getStructuredFields();
+    const encodedSection = component.evaluatedSections.find(
+      s => s.section === 'vc-fields.lear-credential-machine.credentialEncoded'
+    );
+    expect(encodedSection).toBeTruthy();
+    expect(encodedSection?.fields.length).toBe(1);
+    expect(encodedSection?.fields[0].label).toBe('vc-fields.lear-credential-machine.credentialEncoded');
+    expect(encodedSection?.fields[0].value).toBe('');
+    if (originalDetailMap) {
+      detailMapModule.CredentialDetailMap[component.credentialType] = originalDetailMap;
+    } else {
+      delete detailMapModule.CredentialDetailMap[component.credentialType];
+    }
+  });
+
 });

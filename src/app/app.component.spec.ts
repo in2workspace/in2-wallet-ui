@@ -109,9 +109,9 @@ describe('AppComponent', () => {
       ],
     }).compileComponents();
 
-    jest.spyOn(AppComponent.prototype, 'setDefaultLanguages');
-    jest.spyOn(AppComponent.prototype, 'setStoredLanguage');
-    jest.spyOn(AppComponent.prototype, 'setCustomStyles');
+    jest.spyOn(AppComponent.prototype as any, 'setDefaultLanguages');
+    jest.spyOn(AppComponent.prototype as any, 'setStoredLanguage');
+    jest.spyOn(AppComponent.prototype as any, 'setCustomStyles');
 
     const fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
@@ -123,19 +123,19 @@ describe('AppComponent', () => {
   });
 
   it('should initiliaze default languages, stored language and custom styles', ()=>{
-    expect(component.setDefaultLanguages).toHaveBeenCalled();
-    expect(component.setStoredLanguage).toHaveBeenCalled();
-    expect(component.setCustomStyles).toHaveBeenCalled();
+    expect((component as any).setDefaultLanguages).toHaveBeenCalled();
+    expect((component as any).setStoredLanguage).toHaveBeenCalled();
+    expect((component as any).setCustomStyles).toHaveBeenCalled();
   });
 
   it('should track router events, handle no cache and show alert for incompatible device', ()=>{
-    jest.spyOn(component, 'trackRouterEvents');
-    jest.spyOn(component, 'alertIncompatibleDevice');
+    jest.spyOn((component as any), 'trackRouterEvents');
+    jest.spyOn((component as any), 'alertIncompatibleDevice');
 
     component.ngOnInit();
 
-    expect(component.trackRouterEvents).toHaveBeenCalled();
-    expect(component.alertIncompatibleDevice).toHaveBeenCalled();
+    expect((component as any).trackRouterEvents).toHaveBeenCalled();
+    expect((component as any).alertIncompatibleDevice).toHaveBeenCalled();
   });
 
   it('should emit and complete destroy subject', ()=>{
@@ -149,7 +149,7 @@ describe('AppComponent', () => {
   });
 
   it('should add available languages', () => {
-    component.setDefaultLanguages();
+    (component as any).setDefaultLanguages();
     expect(translateServiceMock.addLangs).toHaveBeenCalledWith(['en', 'es', 'ca']);
     expect(translateServiceMock.setDefaultLang).toHaveBeenCalledWith('en');
     expect(translateServiceMock.use).toHaveBeenCalledWith('en');
@@ -159,7 +159,7 @@ describe('AppComponent', () => {
     translateServiceMock.use.mockClear();
     storageServiceMock.get.mockResolvedValueOnce('');
     translateServiceMock.getLangs.mockReturnValue(['en', 'es', 'ca']);
-    component.setStoredLanguage();
+    (component as any).setStoredLanguage();
     tick();
     expect(translateServiceMock.use).not.toHaveBeenCalled();
     expect(storageServiceMock.set).toHaveBeenCalledWith('language', 'en');
@@ -169,7 +169,7 @@ describe('AppComponent', () => {
     translateServiceMock.use.mockClear();
     storageServiceMock.get.mockResolvedValueOnce('ca');
     translateServiceMock.getLangs.mockReturnValue(['en', 'es', 'ca']);
-    component.setStoredLanguage();
+    (component as any).setStoredLanguage();
     tick();
     expect(translateServiceMock.use).toHaveBeenCalledWith('ca');
     expect(storageServiceMock.set).not.toHaveBeenCalled();
@@ -179,7 +179,7 @@ describe('AppComponent', () => {
     translateServiceMock.use.mockClear();
     storageServiceMock.get.mockResolvedValueOnce('fr');
     translateServiceMock.getLangs.mockReturnValue(['en', 'es', 'ca']);
-    component.setStoredLanguage();
+    (component as any).setStoredLanguage();
     tick();
     expect(translateServiceMock.use).not.toHaveBeenCalled();
     expect(storageServiceMock.set).toHaveBeenCalledWith('language', 'en');
@@ -211,7 +211,7 @@ describe('AppComponent', () => {
       .mockReturnValue(true);
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {}); 
   
-    component.alertIncompatibleDevice(); // Crida explícita a la funció
+    (component as any).alertIncompatibleDevice(); // Crida explícita a la funció
   
     expect(isIOSVersionLowerThanSpy).toHaveBeenCalledWith(14.3);
     expect(isNotSafariSpy).toHaveBeenCalled();
@@ -229,7 +229,7 @@ describe('AppComponent', () => {
     jest.spyOn(component['cameraService'], 'isNotSafari').mockReturnValue(true);
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {}); 
   
-    component.alertIncompatibleDevice(); // Crida explícita a la funció
+    (component as any).alertIncompatibleDevice(); // Crida explícita a la funció
   
     expect(alertSpy).not.toHaveBeenCalled();
   
@@ -243,7 +243,7 @@ describe('AppComponent', () => {
     jest.spyOn(component['cameraService'], 'isNotSafari').mockReturnValue(false);
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {}); 
   
-    component.alertIncompatibleDevice(); // Crida explícita a la funció
+    (component as any).alertIncompatibleDevice(); // Crida explícita a la funció
   
     expect(alertSpy).not.toHaveBeenCalled();
   

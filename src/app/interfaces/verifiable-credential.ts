@@ -10,6 +10,7 @@ export interface VerifiableCredential {
   validUntil: string;
   credentialSubject: CredentialSubject;
   credentialStatus: CredentialStatus;
+  credentialEncoded?: string;
 }
 
 export interface Issuer {
