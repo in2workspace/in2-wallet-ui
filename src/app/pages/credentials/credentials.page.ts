@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {AlertController, IonicModule} from '@ionic/angular';
+import {AlertController, IonicModule, Platform} from '@ionic/angular';
 import {StorageService} from 'src/app/services/storage.service';
 import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
 import {QRCodeModule} from 'angularx-qrcode';
@@ -17,7 +17,6 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
 import { catchError, forkJoin, of } from 'rxjs';
-
 
 const TIME_IN_MS = 3000;
 
@@ -36,9 +35,10 @@ const TIME_IN_MS = 3000;
     QRCodeModule,
     VcViewComponent,
     TranslateModule,
-    BarcodeScannerComponent,
-  ],
+    BarcodeScannerComponent
+  ]
 })
+
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CredentialsPage implements OnInit {
   public alertButtons = ['OK'];
@@ -52,6 +52,7 @@ export class CredentialsPage implements OnInit {
   public scaned_cred = false;
   public show_qr = false;
   public credentialOfferUri = '';
+
 
   private readonly alertController = inject(AlertController);
   private readonly cdr = inject(ChangeDetectorRef);
@@ -288,22 +289,11 @@ export class CredentialsPage implements OnInit {
   }
 
   private async okMessage(): Promise<void> {
-    const alert = await this.alertController.create({
-      message: `
-        <div style="display: flex; align-items: center; gap: 50px;">
-          <ion-icon name="checkmark-circle-outline" ></ion-icon>
-          <span>${this.translate.instant('home.ok-msg')}</span>
-        </div>
-      `,
-      cssClass: 'custom-alert-ok',
-    });
-
-    await alert.present();
+    this.toastServiceHandler.showToast('home.ok-msg', 2000);
 
     setTimeout(async () => {
-      await alert.dismiss();
       this.refresh();
-    }, 2000);
+    }, 500);
   }
 
   private successRefresh(): void {
