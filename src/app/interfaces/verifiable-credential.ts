@@ -10,6 +10,7 @@ export interface VerifiableCredential {
   credentialSubject: CredentialSubject;
   credentialStatus: CredentialStatus;
   status: CredentialStatus; //TODO: Remove this field in the future
+  credentialEncoded?: string;
 }
 
 export interface Issuer {

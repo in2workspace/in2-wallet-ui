@@ -82,9 +82,9 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
       })),
     },
     {
-      section: 'vc-fields.lear-credential-machine.credentialDid',
+      section: 'vc-fields.lear-credential-machine.credentialEncoded',
       fields: [
-        { label: 'vc-fields.lear-credential-machine.credentialDid', valueGetter: () => s.mandate?.mandatee?.id ?? '' }
+        { label: 'vc-fields.lear-credential-machine.credentialEncoded', valueGetter: () => s.credentialEncoded ?? '' }
       ],
     },
   ],

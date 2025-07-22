@@ -182,7 +182,7 @@
                 "country": "País"
             },
             "powers": "Poderes",
-            "credentialDid": "Credencial"
+            "credentialEncoded": "Credencial"
         },
         "gaia-x-label-credential": {
             "label-info": {
