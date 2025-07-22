@@ -133,6 +133,7 @@
     },
     "vc-fields": {
         "delete": "Eliminar",
+        "copy-success": "S'ha copiat al porta-retalls",
         "modal-title": "Detalls de credencial",
         "title": "Informació de credencials",
         "credentialInfo": {
@@ -183,7 +184,8 @@
                 "serialNumber": "Número de sèrie",
                 "country": "País"
             },
-            "powers": "Poders"
+            "powers": "Poders",
+            "credentialEncoded": "Credencial"
         },
         "gaia-x-label-credential": {
             "label-info": {

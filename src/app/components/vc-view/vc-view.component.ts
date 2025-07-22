@@ -18,6 +18,7 @@ import { IonicModule } from '@ionic/angular';
 import { CredentialTypeMap } from 'src/app/interfaces/credential-type-map';
 import { CredentialDetailMap, EvaluatedSection } from 'src/app/interfaces/credential-detail-map';
 import * as dayjs from 'dayjs';
+import { ToastServiceHandler } from 'src/app/services/toast.service';
 
 
 @Component({
@@ -29,6 +30,7 @@ import * as dayjs from 'dayjs';
 })
 export class VcViewComponent implements OnInit {
   @Input() public credentialInput!: VerifiableCredential;
+
   @Input() public isDetailViewActive = false;
   @Output() public vcEmit: EventEmitter<VerifiableCredential> =
     new EventEmitter();
@@ -84,6 +86,7 @@ export class VcViewComponent implements OnInit {
   },
   ];
   private readonly walletService = inject(WalletService);
+  private readonly toastService = inject(ToastServiceHandler);
 
   public isDetailModalOpen = false;
   public evaluatedSections!: EvaluatedSection[];
@@ -115,6 +118,16 @@ export class VcViewComponent implements OnInit {
       return 'VerifiableCredential';
     }
   }
+
+  public async copyToClipboard(text: string): Promise<void> {
+    try {
+      await navigator.clipboard.writeText(text);
+      this.toastService.showToast('vc-fields.copy-success');
+    } catch (err) {
+      console.error('Error al copiar', err);
+    }
+  }
+
 
   // TO DO: funcion antigua, revisar si se puede eliminar
   public checkAvailableFormats(): void {
@@ -266,7 +279,16 @@ export class VcViewComponent implements OnInit {
             .filter(f => !!f.value && f.value !== ''),
         }));
 
+    if(this.credentialType == 'LEARCredentialMachine') {
+      detailedSections.push({
+        section: 'vc-fields.lear-credential-machine.credentialEncoded',
+        fields: [
+          { label: 'vc-fields.lear-credential-machine.credentialEncoded', value: vc.credentialEncoded ?? '' }
+        ]
+      });
 
+    }
+    
     this.evaluatedSections = [credentialInfo, ...detailedSections].filter(section => section.fields.length > 0);
   }
 

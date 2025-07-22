@@ -59,7 +59,6 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
     {
       section: 'vc-fields.lear-credential-machine.mantadatee.title',
       fields: [
-        { label: 'vc-fields.lear-credential-machine.mantadatee.id', valueGetter: () => s.mandate?.mandatee?.id ?? '' },
         { label: 'vc-fields.lear-credential-machine.mantadatee.domain', valueGetter: () => s.mandate?.mandatee?.domain ?? '' },
         { label: 'vc-fields.lear-credential-machine.mantadatee.ipAddress', valueGetter: () => s.mandate?.mandatee?.ipAddress ?? '' },
       ],
@@ -81,7 +80,7 @@ export const CredentialDetailMap: Record<string, CredentialDetailMapEntry> = {
         valueGetter: () =>
           `${Array.isArray(p.action) ? p.action.join(', ') : p.action}`,
       })),
-    },
+    }
   ],
 
   'gx:LabelCredential': (s) => [

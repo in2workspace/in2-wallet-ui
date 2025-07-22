@@ -93,3 +93,29 @@ ion-modal.stack-modal {
   margin-bottom: 4px;
 }
 
+.token-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  width: 100%;
+  gap: 12px;
+}
+
+.token-value {
+  flex: 1;
+  min-width: 0;
+}
+
+.token-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.ellipsis-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+}

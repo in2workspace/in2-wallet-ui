@@ -134,6 +134,7 @@
     },
     "vc-fields":{
         "delete": "Delete",
+        "copy-success": "Copied to clipboard",
         "modal-title": "Credential Details",
         "title": "Credential Info",
         "credentialInfo": {
@@ -184,7 +185,8 @@
                 "serialNumber": "Serial Number",
                 "country": "Country"
             },
-            "powers": "Powers"
+            "powers": "Powers",
+            "credentialEncoded": "Credential"
         },
         "gaia-x-label-credential":{
             "label-info": {
