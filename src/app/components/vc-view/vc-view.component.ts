@@ -328,7 +328,7 @@ export class VcViewComponent implements OnInit {
             .filter(f => !!f.value && f.value !== ''),
         }));
 
-    if(this.credentialType == 'LearCredentialMachine') {
+    if(this.credentialType == 'LEARCredentialMachine') {
       detailedSections.push({
         section: 'vc-fields.lear-credential-machine.credentialEncoded',
         fields: [
