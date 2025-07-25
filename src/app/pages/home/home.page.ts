@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { BarcodeScannerComponent } from 'src/app/components/barcode-scanner/barcode-scanner.component';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
@@ -16,7 +15,6 @@ import { ToastServiceHandler } from 'src/app/services/toast.service';
     IonicModule,
     CommonModule,
     FormsModule,
-    BarcodeScannerComponent,
     TranslateModule,
     RouterModule,
   ],
