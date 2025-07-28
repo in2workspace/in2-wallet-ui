@@ -174,34 +174,43 @@ export class CredentialsPage implements OnInit {
     console.info('QR code emits');
     console.info('toggle scan is: ');
     console.info(this.toggleScan);
-    this.show_qr = false;
+
+    let sucessCallback;
+    if(qrCode.includes('credential_offer_uri')){
+      //show VCs list
+      this.toggleScan = false;
+      // CROSS-DEVICE CREDENTIAL OFFER FLOW
+      sucessCallback = () => {
+        this.toggleScan = false;
+        //todo
+        this.navigatedFrom = 'credential';
+        this.okMessage();
+        this.successRefresh();
+      }
+    }else{
+      // LOGIN / VERIFIABLE PRESENTATION
+      // hide scanner but don't show VCs list
+      this.show_qr = false;
+      sucessCallback = (executionResponse: JSON) => {
+        this.navigatedFrom = '';
+        this.router.navigate(['/tabs/vc-selector/'], {
+          queryParams: {
+            executionResponse: JSON.stringify(executionResponse),
+          },
+        });
+      }
+    }
+    //todo don't accept qrs that are not to login or get VC
     this.websocket.connect();
 
     // TODO: Instead of using a delay, we should wait for the websocket connection to be established
     this.delay(1000).then(() => {
-      //todo don't accept qrs that are not to login or get VC
       this.walletService.executeContent(qrCode)
       .pipe(
         takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (executionResponse) => {
-            // TODO: Instead of analyzing the qrCode, we should check the response and decide what object we need to show depending on the response
-            // CROSS-DEVICE CREDENTIAL OFFER FLOW
-            if (qrCode.includes('credential_offer_uri')) {
-              this.toggleScan = false;
-              //todo
-              this.navigatedFrom = 'credential';
-              this.okMessage();
-              this.successRefresh();
-            } else {
-              // login from verifier
-              this.navigatedFrom = '';
-              this.router.navigate(['/tabs/vc-selector/'], {
-                queryParams: {
-                  executionResponse: JSON.stringify(executionResponse),
-                },
-              });
-            }
+            sucessCallback(executionResponse);
             this.websocket.closeConnection();
           },
           error: (httpErrorResponse) => {
