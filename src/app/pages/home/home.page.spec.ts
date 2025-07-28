@@ -77,7 +77,7 @@ describe('HomePage', () => {
       jest.spyOn(navigator.mediaDevices, 'getUserMedia').mockReturnValue(promise);
       const navigateSpy = jest.spyOn(mockRouter, 'navigate');
     await component.startScan();
-    expect(navigateSpy).toHaveBeenCalledWith(['/tabs/credentials/'], { queryParams: { toggleScan: true, from: 'home', show_qr: true } });
+    expect(navigateSpy).toHaveBeenCalledWith(['/tabs/credentials/'], { queryParams: { showScannerView: true, showScanner: true } });
   });
 
 

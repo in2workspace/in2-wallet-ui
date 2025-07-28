@@ -16,12 +16,14 @@ import {CameraLogsService} from 'src/app/services/camera-logs.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
-import { catchError, forkJoin, of } from 'rxjs';
+import { catchError, forkJoin, of, tap } from 'rxjs';
+import { ExtendedHttpErrorResponse } from 'src/app/interfaces/errors';
 
 
+//todo avoid this constant
 const TIME_IN_MS = 3000;
 
-//TODO don't show creds while scanning, separate scan in another component
+//TODO separate scan in another component
 
 @Component({
   selector: 'app-credentials',
@@ -42,10 +44,8 @@ const TIME_IN_MS = 3000;
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CredentialsPage implements OnInit {
   public credList: Array<VerifiableCredential> = [];
-  public isAlertOpen = false;
-  public toggleScan = false;
-  public show_qr = false;
-  public navigatedFrom = '';
+  public showScannerView = false;
+  public showScanner = false;
   public credentialOfferUri = '';
 
   private readonly alertController = inject(AlertController);
@@ -61,35 +61,165 @@ export class CredentialsPage implements OnInit {
 
   public constructor()
     {
-    // unsubscribe
     this.route.queryParams
-    .pipe(takeUntilDestroyed())
-    .subscribe((params) => {
-      this.toggleScan = params['toggleScan'];
-      console.log('toggle scan after init:')
-      console.log(this.toggleScan)
-      this.show_qr = params['show_qr'];
-      this.navigatedFrom = params['from'];
-      this.credentialOfferUri = params['credentialOfferUri'];
-    });
+      .pipe(takeUntilDestroyed())
+      .subscribe((params) => {
+        this.showScannerView = params['showScannerViewView'];
+        this.showScanner = params['showScanner'];
+        this.credentialOfferUri = params['credentialOfferUri'];
+      });
 
   }
 
   public ngOnInit(): void {
     this.loadCredentials();
 
-    // TODO: Find a better way to handle this
     if (this.credentialOfferUri) {
-      // SAME-DEVICE CREDENTIAL OFFER FLOW
-      this.generateCred();
+      this.sameDeviceVcActivationFlow();
     }
   }
 
-  ionViewDidEnter(): void {
+  public ionViewDidEnter(): void {
     this.requestPendingSignatures();
   }
 
-  public requestPendingSignatures(): void {
+  public scan(): void {
+    this.showScannerView = true;
+    this.showScanner = true;
+  }
+
+  public vcDelete(cred: VerifiableCredential): void {
+    this.walletService.deleteVC(cred.id).subscribe(() => {
+      this.loadCredentials();
+    });
+  }
+
+  public qrCodeEmit(qrCode: string): void {
+    let executeContentSucessCallback;
+    //todo don't accept qrs that are not to login or get VC
+    if(qrCode.includes('credential_offer_uri')){
+      //show VCs list
+      this.showScannerView = false;
+      // CROSS-DEVICE CREDENTIAL OFFER FLOW
+      executeContentSucessCallback = () => {
+        this.showScannerView = false;
+        this.okMessage();
+        this.successRefresh();
+      }
+    }else{
+      // LOGIN / VERIFIABLE PRESENTATION
+      // hide scanner but don't show VCs list
+      this.showScanner = false;
+      executeContentSucessCallback = (executionResponse: JSON) => {
+        this.router.navigate(['/tabs/vc-selector/'], {
+          queryParams: {
+            executionResponse: JSON.stringify(executionResponse),
+          },
+        });
+      }
+    }
+    this.websocket.connect()
+      .then(() => {
+          this.walletService.executeContent(qrCode)
+          .pipe(
+            takeUntilDestroyed(this.destroyRef),
+            tap(() => { this.websocket.closeConnection(); })
+          ).subscribe({
+              next: (executionResponse) => {
+                executeContentSucessCallback(executionResponse);
+              },
+              error: (error: ExtendedHttpErrorResponse) => {
+                this.handleContentExecutionError(error);
+              },
+            });
+        })
+        .catch(err => {
+          this.handleContentExecutionError(err)
+        })
+  }
+
+  public sameDeviceVcActivationFlow(): void {
+    this.websocket.connect()
+      .then(() => {
+        console.info('Requesting Credential Offer via same-device flow.');
+        this.walletService.requestOpenidCredentialOffer(this.credentialOfferUri).subscribe({
+          next: () => {
+            this.okMessage();
+            this.successRefresh();
+            this.websocket.closeConnection();
+            this.router.navigate(['/tabs/credentials']);
+          },
+          error: (err) => {
+            console.error(err);
+            this.websocket.closeConnection();
+          },
+        });
+      })
+      .catch(err => {
+          this.handleContentExecutionError(err)
+      })
+  }
+
+  public handleScanButtonKeydown(event: KeyboardEvent, action: string): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      this.scan();
+      event.preventDefault();
+    }else{
+      console.error('Unrecognized event');
+    }
+  }
+
+  private async okMessage(): Promise<void> {
+    const alert = await this.alertController.create({
+      message: `
+        <div style="display: flex; align-items: center; gap: 50px;">
+          <ion-icon name="checkmark-circle-outline" ></ion-icon>
+          <span>${this.translate.instant('home.ok-msg')}</span>
+        </div>
+      `,
+      cssClass: 'custom-alert-ok',
+    });
+
+    await alert.present();
+
+    setTimeout(async () => {
+      await alert.dismiss();
+      this.loadCredentials();
+    }, 2000);
+  }
+
+  private successRefresh(): void {
+    setTimeout(() => {
+      this.showScannerView = false;
+    }, TIME_IN_MS);
+    this.loadCredentials();
+  }
+
+    private loadCredentials(): void {
+    const normalizer = new VerifiableCredentialSubjectDataNormalizer();
+    this.walletService.getAllVCs().subscribe({
+      next: (credentialListResponse: VerifiableCredential[]) => {
+        // Iterate over the list and normalize each credentialSubject
+        this.credList = credentialListResponse.slice().reverse().map(cred => {
+          if (cred.credentialSubject) {
+            cred.credentialSubject = normalizer.normalizeLearCredentialSubject(cred.credentialSubject);
+          }
+          return cred;
+        });
+        this.cdr.detectChanges()
+      },
+      error: (error) => {
+        if (error.status === 404) {
+          this.credList = [];
+          this.cdr.detectChanges();
+        } else {
+          console.error("Error fetching credentials:", error);
+        }
+      }
+    });
+  }
+
+    private requestPendingSignatures(): void {
     if(this.credList.length === 0){
       return;
     }
@@ -127,170 +257,25 @@ export class CredentialsPage implements OnInit {
     });
   }
 
-  public forcePageReload(): void {
+  private forcePageReload(): void {
     this.router.navigate(['/tabs/credentials']).then(() => {
       window.location.reload();
     });
   }
 
-  public scan(): void {
-    console.info('scan()')
-    this.toggleScan = true;
-    this.show_qr = true;
-  }
+  private handleContentExecutionError(errorResponse: ExtendedHttpErrorResponse): void{
+    const httpErr = errorResponse?.error;
+    const message = httpErr?.message || errorResponse?.message || 'No error message';
+    const title = httpErr?.title || errorResponse?.title || '(No title)';
+    const path = httpErr?.path || errorResponse?.path || '(No path)';
 
-  //getVCs
-  public loadCredentials(): void {
-    const normalizer = new VerifiableCredentialSubjectDataNormalizer();
-    this.walletService.getAllVCs().subscribe({
-      next: (credentialListResponse: VerifiableCredential[]) => {
-        // Iterate over the list and normalize each credentialSubject
-        this.credList = credentialListResponse.slice().reverse().map(cred => {
-          if (cred.credentialSubject) {
-            cred.credentialSubject = normalizer.normalizeLearCredentialSubject(cred.credentialSubject);
-          }
-          return cred;
-        });
-        this.cdr.detectChanges()
-      },
-      error: (error) => {
-        if (error.status === 404) {
-          this.credList = [];
-          this.cdr.detectChanges();
-        } else {
-          console.error("Error fetching credentials:", error);
-        }
-      }
-    });
-  }
+    const error = title + ' . ' + message + ' . ' + path;
+    this.cameraLogsService.addCameraLog(new Error(error), 'httpError');
 
-  public vcDelete(cred: VerifiableCredential): void {
-    this.walletService.deleteVC(cred.id).subscribe(() => {
-      this.loadCredentials();
-    });
-  }
-
-  public qrCodeEmit(qrCode: string): void {
-    console.info('QR code emits');
-    console.info('toggle scan is: ');
-    console.info(this.toggleScan);
-
-    let sucessCallback;
-    if(qrCode.includes('credential_offer_uri')){
-      //show VCs list
-      this.toggleScan = false;
-      // CROSS-DEVICE CREDENTIAL OFFER FLOW
-      sucessCallback = () => {
-        this.toggleScan = false;
-        //todo
-        this.navigatedFrom = 'credential';
-        this.okMessage();
-        this.successRefresh();
-      }
-    }else{
-      // LOGIN / VERIFIABLE PRESENTATION
-      // hide scanner but don't show VCs list
-      this.show_qr = false;
-      sucessCallback = (executionResponse: JSON) => {
-        this.navigatedFrom = '';
-        this.router.navigate(['/tabs/vc-selector/'], {
-          queryParams: {
-            executionResponse: JSON.stringify(executionResponse),
-          },
-        });
-      }
-    }
-    //todo don't accept qrs that are not to login or get VC
-    this.websocket.connect();
-
-    // TODO: Instead of using a delay, we should wait for the websocket connection to be established
-    this.delay(1000).then(() => {
-      this.walletService.executeContent(qrCode)
-      .pipe(
-        takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: (executionResponse) => {
-            sucessCallback(executionResponse);
-            this.websocket.closeConnection();
-          },
-          error: (httpErrorResponse) => {
-            this.websocket.closeConnection();
-
-            const httpErr = httpErrorResponse?.error;
-            const message = httpErr?.message || httpErrorResponse?.message || 'No error message';
-            const title = httpErr?.title || httpErrorResponse?.title || '(No title)';
-            const path = httpErr?.path || httpErrorResponse?.path || '(No path)';
-
-            const error = title + ' . ' + message + ' . ' + path;
-            this.cameraLogsService.addCameraLog(new Error(error), 'httpError');
-
-            console.error(httpErrorResponse);
-            setTimeout(()=>{
-              this.router.navigate(['/tabs/home'])
-            }, 1000);
-
-          },
-        });
-    });
-  }
-
-  public generateCred(): void {
-    this.websocket.connect();
-
-    // Esperar un segundo antes de continuar
-    this.delay(1000).then(() => {
-      console.info('Requesting Credential Offer via same-device flow.');
-      this.walletService.requestOpenidCredentialOffer(this.credentialOfferUri).subscribe({
-        next: () => {
-          this.okMessage();
-          this.successRefresh();
-          this.websocket.closeConnection();
-          this.router.navigate(['/tabs/credentials']);
-        },
-        error: (err) => {
-          console.error(err);
-          this.websocket.closeConnection();
-        },
-      });
-    });
-  }
-
-  public handleButtonKeydown(event: KeyboardEvent, action: string): void {
-    if (event.key === 'Enter' || event.key === ' ') {
-      this.scan();
-      event.preventDefault();
-    }else{
-      console.error('Unrecognized event');
-    }
-  }
-  private delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  private async okMessage(): Promise<void> {
-    const alert = await this.alertController.create({
-      message: `
-        <div style="display: flex; align-items: center; gap: 50px;">
-          <ion-icon name="checkmark-circle-outline" ></ion-icon>
-          <span>${this.translate.instant('home.ok-msg')}</span>
-        </div>
-      `,
-      cssClass: 'custom-alert-ok',
-    });
-
-    await alert.present();
-
-    setTimeout(async () => {
-      await alert.dismiss();
-      this.loadCredentials();
-    }, 2000);
-  }
-
-  private successRefresh(): void {
-    setTimeout(() => {
-      this.isAlertOpen = false;
-    }, TIME_IN_MS);
-    this.loadCredentials();
-  }
+    console.error(errorResponse);
+    setTimeout(()=>{
+      this.router.navigate(['/tabs/home'])
+    }, 1000);
+}
 
 }

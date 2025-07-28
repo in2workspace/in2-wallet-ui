@@ -32,7 +32,7 @@ export class HomePage implements OnInit {
     const scanRoute = '/tabs/credentials/';
     try{
       await this.router.navigate([scanRoute], {
-        queryParams: { toggleScan: true, from: 'home', show_qr: true },
+        queryParams: { showScannerView: true, showScanner: true },
       });
     }catch(err){
       console.error('Error when trying to navigate to ' + scanRoute);

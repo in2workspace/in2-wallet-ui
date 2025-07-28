@@ -23,70 +23,77 @@ export class WebsocketService {
     public readonly translate: TranslateService
   ) {}
 
-  public connect(): void {
-    this.socket = new WebSocket(
-      environment.websocket_url + WEBSOCKET_PATH
-    );
-  
-    this.socket.onopen = () => {
-      console.log('WebSocket connection opened');
-      this.sendMessage(
-        JSON.stringify({ id: this.authenticationService.getToken() })
+  public connect(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.socket = new WebSocket(
+        environment.websocket_url + WEBSOCKET_PATH
       );
-    };
-  
-    this.socket.onmessage = async (event) => {
-      console.log('Message received:', event.data);
-      const data = JSON.parse(event.data);
-  
-      let description = data.tx_code?.description || '';
-      let counter = data.timeout || 60;
-  
-      const alert = await this.alertController.create({
-        header: this.translate.instant('confirmation.pin'),
-        message: `${description}<br><small class="counter">Time remaining: ${counter} seconds</small>`,
-        inputs: [
-          {
-            name: 'pin',
-            type: 'text',
-            placeholder: 'PIN',
-            attributes: {
-              inputmode: 'numeric',
-              pattern: '[0-9]*',
+    
+      this.socket.onopen = () => {
+        console.log('WebSocket connection opened');
+        this.sendMessage(
+          JSON.stringify({ id: this.authenticationService.getToken() })
+        );
+        resolve();
+      };
+      this.socket.onerror = (err) => {
+        console.error('WebSocket failed to open', err);
+        reject(err);
+      };
+    
+      this.socket.onmessage = async (event) => {
+        console.log('Message received:', event.data);
+        const data = JSON.parse(event.data);
+    
+        let description = data.tx_code?.description || '';
+        let counter = data.timeout || 60;
+    
+        const alert = await this.alertController.create({
+          header: this.translate.instant('confirmation.pin'),
+          message: `${description}<br><small class="counter">Time remaining: ${counter} seconds</small>`,
+          inputs: [
+            {
+              name: 'pin',
+              type: 'text',
+              placeholder: 'PIN',
+              attributes: {
+                inputmode: 'numeric',
+                pattern: '[0-9]*',
+              },
             },
-          },
-        ],
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            handler: () => {
-              clearInterval(interval);
+          ],
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => {
+                clearInterval(interval);
+              },
             },
-          },
-          {
-            text: 'Send',
-            handler: (alertData) => {
-              clearInterval(interval);
-              this.loadingTimeout = setTimeout(() => {
-                this.isLoadingSubject.next(true);
-              }, 1000);
-              this.sendMessage(JSON.stringify({ pin: alertData.pin }));
+            {
+              text: 'Send',
+              handler: (alertData) => {
+                clearInterval(interval);
+                this.loadingTimeout = setTimeout(() => {
+                  this.isLoadingSubject.next(true);
+                }, 1000);
+                this.sendMessage(JSON.stringify({ pin: alertData.pin }));
+              },
             },
-          },
-        ],
-      });
-  
-      const interval = this.startCountdown(alert, description, counter);
-  
-      await alert.present();
-    };
-  
-    this.socket.onclose = () => {
-      clearTimeout(this.loadingTimeout);
-      this.isLoadingSubject.next(false);
-      console.log('WebSocket connection closed');
-    };
+          ],
+        });
+    
+        const interval = this.startCountdown(alert, description, counter);
+    
+        await alert.present();
+      };
+    
+      this.socket.onclose = () => {
+        clearTimeout(this.loadingTimeout);
+        this.isLoadingSubject.next(false);
+        console.log('WebSocket connection closed');
+      };
+    });
   }
   
   public sendMessage(message: string): void {
