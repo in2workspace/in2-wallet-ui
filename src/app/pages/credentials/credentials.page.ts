@@ -16,7 +16,7 @@ import {CameraLogsService} from 'src/app/services/camera-logs.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
-import { catchError, forkJoin, of, tap } from 'rxjs';
+import { catchError, EMPTY, forkJoin, from, Observable, of, switchMap, takeUntil, tap } from 'rxjs';
 import { ExtendedHttpErrorResponse } from 'src/app/interfaces/errors';
 
 
@@ -72,7 +72,7 @@ export class CredentialsPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.loadCredentials();
+    this.loadCredentials().subscribe();
 
     if (this.credentialOfferUri) {
       this.sameDeviceVcActivationFlow();
@@ -89,33 +89,33 @@ export class CredentialsPage implements OnInit {
   }
 
   public vcDelete(cred: VerifiableCredential): void {
-    this.walletService.deleteVC(cred.id).subscribe(() => {
-      this.loadCredentials();
-    });
+    this.walletService.deleteVC(cred.id)
+    .pipe(
+      switchMap(() => this.loadCredentials())
+    )
+    .subscribe();
   }
 
   public qrCodeEmit(qrCode: string): void {
-    let executeContentSucessCallback;
+    let executeContentSucessCallback: (arg: any) => Observable<any>;
     //todo don't accept qrs that are not to login or get VC
     if(qrCode.includes('credential_offer_uri')){
       //show VCs list
       this.showScannerView = false;
       // CROSS-DEVICE CREDENTIAL OFFER FLOW
       executeContentSucessCallback = () => {
-        this.showScannerView = false;
-        this.okMessage();
-        this.successRefresh();
+        return this.handleActivationSuccess();
       }
     }else{
       // LOGIN / VERIFIABLE PRESENTATION
       // hide scanner but don't show VCs list
       this.showScanner = false;
       executeContentSucessCallback = (executionResponse: JSON) => {
-        this.router.navigate(['/tabs/vc-selector/'], {
+        return from(this.router.navigate(['/tabs/vc-selector/'], {
           queryParams: {
             executionResponse: JSON.stringify(executionResponse),
           },
-        });
+        }));
       }
     }
     this.websocket.connect()
@@ -123,10 +123,13 @@ export class CredentialsPage implements OnInit {
           this.walletService.executeContent(qrCode)
           .pipe(
             takeUntilDestroyed(this.destroyRef),
+            switchMap((executionResponse) => {
+                return executeContentSucessCallback(executionResponse);
+              }),
             tap(() => { this.websocket.closeConnection(); })
           ).subscribe({
               next: (executionResponse) => {
-                executeContentSucessCallback(executionResponse);
+                
               },
               error: (error: ExtendedHttpErrorResponse) => {
                 this.handleContentExecutionError(error);
@@ -144,10 +147,10 @@ export class CredentialsPage implements OnInit {
         console.info('Requesting Credential Offer via same-device flow.');
         this.walletService.requestOpenidCredentialOffer(this.credentialOfferUri).subscribe({
           next: () => {
-            this.okMessage();
-            this.successRefresh();
-            this.websocket.closeConnection();
-            this.router.navigate(['/tabs/credentials']);
+            this.handleActivationSuccess().subscribe(() => {
+              this.router.navigate(['/tabs/credentials']);
+              this.websocket.closeConnection();
+            });
           },
           error: (err) => {
             console.error(err);
@@ -184,21 +187,23 @@ export class CredentialsPage implements OnInit {
 
     setTimeout(async () => {
       await alert.dismiss();
-      this.loadCredentials();
     }, 2000);
   }
 
-  private successRefresh(): void {
-    setTimeout(() => {
-      this.showScannerView = false;
-    }, TIME_IN_MS);
-    this.loadCredentials();
+  private handleActivationSuccess(): Observable<VerifiableCredential[]> {
+    return this.loadCredentials()
+      .pipe(
+        tap(() => {
+          this.okMessage();
+        })
+      )
   }
 
-    private loadCredentials(): void {
+  private loadCredentials(): Observable<VerifiableCredential[]> {
     const normalizer = new VerifiableCredentialSubjectDataNormalizer();
-    this.walletService.getAllVCs().subscribe({
-      next: (credentialListResponse: VerifiableCredential[]) => {
+    return this.walletService.getAllVCs().pipe(
+      takeUntilDestroyed(this.destroyRef),
+      tap((credentialListResponse: VerifiableCredential[]) => {
         // Iterate over the list and normalize each credentialSubject
         this.credList = credentialListResponse.slice().reverse().map(cred => {
           if (cred.credentialSubject) {
@@ -207,16 +212,18 @@ export class CredentialsPage implements OnInit {
           return cred;
         });
         this.cdr.detectChanges()
-      },
-      error: (error) => {
+      }),
+      catchError((error: ExtendedHttpErrorResponse) => {
         if (error.status === 404) {
           this.credList = [];
           this.cdr.detectChanges();
         } else {
           console.error("Error fetching credentials:", error);
         }
-      }
-    });
+        return of([]);
+      })
+    )
+
   }
 
     private requestPendingSignatures(): void {
