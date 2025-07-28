@@ -114,7 +114,7 @@
         "ko-message":"Failed to Login",
         "unauthorized-message":"The credential provided is invalid",
         "bad-request-error-message":"Error sending the credential",
-        "credential-revoke-message":"The credential provided is invalid, it has been revoked or is not valid for this operation",
+        "credential-revoke-message":"The provided credential is invalid or revoked",
         "server-error-message":"We couldn't process your request.<br>Please try again later.",
         "generic-error-message": "Unknown error",
         "close": "Close"
