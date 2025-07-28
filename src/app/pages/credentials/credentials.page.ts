@@ -56,8 +56,7 @@ export class CredentialsPage implements OnInit {
   private readonly walletService = inject(WalletService);
   private readonly websocket = inject(WebsocketService);
 
-  public constructor()
-    {
+  public constructor(){
     this.route.queryParams
       .pipe(takeUntilDestroyed())
       .subscribe((params) => {
@@ -65,7 +64,6 @@ export class CredentialsPage implements OnInit {
         this.showScanner = params['showScanner'];
         this.credentialOfferUri = params['credentialOfferUri'];
       });
-
   }
 
   public ngOnInit(): void {
@@ -80,7 +78,7 @@ export class CredentialsPage implements OnInit {
     this.requestPendingSignatures();
   }
 
-  public scan(): void {
+  public openScanner(): void {
     this.showScannerView = true;
     this.showScanner = true;
   }
@@ -160,9 +158,9 @@ export class CredentialsPage implements OnInit {
       })
   }
 
-  public handleScanButtonKeydown(event: KeyboardEvent, action: string): void {
+  public handleOpenScannerButtonKeydown(event: KeyboardEvent, action: string): void {
     if (event.key === 'Enter' || event.key === ' ') {
-      this.scan();
+      this.openScanner();
       event.preventDefault();
     }else{
       console.error('Unrecognized event');
