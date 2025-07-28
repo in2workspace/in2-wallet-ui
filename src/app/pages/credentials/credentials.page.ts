@@ -66,6 +66,8 @@ export class CredentialsPage implements OnInit {
     .pipe(takeUntilDestroyed())
     .subscribe((params) => {
       this.toggleScan = params['toggleScan'];
+      console.log('toggle scan after init:')
+      console.log(this.toggleScan)
       this.show_qr = params['show_qr'];
       this.navigatedFrom = params['from'];
       this.credentialOfferUri = params['credentialOfferUri'];
@@ -132,6 +134,7 @@ export class CredentialsPage implements OnInit {
   }
 
   public scan(): void {
+    console.info('scan()')
     this.toggleScan = true;
     this.show_qr = true;
   }
@@ -168,6 +171,9 @@ export class CredentialsPage implements OnInit {
   }
 
   public qrCodeEmit(qrCode: string): void {
+    console.info('QR code emits');
+    console.info('toggle scan is: ');
+    console.info(this.toggleScan);
     this.show_qr = false;
     this.websocket.connect();
 
@@ -224,6 +230,7 @@ export class CredentialsPage implements OnInit {
 
     // Esperar un segundo antes de continuar
     this.delay(1000).then(() => {
+      console.info('Requesting Credential Offer via same-device flow.');
       this.walletService.requestOpenidCredentialOffer(this.credentialOfferUri).subscribe({
         next: () => {
           this.okMessage();
@@ -241,46 +248,11 @@ export class CredentialsPage implements OnInit {
 
   public handleButtonKeydown(event: KeyboardEvent, action: string): void {
     if (event.key === 'Enter' || event.key === ' ') {
-      if (action === 'scan') {
-        this.scan();
-      } else if (action === 'getCredential') {
-        this.credentialClick();
-      }
+      this.scan();
       event.preventDefault();
+    }else{
+      console.error('Unrecognized event');
     }
-  }
-
-  public async credentialClick(): Promise<void> {
-    const alert = await this.alertController.create({
-      header: this.translate.instant('credentials.confirmation'),
-      message: this.translate.instant('confirmationMessage.confirmation'),
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.info('User canceled');
-          },
-        },
-        {
-          text: 'Accept',
-          handler: () => {
-            console.info('User accepted');
-            setTimeout(() => {
-              this.isAlertOpen = false;
-              this.toggleScan = false;
-              this.router.navigate(['/tabs/credentials/']);
-            }, TIME_IN_MS);
-            this.isAlertOpen = true;
-            this.show_qr = true;
-            this.navigatedFrom = '';
-          },
-        },
-      ],
-    });
-
-    await alert.present();
-
   }
   private delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
