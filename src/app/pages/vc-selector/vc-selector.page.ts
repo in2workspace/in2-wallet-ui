@@ -11,6 +11,7 @@ import { VCReply } from 'src/app/interfaces/verifiable-credential-reply';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import {VerifiableCredentialSubjectDataNormalizer} from 'src/app/interfaces/verifiable-credential-subject-data-normalizer';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { firstValueFrom } from 'rxjs';
 
 // todo: show only VCs with powers to login
 // todo: if user has only one VC, use this directly
@@ -160,12 +161,13 @@ private async handleError(err: any) {
       // Handle other types of errors
       messageText = 'vc-selector.generic-error-message';
     }
+    const translatedMessage = await firstValueFrom(this.translate.get(messageText));
 
     const alert = await this.alertController.create({
       message: `
         <div style="display: flex; align-items: center; gap: 50px;">
           <ion-icon name="alert-circle-outline"></ion-icon>
-          <span>${this.translate.instant(messageText)}</span>
+          <span>${translatedMessage}</span>
         </div>
       `,
       buttons: [
