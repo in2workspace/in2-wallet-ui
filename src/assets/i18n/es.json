@@ -109,7 +109,8 @@
         "ok-message":"Login correcto",
         "ko-header":"Error",
         "ko-message":"El login ha fallado",
-        "close": "Cerrar"
+        "close": "Cerrar",
+        "credential-revoke-message":"La credencial proporcionada no es válida, ha sido revocada o no es válida para esta operación"
     },
     "vc-view":{
         "warning-header": "Credencial",

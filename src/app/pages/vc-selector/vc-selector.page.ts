@@ -150,6 +150,9 @@ private async handleError(err: any) {
     } else if (statusCode === 401) {
       // Handle unauthorized errors (401)
       messageText = 'vc-selector.unauthorized-message';
+    } else if (statusCode === 403) {
+      // Handle client errors (403x)
+      messageText = 'vc-selector.credential-revoke-message';
     } else if (statusCode >= 400) {
       // Handle client errors (40x)
       messageText = 'vc-selector.bad-request-error-message';

@@ -395,6 +395,12 @@ describe('VcSelectorPage', () => {
       expect(mockTranslateService.instant).toHaveBeenCalledWith('vc-selector.unauthorized-message');
     });
 
+    it('should show unauthorized message for 403 status code', async () => {
+      await component.errorMessage(403);
+
+      expect(mockTranslateService.instant).toHaveBeenCalledWith('vc-selector.credential-revoke-message');
+    });
+
     it('should show bad request message for 4xx status codes', async () => {
       await component.errorMessage(400);
 
