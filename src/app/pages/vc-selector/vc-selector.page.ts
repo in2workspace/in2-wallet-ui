@@ -38,7 +38,6 @@ export class VcSelectorPage {
   public userName = '';
   public isAlertOpen = false;
   public errorAlertOpen = false;
-  public alertButtons = ['OK'];
   public sendCredentialAlert = false;
 
   public _VCReply: VCReply = {

@@ -41,43 +41,40 @@ const TIME_IN_MS = 3000;
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CredentialsPage implements OnInit {
-  public alertButtons = ['OK'];
-  public userName = '';
   public credList: Array<VerifiableCredential> = [];
-  public size = 300;
   public isAlertOpen = false;
   public toggleScan = false;
-  public credOfferEndpoint = '';
-  public from = '';
-  public scaned_cred = false;
   public show_qr = false;
+  public navigatedFrom = '';
   public credentialOfferUri = '';
 
   private readonly alertController = inject(AlertController);
+  private readonly cameraLogsService = inject(CameraLogsService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly toastServiceHandler = inject(ToastServiceHandler);
   private readonly translate = inject(TranslateService);
   private readonly walletService = inject(WalletService);
   private readonly websocket = inject(WebsocketService);
-  private readonly cameraLogsService = inject(CameraLogsService);
 
-  public constructor(private readonly toastServiceHandler: ToastServiceHandler)
+  public constructor()
     {
-    this.credOfferEndpoint = window.location.origin + '/tabs/home';
-    this.route.queryParams.subscribe((params) => {
+    // unsubscribe
+    this.route.queryParams
+    .pipe(takeUntilDestroyed())
+    .subscribe((params) => {
       this.toggleScan = params['toggleScan'];
-      this.from = params['from'];
       this.show_qr = params['show_qr'];
+      this.navigatedFrom = params['from'];
       this.credentialOfferUri = params['credentialOfferUri'];
     });
 
   }
 
   public ngOnInit(): void {
-    this.scaned_cred = false;
-    this.refresh();
+    this.loadCredentials();
 
     // TODO: Find a better way to handle this
     if (this.credentialOfferUri) {
@@ -139,7 +136,8 @@ export class CredentialsPage implements OnInit {
     this.show_qr = true;
   }
 
-  public refresh(): void {
+  //getVCs
+  public loadCredentials(): void {
     const normalizer = new VerifiableCredentialSubjectDataNormalizer();
     this.walletService.getAllVCs().subscribe({
       next: (credentialListResponse: VerifiableCredential[]) => {
@@ -165,12 +163,12 @@ export class CredentialsPage implements OnInit {
 
   public vcDelete(cred: VerifiableCredential): void {
     this.walletService.deleteVC(cred.id).subscribe(() => {
-      this.refresh();
+      this.loadCredentials();
     });
   }
 
   public qrCodeEmit(qrCode: string): void {
-    this.toggleScan = false;
+    this.show_qr = false;
     this.websocket.connect();
 
     // TODO: Instead of using a delay, we should wait for the websocket connection to be established
@@ -184,13 +182,14 @@ export class CredentialsPage implements OnInit {
             // TODO: Instead of analyzing the qrCode, we should check the response and decide what object we need to show depending on the response
             // CROSS-DEVICE CREDENTIAL OFFER FLOW
             if (qrCode.includes('credential_offer_uri')) {
-              this.from = 'credential';
+              this.toggleScan = false;
+              //todo
+              this.navigatedFrom = 'credential';
               this.okMessage();
               this.successRefresh();
             } else {
               // login from verifier
-              this.show_qr = false;
-              this.from = '';
+              this.navigatedFrom = '';
               this.router.navigate(['/tabs/vc-selector/'], {
                 queryParams: {
                   executionResponse: JSON.stringify(executionResponse),
@@ -250,6 +249,7 @@ export class CredentialsPage implements OnInit {
       event.preventDefault();
     }
   }
+
   public async credentialClick(): Promise<void> {
     const alert = await this.alertController.create({
       header: this.translate.instant('credentials.confirmation'),
@@ -273,8 +273,7 @@ export class CredentialsPage implements OnInit {
             }, TIME_IN_MS);
             this.isAlertOpen = true;
             this.show_qr = true;
-            this.scaned_cred = false;
-            this.from = '';
+            this.navigatedFrom = '';
           },
         },
       ],
@@ -302,16 +301,15 @@ export class CredentialsPage implements OnInit {
 
     setTimeout(async () => {
       await alert.dismiss();
-      this.refresh();
+      this.loadCredentials();
     }, 2000);
   }
 
   private successRefresh(): void {
     setTimeout(() => {
       this.isAlertOpen = false;
-      this.scaned_cred = false;
     }, TIME_IN_MS);
-    this.refresh();
+    this.loadCredentials();
   }
 
 }

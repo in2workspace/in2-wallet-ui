@@ -27,6 +27,7 @@ export class WalletService {
       options
     );
   }
+  
   public getVCinCBOR(credential: VerifiableCredential): Observable<string> {
     const options = {
       headers: headers,
