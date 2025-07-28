@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { BehaviorSubject } from 'rxjs';
 import { AlertController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { WEBSOCKET_PATH } from '../constants/api.constants';
+import { LoaderService } from './loader.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,14 +15,12 @@ export class WebsocketService {
   private socket!: WebSocket;
 
   private loadingTimeout: any;
-  private readonly isLoadingSubject = new BehaviorSubject<boolean>(false);
-  public isLoading$ = this.isLoadingSubject.asObservable();
 
-  public constructor(
-    private readonly authenticationService: AuthenticationService,
-    private readonly alertController: AlertController,
-    public readonly translate: TranslateService
-  ) {}
+  private readonly alertController = inject(AlertController);
+  private readonly authenticationService = inject(AuthenticationService);
+  public readonly loader = inject(LoaderService);
+  public readonly translate = inject(TranslateService);
+
 
   public connect(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -75,7 +74,7 @@ export class WebsocketService {
               handler: (alertData) => {
                 clearInterval(interval);
                 this.loadingTimeout = setTimeout(() => {
-                  this.isLoadingSubject.next(true);
+                  this.loader.addLoadingProcess();
                 }, 1000);
                 this.sendMessage(JSON.stringify({ pin: alertData.pin }));
               },
@@ -91,7 +90,7 @@ export class WebsocketService {
     
       this.socket.onclose = () => {
         clearTimeout(this.loadingTimeout);
-        this.isLoadingSubject.next(false);
+        this.loader.removeLoadingProcess();
         console.log('WebSocket connection closed');
       };
     });

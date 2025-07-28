@@ -1,5 +1,5 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, Signal, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule, PopoverController } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -10,6 +10,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { CameraService } from './services/camera.service';
 import { environment } from 'src/environments/environment';
 import { WebsocketService } from './services/websocket.service';
+import { LoaderService } from './services/loader.service';
 
 @Component({
   selector: 'app-root',
@@ -28,15 +29,14 @@ import { WebsocketService } from './services/websocket.service';
 export class AppComponent implements OnInit, OnDestroy {
   private readonly authenticationService = inject(AuthenticationService);
   private readonly document = inject(DOCUMENT);
-  private readonly websocket = inject(WebsocketService);
-  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly loader = inject(LoaderService);
   private readonly router = inject(Router)
   public userName = this.authenticationService.getName$();
   public isCallbackRoute = false;
   public isBaseRoute = false;
   public readonly logoSrc = environment.customizations.logo_src;
   private readonly destroy$ = new Subject<void>();
-  public isLoading = false;
+  public isLoading$: Signal<boolean>;
 
   public constructor(
     private readonly cameraService: CameraService,
@@ -48,6 +48,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.setStoredLanguage();
     this.setCustomStyles();
     this.setFavicon();
+    this.isLoading$ = this.loader.isLoading$;
     this.router.events.subscribe(() => {
       this.isBaseRoute = this.router.url === '/';
     });
@@ -57,10 +58,6 @@ export class AppComponent implements OnInit, OnDestroy {
     // if the route is "/callback", don't allow menu popover --do declarative
     this.trackRouterEvents();
     this.alertIncompatibleDevice();
-    this.websocket.isLoading$.subscribe((loading) => {
-      this.isLoading = loading;
-      this.cdr.detectChanges();
-    });
   }
 
   public ngOnDestroy(){

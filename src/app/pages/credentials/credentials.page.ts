@@ -18,6 +18,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
 import { catchError, EMPTY, forkJoin, from, Observable, of, switchMap, takeUntil, tap } from 'rxjs';
 import { ExtendedHttpErrorResponse } from 'src/app/interfaces/errors';
+import { LoaderService } from 'src/app/services/loader.service';
 
 
 //TODO separate scan in another component
@@ -49,6 +50,7 @@ export class CredentialsPage implements OnInit {
   private readonly cameraLogsService = inject(CameraLogsService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly loader = inject(LoaderService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly toastServiceHandler = inject(ToastServiceHandler);
@@ -84,11 +86,14 @@ export class CredentialsPage implements OnInit {
   }
 
   public vcDelete(cred: VerifiableCredential): void {
+    this.loader.addLoadingProcess();
     this.walletService.deleteVC(cred.id)
     .pipe(
       switchMap(() => this.loadCredentials())
     )
-    .subscribe();
+    .subscribe(() => {
+      this.loader.removeLoadingProcess();
+    });
   }
 
   public qrCodeEmit(qrCode: string): void {
@@ -105,12 +110,15 @@ export class CredentialsPage implements OnInit {
       // LOGIN / VERIFIABLE PRESENTATION
       // hide scanner but don't show VCs list
       this.showScanner = false;
+      this.loader.addLoadingProcess();
       executeContentSucessCallback = (executionResponse: JSON) => {
         return from(this.router.navigate(['/tabs/vc-selector/'], {
           queryParams: {
             executionResponse: JSON.stringify(executionResponse),
           },
-        }));
+        })).pipe(
+          tap(() => { this.loader.addLoadingProcess() })
+        );
       }
     }
     this.websocket.connect()
@@ -186,15 +194,20 @@ export class CredentialsPage implements OnInit {
   }
 
   private handleActivationSuccess(): Observable<VerifiableCredential[]> {
+    this.loader.addLoadingProcess();
+
     return this.loadCredentials()
       .pipe(
         tap(() => {
+          this.loader.removeLoadingProcess();
           this.showTempOkMessage();
         })
       )
   }
 
   private loadCredentials(): Observable<VerifiableCredential[]> {
+    this.loader.addLoadingProcess();
+
     const normalizer = new VerifiableCredentialSubjectDataNormalizer();
     return this.walletService.getAllVCs().pipe(
       takeUntilDestroyed(this.destroyRef),
@@ -206,7 +219,8 @@ export class CredentialsPage implements OnInit {
           }
           return cred;
         });
-        this.cdr.detectChanges()
+        this.cdr.detectChanges();
+        this.loader.removeLoadingProcess();
       }),
       catchError((error: ExtendedHttpErrorResponse) => {
         if (error.status === 404) {
@@ -215,6 +229,7 @@ export class CredentialsPage implements OnInit {
         } else {
           console.error("Error fetching credentials:", error);
         }
+        this.loader.removeLoadingProcess();
         return of([]);
       })
     )
