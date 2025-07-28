@@ -20,9 +20,6 @@ import { catchError, EMPTY, forkJoin, from, Observable, of, switchMap, takeUntil
 import { ExtendedHttpErrorResponse } from 'src/app/interfaces/errors';
 
 
-//todo avoid this constant
-const TIME_IN_MS = 3000;
-
 //TODO separate scan in another component
 
 @Component({
@@ -64,7 +61,7 @@ export class CredentialsPage implements OnInit {
     this.route.queryParams
       .pipe(takeUntilDestroyed())
       .subscribe((params) => {
-        this.showScannerView = params['showScannerViewView'];
+        this.showScannerView = params['showScannerView'];
         this.showScanner = params['showScanner'];
         this.credentialOfferUri = params['credentialOfferUri'];
       });
@@ -172,7 +169,7 @@ export class CredentialsPage implements OnInit {
     }
   }
 
-  private async okMessage(): Promise<void> {
+  private async showTempOkMessage(): Promise<void> {
     const alert = await this.alertController.create({
       message: `
         <div style="display: flex; align-items: center; gap: 50px;">
@@ -194,7 +191,7 @@ export class CredentialsPage implements OnInit {
     return this.loadCredentials()
       .pipe(
         tap(() => {
-          this.okMessage();
+          this.showTempOkMessage();
         })
       )
   }
