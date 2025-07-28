@@ -81,6 +81,7 @@ export class WebsocketService {
               },
             },
           ],
+          backdropDismiss: false,
         });
     
         const interval = this.startCountdown(alert, description, counter);
