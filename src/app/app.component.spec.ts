@@ -9,7 +9,7 @@ import { StorageService } from './services/storage.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from '../environments/environment';
 import { WebsocketService } from './services/websocket.service';
-import { ChangeDetectorRef } from '@angular/core';
+import { LoaderService } from './services/loader.service';
 describe('AppComponent', () => {
   let component: AppComponent;
   let translateServiceMock: jest.Mocked<TranslateService>;
@@ -58,10 +58,6 @@ describe('AppComponent', () => {
   } as unknown as jest.Mocked<NavController>;
 
   beforeEach(async () => {
-    isLoadingSubject = new Subject<boolean>();
-    websocketServiceMock = {
-      isLoading$: isLoadingSubject.asObservable(),
-    };
 
     translateServiceMock = {
       addLangs: jest.fn(),
@@ -98,6 +94,7 @@ describe('AppComponent', () => {
         RouterTestingModule, 
       ],
       providers: [
+        LoaderService,
         { provide: TranslateService, useValue: translateServiceMock },
         { provide: PopoverController, useValue: popoverControllerMock },
         { provide: Router, useValue: routerMock },
@@ -105,7 +102,6 @@ describe('AppComponent', () => {
         { provide: StorageService, useValue: storageServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: NavController, useValue: navControllerMock },
-        { provide: WebsocketService, useValue: websocketServiceMock }
       ],
     }).compileComponents();
 
@@ -128,13 +124,13 @@ describe('AppComponent', () => {
     expect((component as any).setCustomStyles).toHaveBeenCalled();
   });
 
-  it('should track router events, handle no cache and show alert for incompatible device', ()=>{
-    jest.spyOn((component as any), 'trackRouterEvents');
+  it('should set up route listeners, handle no cache and show alert for incompatible device', ()=>{
+    jest.spyOn((component as any), 'setupRouteListeners');
     jest.spyOn((component as any), 'alertIncompatibleDevice');
 
     component.ngOnInit();
 
-    expect((component as any).trackRouterEvents).toHaveBeenCalled();
+    expect((component as any).setupRouteListeners).toHaveBeenCalled();
     expect((component as any).alertIncompatibleDevice).toHaveBeenCalled();
   });
 
@@ -318,71 +314,13 @@ describe('AppComponent', () => {
     alertSpy.mockRestore();
   });
     
-  it('should subscribe to isLoading$ and update isLoading', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const spyDetectChanges = jest.spyOn(component['cdr'], 'detectChanges');
+  it('should synchronize isLoading$ with loader service', () => {
+    const loaderService = TestBed.inject(LoaderService);
+    expect(component.isLoading$()).toBe(loaderService.isLoading$());
 
-    component.ngOnInit(); 
-
-    isLoadingSubject.next(true); 
-    fixture.detectChanges(); 
-
-    expect(component.isLoading).toBe(true);
-    expect(spyDetectChanges).toHaveBeenCalled();
-  });
-
-  it('should not show overlay if isLoading is false', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    component.ngOnInit();
-    isLoadingSubject.next(false); 
-    fixture.detectChanges();
-
-    expect(component.isLoading).toBe(false);
-  });
-
-  it('should update isLoading when WebSocketService emits a new value', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    component.ngOnInit();
-
-    isLoadingSubject.next(false);
-    fixture.detectChanges();
-    expect(component.isLoading).toBe(false);
-
-    isLoadingSubject.next(true);
-    fixture.detectChanges();
-    expect(component.isLoading).toBe(true);
-
-    isLoadingSubject.next(false);
-    fixture.detectChanges();
-    expect(component.isLoading).toBe(false);
-  });
- 
-  it('should render the overlay when isLoading is true', async () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    component.isLoading = true; 
-    fixture.detectChanges(); 
-    await fixture.whenStable(); 
-
-    setTimeout(() => {
-      fixture.detectChanges(); 
-      const overlayElement = fixture.nativeElement.querySelector('.overlay');
-
-      expect(overlayElement).not.toBeNull(); 
-      expect(getComputedStyle(overlayElement).display).not.toBe('none');
-    }, 0);
-  });
-
-  it('should not render the overlay when isLoading is false', async () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    component.isLoading = false; 
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    setTimeout(() => {
-      fixture.detectChanges();
-      const overlayElement = fixture.nativeElement.querySelector('.overlay');
-      expect(overlayElement).toBeNull(); 
-    }, 0);
+    loaderService.addLoadingProcess();
+    expect(component.isLoading$()).toBe(loaderService.isLoading$());
+    expect(component.isLoading$()).toBeTruthy;
   });
 });
 

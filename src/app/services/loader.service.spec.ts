@@ -13,4 +13,48 @@ describe('LoaderService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should compute isLoading from isLoadingCount', () => {
+    expect((service as any).loadingCount$()).toBe(0);
+    expect(service.isLoading$()).toBe(false);
+
+    (service as any).loadingCount$.set(1);
+    expect(service.isLoading$()).toBe(true);
+
+    (service as any).loadingCount$.set(10);
+    expect(service.isLoading$()).toBe(true);
+
+    (service as any).loadingCount$.set(0);
+    expect(service.isLoading$()).toBe(false);
+  });
+
+  it('should add loading process', () => {
+    expect((service as any).loadingCount$()).toBe(0);
+
+    service.addLoadingProcess();
+    expect((service as any).loadingCount$()).toBe(1);
+
+    service.addLoadingProcess();
+    expect((service as any).loadingCount$()).toBe(2);
+  });
+
+  it('should remove loading process', () => {
+    expect((service as any).loadingCount$()).toBe(0);
+
+    (service as any).loadingCount$.set(10);
+    service.removeLoadingProcess();
+
+    expect((service as any).loadingCount$()).toBe(9);
+  });
+
+  it('should reset loading process', () => {
+    expect((service as any).loadingCount$()).toBe(0);
+
+    (service as any).loadingCount$.set(10);
+    service.resetLoadingCount();
+
+    expect((service as any).loadingCount$()).toBe(0);
+  });
+
+
 });

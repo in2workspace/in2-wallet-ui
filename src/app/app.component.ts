@@ -9,7 +9,6 @@ import { StorageService } from './services/storage.service';
 import { Subject, takeUntil } from 'rxjs';
 import { CameraService } from './services/camera.service';
 import { environment } from 'src/environments/environment';
-import { WebsocketService } from './services/websocket.service';
 import { LoaderService } from './services/loader.service';
 
 @Component({
@@ -49,14 +48,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.setCustomStyles();
     this.setFavicon();
     this.isLoading$ = this.loader.isLoading$;
-    this.router.events.subscribe(() => {
-      this.isBaseRoute = this.router.url === '/';
-    });
   }
 
   public ngOnInit() {
-    // if the route is "/callback", don't allow menu popover --do declarative
-    this.trackRouterEvents();
+    this.setupRouteListeners();
     this.alertIncompatibleDevice();
   }
 
@@ -128,12 +123,16 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
   
-  private trackRouterEvents(): void {
+  private setupRouteListeners(): void {
+    // todo do declarative
     this.router.events
     .pipe(takeUntil(this.destroy$))
     .subscribe(() => {
+      // if the route is "/callback" blurs the toolbar to give a "transitional effect"
       const currentUrl = this.router.url.split('?')[0];
       this.isCallbackRoute = currentUrl.startsWith('/callback');
+      // if the route is "/", don't allow menu popover
+      this.isBaseRoute = this.router.url === '/';
     });
   }
 

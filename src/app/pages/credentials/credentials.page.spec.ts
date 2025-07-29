@@ -12,6 +12,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { CredentialStatus, Mandate } from 'src/app/interfaces/verifiable-credential';
 import { TranslateService } from '@ngx-translate/core';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
+import { LoaderService } from 'src/app/services/loader.service';
 
 describe('CredentialsPage', () => {
   let component: CredentialsPage;
@@ -22,7 +23,10 @@ describe('CredentialsPage', () => {
   beforeEach(async () => {
     walletServiceMock = {
       requestSignature: jest.fn(),
-      getAllVCs: jest.fn(),
+      getAllVCs: jest.fn().mockReturnValue(of()),
+      deleteVc: jest.fn().mockReturnValue(of()),
+      executeContent: jest.fn().mockReturnValue(of()),
+      requestOpenidCredentialOffer: jest.fn().mockReturnValue(of())
     };
 
     routerMock = {
@@ -37,6 +41,7 @@ describe('CredentialsPage', () => {
       imports: [IonicModule.forRoot()],
       providers: [
         CredentialsPage,
+        LoaderService,
         { provide: WalletService, useValue: walletServiceMock },
         { provide: Router, useValue: routerMock },
         { provide: ToastServiceHandler, useValue: toastServiceHandlerMock },
@@ -53,25 +58,20 @@ describe('CredentialsPage', () => {
 
     component = TestBed.inject(CredentialsPage);
     component.credList = [];
-    component.refresh = jest.fn();
-    component.generateCred = jest.fn();
-    component.forcePageReload = jest.fn();
+    component.sameDeviceVcActivationFlow = jest.fn();
+    (component as any).forcePageReload = jest.fn();
   });
 
   describe('ngOnInit', () => {
-    it('should call generateCred only if credentialOfferUri is not null',() => {
+    it('should call sameDeviceVcActivationFlow only if credentialOfferUri is not null',() => {
       component.credentialOfferUri = 'testUri';
       component.ngOnInit();
-      expect(component.generateCred).toHaveBeenCalledTimes(1);
-      expect(component.refresh).toHaveBeenCalled();
-      expect(component.scaned_cred).toBe(false);
+      expect(component.sameDeviceVcActivationFlow).toHaveBeenCalledTimes(1);
     });
-    it('should not call generateCred only if credentialOfferUri is null',() => {
+    it('should not call sameDeviceVcActivationFlow only if credentialOfferUri is null',() => {
       component.credentialOfferUri = '';
       component.ngOnInit();
-      expect(component.generateCred).not.toHaveBeenCalled();
-      expect(component.refresh).toHaveBeenCalled();
-      expect(component.scaned_cred).toBe(false);
+      expect(component.sameDeviceVcActivationFlow).not.toHaveBeenCalled();
     });
   });
   describe('ionViewerDidEnter', () => {
@@ -124,13 +124,13 @@ describe('CredentialsPage', () => {
       const response: HttpResponse<string> = { status: 204 } as HttpResponse<string>;
       walletServiceMock.requestSignature.mockReturnValue(of(response));
 
-      component.forcePageReload = jest.fn();
+      (component as any).forcePageReload = jest.fn();
 
       (component as any).requestPendingSignatures();
       flush(); 
 
       expect(walletServiceMock.requestSignature).toHaveBeenCalledWith('123');
-      expect(component.forcePageReload).toHaveBeenCalled();
+      expect((component as any).forcePageReload).toHaveBeenCalled();
     }));
 
     it('should handle errors in requestSignature and not call toastServiceHandler.showErrorAlert or forcePageReload', fakeAsync(() => {
@@ -158,21 +158,21 @@ describe('CredentialsPage', () => {
       walletServiceMock.requestSignature.mockReturnValue(throwError(() => errorResponse));
 
       const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-      component.forcePageReload = jest.fn();
+      (component as any).forcePageReload = jest.fn();
 
       (component as any).requestPendingSignatures();
       flush();
 
       expect(walletServiceMock.requestSignature).toHaveBeenCalledWith('456');
       expect(toastServiceHandlerMock.showErrorAlert).not.toHaveBeenCalled();
-      expect(component.forcePageReload).not.toHaveBeenCalled();
+      expect((component as any).forcePageReload).not.toHaveBeenCalled();
       consoleErrorSpy.mockRestore();
     }));
   });
 
   describe('forcePageReload', () => {
     it('should navigate to /tabs/credentials and reload the window', async () => {
-      component.forcePageReload = CredentialsPage.prototype.forcePageReload.bind(component);
+      (component as any).forcePageReload = (CredentialsPage as any).prototype.forcePageReload.bind(component);
 
       const reloadSpy = jest.fn();
       const originalLocation = window.location;
@@ -183,7 +183,7 @@ describe('CredentialsPage', () => {
 
       routerMock.navigate.mockReturnValue(Promise.resolve(true));
 
-      await component.forcePageReload();
+      await (component as any).forcePageReload();
 
       expect(routerMock.navigate).toHaveBeenCalledWith(['/tabs/credentials']);
       expect(reloadSpy).toHaveBeenCalled();
