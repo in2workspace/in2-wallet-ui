@@ -16,7 +16,7 @@ import {CameraLogsService} from 'src/app/services/camera-logs.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
-import { catchError, EMPTY, forkJoin, from, Observable, of, switchMap, takeUntil, tap } from 'rxjs';
+import { catchError, EMPTY, finalize, forkJoin, from, Observable, of, switchMap, takeUntil, tap } from 'rxjs';
 import { ExtendedHttpErrorResponse } from 'src/app/interfaces/errors';
 import { LoaderService } from 'src/app/services/loader.service';
 
@@ -89,7 +89,8 @@ export class CredentialsPage implements OnInit {
     this.loader.addLoadingProcess();
     this.walletService.deleteVC(cred.id)
     .pipe(
-      switchMap(() => this.loadCredentials())
+      switchMap(() => this.loadCredentials()),
+      finalize(() => this.loader.removeLoadingProcess())
     )
     .subscribe(() => {
       this.loader.removeLoadingProcess();
@@ -117,7 +118,7 @@ export class CredentialsPage implements OnInit {
             executionResponse: JSON.stringify(executionResponse),
           },
         })).pipe(
-          tap(() => { this.loader.addLoadingProcess() })
+          tap(() => { this.loader.removeLoadingProcess() })
         );
       }
     }
@@ -129,7 +130,10 @@ export class CredentialsPage implements OnInit {
             switchMap((executionResponse) => {
                 return executeContentSucessCallback(executionResponse);
               }),
-            tap(() => { this.websocket.closeConnection(); })
+            finalize(() => {
+              this.loader.removeLoadingProcess();
+              this.websocket.closeConnection();
+            }),
           ).subscribe({
               next: (executionResponse) => {
                 
