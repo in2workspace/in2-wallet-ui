@@ -1,27 +1,27 @@
-import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {AlertController, IonicModule} from '@ionic/angular';
-import {StorageService} from 'src/app/services/storage.service';
-import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
-import {QRCodeModule} from 'angularx-qrcode';
-import {WalletService} from 'src/app/services/wallet.service';
-import {VcViewComponent} from '../../components/vc-view/vc-view.component';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {WebsocketService} from 'src/app/services/websocket.service';
-import {VerifiableCredential, CredentialStatus} from 'src/app/interfaces/verifiable-credential';
-import {VerifiableCredentialSubjectDataNormalizer} from 'src/app/interfaces/verifiable-credential-subject-data-normalizer';
-import {CameraLogsService} from 'src/app/services/camera-logs.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AlertController, IonicModule, ViewWillLeave } from '@ionic/angular';
+import { StorageService } from 'src/app/services/storage.service';
+import { BarcodeScannerComponent } from 'src/app/components/barcode-scanner/barcode-scanner.component';
+import { QRCodeModule } from 'angularx-qrcode';
+import { WalletService } from 'src/app/services/wallet.service';
+import { VcViewComponent } from '../../components/vc-view/vc-view.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { WebsocketService } from 'src/app/services/websocket.service';
+import { VerifiableCredential, CredentialStatus } from 'src/app/interfaces/verifiable-credential';
+import { VerifiableCredentialSubjectDataNormalizer } from 'src/app/interfaces/verifiable-credential-subject-data-normalizer';
+import { CameraLogsService } from 'src/app/services/camera-logs.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
-import { catchError, EMPTY, finalize, forkJoin, from, Observable, of, switchMap, takeUntil, tap } from 'rxjs';
+import { catchError, finalize, forkJoin, from, Observable, of, switchMap, tap } from 'rxjs';
 import { ExtendedHttpErrorResponse } from 'src/app/interfaces/errors';
 import { LoaderService } from 'src/app/services/loader.service';
 
 
-//TODO separate scan in another component
+// TODO separate scan in another component/ page
 
 @Component({
   selector: 'app-credentials',
@@ -40,7 +40,7 @@ import { LoaderService } from 'src/app/services/loader.service';
   ],
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
-export class CredentialsPage implements OnInit {
+export class CredentialsPage implements OnInit, ViewWillLeave {
   public credList: Array<VerifiableCredential> = [];
   public showScannerView = false;
   public showScanner = false;
@@ -77,10 +77,20 @@ export class CredentialsPage implements OnInit {
   }
 
   public ionViewDidEnter(): void {
+    console.log('did enter credentials');
     this.requestPendingSignatures();
   }
 
+  //this is needed to ensure the scanner is destroyed when leaving page. Ionic
+  //caches the component (it isn't destroyed when leaving route), so ngOnDestroy won't work
+  public ionViewWillLeave(): void{
+    console.log('ionViewWillLeave credentials');
+    this.showScannerView = false;
+    this.cdr.detectChanges();
+  }
+
   public openScanner(): void {
+    console.log('credentials: openScanner')
     this.showScannerView = true;
     this.showScanner = true;
   }

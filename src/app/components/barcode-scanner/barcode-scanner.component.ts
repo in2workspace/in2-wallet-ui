@@ -14,6 +14,7 @@ import { BarcodeFormat, Exception } from '@zxing/library';
 import { ZXingScannerModule, ZXingScannerComponent } from '@zxing/ngx-scanner';
 import {
   BehaviorSubject,
+  Observable,
   Subject,
   debounceTime,
   distinctUntilChanged,
@@ -23,22 +24,23 @@ import {
   shareReplay,
   switchMap,
   take,
-  takeUntil
+  takeUntil,
+  tap
 } from 'rxjs';
 import { CameraLogType } from 'src/app/interfaces/camera-log';
 import { CameraService } from 'src/app/services/camera.service';
 import { RouterModule } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicModule } from '@ionic/angular';
 
 // ! Since console.error is intercepted (to capture the error already caught by zxing), be careful to avoid recursion
 // ! (i.e., console.error should not be called within the execution flow of another console.error)
 
-//when a scanner component is created, it waits for the "destroying scanner list" is empty
-//a scanner component is removed from such list not right after being destroyed, but after some delay,
-//This delay is due to a time range in which the camera stream is deactivated after destroying scanner component
-//Without this delay, if user tries to switch fast betwee two scanner pages, the scanner might be blocked
+// When a scanner component is created, it waits for the "destroying scanner list" is empty.
+// A scanner component (its id) is removed from such list not right after being destroyed, but after some delay.
+// This delay is needed because the activation process requires some time to be completed, so that if the component is 
+// destroyed during this process, the camera is not deactivated and the next activation might be blocked
 
 @Component({
   selector: 'app-barcode-scanner',
@@ -57,7 +59,10 @@ export class BarcodeScannerComponent implements OnInit {
   //COUNTDOWN
   public readonly isError$ = this.cameraService.isCameraError$;
   private readonly activationTimeoutInSeconds = 4;
-  private readonly activatedScanner$$ = new Subject<void>();
+  private readonly _activatedScanner$$ = new Subject<void>();
+  readonly activatedScanner$$: Observable<void> = this._activatedScanner$$.pipe(
+    takeUntilDestroyed()
+  );
   private readonly activationCountdown$ = this.activatedScanner$$.pipe(
     switchMap(() => interval(1000)
       .pipe(
@@ -72,16 +77,21 @@ export class BarcodeScannerComponent implements OnInit {
 
   public readonly selectedDevice$: WritableSignal<MediaDeviceInfo|undefined> = this.cameraService.selectedCamera$;
   private readonly updateScannerDeviceEffect = effect(async () => {
+    console.log('component.updateScannerDeviceEffect');
     const selectedDevice = this.selectedDevice$();
     if(this.firstActivationCompleted && this.scanner && selectedDevice && this.scanner.device !== selectedDevice){
+      console.log('Activating scanner since first activation has alrady been completed')
       const hasPermission = await this.scanner.askForPermission()
         if(hasPermission){
           this.scanner.device = selectedDevice;
-          this.activatedScanner$$.next();
+          this._activatedScanner$$.next();
         }else{
           console.error('SCANNER: Permission denied');
         }
-  }});
+    }else{
+      console.log('Not activating scanner after switch: first activation not been completed')
+    }
+  });
   private readonly isActivatingScanner$ = toSignal(this.cameraService.activatingScannersList$);
 
 
@@ -121,13 +131,16 @@ export class BarcodeScannerComponent implements OnInit {
     }
 
     public ngOnDestroy(): void {
+      console.log('Barcode on destroy');
       this.destroy$.next();
       this.setActivatingTimeout();
       this.restoreOriginalConsoleError();
       this.cameraService.isCameraError$.set(false);
+      this.destroy$.complete();
     }
 
     public async initCameraIfNoActivateScanners(): Promise<void>{
+      console.log('initCameraIfNoActivateScanners');
        //activate scanner once there are no other scanner in deactivation process
        const activatingScannersList = this.isActivatingScanner$();
        if (activatingScannersList?.length === 0) {
@@ -141,7 +154,9 @@ export class BarcodeScannerComponent implements OnInit {
          console.warn('SCANNER: there is at least one active scanner, waiting before starting next camera flow.')
          this.cameraService.activatingScannersList$
            .pipe(
+             tap(val=> { console.log('cameraService.activatingScannersList$: ' + val) }),
              filter(value => value.length === 0),
+             tap(()=> { console.log('cameraService.activatingScannersList$ length is 0') }),
              takeUntil(this.destroy$),
              take(1),
            )
@@ -156,17 +171,19 @@ export class BarcodeScannerComponent implements OnInit {
     }
 
   public async activateScanner(): Promise<void>{
+    console.log('activateScanner');
     if(this.scanner){
       this.scanner.enable = true;
       const hasPermission = await this.scanner.askForPermission();
       if(this.scanner.device?.deviceId !== this.selectedDevice$()?.deviceId && hasPermission){
         this.scanner.device = this.selectedDevice$();
-        this.activatedScanner$$.next();
+        this._activatedScanner$$.next();
       }
     }
   }
 
   public async activateScannerInitially(): Promise<void>{
+    console.log('activateScannerInitially')
     await this.activateScanner();
     this.firstActivationCompleted = true;  
   }
@@ -188,7 +205,8 @@ export class BarcodeScannerComponent implements OnInit {
     this.cameraLogsService.addCameraLog(error, exceptionType);
   }
 
-  public setActivatingTimeout(): void{
+  private setActivatingTimeout(): void{
+    console.log('setActivatingTimeout')
     this.cameraService.addActivatingScanner(this.scannerId);
     const activationCountDownValue = this.activationCountdownValue$();
     console.warn('Scanner activation countdown value: ' + activationCountDownValue + ' ms');

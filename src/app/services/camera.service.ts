@@ -20,12 +20,14 @@ export class CameraService {
   public activatingScannersListSubj = new BehaviorSubject<string[]>([]);
   public activatingScannersList$ = this.activatingScannersListSubj.asObservable();
 
-  public addActivatingScanner(scannerId:string){
+  public addActivatingScanner(scannerId: string){
+    console.log('Adding scanner with id: ' + scannerId);
     const destroyingScanner = this.activatingScannersListSubj.getValue();
     this.activatingScannersListSubj.next([...destroyingScanner, scannerId]);
   }
 
-  public removeActivatingScanner(scannerId:string){
+  public removeActivatingScanner(scannerId: string){
+    console.log('Removing scanner with id: ' + scannerId);
     const destroyingScanner = this.activatingScannersListSubj.getValue();
     const updatedList = destroyingScanner.filter(id => id !== scannerId);
     this.activatingScannersListSubj.next([...updatedList]);
