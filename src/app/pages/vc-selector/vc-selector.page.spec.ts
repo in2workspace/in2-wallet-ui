@@ -191,12 +191,11 @@ describe('VcSelectorPage', () => {
       component.executionResponse = mockExecutionResponse;
       component.formatCredList();
 
-      expect(component.credList).toHaveLength(2);
-      expect(component.credList[0].id).toBe('vc2'); // Should be reversed
-      expect(component.credList[1].id).toBe('vc1');
+      expect(component.credList).toHaveLength(1);
+      expect(component.credList[0].id).toBe('vc1');
       
       // Verify mandate structure is preserved
-      const credSubject = component.credList[1].credentialSubject as { mandate: Mandate };
+      const credSubject = component.credList[0].credentialSubject as { mandate: Mandate };
       expect(credSubject.mandate.mandatee.firstName).toBe('John');
       expect(credSubject.mandate.mandator.organization).toBe('Test Organization');
       expect(credSubject.mandate.power[0].action).toBe('sign');
@@ -220,31 +219,6 @@ describe('VcSelectorPage', () => {
       
       expect(() => component.formatCredList()).not.toThrow();
       expect(component.credList).toHaveLength(1);
-    });
-
-    it('should verify different credential statuses', () => {
-      const mockRevokedCred = {
-        '@context': ['https://www.w3.org/2018/credentials/v1'],
-        id: 'vc3',
-        type: ['VerifiableCredential'],
-        issuer: mockIssuer,
-        issuanceDate: '2024-01-01T00:00:00Z',
-        validFrom: '2024-01-01T00:00:00Z',
-        expirationDate: '2025-01-01T00:00:00Z',
-        validUntil: '2025-01-01T00:00:00Z',
-        credentialSubject: mockCredentialSubject,
-        lifeCycleStatus: "REVOKED",
-        credentialStatus: {} as CredentialStatus,
-      };
-
-      const executionResponseWithRevoked = {
-        selectableVcList: [mockRevokedCred] as VerifiableCredential[]
-      };
-      
-      component.executionResponse = executionResponseWithRevoked;
-      component.formatCredList();
-
-      expect(component.credList[0].lifeCycleStatus).toBe("REVOKED");
     });
   });
 
@@ -424,8 +398,8 @@ describe('VcSelectorPage', () => {
       expect(component._VCReply.nonce).toBe('test-nonce');
 
       // Should have processed credentials
-      expect(component.credList).toHaveLength(2);
-      expect(component.isClick).toHaveLength(2);
+      expect(component.credList).toHaveLength(1);
+      expect(component.isClick).toHaveLength(1);
 
       // Should be able to select credentials
       const credential = component.credList[0];

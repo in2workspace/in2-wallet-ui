@@ -76,7 +76,7 @@ export class VcSelectorPage {
     console.log('[VC-selector: Formatting credentials list...');
     const unNormalizedCredList: VerifiableCredential[] = this.executionResponse['selectableVcList'];
     const normalizer = new VerifiableCredentialSubjectDataNormalizer();
-    this.credList = [...unNormalizedCredList].reverse().map(cred => {
+    this.credList = [...unNormalizedCredList].reverse().filter(cred => cred.lifeCycleStatus === 'VALID').map(cred => {
       if (cred.credentialSubject) {
         cred.credentialSubject = normalizer.normalizeLearCredentialSubject(cred.credentialSubject);
       }
