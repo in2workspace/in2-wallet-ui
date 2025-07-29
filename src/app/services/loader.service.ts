@@ -2,7 +2,7 @@ import { Injectable, computed, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class LoaderService {
-  private loadingCount$ = signal(0);
+  private readonly loadingCount$ = signal(0);
 
   readonly isLoading$ = computed(() => this.loadingCount$() > 0);
 

@@ -20,6 +20,7 @@ import {
 } from 'angular-auth-oidc-client';
 import { HttpErrorInterceptor } from './app/interceptors/error-handler.interceptor';
 import { IAM_PARAMS, IAM_POST_LOGIN_ROUTE, IAM_POST_LOGOUT_URI, IAM_REDIRECT_URI } from './app/constants/iam.constants';
+import { disableTouchScrollOnPaths } from './app/helpers/disable-touch-scroll-on-paths';
 
 
 disableTouchScrollOnPaths(
@@ -74,20 +75,5 @@ bootstrapApplication(AppComponent, {
 });
 export function httpTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http);
-}
-
-export function disableTouchScrollOnPaths(noScrollPages: string[]) {
-  const handler = (event: TouchEvent) => {
-    const currentPath = new URL(window.location.href).pathname;
-    if (noScrollPages.includes(currentPath)) {
-      event.preventDefault();
-    }
-  };
-
-  document.addEventListener('touchmove', handler, { passive: false });
-
-  return () => {
-    document.removeEventListener('touchmove', handler);
-  };
 }
 

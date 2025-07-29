@@ -1,5 +1,5 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, Signal, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, Signal, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule, PopoverController } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -18,8 +18,6 @@ import { LoaderService } from './services/loader.service';
   standalone: true,
   imports: [
     IonicModule,
-    RouterLink,
-    RouterLinkActive,
     CommonModule,
     TranslateModule,
   ],

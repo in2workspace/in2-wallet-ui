@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { BehaviorSubject } from 'rxjs';
-import { AlertController } from '@ionic/angular';
+import { AlertController, AlertOptions } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { WEBSOCKET_PATH } from '../constants/api.constants';
@@ -35,9 +35,10 @@ export class WebsocketService {
         );
         resolve();
       };
-      this.socket.onerror = (err) => {
-        console.error('WebSocket failed to open', err);
-        reject(err);
+      
+      this.socket.onerror = (ev: Event) => {
+        console.error('WebSocket failed to open', ev);
+        reject('Websocket error.');
       };
     
       this.socket.onmessage = async (event) => {
@@ -47,7 +48,7 @@ export class WebsocketService {
         let description = data.tx_code?.description || '';
         let counter = data.timeout || 60;
     
-        const alert = await this.alertController.create({
+        const alertOptions: AlertOptions = {
           header: this.translate.instant('confirmation.pin'),
           message: `${description}<br><small class="counter">Time remaining: ${counter} seconds</small>`,
           inputs: [
@@ -81,7 +82,8 @@ export class WebsocketService {
             },
           ],
           backdropDismiss: false,
-        });
+        };
+        const alert = await this.alertController.create(alertOptions);
     
         const interval = this.startCountdown(alert, description, counter);
     
