@@ -6,10 +6,11 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from './services/authentication.service';
 import { MenuComponent } from './components/menu/menu.component';
 import { StorageService } from './services/storage.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, map } from 'rxjs';
 import { CameraService } from './services/camera.service';
 import { environment } from 'src/environments/environment';
 import { LoaderService } from './services/loader.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-root',
@@ -28,19 +29,26 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly document = inject(DOCUMENT);
   private readonly loader = inject(LoaderService);
   private readonly router = inject(Router)
+
   public userName = this.authenticationService.getName$();
-  public isCallbackRoute = false;
-  public isBaseRoute = false;
+  public routerEvents$ = this.router.events;
+  // if the route is "/", don't allow menu popover
+  public isBaseRoute$ = toSignal<boolean>(this.routerEvents$.pipe(map(ev => this.router.url === '/')));
+  // if the route is "/callback" blurs the toolbar to give a "transitional effect"
+  public isCallbackRoute$ = toSignal<boolean>(this.routerEvents$.pipe(map(ev => {
+      const currentUrl = this.router.url.split('?')[0];
+      return currentUrl.startsWith('/callback');
+  })));
   public readonly logoSrc = environment.customizations.logo_src;
   private readonly destroy$ = new Subject<void>();
   public isLoading$: Signal<boolean>;
 
-  public constructor(
-    private readonly cameraService: CameraService,
-    private readonly popoverController: PopoverController,
-    private readonly storageService: StorageService,
-    public readonly translate: TranslateService
-  ) {
+  private readonly cameraService = inject(CameraService);
+  private readonly popoverController = inject(PopoverController);
+  private readonly storageService = inject(StorageService);
+  public readonly translate = inject(TranslateService);
+
+  public constructor() {
     this.setDefaultLanguages();
     this.setStoredLanguage();
     this.setCustomStyles();
@@ -49,7 +57,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.setupRouteListeners();
     this.alertIncompatibleDevice();
   }
 
@@ -120,19 +127,7 @@ export class AppComponent implements OnInit, OnDestroy {
       alert('This application scanner is probably not supported on this device with this browser. If you have issues, use Safari browser.');
     }
   }
-  
-  private setupRouteListeners(): void {
-    // todo do declarative
-    this.router.events
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(() => {
-      // if the route is "/callback" blurs the toolbar to give a "transitional effect"
-      const currentUrl = this.router.url.split('?')[0];
-      this.isCallbackRoute = currentUrl.startsWith('/callback');
-      // if the route is "/", don't allow menu popover
-      this.isBaseRoute = this.router.url === '/';
-    });
-  }
+
 
   public openPopoverByKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -142,7 +137,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public async openPopover(ev: Event): Promise<void> {
-    if (this.isCallbackRoute) {
+    if (this.isCallbackRoute$()) {
       return; 
     }
     const popover = await this.popoverController.create({

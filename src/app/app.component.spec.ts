@@ -125,12 +125,10 @@ describe('AppComponent', () => {
   });
 
   it('should set up route listeners, handle no cache and show alert for incompatible device', ()=>{
-    jest.spyOn((component as any), 'setupRouteListeners');
     jest.spyOn((component as any), 'alertIncompatibleDevice');
 
     component.ngOnInit();
 
-    expect((component as any).setupRouteListeners).toHaveBeenCalled();
     expect((component as any).alertIncompatibleDevice).toHaveBeenCalled();
   });
 

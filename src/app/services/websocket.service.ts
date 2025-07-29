@@ -55,11 +55,12 @@ export class WebsocketService {
         const cancelHandler = () => {
           clearInterval(interval);
         };
+        const loadingTimeOutSendHandler = () => {
+          this.loader.addLoadingProcess();
+        };
         const sendHandler = (alertData: any) => {
           clearInterval(interval);
-          this.loadingTimeout = setTimeout(() => {
-            this.loader.addLoadingProcess();
-          }, 1000);
+          this.loadingTimeout = setTimeout(loadingTimeOutSendHandler, 1000);
           this.sendMessage(JSON.stringify({ pin: alertData.pin }));
         }
         const alertOptions: AlertOptions = {

@@ -137,6 +137,7 @@ export class VcSelectorPage {
       this.walletService.executeVC(this._VCReply).subscribe({
         next: () => {
           this.loader.removeLoadingProcess();
+          this.router.navigate(['/tabs/home']);
           this.okMessage();
         },
         error: err => {
@@ -211,7 +212,6 @@ private async handleError(err: any) {
 
     setTimeout(async () => {
       await alert.dismiss();
-      this.router.navigate(['/tabs/home']);
     }, 2000);
   }
 

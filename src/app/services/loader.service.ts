@@ -4,7 +4,13 @@ import { Injectable, computed, signal } from '@angular/core';
 export class LoaderService {
   private readonly loadingCount$ = signal(0);
 
-  readonly isLoading$ = computed(() => this.loadingCount$() > 0);
+  readonly isLoading$ = computed(() => {
+    const loadingCount = this.loadingCount$();
+    if(loadingCount < 0){
+      console.error('Loading count is < 0: attempted to cancel a process that was not notified to the loader service.');
+    }
+    return loadingCount > 0
+  });
 
   addLoadingProcess(): void {
     this.loadingCount$.update(count => count + 1);
