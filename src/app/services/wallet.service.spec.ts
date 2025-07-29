@@ -7,7 +7,7 @@ import { WalletService } from './wallet.service';
 import { environment } from 'src/environments/environment';
 import {
   CredentialStatus,
-  CredentialStatusType,
+  LifeCycleStatus,
   VerifiableCredential,
 } from '../interfaces/verifiable-credential';
 import { SERVER_PATH } from '../constants/api.constants';
@@ -95,7 +95,7 @@ describe('WalletService', () => {
           ]
         },
       },
-      lifeCycleStatus: CredentialStatusType.ISSUED,
+      lifeCycleStatus: "ISSUED",
       credentialStatus: {} as CredentialStatus, 
     };
     const mockResponse = 'mock-cbor-data';
@@ -215,7 +215,7 @@ describe('WalletService', () => {
             ],
           },
         },
-        lifeCycleStatus: CredentialStatusType.ISSUED,
+        lifeCycleStatus: "ISSUED",
         credentialStatus: {} as CredentialStatus
       },
     ];
@@ -274,7 +274,7 @@ describe('WalletService', () => {
           ]
         },
       },
-      lifeCycleStatus: CredentialStatusType.ISSUED,
+      lifeCycleStatus: "ISSUED",
       credentialStatus: {} as CredentialStatus
     };
 

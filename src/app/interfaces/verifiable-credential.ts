@@ -2,7 +2,7 @@ export interface VerifiableCredential {
   '@context': string[];
   id: string;
   type?: string[];  
-  lifeCycleStatus: CredentialStatusType; 
+  lifeCycleStatus: LifeCycleStatus; 
   name?: string;
   description?: string;
   issuer: Issuer;
@@ -91,10 +91,12 @@ export interface CredentialStatus {
   statusListCredential: string;
 }
 
-//TODO: REVISAR NEW FORMAT
-export enum CredentialStatusType {
-  VALID = 'VALID',
-  ISSUED = 'ISSUED',
-  REVOKED = 'REVOKED',
-  EXPIRED = 'EXPIRED',
-}
+export const LifeCycleStatuses = [
+  'VALID',
+  'ISSUED',
+  'REVOKED',
+  'EXPIRED',
+] as const;
+
+export type LifeCycleStatus = typeof LifeCycleStatuses[number];
+

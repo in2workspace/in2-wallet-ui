@@ -11,7 +11,8 @@ import { WalletService } from 'src/app/services/wallet.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import {
-  CredentialStatusType,
+  LifeCycleStatus,
+  LifeCycleStatuses,
   VerifiableCredential,
 } from 'src/app/interfaces/verifiable-credential';
 import { IonicModule } from '@ionic/angular';
@@ -45,7 +46,7 @@ export class VcViewComponent implements OnInit {
   public isModalDeleteOpen = false;
   public isModalUnsignedOpen = false;
   public showChip = false;
-  public credentialStatus = CredentialStatusType;
+  public credentialStatus = LifeCycleStatuses;
   public handlerMessage = '';
   public alertButtons = [
     {
@@ -102,7 +103,6 @@ export class VcViewComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    console.log(this.credentialInput);
     this.checkAvailableFormats();
     this.credentialType = this.getSpecificType(this.credentialInput);
   }
@@ -135,7 +135,7 @@ export class VcViewComponent implements OnInit {
   }
 
   public qrView(): void {
-    if (this.credentialInput.lifeCycleStatus !== CredentialStatusType.EXPIRED) {
+    if (this.credentialInput.lifeCycleStatus !== "EXPIRED") {
       this.walletService.getVCinCBOR(this.credentialInput).subscribe({
         next: (value: string) => {
           this.cred_cbor = value;

@@ -9,7 +9,7 @@ import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
 import { of, throwError } from 'rxjs';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { CredentialStatus, CredentialStatusType, Mandate, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
+import { CredentialStatus, LifeCycleStatus, LifeCycleStatuses, Mandate, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { TranslateService } from '@ngx-translate/core';
 
 describe('CredentialsPage', () => {
@@ -95,7 +95,7 @@ describe('CredentialsPage', () => {
     });
 
     it('should not take any action if there are no outstanding credentials (ISSUED)', () => {
-      const credential: VerifiableCredential = {lifeCycleStatus: CredentialStatusType.REVOKED} as VerifiableCredential;
+      const credential: VerifiableCredential = {lifeCycleStatus: "REVOKED"} as VerifiableCredential;
       component.credList = [credential]; 
       (component as any).requestPendingSignatures(); 
 
@@ -108,7 +108,7 @@ describe('CredentialsPage', () => {
       } as Mandate
       const pendingCredential = {
         id: '123',
-        lifeCycleStatus: CredentialStatusType.ISSUED,
+        lifeCycleStatus: LifeCycleStatuses[1],
         '@context': ['https://www.w3.org/ns/credentials/v2'],
         issuer: { id: 'issuer' },
         issuanceDate: new Date().toISOString(),
@@ -139,7 +139,7 @@ describe('CredentialsPage', () => {
           } as Mandate
           const pendingCredential = {
             id: '456',
-            lifeCycleStatus: CredentialStatusType.ISSUED,
+            lifeCycleStatus: LifeCycleStatuses[1],
             '@context': ['https://www.w3.org/ns/credentials/v2'],
             issuer: { id: 'issuer' },
             issuanceDate: new Date().toISOString(),

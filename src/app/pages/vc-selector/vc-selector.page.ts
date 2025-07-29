@@ -161,7 +161,7 @@ private async handleError(err: any) {
       // Handle other types of errors
       messageText = 'vc-selector.generic-error-message';
     }
-    const translatedMessage = await this.translate.instant(messageText);
+    const translatedMessage = this.translate.instant(messageText);
 
     const alert = await this.alertController.create({
       message: `

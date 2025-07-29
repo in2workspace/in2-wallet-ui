@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { VcViewComponent } from './vc-view.component';
 import { WalletService } from 'src/app/services/wallet.service';
-import { CredentialStatusType, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
+import { LifeCycleStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { Observable, of, throwError } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import * as detailMapModule from 'src/app/interfaces/credential-detail-map';
@@ -73,7 +73,7 @@ describe('VcViewComponent', () => {
           ]
         },
       },
-      lifeCycleStatus: CredentialStatusType.ISSUED,
+      lifeCycleStatus: "ISSUED",
       credentialStatus: {} as any,
     };
 
@@ -176,7 +176,7 @@ describe('VcViewComponent', () => {
   });
 
   it('qrView should set isAlertExpirationOpenNotFound when credential is expired', () => {
-    component.credentialInput.lifeCycleStatus = CredentialStatusType.EXPIRED;
+    component.credentialInput.lifeCycleStatus = "EXPIRED";
     component.qrView();
     expect(component.isAlertExpirationOpenNotFound).toBeTruthy();
   });

@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 import { VcSelectorPage } from './vc-selector.page';
 import { WalletService } from 'src/app/services/wallet.service';
-import { VerifiableCredential, CredentialStatus, Issuer, CredentialSubject, Mandate, Mandatee, Mandator, Power, CredentialStatusType } from 'src/app/interfaces/verifiable-credential';
+import { VerifiableCredential, CredentialStatus, Issuer, CredentialSubject, Mandate, Mandatee, Mandator, Power, LifeCycleStatus } from 'src/app/interfaces/verifiable-credential';
 
 describe('VcSelectorPage', () => {
   let component: VcSelectorPage;
@@ -71,7 +71,7 @@ describe('VcSelectorPage', () => {
         validUntil: '2025-01-01T00:00:00Z',
         credentialSubject: mockCredentialSubject,
         available_formats: ['jwt'],
-        lifeCycleStatus: CredentialStatusType.VALID
+        lifeCycleStatus: "VALID"
       },
       {
         '@context': ['https://www.w3.org/2018/credentials/v1'],
@@ -93,7 +93,7 @@ describe('VcSelectorPage', () => {
             power: [mockPower]
           }
         },
-        lifeCycleStatus: CredentialStatusType.ISSUED
+        lifeCycleStatus: "ISSUED"
       }
     ] as VerifiableCredential[],
     redirectUri: 'http://example.com/callback',
@@ -212,7 +212,7 @@ describe('VcSelectorPage', () => {
             issuer: mockIssuer,
             validFrom: '2024-01-01T00:00:00Z',
             validUntil: '2025-01-01T00:00:00Z',
-            lifeCycleStatus: CredentialStatusType.VALID
+            lifeCycleStatus: "VALID"
           } as VerifiableCredential
         ]
       };
@@ -233,7 +233,7 @@ describe('VcSelectorPage', () => {
         expirationDate: '2025-01-01T00:00:00Z',
         validUntil: '2025-01-01T00:00:00Z',
         credentialSubject: mockCredentialSubject,
-        lifeCycleStatus: CredentialStatusType.REVOKED,
+        lifeCycleStatus: "REVOKED",
         credentialStatus: {} as CredentialStatus,
       };
 
@@ -244,7 +244,7 @@ describe('VcSelectorPage', () => {
       component.executionResponse = executionResponseWithRevoked;
       component.formatCredList();
 
-      expect(component.credList[0].lifeCycleStatus).toBe(CredentialStatusType.REVOKED);
+      expect(component.credList[0].lifeCycleStatus).toBe("REVOKED");
     });
   });
 
@@ -260,7 +260,7 @@ describe('VcSelectorPage', () => {
           expirationDate: '2025-01-01T00:00:00Z',
           validUntil: '2025-01-01T00:00:00Z',
           credentialSubject: mockCredentialSubject,
-          lifeCycleStatus: CredentialStatusType.VALID,
+          lifeCycleStatus: "VALID",
           credentialStatus: {} as CredentialStatus,
         } as VerifiableCredential,
         { 
@@ -272,7 +272,7 @@ describe('VcSelectorPage', () => {
           expirationDate: '2025-01-01T00:00:00Z',
           validUntil: '2025-01-01T00:00:00Z',
           credentialSubject: mockCredentialSubject,
-          lifeCycleStatus: CredentialStatusType.VALID,
+          lifeCycleStatus: "VALID",
           credentialStatus: {} as CredentialStatus,
         } as VerifiableCredential
       ];
@@ -303,7 +303,7 @@ describe('VcSelectorPage', () => {
         expirationDate: '2025-01-01T00:00:00Z',
         validUntil: '2025-01-01T00:00:00Z',
         credentialSubject: mockCredentialSubject,
-        lifeCycleStatus: CredentialStatusType.VALID,
+        lifeCycleStatus: "VALID",
         credentialStatus: {} as CredentialStatus,
       } as VerifiableCredential;
       component.isClick = [false, false];
@@ -328,7 +328,7 @@ describe('VcSelectorPage', () => {
         expirationDate: '2025-01-01T00:00:00Z',
         validUntil: '2025-01-01T00:00:00Z',
         credentialSubject: mockCredentialSubject,
-        lifeCycleStatus: CredentialStatusType.VALID,
+        lifeCycleStatus: "VALID",
         credentialStatus: {} as CredentialStatus,
       } as VerifiableCredential;
     });

@@ -11,7 +11,7 @@
     align-content: center;
   "
 >
-@if(credentialInput.lifeCycleStatus == credentialStatus.ISSUED){
+@if(credentialInput.lifeCycleStatus == "ISSUED"){
   <button
       (click)="unsignedInfo()"
       (keydown)="handleButtonKeydown($event, 'info')"
@@ -44,10 +44,10 @@
       @if(iconUrl){
         <img [src]="iconUrl" alt width="50" height="50" style="margin: 10px auto" />
       }
-      @if(credentialInput.lifeCycleStatus == credentialStatus.EXPIRED) {
+      @if(credentialInput.lifeCycleStatus == "EXPIRED") {
         <span class="status-ellipse status-expired">{{ "credentials.expiration" | translate }}</span>
       }
-      @if(credentialInput.lifeCycleStatus == credentialStatus.REVOKED) {
+      @if(credentialInput.lifeCycleStatus == "REVOKED") {
         <span class="status-ellipse status-expired">{{ "vc-view.revoked" | translate }}</span>
       }
       </ion-col>
