@@ -28,6 +28,7 @@ export class WebsocketService {
         environment.websocket_url + WEBSOCKET_PATH
       );
     
+      // ON OPEN
       this.socket.onopen = () => {
         console.log('WebSocket connection opened');
         this.sendMessage(
@@ -36,11 +37,14 @@ export class WebsocketService {
         resolve();
       };
       
+      // ON ERROR
       this.socket.onerror = (ev: Event) => {
-        console.error('WebSocket failed to open', ev);
-        reject('Websocket error.');
+        console.error('WebSocket failed to open');
+        console.error(ev);
+        reject(new Error('Websocket error.'));
       };
     
+      // ON MESSAGE
       this.socket.onmessage = async (event) => {
         console.log('Message received:', event.data);
         const data = JSON.parse(event.data);
@@ -48,6 +52,16 @@ export class WebsocketService {
         let description = data.tx_code?.description || '';
         let counter = data.timeout || 60;
     
+        const cancelHandler = () => {
+          clearInterval(interval);
+        };
+        const sendHandler = (alertData: any) => {
+          clearInterval(interval);
+          this.loadingTimeout = setTimeout(() => {
+            this.loader.addLoadingProcess();
+          }, 1000);
+          this.sendMessage(JSON.stringify({ pin: alertData.pin }));
+        }
         const alertOptions: AlertOptions = {
           header: this.translate.instant('confirmation.pin'),
           message: `${description}<br><small class="counter">Time remaining: ${counter} seconds</small>`,
@@ -66,23 +80,16 @@ export class WebsocketService {
             {
               text: 'Cancel',
               role: 'cancel',
-              handler: () => {
-                clearInterval(interval);
-              },
+              handler: cancelHandler,
             },
             {
               text: 'Send',
-              handler: (alertData) => {
-                clearInterval(interval);
-                this.loadingTimeout = setTimeout(() => {
-                  this.loader.addLoadingProcess();
-                }, 1000);
-                this.sendMessage(JSON.stringify({ pin: alertData.pin }));
-              },
+              handler: sendHandler,
             },
           ],
           backdropDismiss: false,
         };
+        
         const alert = await this.alertController.create(alertOptions);
     
         const interval = this.startCountdown(alert, description, counter);
@@ -90,6 +97,7 @@ export class WebsocketService {
         await alert.present();
       };
     
+      // ON CLOSE
       this.socket.onclose = () => {
         clearTimeout(this.loadingTimeout);
         this.loader.removeLoadingProcess();

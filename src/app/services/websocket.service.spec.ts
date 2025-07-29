@@ -116,7 +116,7 @@ describe('WebsocketService', () => {
   const err = new Error('WebSocket failed to open');
   mockWebSocketInstance.onerror(err);
 
-  return expect(connectPromise).rejects.toBe("Websocket error.");
+  return expect(connectPromise).rejects.toEqual(new Error('Websocket error.'));
 });
 
 
