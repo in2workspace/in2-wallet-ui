@@ -124,7 +124,8 @@ export class CredentialsPage implements OnInit {
     }
     this.websocket.connect()
       .then(() => {
-          this.walletService.executeContent(qrCode)
+        this.loader.addLoadingProcess();
+        this.walletService.executeContent(qrCode)
           .pipe(
             takeUntilDestroyed(this.destroyRef),
             switchMap((executionResponse) => {
@@ -135,17 +136,14 @@ export class CredentialsPage implements OnInit {
               this.websocket.closeConnection();
             }),
           ).subscribe({
-              next: (executionResponse) => {
-                
-              },
               error: (error: ExtendedHttpErrorResponse) => {
                 this.handleContentExecutionError(error);
               },
-            });
-        })
-        .catch(err => {
-          this.handleContentExecutionError(err)
-        })
+          });
+      })
+      .catch(err => {
+        this.handleContentExecutionError(err)
+      })
   }
 
   public sameDeviceVcActivationFlow(): void {
