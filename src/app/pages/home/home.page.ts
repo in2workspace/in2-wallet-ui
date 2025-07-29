@@ -36,7 +36,7 @@ export class HomePage implements OnInit {
       });
     }catch(err){
       console.error('Error when trying to navigate to ' + scanRoute);
-      this.toastService.showErrorAlertByTranslateLabel("errors.navigation");
+      this.toastService.showErrorAlertByTranslateLabel("errors.navigation").subscribe();
     }
   }
   public handleButtonKeydown(event: KeyboardEvent): void {
