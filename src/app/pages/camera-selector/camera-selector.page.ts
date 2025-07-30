@@ -42,7 +42,6 @@ export class CameraSelectorPage implements ViewWillLeave{
   }
 
   public async onDeviceSelectChange(selectedDeviceId: string): Promise<void> {
-    console.log('Camera selector: change in device selector detected...');
     this.showIsChangingDeviceTemp();
     const availableDevices = await this.cameraService.updateAvailableCameras();
     if(availableDevices.length === 0){
@@ -53,8 +52,6 @@ export class CameraSelectorPage implements ViewWillLeave{
     const isAvailable = this.cameraService.isCameraAvailableById(selectedDeviceId);
     if(isAvailable){
       const selectedDevice = this.cameraService.getAvailableCameraById(selectedDeviceId);
-      console.log('Camera selector: setting new camera: ');
-      console.log(selectedDevice);
       this.cameraService.setCamera(selectedDevice);
     }else{
       console.error('Camera selector: error when trying to get camera by id');

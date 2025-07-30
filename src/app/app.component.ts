@@ -137,8 +137,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public async openPopover(ev: Event): Promise<void> {
-    console.log(this.isCallbackRoute$)
-    console.log(this.isCallbackRoute$())
     if (this.isCallbackRoute$()) {
       return; 
     }

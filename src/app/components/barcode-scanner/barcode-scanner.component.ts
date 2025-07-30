@@ -24,8 +24,7 @@ import {
   shareReplay,
   switchMap,
   take,
-  takeUntil,
-  tap
+  takeUntil
 } from 'rxjs';
 import { CameraLogType } from 'src/app/interfaces/camera-log';
 import { CameraService } from 'src/app/services/camera.service';
@@ -37,7 +36,7 @@ import { IonicModule } from '@ionic/angular';
 // ! Since console.error is intercepted (to capture the error already caught by zxing), be careful to avoid recursion
 // ! (i.e., console.error should not be called within the execution flow of another console.error)
 
-// When a scanner component is created, it waits for the "destroying scanner list" is empty.
+// When a scanner component is created, it waits until the "destroying scanner list" is empty.
 // A scanner component (its id) is removed from such list not right after being destroyed, but after some delay.
 // This delay is needed because the activation process requires some time to be completed, so that if the component is 
 // destroyed during this process, the camera is not deactivated and the next activation might be blocked
@@ -86,6 +85,8 @@ export class BarcodeScannerComponent implements OnInit {
           hasPermission = await this.scanner.askForPermission();
         }catch(err){
           console.error('Barcode-scanner: error when trying to get permission before settings new device.');
+          console.error(err);
+          hasPermission = false;
         }
       }
       if(hasPermission !== false){
@@ -94,8 +95,6 @@ export class BarcodeScannerComponent implements OnInit {
       }else{
         console.error('SCANNER: Permission denied');
       }
-    }else{
-      console.log('Not activating scanner after switch: first activation not been completed')
     }
   });
   private readonly isActivatingScanner$ = toSignal(this.cameraService.activatingScannersList$);

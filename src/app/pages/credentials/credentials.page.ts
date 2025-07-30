@@ -77,20 +77,17 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
   }
 
   public ionViewDidEnter(): void {
-    console.log('did enter credentials');
     this.requestPendingSignatures();
   }
 
   //this is needed to ensure the scanner is destroyed when leaving page. Ionic
   //caches the component (it isn't destroyed when leaving route), so ngOnDestroy won't work
   public ionViewWillLeave(): void{
-    console.log('ionViewWillLeave credentials');
     this.showScannerView = false;
     this.cdr.detectChanges();
   }
 
   public openScanner(): void {
-    console.log('credentials: openScanner')
     this.showScannerView = true;
     this.showScanner = true;
   }
