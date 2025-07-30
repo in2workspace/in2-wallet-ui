@@ -11,7 +11,6 @@ import { WalletService } from 'src/app/services/wallet.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import {
-  CredentialStatus,
   VerifiableCredential,
 } from 'src/app/interfaces/verifiable-credential';
 import { IonicModule } from '@ionic/angular';
@@ -41,12 +40,10 @@ export class VcViewComponent implements OnInit {
   public isAlertOpenNotFound = false;
   public isAlertExpirationOpenNotFound = false;
   public isAlertOpenDeleteNotFound = false;
-  public isExpired = false;
   public isModalOpen = false;
   public isModalDeleteOpen = false;
   public isModalUnsignedOpen = false;
   public showChip = false;
-  public credentialStatus = CredentialStatus;
   public handlerMessage = '';
   public alertButtons = [
     {
@@ -103,7 +100,6 @@ export class VcViewComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.checkExpirationVC();
     this.checkAvailableFormats();
     this.credentialType = this.getSpecificType(this.credentialInput);
   }
@@ -136,7 +132,7 @@ export class VcViewComponent implements OnInit {
   }
 
   public qrView(): void {
-    if (!this.isExpired) {
+    if (this.credentialInput.lifeCycleStatus !== "EXPIRED") {
       this.walletService.getVCinCBOR(this.credentialInput).subscribe({
         next: (value: string) => {
           this.cred_cbor = value;
@@ -165,18 +161,6 @@ export class VcViewComponent implements OnInit {
     this.isModalOpen = isOpen;
   }
 
-  public checkExpirationVC(): void {
-    if (this.credentialInput.status !== CredentialStatus.ISSUED) {
-      const validUntil: Date = new Date(
-        this.credentialInput.validUntil
-      );
-      const currentDate: Date = new Date();
-      this.isExpired = validUntil < currentDate;
-    } else {
-      this.isExpired = false;
-    }
-  }
-
   public setOpenNotFound(isOpen: boolean): void {
     this.isAlertOpenNotFound = isOpen;
   }
@@ -187,13 +171,6 @@ export class VcViewComponent implements OnInit {
 
   public setOpenExpirationNotFound(isOpen: boolean): void {
     this.isAlertExpirationOpenNotFound = isOpen;
-  }
-
-  public isCredentialIssuedAndNotExpired(): boolean {
-    return (
-      this.credentialInput.status === CredentialStatus.ISSUED
-      && !this.isExpired
-    );
   }
 
   public handleKeydown(event: KeyboardEvent, action = 'request') {

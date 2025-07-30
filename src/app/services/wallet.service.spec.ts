@@ -7,6 +7,7 @@ import { WalletService } from './wallet.service';
 import { environment } from 'src/environments/environment';
 import {
   CredentialStatus,
+  LifeCycleStatus,
   VerifiableCredential,
 } from '../interfaces/verifiable-credential';
 import { SERVER_PATH } from '../constants/api.constants';
@@ -94,8 +95,8 @@ describe('WalletService', () => {
           ]
         },
       },
-      status: CredentialStatus.ISSUED,
-      credentialStatus: CredentialStatus.ISSUED,
+      lifeCycleStatus: "ISSUED",
+      credentialStatus: {} as CredentialStatus, 
     };
     const mockResponse = 'mock-cbor-data';
 
@@ -214,8 +215,8 @@ describe('WalletService', () => {
             ],
           },
         },
-        status: CredentialStatus.ISSUED,
-        credentialStatus: CredentialStatus.VALID
+        lifeCycleStatus: "ISSUED",
+        credentialStatus: {} as CredentialStatus
       },
     ];
 
@@ -273,8 +274,8 @@ describe('WalletService', () => {
           ]
         },
       },
-      status: CredentialStatus.ISSUED,
-      credentialStatus: CredentialStatus.VALID
+      lifeCycleStatus: "ISSUED",
+      credentialStatus: {} as CredentialStatus
     };
 
     service.getOne(data).subscribe((credential) => {

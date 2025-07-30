@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { VcViewComponent } from './vc-view.component';
 import { WalletService } from 'src/app/services/wallet.service';
-import { CredentialStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
+import { LifeCycleStatus, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { Observable, of, throwError } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import * as detailMapModule from 'src/app/interfaces/credential-detail-map';
@@ -73,8 +73,8 @@ describe('VcViewComponent', () => {
           ]
         },
       },
-      status: CredentialStatus.ISSUED,
-      credentialStatus: CredentialStatus.ISSUED,
+      lifeCycleStatus: "ISSUED",
+      credentialStatus: {} as any,
     };
 
     fixture.detectChanges();
@@ -85,7 +85,6 @@ describe('VcViewComponent', () => {
   });
 
   it('qrView should handle credential correctly if not expired', () => {
-    component.isExpired = false;
     const mockCBOR = 'mock_cbor_string';
     jest.spyOn(walletService, 'getVCinCBOR').mockReturnValue(of(mockCBOR));
 
@@ -94,29 +93,6 @@ describe('VcViewComponent', () => {
     expect(walletService.getVCinCBOR).toHaveBeenCalledWith(component.credentialInput);
     expect(component.cred_cbor).toEqual(mockCBOR);
     expect(component.isAlertOpenNotFound).toBeFalsy();
-  });
-
-
-  it('checkExpirationVC should set isExpired to true if credential is expired', () => {
-    component.credentialInput = {
-      id: 'testId',
-      validUntil: new Date(Date.now() - 86400000).toISOString(),
-      status: CredentialStatus.REVOKED,
-    } as VerifiableCredential;
-
-    component.checkExpirationVC();
-
-    expect(component.isExpired).toBeTruthy();
-  });
-
-  it('checkExpirationVC should set isExpired to false if credential is not expired', () => {
-    component.credentialInput = {
-      id: 'testId'
-    } as VerifiableCredential;
-
-    component.checkExpirationVC();
-
-    expect(component.isExpired).toBeFalsy();
   });
 
   it('setOpen should correctly set isModalOpen', () => {
@@ -200,12 +176,12 @@ describe('VcViewComponent', () => {
   });
 
   it('qrView should set isAlertExpirationOpenNotFound when credential is expired', () => {
-    component.isExpired = true;
+    component.credentialInput.lifeCycleStatus = "EXPIRED";
     component.qrView();
     expect(component.isAlertExpirationOpenNotFound).toBeTruthy();
   });
+  
   it('qrView should handle HTTP errors correctly', () => {
-    component.isExpired = false;
     const mockError = new Error('Network issue');
     jest.spyOn(walletService, 'getVCinCBOR').mockReturnValue(throwError(() => mockError));
 
@@ -347,24 +323,6 @@ describe('VcViewComponent', () => {
       delete detailMapModule.CredentialDetailMap[component.credentialType];
       }
       component.credentialType = originalCredentialType;
-    });
-
-    it('isCredentialIssuedAndNotExpired should return true if status is ISSUED and not expired', () => {
-      component.credentialInput.status = CredentialStatus.ISSUED;
-      component.isExpired = false;
-      expect(component.isCredentialIssuedAndNotExpired()).toBe(true);
-    });
-
-    it('isCredentialIssuedAndNotExpired should return false if status is not ISSUED', () => {
-      component.credentialInput.status = CredentialStatus.REVOKED;
-      component.isExpired = false;
-      expect(component.isCredentialIssuedAndNotExpired()).toBe(false);
-    });
-
-    it('isCredentialIssuedAndNotExpired should return false if expired', () => {
-      component.credentialInput.status = CredentialStatus.ISSUED;
-      component.isExpired = true;
-      expect(component.isCredentialIssuedAndNotExpired()).toBe(false);
     });
 
     it('mappedFields should return mapped fields from typeConfig', () => {

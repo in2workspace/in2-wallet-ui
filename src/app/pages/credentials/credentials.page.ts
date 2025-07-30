@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {AlertController, IonicModule, Platform} from '@ionic/angular';
+import {AlertController, IonicModule} from '@ionic/angular';
 import {StorageService} from 'src/app/services/storage.service';
 import {BarcodeScannerComponent} from 'src/app/components/barcode-scanner/barcode-scanner.component';
 import {QRCodeModule} from 'angularx-qrcode';
@@ -10,7 +10,7 @@ import {VcViewComponent} from '../../components/vc-view/vc-view.component';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {WebsocketService} from 'src/app/services/websocket.service';
-import {VerifiableCredential, CredentialStatus} from 'src/app/interfaces/verifiable-credential';
+import {VerifiableCredential, LifeCycleStatus, LifeCycleStatuses} from 'src/app/interfaces/verifiable-credential';
 import {VerifiableCredentialSubjectDataNormalizer} from 'src/app/interfaces/verifiable-credential-subject-data-normalizer';
 import {CameraLogsService} from 'src/app/services/camera-logs.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
@@ -97,7 +97,7 @@ export class CredentialsPage implements OnInit {
     }
     console.log('Requesting signatures for pending credentials...');
     const pendingCredentials = this.credList.filter(
-      (credential) => credential.status === CredentialStatus.ISSUED
+      (credential) => credential.lifeCycleStatus === 'ISSUED'
     );
   
     if (pendingCredentials.length === 0) {
@@ -155,6 +155,7 @@ export class CredentialsPage implements OnInit {
       },
       error: (error) => {
         if (error.status === 404) {
+          console.log("No credentials found, initializing empty list.");
           this.credList = [];
           this.cdr.detectChanges();
         } else {

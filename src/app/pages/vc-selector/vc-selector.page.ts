@@ -75,7 +75,7 @@ export class VcSelectorPage {
     console.log('[VC-selector: Formatting credentials list...');
     const unNormalizedCredList: VerifiableCredential[] = this.executionResponse['selectableVcList'];
     const normalizer = new VerifiableCredentialSubjectDataNormalizer();
-    this.credList = [...unNormalizedCredList].reverse().map(cred => {
+    this.credList = [...unNormalizedCredList].reverse().filter(cred => cred.lifeCycleStatus === 'VALID').map(cred => {
       if (cred.credentialSubject) {
         cred.credentialSubject = normalizer.normalizeLearCredentialSubject(cred.credentialSubject);
       }
@@ -150,6 +150,9 @@ private async handleError(err: any) {
     } else if (statusCode === 401) {
       // Handle unauthorized errors (401)
       messageText = 'vc-selector.unauthorized-message';
+    } else if (statusCode === 403) {
+      // Handle client errors (403x)
+      messageText = 'vc-selector.credential-revoke-message';
     } else if (statusCode >= 400) {
       // Handle client errors (40x)
       messageText = 'vc-selector.bad-request-error-message';
@@ -157,12 +160,13 @@ private async handleError(err: any) {
       // Handle other types of errors
       messageText = 'vc-selector.generic-error-message';
     }
+    const translatedMessage = this.translate.instant(messageText);
 
     const alert = await this.alertController.create({
       message: `
         <div style="display: flex; align-items: center; gap: 50px;">
           <ion-icon name="alert-circle-outline"></ion-icon>
-          <span>${this.translate.instant(messageText)}</span>
+          <span>${translatedMessage}</span>
         </div>
       `,
       buttons: [

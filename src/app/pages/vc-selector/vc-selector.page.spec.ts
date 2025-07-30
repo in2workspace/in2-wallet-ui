@@ -1,12 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 import { VcSelectorPage } from './vc-selector.page';
 import { WalletService } from 'src/app/services/wallet.service';
-import { VerifiableCredential, CredentialStatus, Issuer, CredentialSubject, Mandate, Mandatee, Mandator, Power } from 'src/app/interfaces/verifiable-credential';
+import { VerifiableCredential, CredentialStatus, Issuer, CredentialSubject, Mandate, Mandatee, Mandator, Power, LifeCycleStatus } from 'src/app/interfaces/verifiable-credential';
 
 describe('VcSelectorPage', () => {
   let component: VcSelectorPage;
@@ -72,7 +71,7 @@ describe('VcSelectorPage', () => {
         validUntil: '2025-01-01T00:00:00Z',
         credentialSubject: mockCredentialSubject,
         available_formats: ['jwt'],
-        status: CredentialStatus.VALID
+        lifeCycleStatus: "VALID"
       },
       {
         '@context': ['https://www.w3.org/2018/credentials/v1'],
@@ -94,7 +93,7 @@ describe('VcSelectorPage', () => {
             power: [mockPower]
           }
         },
-        status: CredentialStatus.ISSUED
+        lifeCycleStatus: "ISSUED"
       }
     ] as VerifiableCredential[],
     redirectUri: 'http://example.com/callback',
@@ -192,12 +191,11 @@ describe('VcSelectorPage', () => {
       component.executionResponse = mockExecutionResponse;
       component.formatCredList();
 
-      expect(component.credList).toHaveLength(2);
-      expect(component.credList[0].id).toBe('vc2'); // Should be reversed
-      expect(component.credList[1].id).toBe('vc1');
+      expect(component.credList).toHaveLength(1);
+      expect(component.credList[0].id).toBe('vc1');
       
       // Verify mandate structure is preserved
-      const credSubject = component.credList[1].credentialSubject as { mandate: Mandate };
+      const credSubject = component.credList[0].credentialSubject as { mandate: Mandate };
       expect(credSubject.mandate.mandatee.firstName).toBe('John');
       expect(credSubject.mandate.mandator.organization).toBe('Test Organization');
       expect(credSubject.mandate.power[0].action).toBe('sign');
@@ -213,7 +211,7 @@ describe('VcSelectorPage', () => {
             issuer: mockIssuer,
             validFrom: '2024-01-01T00:00:00Z',
             validUntil: '2025-01-01T00:00:00Z',
-            status: CredentialStatus.VALID
+            lifeCycleStatus: "VALID"
           } as VerifiableCredential
         ]
       };
@@ -221,31 +219,6 @@ describe('VcSelectorPage', () => {
       
       expect(() => component.formatCredList()).not.toThrow();
       expect(component.credList).toHaveLength(1);
-    });
-
-    it('should verify different credential statuses', () => {
-      const mockRevokedCred = {
-        '@context': ['https://www.w3.org/2018/credentials/v1'],
-        id: 'vc3',
-        type: ['VerifiableCredential'],
-        issuer: mockIssuer,
-        issuanceDate: '2024-01-01T00:00:00Z',
-        validFrom: '2024-01-01T00:00:00Z',
-        expirationDate: '2025-01-01T00:00:00Z',
-        validUntil: '2025-01-01T00:00:00Z',
-        credentialSubject: mockCredentialSubject,
-        status: CredentialStatus.REVOKED,
-        credentialStatus: CredentialStatus.ISSUED,
-      };
-
-      const executionResponseWithRevoked = {
-        selectableVcList: [mockRevokedCred] as VerifiableCredential[]
-      };
-      
-      component.executionResponse = executionResponseWithRevoked;
-      component.formatCredList();
-
-      expect(component.credList[0].status).toBe(CredentialStatus.REVOKED);
     });
   });
 
@@ -261,8 +234,8 @@ describe('VcSelectorPage', () => {
           expirationDate: '2025-01-01T00:00:00Z',
           validUntil: '2025-01-01T00:00:00Z',
           credentialSubject: mockCredentialSubject,
-          status: CredentialStatus.VALID,
-          credentialStatus: CredentialStatus.ISSUED,
+          lifeCycleStatus: "VALID",
+          credentialStatus: {} as CredentialStatus,
         } as VerifiableCredential,
         { 
           '@context': ['https://www.w3.org/2018/credentials/v1'],
@@ -273,8 +246,8 @@ describe('VcSelectorPage', () => {
           expirationDate: '2025-01-01T00:00:00Z',
           validUntil: '2025-01-01T00:00:00Z',
           credentialSubject: mockCredentialSubject,
-          status: CredentialStatus.VALID,
-          credentialStatus: CredentialStatus.ISSUED,
+          lifeCycleStatus: "VALID",
+          credentialStatus: {} as CredentialStatus,
         } as VerifiableCredential
       ];
       component.resetIsClickList();
@@ -304,8 +277,8 @@ describe('VcSelectorPage', () => {
         expirationDate: '2025-01-01T00:00:00Z',
         validUntil: '2025-01-01T00:00:00Z',
         credentialSubject: mockCredentialSubject,
-        status: CredentialStatus.VALID,
-        credentialStatus: CredentialStatus.ISSUED,
+        lifeCycleStatus: "VALID",
+        credentialStatus: {} as CredentialStatus,
       } as VerifiableCredential;
       component.isClick = [false, false];
       
@@ -329,8 +302,8 @@ describe('VcSelectorPage', () => {
         expirationDate: '2025-01-01T00:00:00Z',
         validUntil: '2025-01-01T00:00:00Z',
         credentialSubject: mockCredentialSubject,
-        status: CredentialStatus.VALID,
-        credentialStatus: CredentialStatus.ISSUED,
+        lifeCycleStatus: "VALID",
+        credentialStatus: {} as CredentialStatus,
       } as VerifiableCredential;
     });
 
@@ -396,6 +369,12 @@ describe('VcSelectorPage', () => {
       expect(mockTranslateService.instant).toHaveBeenCalledWith('vc-selector.unauthorized-message');
     });
 
+    it('should show unauthorized message for 403 status code', async () => {
+      await component.errorMessage(403);
+
+      expect(mockTranslateService.instant).toHaveBeenCalledWith('vc-selector.credential-revoke-message');
+    });
+
     it('should show bad request message for 4xx status codes', async () => {
       await component.errorMessage(400);
 
@@ -419,8 +398,8 @@ describe('VcSelectorPage', () => {
       expect(component._VCReply.nonce).toBe('test-nonce');
 
       // Should have processed credentials
-      expect(component.credList).toHaveLength(2);
-      expect(component.isClick).toHaveLength(2);
+      expect(component.credList).toHaveLength(1);
+      expect(component.isClick).toHaveLength(1);
 
       // Should be able to select credentials
       const credential = component.credList[0];

@@ -93,6 +93,20 @@ ion-modal.stack-modal {
   margin-bottom: 4px;
 }
 
+.status-ellipse {
+  min-width: 110px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  color: #fff;
+  text-align: center;
+  float: right;
+  margin: 10px 12px 10px auto;
+}
+
+.status-expired {
+  background-color: #f44336; 
+}
+
 .token-container {
   display: flex;
   justify-content: space-between;

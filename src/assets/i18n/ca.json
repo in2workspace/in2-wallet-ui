@@ -112,7 +112,8 @@
         "ok-message":"Login correcte",
         "ko-header":"Error",
         "ko-message":"El login ha fallat",
-        "close": "Tancar"
+        "close": "Tancar",
+        "credential-revoke-message":"La credencial proporcionada no és vàlida, ha estat revocada o no és vàlida per a aquesta operació"
     },
     "vc-view":{
         "warning-header": "Credencial",
