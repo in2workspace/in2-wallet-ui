@@ -109,7 +109,8 @@
         "ok-message":"Login correcto",
         "ko-header":"Error",
         "ko-message":"El login ha fallado",
-        "close": "Cerrar"
+        "close": "Cerrar",
+        "credential-revoke-message":"La credencial proporcionada no es válida, ha sido revocada o no es válida para esta operación"
     },
     "vc-view":{
         "warning-header": "Credencial",
@@ -127,6 +128,74 @@
     },
     "scanner":{
         "initializing": "Inicializando escàner..."
+    },
+    "vc-fields": {
+        "delete": "Eliminar",        
+        "copy-success": "Copiado al portapapeles",
+        "modal-title": "Detalles de credencial",
+        "title": "Información de credenciales",
+        "credentialInfo": {
+            "context": "Contexto",
+            "type": "Tipo",
+            "id": "ID",
+            "name": "Nombre",
+            "description": "Descripción",
+            "issuerId": "ID del emisor",
+            "issuerOrganization": "Organización del emisor",
+            "issuerCountry": "País del emisor",
+            "issuerCommonName": "Nombre común del emisor",
+            "issuerSerialNumber": "Número de serie del emisor",
+            "validFrom": "Válido desde",
+            "validUntil": "Válido hasta"
+        },
+        "learCredentialEmployee": {
+            "mantadatee": {
+                "title": "Persona mandatada",
+                "id": "ID",
+                "firstName": "Nombre",
+                "lastName": "Apellido",
+                "email": "Correo electrónico",
+                "nationality": "Nacionalidad"
+            },
+            "mandator": {
+                "title": "Mandante",
+                "id": "ID",
+                "organization": "Organización",
+                "commonName": "Nombre común",
+                "serialNumber": "Número de serie",
+                "country": "País"
+            },
+            "powers": "Poderes"
+        },
+        "lear-credential-machine": {
+            "mantadatee": {
+                "title": "Información de la máquina",
+                "id": "ID",
+                "domain": "Dominio",
+                "ipAddress": "Dirección IP"
+            },
+            "mandator": {
+                "title": "Mandante",
+                "id": "ID",
+                "organization": "Organización",
+                "commonName": "Nombre común",
+                "serialNumber": "Número de serie",
+                "country": "País"
+            },
+            "powers": "Poderes",
+            "credentialEncoded": "Credencial"
+        },
+        "gaia-x-label-credential": {
+            "label-info": {
+                "title": "Información de la etiqueta",
+                "id": "ID de la etiqueta",
+                "lableLevel": "Nivel de la etiqueta",
+                "engineVersion": "Versión del motor",
+                "rulesVersion": "Versión de las reglas"
+            },
+            "compliantCredentials": "Credenciales compatibles",
+            "validatedCriteria": "Criterios validados"
+        }
     },
     "errors":{
         "default":"Error no reconocido. Si el problema persiste, póngase en contacto con el <a href='https://ticketing.dome-marketplace.eu/' target='_blank' rel='noopener noreferrer'>equipo de soporte</a>",

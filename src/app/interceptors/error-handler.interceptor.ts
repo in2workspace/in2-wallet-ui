@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
-  private toastServiceHandler = inject(ToastServiceHandler);
+  private readonly toastServiceHandler = inject(ToastServiceHandler);
 
   private logHandledSilentlyErrorMsg(errMsg: string){
     console.error('Handled silently:', errMsg);
@@ -27,9 +27,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     //todo refactor this handler (conditional structure)
     return next.handle(request).pipe(
       catchError((errorResp: HttpErrorResponse) => {
+        
         let errMessage = errorResp.error?.message || errorResp.message || 'Unknown Http error';
         const errStatus = errorResp.status ?? errorResp.error?.status;
-
         //DONT'T SHOW POPUP CASES
         // get credentials endpoint
         if ( //todo review this handler

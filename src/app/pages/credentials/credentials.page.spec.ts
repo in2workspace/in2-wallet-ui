@@ -9,9 +9,8 @@ import { CameraLogsService } from 'src/app/services/camera-logs.service';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
 import { of, throwError } from 'rxjs';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { CredentialStatus, Mandate } from 'src/app/interfaces/verifiable-credential';
+import { CredentialStatus, LifeCycleStatus, LifeCycleStatuses, Mandate, VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import { TranslateService } from '@ngx-translate/core';
-import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 
 describe('CredentialsPage', () => {
   let component: CredentialsPage;
@@ -96,7 +95,7 @@ describe('CredentialsPage', () => {
     });
 
     it('should not take any action if there are no outstanding credentials (ISSUED)', () => {
-      const credential: VerifiableCredential = {status: CredentialStatus.REVOKED} as VerifiableCredential;
+      const credential: VerifiableCredential = {lifeCycleStatus: "REVOKED"} as VerifiableCredential;
       component.credList = [credential]; 
       (component as any).requestPendingSignatures(); 
 
@@ -109,7 +108,7 @@ describe('CredentialsPage', () => {
       } as Mandate
       const pendingCredential = {
         id: '123',
-        status: CredentialStatus.ISSUED,
+        lifeCycleStatus: LifeCycleStatuses[1],
         '@context': ['https://www.w3.org/ns/credentials/v2'],
         issuer: { id: 'issuer' },
         issuanceDate: new Date().toISOString(),
@@ -118,6 +117,7 @@ describe('CredentialsPage', () => {
         credentialSubject: { mandate:  mockMandate},
         expirationDate: new Date().toISOString(),
         validUntil: new Date().toISOString(),
+        credentialStatus: {} as CredentialStatus,
       };
       component.credList = [pendingCredential];
 
@@ -139,7 +139,7 @@ describe('CredentialsPage', () => {
           } as Mandate
           const pendingCredential = {
             id: '456',
-            status: CredentialStatus.ISSUED,
+            lifeCycleStatus: LifeCycleStatuses[1],
             '@context': ['https://www.w3.org/ns/credentials/v2'],
             issuer: { id: 'issuer' },
             issuanceDate: new Date().toISOString(),
@@ -148,6 +148,8 @@ describe('CredentialsPage', () => {
             credentialSubject: { mandate:  mockMandate},
             expirationDate: new Date().toISOString(),
             validUntil: new Date().toISOString(),
+            credentialStatus: {} as CredentialStatus,
+
           };
       component.credList = [pendingCredential];
 
@@ -188,7 +190,7 @@ describe('CredentialsPage', () => {
       expect(routerMock.navigate).toHaveBeenCalledWith(['/tabs/credentials']);
       expect(reloadSpy).toHaveBeenCalled();
 
-      window.location = originalLocation;
+      window.location = originalLocation as any;
     });
   });
 });

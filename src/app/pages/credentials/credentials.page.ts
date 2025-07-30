@@ -10,14 +10,13 @@ import {VcViewComponent} from '../../components/vc-view/vc-view.component';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {WebsocketService} from 'src/app/services/websocket.service';
-import {VerifiableCredential, CredentialStatus} from 'src/app/interfaces/verifiable-credential';
+import {VerifiableCredential, LifeCycleStatus, LifeCycleStatuses} from 'src/app/interfaces/verifiable-credential';
 import {VerifiableCredentialSubjectDataNormalizer} from 'src/app/interfaces/verifiable-credential-subject-data-normalizer';
 import {CameraLogsService} from 'src/app/services/camera-logs.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastServiceHandler } from 'src/app/services/toast.service';
 import { catchError, forkJoin, of } from 'rxjs';
-
 
 const TIME_IN_MS = 3000;
 
@@ -36,9 +35,10 @@ const TIME_IN_MS = 3000;
     QRCodeModule,
     VcViewComponent,
     TranslateModule,
-    BarcodeScannerComponent,
-  ],
+    BarcodeScannerComponent
+  ]
 })
+
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class CredentialsPage implements OnInit {
   public alertButtons = ['OK'];
@@ -52,6 +52,7 @@ export class CredentialsPage implements OnInit {
   public scaned_cred = false;
   public show_qr = false;
   public credentialOfferUri = '';
+
 
   private readonly alertController = inject(AlertController);
   private readonly cdr = inject(ChangeDetectorRef);
@@ -96,7 +97,7 @@ export class CredentialsPage implements OnInit {
     }
     console.log('Requesting signatures for pending credentials...');
     const pendingCredentials = this.credList.filter(
-      (credential) => credential.status === CredentialStatus.ISSUED
+      (credential) => credential.lifeCycleStatus === 'ISSUED'
     );
   
     if (pendingCredentials.length === 0) {
@@ -154,6 +155,7 @@ export class CredentialsPage implements OnInit {
       },
       error: (error) => {
         if (error.status === 404) {
+          console.log("No credentials found, initializing empty list.");
           this.credList = [];
           this.cdr.detectChanges();
         } else {
@@ -288,22 +290,11 @@ export class CredentialsPage implements OnInit {
   }
 
   private async okMessage(): Promise<void> {
-    const alert = await this.alertController.create({
-      message: `
-        <div style="display: flex; align-items: center; gap: 50px;">
-          <ion-icon name="checkmark-circle-outline" ></ion-icon>
-          <span>${this.translate.instant('home.ok-msg')}</span>
-        </div>
-      `,
-      cssClass: 'custom-alert-ok',
-    });
-
-    await alert.present();
+    this.toastServiceHandler.showToast('home.ok-msg', 2000);
 
     setTimeout(async () => {
-      await alert.dismiss();
       this.refresh();
-    }, 2000);
+    }, 500);
   }
 
   private successRefresh(): void {
