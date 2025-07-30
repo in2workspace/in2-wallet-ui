@@ -77,39 +77,28 @@ export class BarcodeScannerComponent implements OnInit {
 
   public readonly selectedDevice$: WritableSignal<MediaDeviceInfo|undefined> = this.cameraService.selectedCamera$;
   private readonly updateScannerDeviceEffect = effect(async () => {
-    console.log('component.updateScannerDeviceEffect');
     const selectedDevice = this.selectedDevice$();
     if(this.firstActivationCompleted && this.scanner && selectedDevice && this.scanner.device !== selectedDevice){
       let hasPermission = undefined;
-      console.log('Permission will be asked if there is not device: ');
-      console.log(this.scanner.device);
       // if there is already a device, sometimes the askForPemission causes error
       if(!this.scanner.device){
-        console.log('Activating scanner since first activation has already been completed');
-        console.log('Asking for permission from scanner: ');
         try{
           hasPermission = await this.scanner.askForPermission();
         }catch(err){
           console.error('Barcode-scanner: error when trying to get permission before settings new device.');
         }
-      }else{
-        console.log('Permission not asked since there is already scanner');
       }
-      console.log('Post-permission from scanner. Permission is: ');
-      console.log(hasPermission);
-        if(hasPermission !== false){
-          this.scanner.device = selectedDevice;
-          this._activatedScanner$$.next();
-        }else{
-          console.error('SCANNER: Permission denied');
-        }
+      if(hasPermission !== false){
+        this.scanner.device = selectedDevice;
+        this._activatedScanner$$.next();
+      }else{
+        console.error('SCANNER: Permission denied');
+      }
     }else{
       console.log('Not activating scanner after switch: first activation not been completed')
     }
   });
   private readonly isActivatingScanner$ = toSignal(this.cameraService.activatingScannersList$);
-
-
   private readonly scanFailureSubject = new Subject<Error>();
   private readonly scanFailureDebounceDelay = 3000;
   private originalConsoleError: undefined|((...data: any[]) => void);
@@ -155,7 +144,6 @@ export class BarcodeScannerComponent implements OnInit {
     }
 
     public async initCameraIfNoActivateScanners(): Promise<void>{
-      console.log('initCameraIfNoActivateScanners');
        //activate scanner once there are no other scanner in deactivation process
        const activatingScannersList = this.isActivatingScanner$();
        if (activatingScannersList?.length === 0) {
@@ -169,9 +157,7 @@ export class BarcodeScannerComponent implements OnInit {
          console.warn('SCANNER: there is at least one active scanner, waiting before starting next camera flow.')
          this.cameraService.activatingScannersList$
            .pipe(
-             tap(val=> { console.log('cameraService.activatingScannersList$: ' + val) }),
              filter(value => value.length === 0),
-             tap(()=> { console.log('cameraService.activatingScannersList$ length is 0') }),
              takeUntil(this.destroy$),
              take(1),
            )
@@ -186,7 +172,6 @@ export class BarcodeScannerComponent implements OnInit {
     }
 
   public async activateScanner(): Promise<void>{
-    console.log('activateScanner');
     if(this.scanner){
       this.scanner.enable = true;
       const hasPermission = await this.scanner.askForPermission();
@@ -198,7 +183,6 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
   public async activateScannerInitially(): Promise<void>{
-    console.log('activateScannerInitially')
     await this.activateScanner();
     this.firstActivationCompleted = true;  
   }
@@ -221,7 +205,6 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
   private setActivatingTimeout(): void{
-    console.log('setActivatingTimeout')
     this.cameraService.addActivatingScanner(this.scannerId);
     const activationCountDownValue = this.activationCountdownValue$();
     console.warn('Scanner activation countdown value: ' + activationCountDownValue + ' ms');
