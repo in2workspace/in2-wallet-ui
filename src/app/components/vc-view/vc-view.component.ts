@@ -11,7 +11,6 @@ import { WalletService } from 'src/app/services/wallet.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import {
-  LifeCycleStatus,
   LifeCycleStatuses,
   VerifiableCredential,
 } from 'src/app/interfaces/verifiable-credential';
