@@ -11,7 +11,6 @@ import { VCReply } from 'src/app/interfaces/verifiable-credential-reply';
 import { VerifiableCredential } from 'src/app/interfaces/verifiable-credential';
 import {VerifiableCredentialSubjectDataNormalizer} from 'src/app/interfaces/verifiable-credential-subject-data-normalizer';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { firstValueFrom } from 'rxjs';
 
 // todo: show only VCs with powers to login
 // todo: if user has only one VC, use this directly
