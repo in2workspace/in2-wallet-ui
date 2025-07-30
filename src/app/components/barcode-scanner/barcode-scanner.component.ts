@@ -80,9 +80,24 @@ export class BarcodeScannerComponent implements OnInit {
     console.log('component.updateScannerDeviceEffect');
     const selectedDevice = this.selectedDevice$();
     if(this.firstActivationCompleted && this.scanner && selectedDevice && this.scanner.device !== selectedDevice){
-      console.log('Activating scanner since first activation has already been completed')
-      const hasPermission = await this.scanner.askForPermission()
-        if(hasPermission){
+      let hasPermission = undefined;
+      console.log('Permission will be asked if there is not device: ');
+      console.log(this.scanner.device);
+      // if there is already a device, sometimes the askForPemission causes error
+      if(!this.scanner.device){
+        console.log('Activating scanner since first activation has already been completed');
+        console.log('Asking for permission from scanner: ');
+        try{
+          hasPermission = await this.scanner.askForPermission();
+        }catch(err){
+          console.error('Barcode-scanner: error when trying to get permission before settings new device.');
+        }
+      }else{
+        console.log('Permission not asked since there is already scanner');
+      }
+      console.log('Post-permission from scanner. Permission is: ');
+      console.log(hasPermission);
+        if(hasPermission !== false){
           this.scanner.device = selectedDevice;
           this._activatedScanner$$.next();
         }else{
@@ -231,7 +246,6 @@ export class BarcodeScannerComponent implements OnInit {
           "Can't get user media, this is not supported." ?
           'noMediaError' :
           'undefinedError';
-        console.error('Barcode component: handleCameraErrors')
         this.cameraService.handleCameraErrors(err, errorType);
         return;
       }

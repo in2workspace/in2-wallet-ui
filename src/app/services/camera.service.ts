@@ -175,6 +175,7 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   public alertCameraErrorsByErrorName(errMsg: string) {
     console.error('alertCameraErrorsByErrorName. Errmsg: ');
     console.error(errMsg);
+    console.log(typeof(errMsg))
     
     let errorLabel = 'errors.camera.default';
   
