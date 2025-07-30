@@ -80,7 +80,7 @@ export class BarcodeScannerComponent implements OnInit {
     console.log('component.updateScannerDeviceEffect');
     const selectedDevice = this.selectedDevice$();
     if(this.firstActivationCompleted && this.scanner && selectedDevice && this.scanner.device !== selectedDevice){
-      console.log('Activating scanner since first activation has alrady been completed')
+      console.log('Activating scanner since first activation has already been completed')
       const hasPermission = await this.scanner.askForPermission()
         if(hasPermission){
           this.scanner.device = selectedDevice;
@@ -224,13 +224,14 @@ export class BarcodeScannerComponent implements OnInit {
     this.originalConsoleError = console.error;
     console.error = (message?: string, ...optionalParams: any[]) => {
       if(message === "@zxing/ngx-scanner"){
+        console.warn('Logging library error');
         const logMessage = formatLogMessage(message, optionalParams);
         const err = {...new Error(logMessage), name: optionalParams[1]};
         const errorType = optionalParams[0] === 
           "Can't get user media, this is not supported." ?
           'noMediaError' :
           'undefinedError';
-
+        console.error('Barcode component: handleCameraErrors')
         this.cameraService.handleCameraErrors(err, errorType);
         return;
       }

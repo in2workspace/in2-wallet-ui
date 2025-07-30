@@ -55,19 +55,21 @@ export class CameraService {
     try{
       await this.getCameraPermissionAndStopTracks();
     }catch(e: any){
+      console.error('getCameraFlow: Failed when trying to getCameraPermissionAnd...');
       this.handleCameraErrors(e, 'fetchError');
       return 'PERMISSION_DENIED';
     }
 
     let availableDevices = await this.updateAvailableCameras();
     if(availableDevices.length === 0){
-
+      console.error('getCameraFlow: availableDevices is empty');
       this.handleCameraErrors({name: 'CustomNoAvailable'}, 'fetchError');
       return 'NO_CAMERA_AVAILABLE';
     }
 
     const selectedCamera = await this.getCameraFromAvailables();
     if(selectedCamera === 'NO_CAMERA_AVAILABLE'){
+      console.error('getCameraFlow: availableDevices is empty');
       this.handleCameraErrors({name: 'CustomNoAvailable'}, 'fetchError');
     }
     return selectedCamera;
@@ -160,6 +162,7 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   }
 
   public handleCameraErrors(e: Error | { name: string }, type?: CameraLogType) {
+    console.error('handleCameraErrors. Error: ');
     console.error(e);
     this.isCameraError$.set(true);
     this.alertCameraErrorsByErrorName(e.name);
@@ -170,6 +173,8 @@ public async getCameraFromAvailables(): Promise<MediaDeviceInfo|'NO_CAMERA_AVAIL
   }
 
   public alertCameraErrorsByErrorName(errMsg: string) {
+    console.error('alertCameraErrorsByErrorName. Errmsg: ');
+    console.error(errMsg);
     
     let errorLabel = 'errors.camera.default';
   

@@ -45,6 +45,7 @@ export class CameraSelectorPage implements ViewWillLeave{
     this.showIsChangingDeviceTemp();
     const availableDevices = await this.cameraService.updateAvailableCameras();
     if(availableDevices.length === 0){
+      console.error('Camera selector: available devices is empty');
       this.handleCameraError();
       return;
     }
@@ -53,11 +54,13 @@ export class CameraSelectorPage implements ViewWillLeave{
       const selectedDevice = this.cameraService.getAvailableCameraById(selectedDeviceId);
       this.cameraService.setCamera(selectedDevice);
     }else{
+      console.error('Camera selector: error when trying to get camera by id');
       this.handleCameraError();
     }
 }
 
   public handleCameraError(): void{
+    console.error('Camera-selector: handleCameraError')
     this.cameraService.handleCameraErrors({name: 'CustomNoAvailable'}, 'fetchError');
   }
 
