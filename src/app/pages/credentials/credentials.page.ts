@@ -218,7 +218,11 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
   }
 
   private loadCredentials(): Observable<VerifiableCredential[]> {
-    this.loader.addLoadingProcess();
+    // todo this conditional should be removed when scanner is moved to another page
+    const isScannerOpen = this.isScannerOpen();
+    if(isScannerOpen){
+      this.loader.addLoadingProcess();
+    }
 
     const normalizer = new VerifiableCredentialSubjectDataNormalizer();
     return this.walletService.getAllVCs().pipe(
@@ -232,7 +236,9 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
           return cred;
         });
         this.cdr.detectChanges();
-        this.loader.removeLoadingProcess();
+        if(isScannerOpen){
+          this.loader.removeLoadingProcess();
+        }
       }),
       catchError((error: ExtendedHttpErrorResponse) => {
         if (error.status === 404) {
@@ -241,7 +247,9 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
         } else {
           console.error("Error fetching credentials:", error);
         }
-        this.loader.removeLoadingProcess();
+        if(isScannerOpen){
+          this.loader.removeLoadingProcess();
+        }
         return of([]);
       })
     )
@@ -305,6 +313,10 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
     setTimeout(()=>{
       this.router.navigate(['/tabs/home'])
     }, 1000);
+}
+
+private isScannerOpen(): boolean{
+  return this.showScanner === true && this.showScannerView === true;
 }
 
 }
