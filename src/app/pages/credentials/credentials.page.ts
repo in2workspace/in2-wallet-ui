@@ -62,9 +62,10 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
     this.route.queryParams
       .pipe(takeUntilDestroyed())
       .subscribe((params) => {
-        this.showScannerView = params['showScannerView'];
-        this.showScanner = params['showScanner'];
+        this.showScannerView = params['showScannerView'] === 'true';
+        this.showScanner = params['showScanner']     === 'true';
         this.credentialOfferUri = params['credentialOfferUri'];
+        this.cdr.detectChanges();
       });
   }
 
@@ -82,8 +83,10 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
 
   //this is needed to ensure the scanner is destroyed when leaving page. Ionic
   //caches the component (it isn't destroyed when leaving route), so ngOnDestroy won't work
+  //here we don't use the navigation to update he view to avoid circularity
   public ionViewWillLeave(): void{
-    this.closeScannerViewAndScanner();
+    this.showScannerView = false;
+    this.showScanner = false;
     this.cdr.detectChanges();
   }
 
@@ -294,15 +297,16 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
     if(this.credList.length === 0){
       return;
     }
-    console.log('Requesting signatures for pending credentials...');
     const pendingCredentials = this.credList.filter(
       (credential) => credential.status === CredentialStatus.ISSUED
     );
-  
+    
     if (pendingCredentials.length === 0) {
       return;
     }
-  
+    
+    console.log('Requesting signatures for pending credentials...');
+
     const requests = pendingCredentials.map((credential) =>
       this.walletService.requestSignature(credential.id).pipe(
         catchError((error) => {
