@@ -17,7 +17,7 @@ describe('HomePage', () => {
   let fixture: ComponentFixture<HomePage>;
   let route: ActivatedRoute;
   let mockRouter: MockRouter;
-   let mockToast: { showErrorAlertByTranslateLabel: jest.Mock };
+  let mockToast: { showErrorAlertByTranslateLabel: jest.Mock };
    
   beforeEach(async () => {
     mockRouter = new MockRouter();

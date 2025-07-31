@@ -116,7 +116,7 @@ describe('AuthenticationService', () => {
       });
     });
 
-      it('should propagate error when checkAuth throws', (done) => {
+    it('should propagate error when checkAuth throws', (done) => {
       const error = new Error('checkAuth failed');
       mockOidcSecurityService.checkAuth.mockReturnValue(throwError(() => error));
 
