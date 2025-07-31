@@ -257,7 +257,7 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
   private loadCredentials(): Observable<VerifiableCredential[]> {
     // todo this conditional should be removed when scanner is moved to another page
     const isScannerOpen = this.isScannerOpen();
-    if(isScannerOpen){
+    if(!isScannerOpen){
       this.loader.addLoadingProcess();
     }
 
@@ -273,7 +273,7 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
           return cred;
         });
         this.cdr.detectChanges();
-        if(isScannerOpen){
+        if(!isScannerOpen){
           this.loader.removeLoadingProcess();
         }
       }),
@@ -284,7 +284,7 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
         } else {
           console.error("Error fetching credentials:", error);
         }
-        if(isScannerOpen){
+        if(!isScannerOpen){
           this.loader.removeLoadingProcess();
         }
         return of([]);
