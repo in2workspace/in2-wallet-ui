@@ -90,13 +90,9 @@ export class BarcodeScannerComponent implements OnInit {
           hasPermission = false;
         }
       }
-      console.log('hasPermission');
-      console.log(hasPermission);
       if(hasPermission !== false){
-        console.log('device will be set in 1000s');
         setTimeout(() => {
           this.scanner.device = selectedDevice;
-          console.log('device set');
           this._activatedScanner$$.next();
         }, 1000);
       }else{
@@ -141,7 +137,6 @@ export class BarcodeScannerComponent implements OnInit {
     }
 
     public ngOnDestroy(): void {
-      console.log('Barcode on destroy');
       this.destroy$.next();
       this.setActivatingTimeout();
       this.restoreOriginalConsoleError();
