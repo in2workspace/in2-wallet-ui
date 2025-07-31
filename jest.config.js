@@ -39,6 +39,7 @@ module.exports = {
     // '/src/app/app.component',
     // '/src/app/components', 
     // '/src/app/guards',
+    // '/src/app/helpers',
     // '/src/app/interceptors',
     // '/src/app/interfaces',
     // '/src/app/pages',

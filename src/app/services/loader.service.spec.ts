@@ -28,6 +28,19 @@ describe('LoaderService', () => {
     expect(service.isLoading$()).toBe(false);
   });
 
+  it('should log an error when loading count is negative', () => {
+  const errorSpy = jest.spyOn(console, 'error');
+
+  (service as any).loadingCount$.set(-1);
+
+  const isLoading = service.isLoading$();
+
+  expect(isLoading).toBe(false);
+
+  expect(errorSpy).toHaveBeenCalled();
+});
+
+
   it('should add loading process', () => {
     expect((service as any).loadingCount$()).toBe(0);
 
