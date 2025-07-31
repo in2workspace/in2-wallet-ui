@@ -83,16 +83,47 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
   //this is needed to ensure the scanner is destroyed when leaving page. Ionic
   //caches the component (it isn't destroyed when leaving route), so ngOnDestroy won't work
   public ionViewWillLeave(): void{
-    this.showScannerView = false;
+    this.closeScannerViewAndScanner();
     this.cdr.detectChanges();
   }
 
-  public openScanner(): void {
+  public openScannerViewAndScanner(): void {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
         showScannerView: true,
         showScanner: true
+      },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  public openScannerViewWithoutScanner(): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        showScannerView: true
+      },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  public closeScannerViewAndScanner(): void{
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        showScannerView: false,
+        showScanner: false
+      },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  public closeScanner(): void{
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        showScanner: false
       },
       queryParamsHandling: 'merge'
     });
@@ -115,7 +146,7 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
     //todo don't accept qrs that are not to login or get VC
     if(qrCode.includes('credential_offer_uri')){
       //show VCs list
-      this.showScannerView = false;
+      this.closeScannerViewAndScanner();
       // CROSS-DEVICE CREDENTIAL OFFER FLOW
       executeContentSucessCallback = () => {
         return this.handleActivationSuccess();
@@ -123,7 +154,7 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
     }else{
       // LOGIN / VERIFIABLE PRESENTATION
       // hide scanner but don't show VCs list
-      this.showScanner = false;
+      this.closeScanner();
       this.loader.addLoadingProcess();
       executeContentSucessCallback = (executionResponse: JSON) => {
         return from(this.router.navigate(['/tabs/vc-selector/'], {
@@ -183,7 +214,7 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
 
   public handleOpenScannerButtonKeydown(event: KeyboardEvent, action: string): void {
     if (event.key === 'Enter' || event.key === ' ') {
-      this.openScanner();
+      this.openScannerViewAndScanner();
       event.preventDefault();
     }else{
       console.error('Unrecognized event');
