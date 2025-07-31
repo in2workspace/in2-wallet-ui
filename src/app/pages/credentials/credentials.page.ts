@@ -88,8 +88,14 @@ export class CredentialsPage implements OnInit, ViewWillLeave {
   }
 
   public openScanner(): void {
-    this.showScannerView = true;
-    this.showScanner = true;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        showScannerView: true,
+        showScanner: true
+      },
+      queryParamsHandling: 'merge'
+    });
   }
 
   public vcDelete(cred: VerifiableCredential): void {

@@ -19,6 +19,7 @@ describe('CredentialsPage', () => {
   let walletServiceMock: any;
   let routerMock: any;
   let toastServiceHandlerMock: any;
+  let activatedRouteMock: any;
 
   beforeEach(async () => {
     walletServiceMock = {
@@ -60,15 +61,16 @@ describe('CredentialsPage', () => {
     component.credList = [];
     component.sameDeviceVcActivationFlow = jest.fn();
     (component as any).forcePageReload = jest.fn();
+    activatedRouteMock = TestBed.inject(ActivatedRoute);
   });
 
   describe('ngOnInit', () => {
-    it('should call sameDeviceVcActivationFlow only if credentialOfferUri is not null',() => {
+    it('should call sameDeviceVcActivationFlow only if credentialOfferUri is not null', () => {
       component.credentialOfferUri = 'testUri';
       component.ngOnInit();
       expect(component.sameDeviceVcActivationFlow).toHaveBeenCalledTimes(1);
     });
-    it('should not call sameDeviceVcActivationFlow only if credentialOfferUri is null',() => {
+    it('should not call sameDeviceVcActivationFlow only if credentialOfferUri is null', () => {
       component.credentialOfferUri = '';
       component.ngOnInit();
       expect(component.sameDeviceVcActivationFlow).not.toHaveBeenCalled();
@@ -190,5 +192,22 @@ describe('CredentialsPage', () => {
 
       window.location = originalLocation;
     });
+  });
+
+   it('openScanner hauria de cridar router.navigate amb els queryParams showScannerView i showScanner i merge', () => {
+    component.openScanner();
+
+    expect(routerMock.navigate).toHaveBeenCalledTimes(1);
+    expect(routerMock.navigate).toHaveBeenCalledWith(
+      [],
+      {
+        relativeTo: activatedRouteMock,
+        queryParams: {
+          showScannerView: true,
+          showScanner: true
+        },
+        queryParamsHandling: 'merge'
+      }
+    );
   });
 });
