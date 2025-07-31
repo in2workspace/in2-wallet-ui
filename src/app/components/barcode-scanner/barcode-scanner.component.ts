@@ -90,8 +90,10 @@ export class BarcodeScannerComponent implements OnInit {
         }
       }
       if(hasPermission !== false){
-        this.scanner.device = selectedDevice;
-        this._activatedScanner$$.next();
+        setTimeout(() => {
+          this.scanner.device = selectedDevice;
+          this._activatedScanner$$.next();
+        }, 1000);
       }else{
         console.error('SCANNER: Permission denied');
       }

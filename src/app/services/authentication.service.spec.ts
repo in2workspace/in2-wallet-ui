@@ -84,6 +84,17 @@ describe('AuthenticationService', () => {
     expect(service.listenToCrossTabLogout).toHaveBeenCalled();
   });
 
+  it('should handle error from checkAuth$ and call authorize', () => {
+    const errorMsg = 'fail';
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+    (AuthenticationService.prototype as any).checkAuth$.mockReturnValueOnce(throwError(() => new Error(errorMsg)));
+
+    service = TestBed.inject(AuthenticationService);
+
+    expect(consoleSpy).toHaveBeenCalledWith('Checking authentication: error in initial authentication.');
+    expect(mockOidcSecurityService.authorize).toHaveBeenCalled();
+  });
+
   describe('checkAuth$', () => {
     it('should update userData if authenticated', (done) => {
       const loginResponse = {
