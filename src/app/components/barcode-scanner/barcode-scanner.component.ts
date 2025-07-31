@@ -81,6 +81,7 @@ export class BarcodeScannerComponent implements OnInit {
       let hasPermission = undefined;
       // if there is already a device, sometimes the askForPemission causes error
       if(!this.scanner.device){
+        console.log('Scanner has no device: ask for permission.');
         try{
           hasPermission = await this.scanner.askForPermission();
         }catch(err){
@@ -89,9 +90,13 @@ export class BarcodeScannerComponent implements OnInit {
           hasPermission = false;
         }
       }
+      console.log('hasPermission');
+      console.log(hasPermission);
       if(hasPermission !== false){
+        console.log('device will be set in 1000s');
         setTimeout(() => {
           this.scanner.device = selectedDevice;
+          console.log('device set');
           this._activatedScanner$$.next();
         }, 1000);
       }else{
